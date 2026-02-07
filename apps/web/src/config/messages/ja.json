@@ -1,0 +1,175 @@
+{
+  "title": "NOD",
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "delete": "削除"
+  },
+  "landing": {
+    "hero": {
+      "badge": "AI搭載ナレッジ管理",
+      "headline": "記事を保存し、インサイトを発見",
+      "description": "NODはAIを活用して記事を分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
+      "cta": "無料で始める",
+      "ctaSecondary": "詳しく見る",
+      "trustedBy": "世界中のナレッジワーカーに信頼されています"
+    },
+    "nav": {
+      "features": "機能",
+      "howItWorks": "使い方",
+      "login": "ログイン",
+      "getStarted": "始める"
+    },
+    "features": {
+      "label": "機能",
+      "headline": "ナレッジ管理に必要なすべて",
+      "items": {
+        "aiSummary": {
+          "title": "AI要約",
+          "description": "あらゆる記事のキーポイントとインサイトを強調するAI生成要約を即座に取得できます。"
+        },
+        "vectorSearch": {
+          "title": "セマンティック検索",
+          "description": "キーワードではなく意味で記事を検索。ベクトル検索があなたの探しているものを理解します。"
+        },
+        "chromeExtension": {
+          "title": "Chrome拡張機能",
+          "description": "ブラウザからワンクリックで記事を保存。コピー＆ペースト不要です。"
+        },
+        "multiPlatform": {
+          "title": "マルチプラットフォーム",
+          "description": "Web、モバイル、ブラウザ拡張機能からナレッジライブラリにアクセスできます。"
+        },
+        "concepts": {
+          "title": "コンセプト抽出",
+          "description": "記事から主要なコンセプト、テーマ、トピックを自動的に識別しタグ付けします。"
+        },
+        "multilingual": {
+          "title": "多言語対応",
+          "description": "あらゆる言語の記事を保存・分析できます。AI要約はお好みの言語で提供されます。"
+        }
+      }
+    },
+    "howItWorks": {
+      "label": "使い方",
+      "headline": "スマートな読書のための3ステップ",
+      "steps": {
+        "save": {
+          "number": "01",
+          "title": "保存",
+          "description": "Chrome拡張機能でWebの記事を保存するか、URLを貼り付けてください。"
+        },
+        "analyze": {
+          "number": "02",
+          "title": "分析",
+          "description": "AIが自動で記事を要約し、キーコンセプトを抽出し、ライブラリに整理します。"
+        },
+        "recall": {
+          "number": "03",
+          "title": "想起",
+          "description": "セマンティック検索で必要なものを正確に見つけましょう。"
+        }
+      }
+    },
+    "cta": {
+      "headline": "ナレッジライブラリの構築を始めましょう",
+      "description": "NODで記事を保存・分析・想起する数千人の読者と一緒に。",
+      "button": "無料で始める",
+      "note": "クレジットカード不要"
+    },
+    "footer": {
+      "product": "製品",
+      "dashboard": "ダッシュボード",
+      "extension": "Chrome拡張機能",
+      "mobile": "モバイルアプリ",
+      "api": "API",
+      "resources": "リソース",
+      "docs": "ドキュメント",
+      "github": "GitHub",
+      "changelog": "変更履歴",
+      "legal": "法的情報",
+      "privacy": "プライバシーポリシー",
+      "terms": "利用規約",
+      "tagline": "AI搭載の記事保存とナレッジ管理。",
+      "copyright": "© 2025 NOD. All rights reserved."
+    }
+  },
+  "loginWelcome": "おかえりなさい",
+  "loginSubtitle": "NODアカウントにログイン",
+  "login": {
+    "signingIn": "ログイン中...",
+    "or": "または",
+    "backToHome": "ホームに戻る"
+  },
+  "continueWithGoogle": "Googleで続ける",
+  "dashboard": {
+    "myArticles": "マイ記事",
+    "searchArticles": "記事を検索...",
+    "allStatus": "すべてのステータス",
+    "statusPending": "待機中",
+    "statusAnalyzing": "分析中",
+    "statusCompleted": "完了",
+    "statusFailed": "失敗",
+    "loadingArticles": "記事を読み込み中...",
+    "loadError": "記事の読み込みに失敗しました。",
+    "noArticles": "まだ記事がありません。Chrome拡張機能で記事を保存してください。",
+    "loadMore": "もっと見る",
+    "noSummary": "要約なし",
+    "articleNotFound": "記事が見つかりません。",
+    "deleteConfirm": "この記事を削除しますか？",
+    "original": "原文を見る",
+    "pendingAnalysis": "分析待機中...",
+    "analyzingArticle": "AIが記事を分析しています...",
+    "summary": "要約",
+    "readTime": "約{minutes}分",
+    "concepts": "キーコンセプト",
+    "keyPoints": "主要ポイント",
+    "analyzedBy": "{provider}/{model}で分析",
+    "similarArticles": "類似記事",
+    "loadingSimilar": "類似記事を読み込み中...",
+    "similarity": "{percent}%一致"
+  },
+  "subscription": {
+    "pricing": "料金プラン",
+    "currentPlan": "現在のプラン",
+    "basic": "Basic",
+    "pro": "Pro",
+    "basicPrice": "無料",
+    "proPrice": "¥980/月",
+    "upgrade": "Proにアップグレード",
+    "manageBilling": "請求管理",
+    "cancel": "サブスクリプションをキャンセル",
+    "cancelConfirm": "サブスクリプションをキャンセルしますか？",
+    "usage": "使用量",
+    "summariesUsed": "今月の要約 {used}/{limit}件使用",
+    "summariesRemaining": "要約 残り{remaining}件",
+    "unlimited": "無制限",
+    "limitReached": "今月の上限に達しました",
+    "upgradePrompt": "Proにアップグレードしてより多くの要約を利用",
+    "features": {
+      "basicSummaries": "月10回 AI要約",
+      "proSummaries": "月300回 AI要約",
+      "basicArticles": "50記事保存",
+      "proArticles": "無制限記事保存",
+      "basicSearch": "1日5回セマンティック検索",
+      "proSearch": "無制限セマンティック検索",
+      "proExport": "CSV/JSONエクスポート",
+      "proPriority": "優先分析キュー"
+    },
+    "processing": "処理中...",
+    "managePayment": "お支払い方法の管理",
+    "cancelDescription": "キャンセルすると、現在の請求期間の終了までPro機能をご利用いただけます。",
+    "checkoutSuccess": "お支払いが完了しました！Proサブスクリプションが有効になりました。",
+    "billingHistory": "請求履歴",
+    "nextBilling": "次回請求日: {date}",
+    "activeSince": "{date}から有効",
+    "planDescription": {
+      "basic": "AI搭載の記事管理を試したいカジュアルな読者に最適です。",
+      "pro": "毎日記事を保存・分析するパワーユーザー向けのプランです。"
+    }
+  }
+}

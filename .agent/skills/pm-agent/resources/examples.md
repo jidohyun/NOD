@@ -1,0 +1,121 @@
+# PM Agent - Examples
+
+## Example 1: Simple TODO App
+
+**Input**: "JWT 인증이 있는 TODO 앱을 만들어줘"
+
+**Output**:
+```json
+{
+  "project_name": "TODO App with JWT Auth",
+  "tech_stack": {
+    "frontend": "Next.js 14 + TypeScript + Tailwind",
+    "backend": "FastAPI + PostgreSQL + Redis",
+    "testing": "pytest + Vitest + Playwright"
+  },
+  "tasks": [
+    {
+      "id": "task-1",
+      "agent": "backend",
+      "title": "JWT authentication API",
+      "priority": 1,
+      "dependencies": [],
+      "estimated_complexity": "high",
+      "acceptance_criteria": [
+        "POST /api/auth/register with email + password",
+        "POST /api/auth/login returns access + refresh tokens",
+        "Password hashed with bcrypt",
+        "Rate limiting: 5/min on login"
+      ]
+    },
+    {
+      "id": "task-2",
+      "agent": "backend",
+      "title": "TODO CRUD API",
+      "priority": 1,
+      "dependencies": [],
+      "acceptance_criteria": [
+        "CRUD endpoints for /api/todos",
+        "User-scoped (JWT required)",
+        "Pagination on list endpoint"
+      ]
+    },
+    {
+      "id": "task-3",
+      "agent": "frontend",
+      "title": "Login + Register UI",
+      "priority": 1,
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Login and register forms with validation",
+        "JWT token storage",
+        "Redirect to /todos after login"
+      ]
+    },
+    {
+      "id": "task-4",
+      "agent": "frontend",
+      "title": "TODO List UI",
+      "priority": 2,
+      "dependencies": ["task-2", "task-3"],
+      "acceptance_criteria": [
+        "Add, toggle, delete todos",
+        "Loading and empty states",
+        "Responsive design"
+      ]
+    },
+    {
+      "id": "task-5",
+      "agent": "qa",
+      "title": "Security & Performance Review",
+      "priority": 3,
+      "dependencies": ["task-1", "task-2", "task-3", "task-4"],
+      "acceptance_criteria": [
+        "OWASP Top 10 audit passed",
+        "Lighthouse > 90",
+        "No N+1 queries"
+      ]
+    }
+  ]
+}
+```
+
+## Example 2: Feature Addition to Existing App
+
+**Input**: "Add a comment system to the blog posts"
+
+**Output**:
+```json
+{
+  "project_name": "Blog Comments Feature",
+  "tasks": [
+    {
+      "id": "task-1",
+      "agent": "backend",
+      "title": "Comments API",
+      "priority": 1,
+      "dependencies": [],
+      "acceptance_criteria": [
+        "POST /api/posts/{id}/comments (auth required)",
+        "GET /api/posts/{id}/comments (public, paginated)",
+        "DELETE /api/comments/{id} (owner only)",
+        "Nested replies (1 level deep)"
+      ]
+    },
+    {
+      "id": "task-2",
+      "agent": "frontend",
+      "title": "Comment Section UI",
+      "priority": 2,
+      "dependencies": ["task-1"],
+      "acceptance_criteria": [
+        "Comment list with pagination (load more)",
+        "Add comment form (auth required)",
+        "Reply to comment",
+        "Delete own comment",
+        "Real-time count update"
+      ]
+    }
+  ]
+}
+```

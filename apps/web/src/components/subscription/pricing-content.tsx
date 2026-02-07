@@ -1,0 +1,112 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { useCheckout } from "@/lib/api/subscriptions";
+import { openCheckout } from "@/lib/paddle";
+
+export function PricingContent() {
+  const t = useTranslations("subscription");
+  const checkout = useCheckout();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const plans = [
+    {
+      name: t("basic"),
+      price: t("basicPrice"),
+      description: t("planDescription.basic"),
+      features: [
+        t("features.basicSummaries"),
+        t("features.basicArticles"),
+        t("features.basicSearch"),
+      ],
+      current: false,
+    },
+    {
+      name: t("pro"),
+      price: t("proPrice"),
+      description: t("planDescription.pro"),
+      features: [
+        t("features.proSummaries"),
+        t("features.proArticles"),
+        t("features.proSearch"),
+        t("features.proExport"),
+        t("features.proPriority"),
+      ],
+      highlighted: true,
+    },
+  ];
+
+  async function handleUpgrade() {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    try {
+      const data = await checkout.mutateAsync();
+      await openCheckout({
+        priceId: data.price_id,
+        userId: data.user_id,
+        userEmail: data.user_email,
+      });
+    } catch {
+      // Checkout overlay handles its own errors
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-4xl py-12 px-4">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold">{t("pricing")}</h1>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {plans.map((plan) => (
+          <div
+            key={plan.name}
+            className={`rounded-xl border-2 p-8 ${
+              plan.highlighted
+                ? "border-primary shadow-lg"
+                : "border-border"
+            }`}
+          >
+            <h2 className="text-2xl font-bold">{plan.name}</h2>
+            <p className="mt-2 text-3xl font-bold">{plan.price}</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {plan.description}
+            </p>
+            <ul className="mt-6 space-y-3">
+              {plan.features.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm">
+                  <svg
+                    className="h-4 w-4 shrink-0 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            {plan.highlighted && (
+              <button
+                type="button"
+                onClick={handleUpgrade}
+                disabled={isProcessing}
+                className="mt-8 block w-full rounded-lg bg-primary py-3 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+              >
+                {isProcessing ? t("processing") : t("upgrade")}
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

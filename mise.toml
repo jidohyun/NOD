@@ -1,0 +1,128 @@
+experimental_monorepo_root = true
+
+[monorepo]
+config_roots = [
+    "apps/*",
+    "packages/*",
+]
+
+[settings]
+experimental = true
+
+[hooks]
+postinstall = '''
+  mkdir -p .git/hooks
+
+  # commit-msg
+  cat > .git/hooks/commit-msg <<'EOF'
+#!/bin/sh
+exec mise run git:commit-msg -- "$1"
+EOF
+  chmod +x .git/hooks/commit-msg
+
+  # pre-commit
+  cat > .git/hooks/pre-commit <<'EOF'
+#!/bin/sh
+exec mise run git:pre-commit
+EOF
+  chmod +x .git/hooks/pre-commit
+
+  # pre-push
+  cat > .git/hooks/pre-push <<'EOF'
+#!/bin/sh
+exec mise run git:pre-push
+EOF
+  chmod +x .git/hooks/pre-push
+'''
+
+[tools]
+node = "24"
+python = "3.12"
+bun = "latest"
+uv = "latest"
+flutter = "3"
+terraform = "1"
+hadolint = "latest"
+"github:Infisical/cli" = "latest"
+
+[tasks]
+"db:migrate" = { depends = ["//apps/api:migrate"], description = "Run database migrations" }
+"dev:web" = { depends = ["//apps/api:dev", "//apps/web:dev"], description = "Start API and Web services" }
+"dev:mobile" = { depends = ["//apps/api:dev", "//apps/mobile:dev"], description = "Start API and Mobile services" }
+dev = { depends = ["//apps/api:dev", "//apps/web:dev", "//apps/worker:dev"], description = "Start all services" }
+format = { depends = ["//apps/api:format", "//apps/web:format", "//apps/worker:format"], description = "Format all apps" }
+"gen:api" = { depends = ["//apps/api:gen:openapi"], run = [{ tasks = ["//apps/web:gen:api", "//apps/mobile:gen:api"] }], description = "Generate OpenAPI schema and API clients" }
+"i18n:build" = { depends = ["//packages/i18n:build"], description = "Build i18n files" }
+"infra:down" = { depends = ["//apps/api:infra:down"], description = "Stop local infrastructure" }
+"infra:up" = { depends = ["//apps/api:infra:up"], description = "Start local infrastructure" }
+install = { depends = ["//apps/web:install", "//apps/api:install", "//apps/worker:install", "//apps/mobile:install", "//packages/design-tokens:install", "//packages/i18n:install"], description = "Install all dependencies" }
+lint = { depends = ["//apps/api:lint", "//apps/web:lint", "//apps/worker:lint"], description = "Lint all apps" }
+test = { depends = ["//apps/api:test", "//apps/web:test", "//apps/worker:test"], description = "Test all apps" }
+"tokens:build" = { depends = ["//packages/design-tokens:build"], description = "Build design tokens" }
+typecheck = { depends = ["//apps/api:typecheck", "//apps/web:typecheck"], description = "Type check all apps" }
+
+[tasks."git:commit-msg"]
+description = "Validate commit message using commitlint"
+run = "bunx @commitlint/cli@20 --edit $1"
+
+[tasks."git:pre-commit"]
+description = "Run conditional checks for staging files"
+run = '''
+#!/usr/bin/env bash
+changed=$(git diff --cached --name-only)
+
+if echo "$changed" | grep -q "^apps/api/"; then
+    echo "[pre-commit] apps/api detected, running lint..."
+    mise //apps/api:lint || exit 1
+fi
+
+if echo "$changed" | grep -q "^apps/web/"; then
+    echo "[pre-commit] apps/web detected, running lint..."
+    mise //apps/web:lint || exit 1
+fi
+
+if echo "$changed" | grep -q "^apps/worker/"; then
+    echo "[pre-commit] apps/worker detected, running lint..."
+    mise //apps/worker:lint || exit 1
+fi
+
+if echo "$changed" | grep -q "^apps/mobile/"; then
+    echo "[pre-commit] apps/mobile detected, running lint..."
+    mise //apps/mobile:lint || exit 1
+fi
+
+if echo "$changed" | grep -qE "Dockerfile$"; then
+    echo "[pre-commit] Dockerfile detected, running hadolint..."
+    echo "$changed" | grep -E "Dockerfile$" | xargs hadolint || exit 1
+fi
+'''
+
+[tasks."git:pre-push"]
+description = "Validate branch name and run tests before push"
+run = '''
+#!/usr/bin/env bash
+bunx @gracefullight/validate-branch || exit 1
+
+# Get changed files compared to origin
+changed=$(git diff --name-only origin/main...HEAD 2>/dev/null || git diff --name-only HEAD~1)
+
+if echo "$changed" | grep -q "^apps/api/"; then
+    echo "[pre-push] apps/api detected, running test..."
+    mise //apps/api:test || exit 1
+fi
+
+if echo "$changed" | grep -q "^apps/web/"; then
+    echo "[pre-push] apps/web detected, running test..."
+    mise //apps/web:test || exit 1
+fi
+
+if echo "$changed" | grep -q "^apps/worker/"; then
+    echo "[pre-push] apps/worker detected, running test..."
+    mise //apps/worker:test || exit 1
+fi
+
+if echo "$changed" | grep -q "^apps/mobile/"; then
+    echo "[pre-push] apps/mobile detected, running test..."
+    mise //apps/mobile:test || exit 1
+fi
+'''

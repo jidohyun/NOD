@@ -1,0 +1,176 @@
+name: Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  pr-size:
+    name: PR Size Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: "size/xs"
+          xs_max_size: "10"
+          s_label: "size/s"
+          s_max_size: "100"
+          m_label: "size/m"
+          m_max_size: "500"
+          l_label: "size/l"
+          l_max_size: "1000"
+          xl_label: "size/xl"
+          fail_if_xl: "false"
+          message_if_xl: >
+            This PR exceeds the recommended size of 1000 lines.
+            Please make sure you are NOT addressing multiple issues with one PR.
+            Note this PR might be rejected due to its size.
+          github_api_url: "https://api.github.com"
+          files_to_ignore: |
+            bun.lock
+            **/bun.lock
+            package-lock.json
+            **/package-lock.json
+            yarn.lock
+            **/yarn.lock
+            pubspec.lock
+            **/pubspec.lock
+            uv.lock
+            **/uv.lock
+            Gemfile.lock
+            **/Gemfile.lock
+            *.g.dart
+            **/*.g.dart
+            *.freezed.dart
+            **/*.freezed.dart
+            *.gen.ts
+            **/*.gen.ts
+            .terraform.lock.hcl
+            **/.terraform.lock.hcl
+            apps/web/src/config/messages/*.json
+            apps/mobile/lib/i18n/messages/*.arb
+            apps/web/src/app/[locale]/tokens.css
+            apps/mobile/lib/core/theme/generated_theme.dart
+
+  biome:
+    name: Biome (JS/TS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: apps/web
+        run: bun install --frozen-lockfile
+
+      - uses: reviewdog/action-setup@v1
+
+      - name: Run Biome with reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: apps/web
+        run: |
+          bun run biome check src --reporter=json 2>&1 | \
+          jq -r '.diagnostics[] | {
+            message: .message,
+            location: {
+              path: .location.path.file,
+              range: {
+                start: { line: .location.span[0].line, column: .location.span[0].column },
+                end: { line: .location.span[1].line, column: .location.span[1].column }
+              }
+            },
+            severity: (if .severity == "error" then "ERROR" elif .severity == "warning" then "WARNING" else "INFO" end)
+          }' | \
+          reviewdog -f=rdjsonl -reporter=github-pr-review -fail-level=error
+
+  ruff:
+    name: Ruff (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: latest
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - uses: reviewdog/action-setup@v1
+
+      - name: Run Ruff with reviewdog (API)
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: apps/api
+        run: |
+          uv sync --frozen
+          uv run ruff check --output-format=json . 2>&1 | \
+          jq -r '.[] | {
+            message: .message,
+            location: {
+              path: .filename,
+              range: {
+                start: { line: .location.row, column: .location.column },
+                end: { line: .end_location.row, column: .end_location.column }
+              }
+            },
+            code: { value: .code },
+            severity: "WARNING"
+          }' | \
+          reviewdog -f=rdjsonl -name="ruff-api" -reporter=github-pr-review -fail-level=error
+
+      - name: Run Ruff with reviewdog (Worker)
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: apps/worker
+        run: |
+          uv sync --frozen
+          uv run ruff check --output-format=json . 2>&1 | \
+          jq -r '.[] | {
+            message: .message,
+            location: {
+              path: .filename,
+              range: {
+                start: { line: .location.row, column: .location.column },
+                end: { line: .end_location.row, column: .end_location.column }
+              }
+            },
+            code: { value: .code },
+            severity: "WARNING"
+          }' | \
+          reviewdog -f=rdjsonl -name="ruff-worker" -reporter=github-pr-review -fail-level=error
+
+  flutter:
+    name: Flutter Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.5"
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - uses: reviewdog/action-setup@v1
+
+      - name: Run Flutter analyze with reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: apps/mobile
+        run: |
+          flutter analyze --no-fatal-infos --no-fatal-warnings 2>&1 | \
+          reviewdog -efm="%f:%l:%c: %m" -name="flutter-analyze" -reporter=github-pr-review -fail-level=error

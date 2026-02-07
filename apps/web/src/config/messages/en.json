@@ -1,0 +1,175 @@
+{
+  "title": "NOD",
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete"
+  },
+  "landing": {
+    "hero": {
+      "badge": "AI-Powered Knowledge Management",
+      "headline": "Save Articles, Unlock Insights",
+      "description": "NOD uses AI to analyze and summarize articles, building your personal knowledge library that you can search and reference anytime.",
+      "cta": "Get Started Free",
+      "ctaSecondary": "Learn More",
+      "trustedBy": "Trusted by knowledge workers worldwide"
+    },
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How It Works",
+      "login": "Log In",
+      "getStarted": "Get Started"
+    },
+    "features": {
+      "label": "Features",
+      "headline": "Everything you need to manage knowledge",
+      "items": {
+        "aiSummary": {
+          "title": "AI Summaries",
+          "description": "Get instant AI-generated summaries of any article, highlighting key points and insights."
+        },
+        "vectorSearch": {
+          "title": "Semantic Search",
+          "description": "Find articles by meaning, not just keywords. Our vector search understands what you're looking for."
+        },
+        "chromeExtension": {
+          "title": "Chrome Extension",
+          "description": "Save articles with one click from your browser. No copy-pasting required."
+        },
+        "multiPlatform": {
+          "title": "Multi-Platform",
+          "description": "Access your knowledge library from web, mobile, or browser extension."
+        },
+        "concepts": {
+          "title": "Concept Extraction",
+          "description": "Automatically identify and tag key concepts, themes, and topics from your articles."
+        },
+        "multilingual": {
+          "title": "Multilingual",
+          "description": "Save and analyze articles in any language. AI summaries available in your preferred language."
+        }
+      }
+    },
+    "howItWorks": {
+      "label": "How It Works",
+      "headline": "Three simple steps to smarter reading",
+      "steps": {
+        "save": {
+          "number": "01",
+          "title": "Save",
+          "description": "Save any article from the web with our Chrome extension or by pasting a URL."
+        },
+        "analyze": {
+          "number": "02",
+          "title": "Analyze",
+          "description": "AI automatically summarizes the article, extracts key concepts, and organizes it in your library."
+        },
+        "recall": {
+          "number": "03",
+          "title": "Recall",
+          "description": "Search your library semantically to find exactly what you need, when you need it."
+        }
+      }
+    },
+    "cta": {
+      "headline": "Start building your knowledge library",
+      "description": "Join thousands of readers who use NOD to save, analyze, and recall articles with AI.",
+      "button": "Get Started Free",
+      "note": "No credit card required"
+    },
+    "footer": {
+      "product": "Product",
+      "dashboard": "Dashboard",
+      "extension": "Chrome Extension",
+      "mobile": "Mobile App",
+      "api": "API",
+      "resources": "Resources",
+      "docs": "Documentation",
+      "github": "GitHub",
+      "changelog": "Changelog",
+      "legal": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "tagline": "AI-powered article saving and knowledge management.",
+      "copyright": "© 2025 NOD. All rights reserved."
+    }
+  },
+  "loginWelcome": "Welcome back",
+  "loginSubtitle": "Sign in to your NOD account",
+  "login": {
+    "signingIn": "Signing in...",
+    "or": "or",
+    "backToHome": "Back to Home"
+  },
+  "continueWithGoogle": "Continue with Google",
+  "dashboard": {
+    "myArticles": "My Articles",
+    "searchArticles": "Search articles...",
+    "allStatus": "All status",
+    "statusPending": "Pending",
+    "statusAnalyzing": "Analyzing",
+    "statusCompleted": "Completed",
+    "statusFailed": "Failed",
+    "loadingArticles": "Loading articles...",
+    "loadError": "Failed to load articles.",
+    "noArticles": "No articles yet. Save articles using the Chrome extension.",
+    "loadMore": "Load more",
+    "noSummary": "No summary available",
+    "articleNotFound": "Article not found.",
+    "deleteConfirm": "Delete this article?",
+    "original": "Original",
+    "pendingAnalysis": "Waiting for analysis to start...",
+    "analyzingArticle": "AI is analyzing this article...",
+    "summary": "Summary",
+    "readTime": "~{minutes} min read",
+    "concepts": "Concepts",
+    "keyPoints": "Key Points",
+    "analyzedBy": "Analyzed by {provider}/{model}",
+    "similarArticles": "Similar Articles",
+    "loadingSimilar": "Loading similar articles...",
+    "similarity": "{percent}% match"
+  },
+  "subscription": {
+    "pricing": "Pricing",
+    "currentPlan": "Current Plan",
+    "basic": "Basic",
+    "pro": "Pro",
+    "basicPrice": "Free",
+    "proPrice": "$7.99/mo",
+    "upgrade": "Upgrade to Pro",
+    "manageBilling": "Manage Billing",
+    "cancel": "Cancel Subscription",
+    "cancelConfirm": "Are you sure you want to cancel your subscription?",
+    "usage": "Usage",
+    "summariesUsed": "{used}/{limit} summaries used this month",
+    "summariesRemaining": "{remaining} summaries remaining",
+    "unlimited": "Unlimited",
+    "limitReached": "Monthly limit reached",
+    "upgradePrompt": "Upgrade to Pro for more summaries",
+    "features": {
+      "basicSummaries": "10 AI summaries/month",
+      "proSummaries": "300 AI summaries/month",
+      "basicArticles": "50 saved articles",
+      "proArticles": "Unlimited saved articles",
+      "basicSearch": "5 semantic searches/day",
+      "proSearch": "Unlimited semantic searches",
+      "proExport": "Export to CSV/JSON",
+      "proPriority": "Priority analysis queue"
+    },
+    "processing": "Processing...",
+    "managePayment": "Manage Payment Method",
+    "cancelDescription": "If you cancel, your Pro features will remain active until the end of your current billing period.",
+    "checkoutSuccess": "Payment successful! Your Pro subscription is now active.",
+    "billingHistory": "Billing History",
+    "nextBilling": "Next billing date: {date}",
+    "activeSince": "Active since {date}",
+    "planDescription": {
+      "basic": "Perfect for casual readers who want to try AI-powered article management.",
+      "pro": "For power users who save and analyze articles daily."
+    }
+  }
+}

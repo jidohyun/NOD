@@ -1,0 +1,20 @@
+{
+  "useGitignore": true,
+  "words": [
+    "mise"
+  ],
+  "overrides": [
+    {
+      "filename": "**/*.ko.{md,txt}",
+      "language": "ko"
+    },
+    {
+      "filename": "**/*.ja.{md,txt}",
+      "language": "ja"
+    },
+    {
+      "filename": "**/*.zh.{md,txt}",
+      "language": "zh"
+    }
+  ]
+}

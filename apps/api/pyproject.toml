@@ -1,0 +1,109 @@
+[project]
+name = "api"
+version = "0.1.0"
+description = "FastAPI backend API"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.128.0",
+    "sqlalchemy[asyncio]>=2.0.40",
+    "alembic>=1.17.2",
+    "pydantic-settings>=2.12.0",
+    "asyncpg>=0.30.0",
+    "python-multipart>=0.0.20",
+    "httpx>=0.28.1",
+    "tenacity>=9.1.2",
+    "redis>=5.0.0",
+    "structlog>=25.0.0",
+    "opentelemetry-api>=1.28.0",
+    "opentelemetry-sdk>=1.28.0",
+    "opentelemetry-instrumentation-fastapi>=0.49b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.49b0",
+    "opentelemetry-instrumentation-httpx>=0.49b0",
+    "opentelemetry-instrumentation-redis>=0.49b0",
+    "opentelemetry-exporter-otlp>=1.28.0",
+    "jwcrypto>=1.5.6",
+    "psycopg2-binary>=2.9.9",
+    "pgvector>=0.3.6",
+    "openai>=1.82.0",
+    "google-genai>=1.14.0",
+    "bcrypt>=4.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.12",
+    "poethepoet>=0.35.0",
+    "mypy>=1.17.0",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=0.26.0",
+    "pytest-cov>=6.1.1",
+    "factory-boy>=3.3.3",
+
+]
+
+[tool.uv]
+managed = true
+
+[tool.poe.tasks]
+dev = "fastapi dev src/main.py --port 8000"
+start = "fastapi run src/main.py --port 8000"
+
+# Database
+migrate = "alembic upgrade head"
+"migrate-create" = "alembic revision --autogenerate -m"
+"migrate-down" = "alembic downgrade -1"
+
+# Linting & Formatting
+lint = "ruff check ."
+format = "ruff format ."
+check = ["lint", "format"]
+
+# Type checking
+typecheck = "mypy src"
+
+# All checks
+"all-checks" = ["check", "typecheck"]
+
+# Testing
+test = "pytest tests/"
+"test-cov" = "pytest tests/ --cov=src --cov-report=html"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+exclude = ["alembic"]
+
+[[tool.mypy.overrides]]
+module = ["asyncpg.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["redis.asyncio.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["jwcrypto.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["openai.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["google.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["pgvector.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["bcrypt.*"]
+ignore_missing_imports = true

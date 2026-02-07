@@ -1,0 +1,107 @@
+{
+  "@@locale": "en",
+  "appTitle": "Fullstack Starter",
+  "@appTitle": {
+    "description": "The app title"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "An error occurred",
+  "@error": {
+    "description": "Generic error message"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "extHeaderTitle": "NOD",
+  "@extHeaderTitle": {
+    "description": "Extension header title"
+  },
+  "extHeaderSubtitle": "Article Saver",
+  "@extHeaderSubtitle": {
+    "description": "Extension header subtitle"
+  },
+  "extLoginTitle": "Save articles with AI analysis",
+  "@extLoginTitle": {
+    "description": "Extension login prompt title"
+  },
+  "extLoginSubtitle": "Sign in to your NOD account to get started",
+  "@extLoginSubtitle": {
+    "description": "Extension login prompt subtitle"
+  },
+  "extLoginFeature1": "Extract key insights from articles",
+  "@extLoginFeature1": {
+    "description": "Extension feature 1"
+  },
+  "extLoginFeature2": "Build your knowledge library",
+  "@extLoginFeature2": {
+    "description": "Extension feature 2"
+  },
+  "extLoginFeature3": "Access from any device",
+  "@extLoginFeature3": {
+    "description": "Extension feature 3"
+  },
+  "extLoginButton": "Sign In to NOD",
+  "@extLoginButton": {
+    "description": "Extension login button"
+  },
+  "extLoadingAuth": "Checking authentication...",
+  "@extLoadingAuth": {
+    "description": "Extension auth loading message"
+  },
+  "extLoadingExtract": "Analyzing article...",
+  "@extLoadingExtract": {
+    "description": "Extension content extraction loading"
+  },
+  "extSaveButton": "Save & Analyze",
+  "@extSaveButton": {
+    "description": "Extension save button text"
+  },
+  "extSaving": "Saving...",
+  "@extSaving": {
+    "description": "Extension saving in progress"
+  },
+  "extSaveSuccessTitle": "Saved!",
+  "@extSaveSuccessTitle": {
+    "description": "Extension save success title"
+  },
+  "extSaveSuccessSubtitle": "AI analysis in progress",
+  "@extSaveSuccessSubtitle": {
+    "description": "Extension save success subtitle"
+  },
+  "extViewDashboard": "View in Dashboard",
+  "@extViewDashboard": {
+    "description": "Extension view in dashboard button"
+  },
+  "extErrorTitle": "Something went wrong",
+  "@extErrorTitle": {
+    "description": "Extension error title"
+  },
+  "extTryAgain": "Try Again",
+  "@extTryAgain": {
+    "description": "Extension retry button"
+  },
+  "extMinRead": "min read",
+  "@extMinRead": {
+    "description": "Extension reading time suffix"
+  }
+}

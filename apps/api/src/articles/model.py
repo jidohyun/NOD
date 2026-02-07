@@ -1,0 +1,88 @@
+import uuid as uuid_lib
+from datetime import datetime
+
+from pgvector.sqlalchemy import Vector
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text, func, text
+from sqlalchemy.dialects.postgresql import JSON, UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from src.common.models.base import TimestampMixin, UUIDMixin
+from src.lib.database import Base
+
+
+class Article(UUIDMixin, TimestampMixin, Base):
+    __tablename__ = "articles"
+
+    user_id: Mapped[uuid_lib.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
+    title: Mapped[str] = mapped_column(String(500), nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    source: Mapped[str] = mapped_column(
+        String(50), nullable=False, server_default=text("'web'")
+    )
+    status: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default=text("'pending'")
+    )
+
+    # Relationships
+    summary: Mapped["ArticleSummary | None"] = relationship(
+        back_populates="article", uselist=False, cascade="all, delete-orphan"
+    )
+    embedding: Mapped["ArticleEmbedding | None"] = relationship(
+        back_populates="article", uselist=False, cascade="all, delete-orphan"
+    )
+
+
+class ArticleSummary(UUIDMixin, TimestampMixin, Base):
+    __tablename__ = "article_summaries"
+
+    article_id: Mapped[uuid_lib.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("articles.id", ondelete="CASCADE"),
+        unique=True,
+        nullable=False,
+    )
+    summary: Mapped[str] = mapped_column(Text, nullable=False)
+    concepts: Mapped[dict] = mapped_column(JSON, nullable=False, default=list)
+    key_points: Mapped[dict] = mapped_column(JSON, nullable=False, default=list)
+    reading_time_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    language: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)
+    ai_model: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    # Relationships
+    article: Mapped["Article"] = relationship(back_populates="summary")
+
+
+class ArticleEmbedding(UUIDMixin, TimestampMixin, Base):
+    __tablename__ = "article_embeddings"
+
+    article_id: Mapped[uuid_lib.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("articles.id", ondelete="CASCADE"),
+        unique=True,
+        nullable=False,
+    )
+    embedding: Mapped[list[float]] = mapped_column(
+        Vector(768), nullable=False
+    )
+    ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)
+    ai_model: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    # Relationships
+    article: Mapped["Article"] = relationship(back_populates="embedding")
+
+
+# IVFFlat index for cosine similarity search (PoC; production would use HNSW)
+article_embedding_index = Index(
+    "ix_article_embeddings_embedding",
+    ArticleEmbedding.embedding,
+    postgresql_using="ivfflat",
+    postgresql_with={"lists": 100},
+    postgresql_ops={"embedding": "vector_cosine_ops"},
+)
