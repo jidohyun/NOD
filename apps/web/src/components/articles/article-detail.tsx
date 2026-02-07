@@ -1,0 +1,150 @@
+"use client";
+
+import { useArticle, useDeleteArticle } from "@/lib/api/articles";
+import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+
+const STATUS_COLORS: Record<string, string> = {
+  pending: "bg-primary/10 text-primary",
+  analyzing: "bg-blue-100 text-blue-800",
+  completed: "bg-green-100 text-green-800",
+  failed: "bg-red-100 text-red-800",
+};
+
+const DATE_LOCALE_MAP: Record<string, string> = {
+  ko: "ko-KR",
+  en: "en-US",
+  ja: "ja-JP",
+};
+
+export function ArticleDetail({ id }: { id: string }) {
+  const t = useTranslations("dashboard");
+  const tc = useTranslations("common");
+  const locale = useLocale();
+  const { data: article, isLoading, isError } = useArticle(id);
+  const deleteArticle = useDeleteArticle();
+  const router = useRouter();
+
+  const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
+
+  if (isLoading) {
+    return <div className="py-12 text-center text-muted-foreground">{tc("loading")}</div>;
+  }
+  if (isError || !article) {
+    return <div className="py-12 text-center text-destructive">{t("articleNotFound")}</div>;
+  }
+
+  const handleDelete = async () => {
+    if (!confirm(t("deleteConfirm"))) return;
+    await deleteArticle.mutateAsync(id);
+    router.push("/articles");
+  };
+
+  const formattedDate = new Date(article.created_at).toLocaleDateString(dateLocale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="text-2xl font-bold">{article.title}</h1>
+          <button
+            onClick={handleDelete}
+            className="shrink-0 rounded-md border border-destructive px-3 py-1 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground"
+          >
+            {tc("delete")}
+          </button>
+        </div>
+        <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[article.status] || ""}`}
+          >
+            {article.status}
+          </span>
+          <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">{article.source}</span>
+          <time>{formattedDate}</time>
+          {article.url && (
+            <a
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              {t("original")}
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Status indicator for pending/analyzing */}
+      {(article.status === "pending" || article.status === "analyzing") && (
+        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+            <p className="text-sm text-blue-800">
+              {article.status === "pending"
+                ? t("pendingAnalysis")
+                : t("analyzingArticle")}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Summary */}
+      {article.summary && (
+        <div className="space-y-4">
+          <section className="rounded-lg border bg-card p-4">
+            <h2 className="text-lg font-semibold mb-2">{t("summary")}</h2>
+            <p className="text-sm leading-relaxed">{article.summary.summary}</p>
+            {article.summary.reading_time_minutes && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                {t("readTime", { minutes: article.summary.reading_time_minutes })}
+                {article.summary.language && ` · ${article.summary.language.toUpperCase()}`}
+              </p>
+            )}
+          </section>
+
+          {article.summary.concepts.length > 0 && (
+            <section className="rounded-lg border bg-card p-4">
+              <h2 className="text-lg font-semibold mb-2">{t("concepts")}</h2>
+              <div className="flex flex-wrap gap-2">
+                {article.summary.concepts.map((concept) => (
+                  <span
+                    key={concept}
+                    className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
+                  >
+                    {concept}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {article.summary.key_points.length > 0 && (
+            <section className="rounded-lg border bg-card p-4">
+              <h2 className="text-lg font-semibold mb-2">{t("keyPoints")}</h2>
+              <ul className="list-disc list-inside space-y-1">
+                {article.summary.key_points.map((point, i) => (
+                  <li key={i} className="text-sm leading-relaxed">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <p className="text-xs text-muted-foreground">
+            {t("analyzedBy", {
+              provider: article.summary.ai_provider,
+              model: article.summary.ai_model,
+            })}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
