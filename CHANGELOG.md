@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2026-02-07)
+
+
+### Features
+
+* unify app color system around #E8B931 gold brand identity ([bce22e5](https://github.com/jidohyun/NOD/commit/bce22e5a0aed6792c3c932b3856be756090c9d11))
+
 ## [2.7.1](https://github.com/first-fluke/fullstack-starter/compare/v2.7.0...v2.7.1) (2026-01-29)
 
 
