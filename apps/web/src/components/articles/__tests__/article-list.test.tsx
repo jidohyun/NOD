@@ -119,7 +119,7 @@ describe('ArticleList', () => {
 
       renderWithProviders(<ArticleList />)
 
-      expect(screen.getByText(/error/i)).toBeInTheDocument()
+      expect(screen.getByText(/failed to load/i)).toBeInTheDocument()
     })
   })
 
