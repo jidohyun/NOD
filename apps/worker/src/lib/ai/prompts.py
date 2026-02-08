@@ -1,4 +1,5 @@
-ARTICLE_ANALYSIS_PROMPT = """Analyze the following article and provide a structured analysis.
+ARTICLE_ANALYSIS_PROMPT = """\
+Analyze the following article and provide a structured analysis.
 
 Title: {title}
 
