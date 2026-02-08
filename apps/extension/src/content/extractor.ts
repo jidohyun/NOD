@@ -21,7 +21,8 @@ export function extractContent(): ExtractedContent {
  */
 function tryReadability(): ExtractedContent | null {
   try {
-    const documentClone = document.cloneNode(true) as Document;
+    const sourceDocument = getSourceDocument();
+    const documentClone = sourceDocument.cloneNode(true) as Document;
     const reader = new Readability(documentClone);
     const article = reader.parse();
 
@@ -33,7 +34,7 @@ function tryReadability(): ExtractedContent | null {
     const wordCount = countWords(content);
 
     return {
-      title: article.title || document.title || "Untitled",
+      title: article.title || sourceDocument.title || "Untitled",
       content: truncateContent(content),
       excerpt: createExcerpt(content),
       url: window.location.href,
@@ -52,6 +53,7 @@ function tryReadability(): ExtractedContent | null {
  * Fallback heuristic extraction
  */
 function heuristicExtraction(): ExtractedContent {
+  const sourceDocument = getSourceDocument();
   const title = extractTitle();
   const content = extractMainContent();
   const wordCount = countWords(content);
@@ -73,30 +75,32 @@ function heuristicExtraction(): ExtractedContent {
  * Extract page title
  */
 function extractTitle(): string {
+  const sourceDocument = getSourceDocument();
   // Try Open Graph title
-  const ogTitle = document.querySelector<HTMLMetaElement>(
+  const ogTitle = sourceDocument.querySelector<HTMLMetaElement>(
     'meta[property="og:title"]'
   )?.content;
   if (ogTitle) return ogTitle;
 
   // Try h1
-  const h1 = document.querySelector("h1")?.textContent?.trim();
+  const h1 = sourceDocument.querySelector("h1")?.textContent?.trim();
   if (h1) return h1;
 
   // Fallback to document title
-  return document.title || "Untitled";
+  return sourceDocument.title || "Untitled";
 }
 
 /**
  * Extract main content using heuristics
  */
 function extractMainContent(): string {
+  const sourceDocument = getSourceDocument();
   // Priority: article > main > [role="main"] > body
   const contentElement =
-    document.querySelector("article") ||
-    document.querySelector("main") ||
-    document.querySelector('[role="main"]') ||
-    document.body;
+    sourceDocument.querySelector("article") ||
+    sourceDocument.querySelector("main") ||
+    sourceDocument.querySelector('[role="main"]') ||
+    sourceDocument.body;
 
   const clone = contentElement.cloneNode(true) as HTMLElement;
 
@@ -135,7 +139,8 @@ function extractMainContent(): string {
  * Extract site name from meta tags
  */
 function extractSiteName(): string {
-  const ogSiteName = document.querySelector<HTMLMetaElement>(
+  const sourceDocument = getSourceDocument();
+  const ogSiteName = sourceDocument.querySelector<HTMLMetaElement>(
     'meta[property="og:site_name"]'
   )?.content;
   if (ogSiteName) return ogSiteName;
@@ -148,11 +153,12 @@ function extractSiteName(): string {
  * Extract author from meta tags
  */
 function extractAuthor(): string | undefined {
+  const sourceDocument = getSourceDocument();
   const metaAuthor =
-    document.querySelector<HTMLMetaElement>('meta[name="author"]')?.content;
+    sourceDocument.querySelector<HTMLMetaElement>('meta[name="author"]')?.content;
   if (metaAuthor) return metaAuthor;
 
-  const articleAuthor = document.querySelector<HTMLMetaElement>(
+  const articleAuthor = sourceDocument.querySelector<HTMLMetaElement>(
     'meta[property="article:author"]'
   )?.content;
   if (articleAuthor) return articleAuthor;
@@ -164,18 +170,19 @@ function extractAuthor(): string | undefined {
  * Extract published date from meta tags
  */
 function extractPublishedDate(): string | undefined {
-  const articleTime = document.querySelector<HTMLMetaElement>(
+  const sourceDocument = getSourceDocument();
+  const articleTime = sourceDocument.querySelector<HTMLMetaElement>(
     'meta[property="article:published_time"]'
   )?.content;
   if (articleTime) return articleTime;
 
-  const datePublished = document.querySelector<HTMLMetaElement>(
+  const datePublished = sourceDocument.querySelector<HTMLMetaElement>(
     'meta[property="datePublished"]'
   )?.content;
   if (datePublished) return datePublished;
 
   // Try time element
-  const timeElement = document.querySelector<HTMLTimeElement>("time[datetime]");
+  const timeElement = sourceDocument.querySelector<HTMLTimeElement>("time[datetime]");
   if (timeElement?.dateTime) return timeElement.dateTime;
 
   return undefined;
@@ -212,13 +219,14 @@ function truncateContent(content: string): string {
  * Check if current page is likely an article
  */
 export function isArticlePage(): boolean {
+  const sourceDocument = getSourceDocument();
   // Check for article-like elements
-  const hasArticle = !!document.querySelector("article");
-  const hasMain = !!document.querySelector("main");
+  const hasArticle = !!sourceDocument.querySelector("article");
+  const hasMain = !!sourceDocument.querySelector("main");
 
   // Check for article meta tags
   const hasOgArticle =
-    document.querySelector('meta[property="og:type"]')?.getAttribute("content") === "article";
+    sourceDocument.querySelector('meta[property="og:type"]')?.getAttribute("content") === "article";
 
   // Check content length
   const mainContent = extractMainContent();
@@ -226,4 +234,23 @@ export function isArticlePage(): boolean {
   const hasEnoughContent = wordCount > 100;
 
   return (hasArticle || hasMain || hasOgArticle) && hasEnoughContent;
+}
+
+function getSourceDocument(): Document {
+  const hostname = window.location.hostname;
+  const isNaverBlog = hostname === "blog.naver.com" || hostname.endsWith(".blog.naver.com");
+  if (!isNaverBlog) return document;
+
+  const iframe = document.querySelector<HTMLIFrameElement>("iframe#mainFrame");
+  if (!iframe) return document;
+
+  try {
+    const iframeDoc = iframe.contentDocument;
+    if (!iframeDoc?.body) return document;
+
+    const text = iframeDoc.body.textContent?.replace(/\s+/g, " ").trim() || "";
+    return text.length > 200 ? iframeDoc : document;
+  } catch {
+    return document;
+  }
 }
