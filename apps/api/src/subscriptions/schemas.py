@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
-from pydantic import BaseModel, Field
 
+from pydantic import BaseModel, Field
 
 # Plan limits configuration
 PLAN_LIMITS = {
@@ -11,7 +11,7 @@ PLAN_LIMITS = {
         "searches_per_day": 5,
     },
     "pro": {
-        "summaries_per_month": 300,
+        "summaries_per_month": -1,
         "max_articles": -1,  # unlimited
         "searches_per_day": -1,  # unlimited
     },
