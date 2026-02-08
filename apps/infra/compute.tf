@@ -30,7 +30,7 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       env {
-        name  = "ENVIRONMENT"
+        name  = "PROJECT_ENV"
         value = var.environment
       }
 
@@ -72,6 +72,21 @@ resource "google_cloud_run_v2_service" "api" {
       env {
         name  = "STORAGE_BUCKET"
         value = google_storage_bucket.uploads.name
+      }
+
+      env {
+        name  = "STORAGE_BACKEND"
+        value = "gcs"
+      }
+
+      env {
+        name  = "GCS_BUCKET_NAME"
+        value = google_storage_bucket.uploads.name
+      }
+
+      env {
+        name  = "WORKER_URL"
+        value = google_cloud_run_v2_service.worker.uri
       }
 
       startup_probe {
@@ -185,7 +200,7 @@ resource "google_cloud_run_v2_service" "worker" {
       }
 
       env {
-        name  = "ENVIRONMENT"
+        name  = "PROJECT_ENV"
         value = var.environment
       }
 
@@ -229,6 +244,21 @@ resource "google_cloud_run_v2_service" "worker" {
         value = google_storage_bucket.uploads.name
       }
 
+      env {
+        name  = "STORAGE_BACKEND"
+        value = "gcs"
+      }
+
+      env {
+        name  = "GCS_BUCKET_NAME"
+        value = google_storage_bucket.uploads.name
+      }
+
+      env {
+        name  = "WORKER_URL"
+        value = google_cloud_run_v2_service.worker.uri
+      }
+
       startup_probe {
         http_get {
           path = "/health"
@@ -245,6 +275,14 @@ resource "google_cloud_run_v2_service" "worker" {
   depends_on = [
     google_secret_manager_secret_iam_member.worker_db_password,
   ]
+}
+
+# Allow API service to invoke Worker (Cloud Run auth)
+resource "google_cloud_run_v2_service_iam_member" "worker_api" {
+  location = google_cloud_run_v2_service.worker.location
+  name     = google_cloud_run_v2_service.worker.name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.api.email}"
 }
 
 # Allow public access to API
