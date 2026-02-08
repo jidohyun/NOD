@@ -1,12 +1,12 @@
 "use client";
 
-import { useInfiniteArticles } from "@/lib/api/articles";
-import { useState } from "react";
+import { LayoutGrid, List } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { ArticleCard } from "@/components/articles/article-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LayoutGrid, List } from "lucide-react";
+import { useInfiniteArticles } from "@/lib/api/articles";
 
 type ViewMode = "grid" | "list";
 
@@ -16,13 +16,7 @@ export function ArticleList() {
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isError,
-  } = useInfiniteArticles({
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteArticles({
     limit: 20,
     search: search || undefined,
     status: statusFilter || undefined,
@@ -77,31 +71,31 @@ export function ArticleList() {
         </div>
       </div>
 
-      {isLoading && (
+      {isLoading ? (
         <div className="py-12 text-center text-muted-foreground">{t("loadingArticles")}</div>
-      )}
-      {isError && (
-        <div className="py-12 text-center text-destructive">{t("loadError")}</div>
-      )}
-      {!isLoading && !isError && articles.length === 0 && (
-        <div className="py-12 text-center text-muted-foreground">
-          {t("noArticles")}
-        </div>
-      )}
+      ) : null}
+      {isError ? <div className="py-12 text-center text-destructive">{t("loadError")}</div> : null}
+      {!isLoading && !isError && articles.length === 0 ? (
+        <div className="py-12 text-center text-muted-foreground">{t("noArticles")}</div>
+      ) : null}
 
-      <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-3"}>
+      <div
+        className={
+          viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-3"
+        }
+      >
         {articles.map((article) => (
           <ArticleCard key={article.id} article={article} />
         ))}
       </div>
 
-      {hasNextPage && (
+      {hasNextPage ? (
         <div className="flex justify-center pt-4">
           <Button onClick={() => fetchNextPage()} variant="outline">
             {t("loadMore")}
           </Button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

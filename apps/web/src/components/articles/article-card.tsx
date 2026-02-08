@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { ArticleListItem } from "@/lib/api/articles";
 
 export interface ArticleCardProps {
@@ -27,17 +27,14 @@ export function ArticleCard({ article }: ArticleCardProps) {
     day: "numeric",
   });
 
-  const hasSummary = article.summary_preview && article.summary_preview.trim() !== "";
-  const hasConcepts = article.concepts && article.concepts.length > 0;
+  const hasSummary = (article.summary_preview?.trim() ?? "") !== "";
+  const hasConcepts = (article.concepts?.length ?? 0) > 0;
 
   return (
     <Card role="article" className="hover:shadow-lg transition-shadow">
       <CardHeader>
         <div className="space-y-2">
-          <Link
-            href={`/articles/${article.id}`}
-            className="text-xl font-semibold hover:underline"
-          >
+          <Link href={`/articles/${article.id}`} className="text-xl font-semibold hover:underline">
             {article.title}
           </Link>
           <div className="flex gap-2">
@@ -52,15 +49,15 @@ export function ArticleCard({ article }: ArticleCardProps) {
             {hasSummary ? article.summary_preview : t("noSummary")}
           </p>
           <p className="text-xs text-muted-foreground">{formattedDate}</p>
-          {hasConcepts && (
+          {hasConcepts ? (
             <div data-testid="concepts-section" className="flex flex-wrap gap-2">
-              {article.concepts!.map((concept) => (
+              {article.concepts?.map((concept) => (
                 <Badge key={concept} variant="outline" className="text-xs">
                   {concept}
                 </Badge>
               ))}
             </div>
-          )}
+          ) : null}
         </div>
       </CardContent>
     </Card>
