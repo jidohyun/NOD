@@ -60,6 +60,14 @@ apps/mobile/.flutter-plugins
 apps/mobile/.flutter-plugins-dependencies
 apps/mobile/.packages
 
+# Mobile (local/generated configs)
+apps/mobile/android/local.properties
+apps/mobile/ios/Flutter/flutter_export_environment.sh
+apps/mobile/ios/Flutter/Generated.xcconfig
+
+# Tooling (local state)
+docs/.bkit-memory.json
+
 # Misc
 *.bak
 *.tmp
