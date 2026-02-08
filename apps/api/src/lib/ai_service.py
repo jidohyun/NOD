@@ -1,5 +1,7 @@
 """AI service for article summarization using Gemini or OpenAI."""
 
+from typing import Literal
+
 import structlog
 from pydantic import BaseModel
 
@@ -33,8 +35,12 @@ class ArticleSummaryResult(BaseModel):
     markdown_note: str
 
 
-async def summarize_article(title: str, content: str) -> ArticleSummaryResult:
-    """Summarize an article using the configured AI provider."""
+async def summarize_article(
+    title: str,
+    content: str,
+    provider: Literal["gemini", "openai"] | None = None,
+) -> ArticleSummaryResult:
+    """Summarize an article using the configured (or overridden) AI provider."""
     user_prompt = ARTICLE_MARKDOWN_NOTE_USER_PROMPT.format(
         title=title,
         content=content[:15000],
@@ -42,7 +48,17 @@ async def summarize_article(title: str, content: str) -> ArticleSummaryResult:
 
     prompt = f"{SUMMARIZE_PROMPT}\n\n{user_prompt}"
 
-    if settings.AI_PROVIDER == "gemini":
+    resolved_provider = provider or settings.AI_PROVIDER
+
+    if resolved_provider == "openai" and not settings.OPENAI_API_KEY:
+        logger.warning("OpenAI key not set, falling back to Gemini")
+        resolved_provider = "gemini"
+
+    if resolved_provider == "gemini" and not settings.GEMINI_API_KEY:
+        logger.warning("Gemini key not set, falling back to OpenAI")
+        resolved_provider = "openai"
+
+    if resolved_provider == "gemini":
         gemini_prompt = f"{KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT}\n\n{prompt}"
         return await _summarize_with_gemini(gemini_prompt)
     return await _summarize_with_openai(prompt)

@@ -127,6 +127,65 @@ async def delete_article(
     return result.rowcount > 0
 
 
+async def search_articles_semantic(
+    db: AsyncSession,
+    user_id: str,
+    query_embedding: list[float],
+    page: int = 1,
+    limit: int = 20,
+    status_filter: str | None = None,
+    similarity_threshold: float = 0.3,
+) -> PaginatedResponse[ArticleListResponse]:
+    similarity_expr = 1 - ArticleEmbedding.embedding.cosine_distance(query_embedding)
+
+    base_query = (
+        select(Article, similarity_expr.label("similarity"))
+        .join(ArticleEmbedding, ArticleEmbedding.article_id == Article.id)
+        .where(
+            Article.user_id == uuid.UUID(user_id),
+            similarity_expr >= similarity_threshold,
+        )
+    )
+
+    if status_filter:
+        base_query = base_query.where(Article.status == status_filter)
+
+    # Count
+    count_query = select(func.count()).select_from(base_query.subquery())
+    total_result = await db.execute(count_query)
+    total = total_result.scalar_one()
+
+    # Fetch ordered by similarity desc with summary eager load
+    query = (
+        base_query.options(selectinload(Article.summary))
+        .order_by(ArticleEmbedding.embedding.cosine_distance(query_embedding))
+        .offset((page - 1) * limit)
+        .limit(limit)
+    )
+    result = await db.execute(query)
+    rows = result.all()
+
+    items = [
+        ArticleListResponse(
+            id=article.id,
+            url=article.url,
+            title=article.title,
+            source=article.source,
+            status=article.status,
+            created_at=article.created_at,
+            summary_preview=article.summary.summary[:200] if article.summary else None,
+        )
+        for article, _similarity in rows
+    ]
+
+    return PaginatedResponse.create(
+        data=items,
+        total=total,
+        page=page,
+        limit=limit,
+    )
+
+
 async def get_similar_articles(
     db: AsyncSession,
     article_id: uuid.UUID,
