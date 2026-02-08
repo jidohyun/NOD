@@ -1,5 +1,5 @@
-import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/lib/i18n/routing";
 
@@ -59,7 +59,9 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const isAuthenticated = Boolean(user);
 
   const isProtectedRoute = protectedPaths.some(
@@ -71,19 +73,23 @@ export async function proxy(request: NextRequest) {
   );
 
   if (isProtectedRoute && !isAuthenticated) {
-    const loginUrl = new URL(
-      locale === defaultLocale ? "/login" : `/${locale}/login`,
-      request.url
-    );
+    const loginUrl = new URL(locale === defaultLocale ? "/login" : `/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }
 
   if (isAuthRoute && isAuthenticated) {
-    const dashboardUrl = new URL(
-      locale === defaultLocale ? "/dashboard" : `/${locale}/dashboard`,
-      request.url
-    );
-    return NextResponse.redirect(dashboardUrl);
+    const redirectParam = nextUrl.searchParams.get("redirect");
+    const isSafeRedirect =
+      typeof redirectParam === "string" &&
+      redirectParam.startsWith("/") &&
+      !redirectParam.startsWith("//");
+
+    const target = isSafeRedirect ? redirectParam : "/dashboard";
+    const hasLocalePrefix = locales.some((l) => target === `/${l}` || target.startsWith(`/${l}/`));
+    const targetWithLocale =
+      hasLocalePrefix || locale === defaultLocale ? target : `/${locale}${target}`;
+
+    return NextResponse.redirect(new URL(targetWithLocale, request.url));
   }
 
   const response = intlMiddleware(request);
@@ -99,7 +105,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|_proxy|_next|_vercel|.*\\..*).*)",
-  ],
+  matcher: ["/((?!api|_proxy|_next|_vercel|.*\\..*).*)"],
 };
