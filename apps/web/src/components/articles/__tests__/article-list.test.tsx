@@ -3,8 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ArticleList } from "@/components/articles/article-list";
-import type { ArticleListItem } from "@/lib/api/articles";
-import { useInfiniteArticles } from "@/lib/api/articles";
+import { type ArticleListItem, useInfiniteArticles, useSemanticSearch } from "@/lib/api/articles";
 import { renderWithProviders } from "@/test/utils";
 
 const RE_LOADING = /loading/i;
@@ -17,6 +16,7 @@ const RE_LOAD_MORE = /load more/i;
 // Mock the API hooks
 vi.mock("@/lib/api/articles", () => ({
   useInfiniteArticles: vi.fn(),
+  useSemanticSearch: vi.fn(),
 }));
 
 // Mock ArticleCard to simplify testing
@@ -33,8 +33,10 @@ vi.mock("next/link", () => ({
 }));
 
 const mockUseInfiniteArticles = vi.mocked(useInfiniteArticles);
+const mockUseSemanticSearch = vi.mocked(useSemanticSearch);
 
 type InfiniteArticlesResult = ReturnType<typeof useInfiniteArticles>;
+type SemanticSearchResult = ReturnType<typeof useSemanticSearch>;
 
 function mockArticlesResponse(articles: ArticleListItem[], hasNextPage = false) {
   mockUseInfiniteArticles.mockReturnValue({
@@ -93,6 +95,14 @@ const mockArticles = [
 describe("ArticleList", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mockUseSemanticSearch.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+      error: new Error("Semantic search disabled"),
+      status: "error",
+    } as SemanticSearchResult);
   });
 
   describe("Loading state", () => {
