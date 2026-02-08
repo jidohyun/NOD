@@ -53,9 +53,12 @@ class GeminiProvider(AIProvider[Any]):
         return schema(**raw)
 
     async def generate_embedding(self, text: str) -> list[float]:
-        response = await self._client.models.embed_content(
+        response = await self._client.aio.models.embed_content(
             model=self._embedding_model,
             contents=text,
         )
         # Gemini text-embedding-004 outputs 768 dimensions by default
-        return list(response.embeddings[0].values)
+        embeddings = response.embeddings
+        if not embeddings or not embeddings[0].values:
+            raise ValueError("Gemini returned empty embeddings")
+        return list(embeddings[0].values)

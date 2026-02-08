@@ -80,6 +80,8 @@ async def _summarize_with_gemini(prompt: str) -> ArticleSummaryResult:
         ),
     )
 
+    if not response.text:
+        raise ValueError("Gemini returned empty response")
     return ArticleSummaryResult.model_validate_json(response.text)
 
 
@@ -105,6 +107,7 @@ async def _summarize_with_openai(prompt: str) -> ArticleSummaryResult:
         },
     )
 
-    return ArticleSummaryResult.model_validate_json(
-        completion.choices[0].message.content
-    )
+    content = completion.choices[0].message.content
+    if not content:
+        raise ValueError("OpenAI returned empty response")
+    return ArticleSummaryResult.model_validate_json(content)

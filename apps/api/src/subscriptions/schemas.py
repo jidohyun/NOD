@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -46,7 +47,7 @@ class UsageResponse(BaseModel):
 
 class PaddleWebhookEvent(BaseModel):
     event_type: str
-    data: dict
+    data: dict[str, Any]
 
 
 class CheckoutRequest(BaseModel):

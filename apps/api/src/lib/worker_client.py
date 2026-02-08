@@ -1,3 +1,5 @@
+from typing import Any
+
 import httpx
 import structlog
 
@@ -6,7 +8,7 @@ from src.lib.config import settings
 logger = structlog.get_logger(__name__)
 
 
-async def dispatch_worker_task(task_type: str, data: dict) -> None:
+async def dispatch_worker_task(task_type: str, data: dict[str, Any]) -> None:
     """Dispatch a task to the worker service.
 
     In local development, calls the worker HTTP endpoint directly.
