@@ -8,7 +8,7 @@ import { renderWithProviders } from "@/test/utils";
 const RE_NOD = /NOD/i;
 const RE_DASHBOARD = /dashboard/i;
 const RE_ARTICLES = /articles/i;
-const RE_SEARCH = /search/i;
+const RE_CHANGE_LANGUAGE = /change language/i;
 
 type NextLinkProps = {
   children: ReactNode;
@@ -89,11 +89,10 @@ describe("DashboardSidebar", () => {
 });
 
 describe("DashboardHeader", () => {
-  it("renders search input placeholder", () => {
+  it("renders language switch button", () => {
     renderWithProviders(<DashboardHeader />);
 
-    const searchInput = screen.getByPlaceholderText(RE_SEARCH);
-    expect(searchInput).toBeInTheDocument();
+    expect(screen.getByLabelText(RE_CHANGE_LANGUAGE)).toBeInTheDocument();
   });
 
   it("renders user avatar/menu button", async () => {
@@ -142,7 +141,7 @@ describe("DashboardLayout", () => {
       </DashboardLayout>
     );
 
-    // Check for header by looking for search input
-    expect(screen.getByPlaceholderText(RE_SEARCH)).toBeInTheDocument();
+    // Check for header by looking for language switch
+    expect(screen.getByLabelText(RE_CHANGE_LANGUAGE)).toBeInTheDocument();
   });
 });
