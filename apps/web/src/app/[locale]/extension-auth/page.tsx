@@ -6,6 +6,10 @@ import { createClient } from "@/lib/supabase/client";
 
 const AUTO_CLOSE_SECONDS = 5;
 
+type ExtensionTokenResponse = {
+  success?: boolean;
+};
+
 function ExtensionAuthContent() {
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [closeIn, setCloseIn] = useState<number | null>(null);
@@ -27,16 +31,22 @@ function ExtensionAuthContent() {
 
       const extId = searchParams.get("ext");
 
+      const runtime = typeof chrome !== "undefined" ? chrome.runtime : undefined;
+
       // Primary: Use chrome.runtime.sendMessage via externally_connectable
-      if (extId && typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+      if (extId && runtime?.sendMessage) {
         try {
-          chrome.runtime.sendMessage(extId, { type: "SET_TOKEN", token }, (response) => {
-            if (chrome.runtime.lastError || !response?.success) {
-              fallbackPostMessage(token);
-            } else {
-              setStatus("success");
+          runtime.sendMessage(
+            extId,
+            { type: "SET_TOKEN", token },
+            (response?: ExtensionTokenResponse) => {
+              if (runtime.lastError || !response?.success) {
+                fallbackPostMessage(token);
+              } else {
+                setStatus("success");
+              }
             }
-          });
+          );
           return;
         } catch {
           // Fall through to postMessage fallback

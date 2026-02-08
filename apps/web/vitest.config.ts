@@ -18,9 +18,5 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    deps: {
-      // Ensure Vite transforms next-intl so our `next/navigation` alias applies.
-      inline: ["next-intl"],
-    },
   },
 });

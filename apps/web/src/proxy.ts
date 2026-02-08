@@ -3,6 +3,10 @@ import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/lib/i18n/routing";
 
+type CookiesToSet = Parameters<
+  NonNullable<Parameters<typeof createServerClient>[2]["cookies"]["setAll"]>
+>[0];
+
 const intlMiddleware = createMiddleware(routing);
 
 const locales = ["ko", "en", "ja"];
@@ -46,7 +50,7 @@ export async function proxy(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: CookiesToSet) {
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
