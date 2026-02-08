@@ -68,20 +68,9 @@ resource "google_compute_security_policy" "main" {
     description = "Rate limiting - 1000 requests per minute"
   }
 
-  # Block known bad IPs (example - customize as needed)
-  rule {
-    action   = "deny(403)"
-    priority = "100"
-
-    match {
-      expr {
-        expression = "origin.region_code == 'XX'"
-      }
-    }
-
-    description = "Block traffic from specific regions"
-    preview     = true # Enable preview mode first
-  }
+  # NOTE: Region-based deny rules must use a valid region/country code.
+  # The original example used 'XX', which is invalid and breaks policy creation.
+  # Add your own deny rule here if/when needed.
 
   # XSS protection
   rule {
