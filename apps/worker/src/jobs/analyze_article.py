@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 import structlog
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import Vector  # type: ignore[import-untyped]
 from sqlalchemy import DateTime, Integer, String, Text, func, select
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column
@@ -43,8 +43,8 @@ class ArticleSummary(Base):
         UUID(as_uuid=True), unique=True, nullable=False
     )
     summary: Mapped[str] = mapped_column(Text, nullable=False)
-    concepts: Mapped[dict] = mapped_column(JSON, nullable=False)
-    key_points: Mapped[dict] = mapped_column(JSON, nullable=False)
+    concepts: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    key_points: Mapped[list[str]] = mapped_column(JSON, nullable=False)
     reading_time_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
     language: Mapped[str | None] = mapped_column(String(10), nullable=True)
     ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)
