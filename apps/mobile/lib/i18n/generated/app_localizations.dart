@@ -147,6 +147,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// Extension header title
+  ///
+  /// In en, this message translates to:
+  /// **'NOD'**
+  String get extHeaderTitle;
+
+  /// Extension header subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Article Saver'**
+  String get extHeaderSubtitle;
+
+  /// Extension login prompt title
+  ///
+  /// In en, this message translates to:
+  /// **'Save articles with AI analysis'**
+  String get extLoginTitle;
+
+  /// Extension login prompt subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to your NOD account to get started'**
+  String get extLoginSubtitle;
+
+  /// Extension feature 1
+  ///
+  /// In en, this message translates to:
+  /// **'Extract key insights from articles'**
+  String get extLoginFeature1;
+
+  /// Extension feature 2
+  ///
+  /// In en, this message translates to:
+  /// **'Build your knowledge library'**
+  String get extLoginFeature2;
+
+  /// Extension feature 3
+  ///
+  /// In en, this message translates to:
+  /// **'Access from any device'**
+  String get extLoginFeature3;
+
+  /// Extension login button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In to NOD'**
+  String get extLoginButton;
+
+  /// Extension auth loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Checking authentication...'**
+  String get extLoadingAuth;
+
+  /// Extension content extraction loading
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing article...'**
+  String get extLoadingExtract;
+
+  /// Extension save button text
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Analyze'**
+  String get extSaveButton;
+
+  /// Extension saving in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get extSaving;
+
+  /// Extension save success title
+  ///
+  /// In en, this message translates to:
+  /// **'Saved!'**
+  String get extSaveSuccessTitle;
+
+  /// Extension save success subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'AI analysis in progress'**
+  String get extSaveSuccessSubtitle;
+
+  /// Extension view in dashboard button
+  ///
+  /// In en, this message translates to:
+  /// **'View in Dashboard'**
+  String get extViewDashboard;
+
+  /// Extension error title
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get extErrorTitle;
+
+  /// Extension retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get extTryAgain;
+
+  /// Extension reading time suffix
+  ///
+  /// In en, this message translates to:
+  /// **'min read'**
+  String get extMinRead;
 }
 
 class _AppLocalizationsDelegate
