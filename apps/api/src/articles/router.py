@@ -1,4 +1,5 @@
 import uuid
+from typing import Literal
 
 import structlog
 from fastapi import APIRouter, HTTPException, Query, status
@@ -12,7 +13,8 @@ from src.articles.schemas import (
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
-from src.lib.dependencies import CurrentUser, DBSession
+from src.lib.config import settings
+from src.lib.dependencies import AIService, CurrentUser, DBSession
 from src.subscriptions import service as sub_service
 
 logger = structlog.get_logger(__name__)
@@ -20,18 +22,20 @@ logger = structlog.get_logger(__name__)
 router = APIRouter()
 
 
-async def _run_analysis(article_id: uuid.UUID, title: str, content: str) -> None:
+async def _run_analysis(
+    article_id: uuid.UUID,
+    title: str,
+    content: str,
+    provider: Literal["gemini", "openai"],
+) -> None:
     """Background task: summarize article with AI and save to DB."""
     from src.articles.model import Article, ArticleSummary
     from src.lib.ai_service import summarize_article
     from src.lib.database import async_session_factory
 
     try:
-        result = await summarize_article(title, content)
+        result = await summarize_article(title, content, provider=provider)
 
-        from src.lib.config import settings as app_settings
-
-        provider = app_settings.AI_PROVIDER
         model_name = "gemini-2.0-flash" if provider == "gemini" else "gpt-4o-mini"
 
         async with async_session_factory() as session:
@@ -58,6 +62,17 @@ async def _run_analysis(article_id: uuid.UUID, title: str, content: str) -> None
             await session.commit()
 
         logger.info("Article analysis complete", article_id=str(article_id))
+
+        # Trigger embedding generation asynchronously.
+        try:
+            from src.lib.worker_client import dispatch_worker_task
+
+            await dispatch_worker_task("embedding", {"article_id": str(article_id)})
+        except Exception:
+            logger.exception(
+                "Failed to dispatch embedding task",
+                article_id=str(article_id),
+            )
     except Exception:
         logger.exception("Article analysis failed", article_id=str(article_id))
 
@@ -82,7 +97,13 @@ async def create_article(
 
     # Check usage limits before running analysis
     if usage_info.can_summarize:
-        await _run_analysis(article.id, article.title, article.content)
+        # Pro plan always uses GPT-4o mini.
+        selected_provider: Literal["gemini", "openai"] = (
+            "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
+        )
+        await _run_analysis(
+            article.id, article.title, article.content, selected_provider
+        )
         await sub_service.increment_summary_usage(db, user.id)
         await db.commit()
         article = await service.get_article(db, article.id, user.id)
@@ -104,6 +125,28 @@ async def list_articles(
     return await service.list_articles(
         db, user.id, page=page, limit=limit, search=search, status_filter=status_filter
     )
+
+
+@router.get("/search", response_model=PaginatedResponse[ArticleListResponse])
+async def search_articles(
+    db: DBSession,
+    user: CurrentUser,
+    ai: AIService,
+    q: str = Query(min_length=2),
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=20, ge=1, le=100),
+    status_filter: str | None = Query(default=None, alias="status"),
+) -> PaginatedResponse[ArticleListResponse]:
+    try:
+        embedding = await ai.generate_embedding(q)
+        return await service.search_articles_semantic(
+            db, user.id, embedding, page=page, limit=limit, status_filter=status_filter
+        )
+    except Exception:
+        logger.warning("Semantic search failed, falling back to text search", query=q)
+        return await service.list_articles(
+            db, user.id, page=page, limit=limit, search=q, status_filter=status_filter
+        )
 
 
 @router.get("/{article_id}", response_model=ArticleResponse)
@@ -184,7 +227,12 @@ async def analyze_url(
 
     # Check usage limits before running analysis
     if usage_info.can_summarize:
-        await _run_analysis(article.id, article.title, article.content)
+        selected_provider: Literal["gemini", "openai"] = (
+            "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
+        )
+        await _run_analysis(
+            article.id, article.title, article.content, selected_provider
+        )
         await sub_service.increment_summary_usage(db, user.id)
         await db.commit()
         article = await service.get_article(db, article.id, user.id)

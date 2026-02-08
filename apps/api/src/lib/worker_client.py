@@ -15,9 +15,21 @@ async def dispatch_worker_task(task_type: str, data: dict) -> None:
     worker_url = settings.WORKER_URL
     try:
         async with httpx.AsyncClient() as client:
+            # Cloud Run -> Cloud Run authenticated call.
+            # https://cloud.google.com/run/docs/authenticating/service-to-service
+            token_resp = await client.get(
+                "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity",
+                params={"audience": worker_url, "format": "full"},
+                headers={"Metadata-Flavor": "Google"},
+                timeout=2.0,
+            )
+            token_resp.raise_for_status()
+            id_token = token_resp.text
+
             response = await client.post(
                 f"{worker_url}/tasks/process",
                 json={"task_type": task_type, "data": data},
+                headers={"Authorization": f"Bearer {id_token}"},
                 timeout=10.0,
             )
             response.raise_for_status()
