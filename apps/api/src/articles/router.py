@@ -4,17 +4,16 @@ import structlog
 from fastapi import APIRouter, HTTPException, Query, status
 
 from src.articles import service
-from src.subscriptions import service as sub_service
 from src.articles.schemas import (
     ArticleAnalyzeURL,
     ArticleCreate,
     ArticleListResponse,
     ArticleResponse,
     SimilarArticleResponse,
-    SummaryResponse,
 )
 from src.common.models.pagination import PaginatedResponse
 from src.lib.dependencies import CurrentUser, DBSession
+from src.subscriptions import service as sub_service
 
 logger = structlog.get_logger(__name__)
 
@@ -23,14 +22,15 @@ router = APIRouter()
 
 async def _run_analysis(article_id: uuid.UUID, title: str, content: str) -> None:
     """Background task: summarize article with AI and save to DB."""
+    from src.articles.model import Article, ArticleSummary
     from src.lib.ai_service import summarize_article
     from src.lib.database import async_session_factory
-    from src.articles.model import Article, ArticleSummary
 
     try:
         result = await summarize_article(title, content)
 
         from src.lib.config import settings as app_settings
+
         provider = app_settings.AI_PROVIDER
         model_name = "gemini-2.0-flash" if provider == "gemini" else "gpt-4o-mini"
 
@@ -38,6 +38,7 @@ async def _run_analysis(article_id: uuid.UUID, title: str, content: str) -> None
             summary = ArticleSummary(
                 article_id=article_id,
                 summary=result.summary,
+                markdown_note=result.markdown_note,
                 concepts=result.concepts,
                 key_points=result.key_points,
                 reading_time_minutes=result.reading_time_minutes,
@@ -48,6 +49,7 @@ async def _run_analysis(article_id: uuid.UUID, title: str, content: str) -> None
             session.add(summary)
 
             from sqlalchemy import update
+
             await session.execute(
                 update(Article)
                 .where(Article.id == article_id)
@@ -150,13 +152,18 @@ async def get_similar_articles(
     return await service.get_similar_articles(db, article_id, user.id, limit=limit)
 
 
-@router.post("/analyze-url", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/analyze-url", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED
+)
 async def analyze_url(
     data: ArticleAnalyzeURL,
     db: DBSession,
     user: CurrentUser,
 ) -> ArticleResponse:
-    """Convenience endpoint for Chrome Extension: accepts URL + pre-extracted content."""
+    """Convenience endpoint for the Chrome Extension.
+
+    Accepts a URL plus pre-extracted content.
+    """
     create_data = ArticleCreate(
         url=data.url,
         title=data.title,

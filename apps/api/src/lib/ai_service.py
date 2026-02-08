@@ -3,22 +3,22 @@
 import structlog
 from pydantic import BaseModel
 
+from src.lib.ai.prompts import (
+    ARTICLE_MARKDOWN_NOTE_USER_PROMPT,
+    KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT,
+)
 from src.lib.config import settings
 
 logger = structlog.get_logger(__name__)
 
-SUMMARIZE_PROMPT = """Analyze the following article and provide a structured summary.
-
-Title: {title}
-Content:
-{content}
-
-Instructions:
-- Write a concise summary (2-4 sentences) in the SAME language as the article.
-- Extract 3-7 key concepts/tags as short keywords.
-- Extract 3-5 key points (one sentence each).
-- Detect the article's language (ISO 639-1 code, e.g. "en", "ko", "ja").
-- Estimate reading time in minutes based on word count (~200 words/min).
+SUMMARIZE_PROMPT = """Return a JSON object with the following fields:
+- summary: 2-4 sentences in Korean
+- concepts: 3-7 short keywords
+- key_points: 3-5 key points (one sentence each)
+- language: the article's language (ISO 639-1 code, e.g. \"en\", \"ko\", \"ja\")
+- reading_time_minutes: estimated reading time in minutes based on word count
+  (~200 words/min)
+- markdown_note: a Korean markdown note following the exact template provided
 """
 
 
@@ -30,14 +30,21 @@ class ArticleSummaryResult(BaseModel):
     key_points: list[str]
     language: str
     reading_time_minutes: int
+    markdown_note: str
 
 
 async def summarize_article(title: str, content: str) -> ArticleSummaryResult:
     """Summarize an article using the configured AI provider."""
-    prompt = SUMMARIZE_PROMPT.format(title=title, content=content[:15000])
+    user_prompt = ARTICLE_MARKDOWN_NOTE_USER_PROMPT.format(
+        title=title,
+        content=content[:15000],
+    )
+
+    prompt = f"{SUMMARIZE_PROMPT}\n\n{user_prompt}"
 
     if settings.AI_PROVIDER == "gemini":
-        return await _summarize_with_gemini(prompt)
+        gemini_prompt = f"{KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT}\n\n{prompt}"
+        return await _summarize_with_gemini(gemini_prompt)
     return await _summarize_with_openai(prompt)
 
 
@@ -69,7 +76,7 @@ async def _summarize_with_openai(prompt: str) -> ArticleSummaryResult:
     completion = await client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are an article analysis assistant."},
+            {"role": "system", "content": KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
         response_format={
