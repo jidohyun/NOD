@@ -101,7 +101,12 @@ fi
 description = "Validate branch name and run tests before push"
 run = '''
 #!/usr/bin/env bash
-bunx @gracefullight/validate-branch || exit 1
+branch=$(git branch --show-current)
+if [[ "$branch" == release-please--* ]]; then
+    echo "[pre-push] release-please branch detected, skipping validation"
+else
+    bunx @gracefullight/validate-branch || exit 1
+fi
 
 # Get changed files compared to origin
 changed=$(git diff --name-only origin/main...HEAD 2>/dev/null || git diff --name-only HEAD~1)
