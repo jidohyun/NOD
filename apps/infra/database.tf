@@ -7,6 +7,9 @@ resource "google_sql_database_instance" "main" {
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
   settings {
+    # Cloud SQL defaults to ENTERPRISE_PLUS when not specified, which doesn't
+    # support shared-core tiers like db-f1-micro.
+    edition           = "ENTERPRISE"
     tier              = var.db_tier
     availability_type = var.environment == "prod" ? "REGIONAL" : "ZONAL"
     disk_size         = 10
