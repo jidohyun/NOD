@@ -1,28 +1,42 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderWithProviders, screen, userEvent } from '@/test/utils'
-import { ArticleList } from '@/components/articles/article-list'
-import { useInfiniteArticles } from '@/lib/api/articles'
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import type { ReactNode } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ArticleList } from "@/components/articles/article-list";
+import type { ArticleListItem } from "@/lib/api/articles";
+import { useInfiniteArticles } from "@/lib/api/articles";
+import { renderWithProviders } from "@/test/utils";
+
+const RE_LOADING = /loading/i;
+const RE_FAILED_TO_LOAD = /failed to load/i;
+const RE_NO_ARTICLES = /no articles/i;
+const RE_SEARCH = /search/i;
+const RE_STATUS = /status/i;
+const RE_LOAD_MORE = /load more/i;
 
 // Mock the API hooks
-vi.mock('@/lib/api/articles', () => ({
+vi.mock("@/lib/api/articles", () => ({
   useInfiniteArticles: vi.fn(),
-}))
+}));
 
 // Mock ArticleCard to simplify testing
-vi.mock('@/components/articles/article-card', () => ({
-  ArticleCard: ({ article }: any) => (
+vi.mock("@/components/articles/article-card", () => ({
+  ArticleCard: ({ article }: { article: ArticleListItem }) => (
     <div data-testid={`article-card-${article.id}`}>{article.title}</div>
   ),
-}))
+}));
 
 // Mock next/link
-vi.mock('next/link', () => ({
-  default: ({ children, href }: any) => <a href={href}>{children}</a>,
-}))
+type NextLinkProps = { children: ReactNode; href: string };
+vi.mock("next/link", () => ({
+  default: ({ children, href }: NextLinkProps) => <a href={href}>{children}</a>,
+}));
 
-const mockUseInfiniteArticles = vi.mocked(useInfiniteArticles)
+const mockUseInfiniteArticles = vi.mocked(useInfiniteArticles);
 
-function mockArticlesResponse(articles: any[], hasNextPage = false) {
+type InfiniteArticlesResult = ReturnType<typeof useInfiniteArticles>;
+
+function mockArticlesResponse(articles: ArticleListItem[], hasNextPage = false) {
   mockUseInfiniteArticles.mockReturnValue({
     data: {
       pages: [
@@ -48,41 +62,41 @@ function mockArticlesResponse(articles: any[], hasNextPage = false) {
     error: null,
     refetch: vi.fn(),
     isFetching: false,
-    status: 'success',
-  } as any)
+    status: "success",
+  } as InfiniteArticlesResult);
 }
 
 const mockArticles = [
   {
-    id: '1',
-    title: 'Test Article 1',
-    slug: 'test-article-1',
-    status: 'published',
-    created_at: '2024-01-01',
+    id: "1",
+    title: "Test Article 1",
+    slug: "test-article-1",
+    status: "published",
+    created_at: "2024-01-01",
   },
   {
-    id: '2',
-    title: 'Test Article 2',
-    slug: 'test-article-2',
-    status: 'draft',
-    created_at: '2024-01-02',
+    id: "2",
+    title: "Test Article 2",
+    slug: "test-article-2",
+    status: "draft",
+    created_at: "2024-01-02",
   },
   {
-    id: '3',
-    title: 'Test Article 3',
-    slug: 'test-article-3',
-    status: 'published',
-    created_at: '2024-01-03',
+    id: "3",
+    title: "Test Article 3",
+    slug: "test-article-3",
+    status: "published",
+    created_at: "2024-01-03",
   },
-]
+];
 
-describe('ArticleList', () => {
+describe("ArticleList", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
-  describe('Loading state', () => {
-    it('shows loading state when isLoading is true', () => {
+  describe("Loading state", () => {
+    it("shows loading state when isLoading is true", () => {
       mockUseInfiniteArticles.mockReturnValue({
         data: undefined,
         fetchNextPage: vi.fn(),
@@ -93,17 +107,17 @@ describe('ArticleList', () => {
         error: null,
         refetch: vi.fn(),
         isFetching: true,
-        status: 'pending',
-      } as any)
+        status: "pending",
+      } as InfiniteArticlesResult);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByText(/loading/i)).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText(RE_LOADING)).toBeInTheDocument();
+    });
+  });
 
-  describe('Error state', () => {
-    it('shows error message when isError is true', () => {
+  describe("Error state", () => {
+    it("shows error message when isError is true", () => {
       mockUseInfiniteArticles.mockReturnValue({
         data: undefined,
         fetchNextPage: vi.fn(),
@@ -111,143 +125,143 @@ describe('ArticleList', () => {
         isFetchingNextPage: false,
         isLoading: false,
         isError: true,
-        error: new Error('Failed to fetch'),
+        error: new Error("Failed to fetch"),
         refetch: vi.fn(),
         isFetching: false,
-        status: 'error',
-      } as any)
+        status: "error",
+      } as InfiniteArticlesResult);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByText(/failed to load/i)).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText(RE_FAILED_TO_LOAD)).toBeInTheDocument();
+    });
+  });
 
-  describe('Empty state', () => {
-    it('shows empty state when there are no articles', () => {
-      mockArticlesResponse([])
+  describe("Empty state", () => {
+    it("shows empty state when there are no articles", () => {
+      mockArticlesResponse([]);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByText(/no articles/i)).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText(RE_NO_ARTICLES)).toBeInTheDocument();
+    });
+  });
 
-  describe('Article rendering', () => {
-    it('renders all article cards when data is loaded', () => {
-      mockArticlesResponse(mockArticles)
+  describe("Article rendering", () => {
+    it("renders all article cards when data is loaded", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByTestId('article-card-1')).toBeInTheDocument()
-      expect(screen.getByTestId('article-card-2')).toBeInTheDocument()
-      expect(screen.getByTestId('article-card-3')).toBeInTheDocument()
-    })
+      expect(screen.getByTestId("article-card-1")).toBeInTheDocument();
+      expect(screen.getByTestId("article-card-2")).toBeInTheDocument();
+      expect(screen.getByTestId("article-card-3")).toBeInTheDocument();
+    });
 
-    it('displays article titles in cards', () => {
-      mockArticlesResponse(mockArticles)
+    it("displays article titles in cards", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByText('Test Article 1')).toBeInTheDocument()
-      expect(screen.getByText('Test Article 2')).toBeInTheDocument()
-      expect(screen.getByText('Test Article 3')).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText("Test Article 1")).toBeInTheDocument();
+      expect(screen.getByText("Test Article 2")).toBeInTheDocument();
+      expect(screen.getByText("Test Article 3")).toBeInTheDocument();
+    });
+  });
 
-  describe('Grid/List view toggle', () => {
-    it('renders view toggle buttons', () => {
-      mockArticlesResponse(mockArticles)
+  describe("Grid/List view toggle", () => {
+    it("renders view toggle buttons", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByTestId('view-toggle-grid')).toBeInTheDocument()
-      expect(screen.getByTestId('view-toggle-list')).toBeInTheDocument()
-    })
+      expect(screen.getByTestId("view-toggle-grid")).toBeInTheDocument();
+      expect(screen.getByTestId("view-toggle-list")).toBeInTheDocument();
+    });
 
-    it('defaults to grid view', () => {
-      mockArticlesResponse(mockArticles)
+    it("defaults to grid view", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      const gridToggle = screen.getByTestId('view-toggle-grid')
-      expect(gridToggle).toHaveAttribute('aria-pressed', 'true')
-    })
+      const gridToggle = screen.getByTestId("view-toggle-grid");
+      expect(gridToggle).toHaveAttribute("aria-pressed", "true");
+    });
 
-    it('switches to list view when list toggle is clicked', async () => {
-      mockArticlesResponse(mockArticles)
-      const user = userEvent.setup()
+    it("switches to list view when list toggle is clicked", async () => {
+      mockArticlesResponse(mockArticles);
+      const user = userEvent.setup();
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      const listToggle = screen.getByTestId('view-toggle-list')
-      await user.click(listToggle)
+      const listToggle = screen.getByTestId("view-toggle-list");
+      await user.click(listToggle);
 
-      expect(listToggle).toHaveAttribute('aria-pressed', 'true')
-    })
-  })
+      expect(listToggle).toHaveAttribute("aria-pressed", "true");
+    });
+  });
 
-  describe('Search input', () => {
-    it('renders search input', () => {
-      mockArticlesResponse(mockArticles)
+  describe("Search input", () => {
+    it("renders search input", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      const searchInput = screen.getByPlaceholderText(/search/i)
-      expect(searchInput).toBeInTheDocument()
-    })
+      const searchInput = screen.getByPlaceholderText(RE_SEARCH);
+      expect(searchInput).toBeInTheDocument();
+    });
 
-    it('allows typing in search input', async () => {
-      mockArticlesResponse(mockArticles)
-      const user = userEvent.setup()
+    it("allows typing in search input", async () => {
+      mockArticlesResponse(mockArticles);
+      const user = userEvent.setup();
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      const searchInput = screen.getByPlaceholderText(/search/i)
-      await user.type(searchInput, 'test query')
+      const searchInput = screen.getByPlaceholderText(RE_SEARCH);
+      await user.type(searchInput, "test query");
 
-      expect(searchInput).toHaveValue('test query')
-    })
-  })
+      expect(searchInput).toHaveValue("test query");
+    });
+  });
 
-  describe('Status filter', () => {
-    it('renders status filter control', () => {
-      mockArticlesResponse(mockArticles)
+  describe("Status filter", () => {
+    it("renders status filter control", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByLabelText(/status/i)).toBeInTheDocument()
-    })
+      expect(screen.getByLabelText(RE_STATUS)).toBeInTheDocument();
+    });
 
-    it('has status filter options', () => {
-      mockArticlesResponse(mockArticles)
+    it("has status filter options", () => {
+      mockArticlesResponse(mockArticles);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      const statusFilter = screen.getByLabelText(/status/i)
-      expect(statusFilter).toBeInTheDocument()
-    })
-  })
+      const statusFilter = screen.getByLabelText(RE_STATUS);
+      expect(statusFilter).toBeInTheDocument();
+    });
+  });
 
-  describe('Infinite scroll', () => {
-    it('shows load more button when hasNextPage is true', () => {
-      mockArticlesResponse(mockArticles, true)
+  describe("Infinite scroll", () => {
+    it("shows load more button when hasNextPage is true", () => {
+      mockArticlesResponse(mockArticles, true);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.getByText(/load more/i)).toBeInTheDocument()
-    })
+      expect(screen.getByText(RE_LOAD_MORE)).toBeInTheDocument();
+    });
 
-    it('does not show load more button when hasNextPage is false', () => {
-      mockArticlesResponse(mockArticles, false)
+    it("does not show load more button when hasNextPage is false", () => {
+      mockArticlesResponse(mockArticles, false);
 
-      renderWithProviders(<ArticleList />)
+      renderWithProviders(<ArticleList />);
 
-      expect(screen.queryByText(/load more/i)).not.toBeInTheDocument()
-    })
+      expect(screen.queryByText(RE_LOAD_MORE)).not.toBeInTheDocument();
+    });
 
-    it('calls fetchNextPage when load more is clicked', async () => {
-      const mockFetchNextPage = vi.fn()
+    it("calls fetchNextPage when load more is clicked", async () => {
+      const mockFetchNextPage = vi.fn();
       mockUseInfiniteArticles.mockReturnValue({
         data: {
           pages: [
@@ -273,16 +287,16 @@ describe('ArticleList', () => {
         error: null,
         refetch: vi.fn(),
         isFetching: false,
-        status: 'success',
-      } as any)
+        status: "success",
+      } as InfiniteArticlesResult);
 
-      const user = userEvent.setup()
-      renderWithProviders(<ArticleList />)
+      const user = userEvent.setup();
+      renderWithProviders(<ArticleList />);
 
-      const loadMoreButton = screen.getByText(/load more/i)
-      await user.click(loadMoreButton)
+      const loadMoreButton = screen.getByText(RE_LOAD_MORE);
+      await user.click(loadMoreButton);
 
-      expect(mockFetchNextPage).toHaveBeenCalledTimes(1)
-    })
-  })
-})
+      expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
+    });
+  });
+});

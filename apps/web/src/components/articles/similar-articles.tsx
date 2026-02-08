@@ -1,8 +1,8 @@
 "use client";
 
-import { useSimilarArticles } from "@/lib/api/articles";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useSimilarArticles } from "@/lib/api/articles";
 
 export function SimilarArticles({ articleId }: { articleId: string }) {
   const t = useTranslations("dashboard");
@@ -32,11 +32,11 @@ export function SimilarArticles({ articleId }: { articleId: string }) {
                 {t("similarity", { percent: Math.round(item.similarity * 100) })}
               </span>
             </div>
-            {item.summary_preview && (
+            {item.summary_preview ? (
               <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
                 {item.summary_preview}
               </p>
-            )}
+            ) : null}
             {item.shared_concepts.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1">
                 {item.shared_concepts.map((concept) => (
