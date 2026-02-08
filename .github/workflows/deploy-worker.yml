@@ -11,7 +11,9 @@ on:
 env:
   PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
   REGION: ${{ vars.GCP_REGION }}
-  SERVICE_NAME: fullstack-starter-worker
+  APP_NAME: ${{ vars.APP_NAME || 'fullstack-starter' }}
+  ENVIRONMENT: ${{ vars.ENVIRONMENT || 'dev' }}
+  SERVICE_NAME: ${{ format('{0}-{1}-worker', vars.APP_NAME || 'fullstack-starter', vars.ENVIRONMENT || 'dev') }}
   WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
   SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
 
@@ -69,7 +71,8 @@ jobs:
 
       - name: Build and push image
         run: |
-          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/fullstack-starter-images/worker:${{ github.sha }}"
+          REPO="${{ env.APP_NAME }}-${{ env.ENVIRONMENT }}-images"
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${REPO}/worker:${{ github.sha }}"
           docker build -t $IMAGE apps/worker
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
