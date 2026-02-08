@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@google-cloud/opentelemetry-cloud-trace-exporter": "^3.0.0",
+    "@next/third-parties": "^16.1.6",
     "@opentelemetry/instrumentation-fetch": "^0.208.0",
     "@opentelemetry/instrumentation-http": "^0.208.0",
     "@opentelemetry/resources": "^2.2.0",
