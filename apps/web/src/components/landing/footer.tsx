@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Link } from "@/lib/i18n/routing";
 
 export function LandingFooter() {
   const t = useTranslations("landing.footer");
@@ -49,13 +49,13 @@ export function LandingFooter() {
                 NOD
               </span>
             </Link>
-            <p className="text-[13px] text-white/25 max-w-xs leading-relaxed">{t("tagline")}</p>
+            <p className="text-[13px] text-white/45 max-w-xs leading-relaxed">{t("tagline")}</p>
           </div>
 
           {/* Link columns */}
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="font-mono text-[11px] text-white/30 uppercase tracking-wider mb-4">
+              <h4 className="font-mono text-[11px] text-white/50 uppercase tracking-wider mb-4">
                 {col.title}
               </h4>
               <ul className="space-y-2.5">
@@ -63,7 +63,7 @@ export function LandingFooter() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] text-white/25 hover:text-white/60 transition-colors"
+                      className="text-[13px] text-white/45 hover:text-white/80 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -76,7 +76,7 @@ export function LandingFooter() {
 
         {/* Bottom bar */}
         <div className="mt-16 pt-6 border-t border-nod-border/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-mono text-[11px] text-white/15">
+          <span className="font-mono text-[11px] text-white/35">
             &copy; {new Date().getFullYear()} NOD. {t("copyright")}
           </span>
           <div className="flex items-center gap-1">

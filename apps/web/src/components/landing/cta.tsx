@@ -1,9 +1,9 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
+import { Link } from "@/lib/i18n/routing";
 
 export function LandingCta() {
   const t = useTranslations("landing.cta");
@@ -64,7 +64,7 @@ export function LandingCta() {
               {t("button")}
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
-            <span className="font-mono text-[12px] text-white/20 tracking-wide">{t("note")}</span>
+            <span className="font-mono text-[12px] text-white/40 tracking-wide">{t("note")}</span>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { LandingFooter } from "@/components/landing/footer";
 import { LandingHero } from "@/components/landing/hero";
 import { LandingHowItWorks } from "@/components/landing/how-it-works";
 import { LandingNav } from "@/components/landing/nav";
+import { LandingPricing } from "@/components/landing/pricing";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -24,6 +25,7 @@ export default async function HomePage({ params }: HomePageProps) {
         <LandingFeatures />
         <LandingHowItWorks />
         <DashboardPreview />
+        <LandingPricing />
         <LandingCta />
       </main>
       <LandingFooter />

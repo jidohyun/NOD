@@ -68,16 +68,22 @@ export function DashboardPreview() {
                 {
                   title: "Understanding React Server Components",
                   status: "completed",
+                  summary:
+                    "RSC enables streaming UI with server-rendered components while keeping interactivity where it matters.",
                   concepts: ["React", "RSC", "Streaming"],
                 },
                 {
                   title: "Vector Databases Explained",
                   status: "completed",
+                  summary:
+                    "Embeddings turn text into vectors; similarity search retrieves related notes beyond exact keywords.",
                   concepts: ["pgvector", "Embeddings", "Cosine"],
                 },
                 {
                   title: "Building with FastAPI",
                   status: "analyzing",
+                  summary:
+                    "Learn ASGI fundamentals, dependency injection patterns, and how to ship typed APIs quickly.",
                   concepts: ["Python", "ASGI"],
                 },
               ].map((article) => (
@@ -100,12 +106,9 @@ export function DashboardPreview() {
                   <h4 className="text-sm font-medium text-white/80 mb-3 leading-snug">
                     {article.title}
                   </h4>
-                  {/* AI summary placeholder */}
-                  <div className="space-y-1.5 mb-4">
-                    <div className="h-2 w-full rounded bg-white/[0.04]" />
-                    <div className="h-2 w-4/5 rounded bg-white/[0.04]" />
-                    <div className="h-2 w-3/5 rounded bg-white/[0.04]" />
-                  </div>
+                  <p className="text-[12px] leading-relaxed text-white/35 line-clamp-3 mb-4">
+                    {article.summary}
+                  </p>
                   {/* Concept tags */}
                   <div className="flex flex-wrap gap-1">
                     {article.concepts.map((concept) => (

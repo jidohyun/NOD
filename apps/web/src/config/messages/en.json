@@ -21,8 +21,16 @@
     "nav": {
       "features": "Features",
       "howItWorks": "How It Works",
+      "pricing": "Pricing",
       "login": "Log In",
       "getStarted": "Get Started"
+    },
+    "pricing": {
+      "label": "Pricing",
+      "headline": "Pick a plan that fits your reading flow",
+      "description": "Start with Basic, then upgrade to Pro when you want unlimited summaries and higher-quality models.",
+      "cta": "View pricing",
+      "note": "Change anytime"
     },
     "features": {
       "label": "Features",
@@ -140,6 +148,8 @@
     "downloadMarkdown": "Download .md",
     "myArticles": "My Articles",
     "searchArticles": "Search articles...",
+    "semanticSearch": "AI Search",
+    "searchMinChars": "Type at least 2 characters to search",
     "allStatus": "All status",
     "statusPending": "Pending",
     "statusAnalyzing": "Analyzing",
