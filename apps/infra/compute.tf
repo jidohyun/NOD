@@ -35,6 +35,16 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       env {
+        name  = "CORS_ORIGINS"
+        value = var.domain != "" ? jsonencode(["https://${var.domain}"]) : jsonencode(["http://localhost:3000"])
+      }
+
+      env {
+        name  = "BETTER_AUTH_URL"
+        value = var.domain != "" ? "https://${var.domain}" : "http://localhost:3000"
+      }
+
+      env {
         name  = "DATABASE_HOST"
         value = google_sql_database_instance.main.private_ip_address
       }
@@ -108,6 +118,17 @@ resource "google_cloud_run_v2_service" "api" {
     }
   }
 
+  lifecycle {
+    # Cloud Run revisions (images, template labels) are deployed/managed by CI.
+    # Infra is still managed by Terraform.
+    ignore_changes = [
+      client,
+      client_version,
+      template[0].containers[0].image,
+      template[0].labels,
+    ]
+  }
+
   labels = local.labels
 
   depends_on = [
@@ -143,7 +164,12 @@ resource "google_cloud_run_v2_service" "web" {
 
       env {
         name  = "NEXT_PUBLIC_API_URL"
-        value = google_cloud_run_v2_service.api.uri
+        value = var.domain != "" ? "https://${var.api_subdomain}.${var.domain}" : google_cloud_run_v2_service.api.uri
+      }
+
+      env {
+        name  = "NEXT_PUBLIC_SITE_URL"
+        value = var.domain != "" ? "https://${var.domain}" : "https://example.com"
       }
 
       startup_probe {
@@ -163,6 +189,15 @@ resource "google_cloud_run_v2_service" "web" {
         failure_threshold = 3
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      client,
+      client_version,
+      template[0].containers[0].image,
+      template[0].labels,
+    ]
   }
 
   labels = local.labels
@@ -263,6 +298,15 @@ resource "google_cloud_run_v2_service" "worker" {
         failure_threshold     = 3
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      client,
+      client_version,
+      template[0].containers[0].image,
+      template[0].labels,
+    ]
   }
 
   labels = local.labels
