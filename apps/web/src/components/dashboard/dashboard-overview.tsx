@@ -1,24 +1,28 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { FileText, Brain, CreditCard, ArrowRight } from "lucide-react"
-import { useUsage } from "@/lib/api/subscriptions"
-import { useArticles } from "@/lib/api/articles"
+import { ArrowRight, Brain, CreditCard, FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useArticles } from "@/lib/api/articles";
+import { useUsage } from "@/lib/api/subscriptions";
+import { Link } from "@/lib/i18n/routing";
 
 export function DashboardOverview() {
-  const { data: usage, isLoading: usageLoading } = useUsage()
-  const { data: articlesData, isLoading: articlesLoading } = useArticles({ page: 1, limit: 1 })
+  const t = useTranslations("dashboard");
+  const ts = useTranslations("subscription");
+  const { data: usage, isLoading: usageLoading } = useUsage();
+  const { data: articlesData, isLoading: articlesLoading } = useArticles({ page: 1, limit: 1 });
 
-  const totalArticles = articlesData?.meta?.total ?? 0
-  const plan = usage?.plan ?? "basic"
-  const summariesUsed = usage?.summaries_used ?? 0
-  const summariesLimit = usage?.summaries_limit ?? 0
+  const totalArticles = articlesData?.meta?.total ?? 0;
+  const plan = usage?.plan ?? "basic";
+  const summariesUsed = usage?.summaries_used ?? 0;
+  const summariesLimit = usage?.summaries_limit ?? 0;
+  const planLabel = usageLoading ? "—" : plan === "pro" ? ts("pro") : ts("basic");
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Overview of your knowledge library.</p>
+        <h1 className="text-2xl font-bold tracking-tight">{t("overview.title")}</h1>
+        <p className="text-muted-foreground">{t("overview.description")}</p>
       </div>
 
       {/* Stats Cards */}
@@ -30,9 +34,9 @@ export function DashboardOverview() {
               <FileText className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Saved Articles</p>
+              <p className="text-sm text-muted-foreground">{t("overview.savedArticles")}</p>
               <p className="text-2xl font-bold">
-                {articlesLoading ? "—" : totalArticles}
+                {articlesLoading ? "—" : totalArticles.toLocaleString()}
               </p>
             </div>
           </div>
@@ -45,9 +49,11 @@ export function DashboardOverview() {
               <Brain className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">AI Summaries</p>
+              <p className="text-sm text-muted-foreground">{t("overview.aiSummaries")}</p>
               <p className="text-2xl font-bold">
-                {usageLoading ? "—" : `${summariesUsed}/${summariesLimit === -1 ? "∞" : summariesLimit}`}
+                {usageLoading
+                  ? "—"
+                  : `${summariesUsed}/${summariesLimit === -1 ? "∞" : summariesLimit}`}
               </p>
             </div>
           </div>
@@ -60,10 +66,8 @@ export function DashboardOverview() {
               <CreditCard className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Current Plan</p>
-              <p className="text-2xl font-bold capitalize">
-                {usageLoading ? "—" : plan}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("overview.currentPlan")}</p>
+              <p className="text-2xl font-bold capitalize">{planLabel}</p>
             </div>
           </div>
         </div>
@@ -76,10 +80,8 @@ export function DashboardOverview() {
           className="group flex items-center justify-between rounded-xl border bg-card p-6 transition-colors hover:bg-accent/50"
         >
           <div>
-            <h3 className="font-semibold">View Articles</h3>
-            <p className="text-sm text-muted-foreground">
-              Browse and search your saved articles.
-            </p>
+            <h3 className="font-semibold">{t("overview.viewArticlesTitle")}</h3>
+            <p className="text-sm text-muted-foreground">{t("overview.viewArticlesDescription")}</p>
           </div>
           <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
         </Link>
@@ -89,14 +91,14 @@ export function DashboardOverview() {
           className="group flex items-center justify-between rounded-xl border bg-card p-6 transition-colors hover:bg-accent/50"
         >
           <div>
-            <h3 className="font-semibold">Manage Billing</h3>
+            <h3 className="font-semibold">{t("overview.manageBillingTitle")}</h3>
             <p className="text-sm text-muted-foreground">
-              View your plan and usage details.
+              {t("overview.manageBillingDescription")}
             </p>
           </div>
           <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
     </div>
-  )
+  );
 }

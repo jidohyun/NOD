@@ -1,8 +1,8 @@
 "use client";
 
-import { useUsage } from "@/lib/api/subscriptions";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useUsage } from "@/lib/api/subscriptions";
 
 export function UpgradePrompt() {
   const t = useTranslations("subscription");

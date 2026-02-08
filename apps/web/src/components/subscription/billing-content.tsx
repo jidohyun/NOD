@@ -1,16 +1,16 @@
 "use client";
 
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect } from "react";
 import {
   useInvalidateSubscription,
   usePortalUrl,
   useSubscription,
   useUsage,
 } from "@/lib/api/subscriptions";
-import { useLocale, useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 import { UsageBar } from "./usage-bar";
-import Link from "next/link";
 
 const DATE_LOCALE_MAP: Record<string, string> = {
   ko: "ko-KR",
@@ -24,8 +24,8 @@ export function BillingContent() {
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { data: subscription, isLoading: subLoading } = useSubscription();
-  const { data: usage, isLoading: usageLoading } = useUsage();
-  const { data: portalUrl, refetch: fetchPortalUrl } = usePortalUrl();
+  const { isLoading: usageLoading } = useUsage();
+  const { refetch: fetchPortalUrl } = usePortalUrl();
   const invalidate = useInvalidateSubscription();
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
@@ -42,11 +42,7 @@ export function BillingContent() {
   }, [searchParams, invalidate]);
 
   if (subLoading || usageLoading) {
-    return (
-      <div className="py-12 text-center text-muted-foreground">
-        {tc("loading")}
-      </div>
-    );
+    return <div className="py-12 text-center text-muted-foreground">{tc("loading")}</div>;
   }
 
   const isPro = subscription?.plan === "pro";
@@ -75,9 +71,7 @@ export function BillingContent() {
       {/* Checkout Success Banner */}
       {searchParams.get("checkout") === "success" && (
         <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-          <p className="text-sm font-medium text-green-800">
-            {t("checkoutSuccess")}
-          </p>
+          <p className="text-sm font-medium text-green-800">{t("checkoutSuccess")}</p>
         </div>
       )}
 
@@ -89,13 +83,13 @@ export function BillingContent() {
             <p className="text-xl font-bold">
               {isPro ? t("pro") : t("basic")} — {isPro ? t("proPrice") : t("basicPrice")}
             </p>
-            {subscription?.current_period_end && (
+            {subscription?.current_period_end ? (
               <p className="mt-1 text-xs text-muted-foreground">
                 {t("nextBilling", {
                   date: new Date(subscription.current_period_end).toLocaleDateString(dateLocale),
                 })}
               </p>
-            )}
+            ) : null}
           </div>
           {!isPro && (
             <Link
@@ -112,7 +106,7 @@ export function BillingContent() {
       <UsageBar />
 
       {/* Pro Management */}
-      {isPro && subscription?.status === "active" && (
+      {isPro && subscription?.status === "active" ? (
         <div className="space-y-3">
           <button
             type="button"
@@ -122,9 +116,7 @@ export function BillingContent() {
             {t("managePayment")}
           </button>
           <div className="rounded-lg border border-destructive/20 p-4">
-            <p className="text-sm text-muted-foreground">
-              {t("cancelDescription")}
-            </p>
+            <p className="text-sm text-muted-foreground">{t("cancelDescription")}</p>
             <button
               type="button"
               onClick={handleCancelSubscription}
@@ -134,7 +126,7 @@ export function BillingContent() {
             </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

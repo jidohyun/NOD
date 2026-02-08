@@ -1,20 +1,18 @@
-"use client"
+"use client";
 
-import Link from 'next/link'
-import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 import {
-  LayoutDashboard,
-  FileText,
-  Settings,
   CreditCard,
-  LogOut,
-  User as UserIcon,
+  FileText,
   HelpCircle,
-} from 'lucide-react'
-import { createClient } from "@/lib/supabase/client"
-import { signOut } from "@/lib/auth/auth-client"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  Tag,
+  User as UserIcon,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,56 +21,66 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import { signOut } from "@/lib/auth/auth-client";
+import { Link, usePathname, useRouter } from "@/lib/i18n/routing";
+import { createClient } from "@/lib/supabase/client";
 
-const NAV_ITEMS = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/articles", icon: FileText, label: "Articles" },
-] as const
-
-const BOTTOM_NAV_ITEMS = [
-  { href: "/settings", icon: Settings, label: "Settings" },
-  { href: "/settings/billing", icon: CreditCard, label: "Billing" },
-] as const
+const LOCALE_PREFIX_RE = /^\/[a-z]{2}(?=\/|$)/;
 
 export function DashboardSidebar() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const [mounted, setMounted] = useState(false)
-  const [userName, setUserName] = useState("")
-  const [userEmail, setUserEmail] = useState("")
-  const [avatarUrl, setAvatarUrl] = useState("")
+  const t = useTranslations("dashboard");
+  const router = useRouter();
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  const navItems = [
+    { href: "/dashboard", icon: LayoutDashboard, label: t("sidebar.nav.dashboard") },
+    { href: "/articles", icon: FileText, label: t("sidebar.nav.articles") },
+  ] as const;
+
+  const bottomNavItems = [
+    { href: "/settings", icon: Settings, label: t("sidebar.nav.settings") },
+    { href: "/settings/billing", icon: CreditCard, label: t("sidebar.nav.billing") },
+    { href: "/pricing", icon: Tag, label: t("sidebar.nav.pricing") },
+  ] as const;
 
   useEffect(() => {
-    setMounted(true)
-    const supabase = createClient()
+    setMounted(true);
+    const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
-        const meta = user.user_metadata
-        setUserName(meta?.full_name ?? meta?.name ?? user.email?.split("@")[0] ?? "")
-        setUserEmail(user.email ?? "")
-        setAvatarUrl(meta?.avatar_url ?? meta?.picture ?? "")
+        const meta = user.user_metadata;
+        setUserName(meta?.full_name ?? meta?.name ?? user.email?.split("@")[0] ?? "");
+        setUserEmail(user.email ?? "");
+        setAvatarUrl(meta?.avatar_url ?? meta?.picture ?? "");
       }
-    })
-  }, [])
+    });
+  }, []);
 
   const initials = userName
     .split(" ")
     .map((n) => n[0])
     .join("")
     .toUpperCase()
-    .slice(0, 2)
+    .slice(0, 2);
 
   function isActive(href: string) {
     // Strip locale prefix (e.g., /ko/articles → /articles)
-    const path = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/"
+    const path = pathname.replace(LOCALE_PREFIX_RE, "") || "/";
     if (href === "/dashboard") {
-      return path === "/dashboard" || path === "/"
+      return path === "/dashboard" || path === "/";
     }
     if (href === "/settings/billing") {
-      return path === "/settings/billing"
+      return path === "/settings/billing";
     }
-    return path.startsWith(href)
+    if (href === "/settings") {
+      return path === "/settings";
+    }
+    return path.startsWith(href);
   }
 
   return (
@@ -86,7 +94,7 @@ export function DashboardSidebar() {
 
       {/* Main Navigation */}
       <nav className="flex-1 space-y-1 p-4">
-        {NAV_ITEMS.map(({ href, icon: Icon, label }) => (
+        {navItems.map(({ href, icon: Icon, label }) => (
           <Link
             key={href}
             href={href}
@@ -103,7 +111,7 @@ export function DashboardSidebar() {
 
         <div className="my-3 border-t" />
 
-        {BOTTOM_NAV_ITEMS.map(({ href, icon: Icon, label }) => (
+        {bottomNavItems.map(({ href, icon: Icon, label }) => (
           <Link
             key={href}
             href={href}
@@ -124,11 +132,14 @@ export function DashboardSidebar() {
         {mounted ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-accent">
+              <button
+                type="button"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-accent"
+              >
                 <Avatar size="sm">
-                  {avatarUrl && (
+                  {avatarUrl ? (
                     <AvatarImage src={avatarUrl} alt={userName} referrerPolicy="no-referrer" />
-                  )}
+                  ) : null}
                   <AvatarFallback>{initials || "U"}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0 text-left">
@@ -148,32 +159,32 @@ export function DashboardSidebar() {
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => router.push("/settings")}>
                   <UserIcon />
-                  <span>Profile</span>
+                  <span>{t("sidebar.user.profile")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/settings")}>
                   <Settings />
-                  <span>Settings</span>
+                  <span>{t("sidebar.user.settings")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/settings/billing")}>
                   <CreditCard />
-                  <span>Billing</span>
+                  <span>{t("sidebar.user.billing")}</span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <HelpCircle />
-                <span>Help</span>
+                <span>{t("sidebar.user.help")}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 variant="destructive"
                 onClick={async () => {
-                  await signOut()
-                  router.push("/login")
+                  await signOut();
+                  router.push("/login");
                 }}
               >
                 <LogOut />
-                <span>Log out</span>
+                <span>{t("sidebar.user.logout")}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -190,5 +201,5 @@ export function DashboardSidebar() {
         )}
       </div>
     </aside>
-  )
+  );
 }
