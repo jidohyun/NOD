@@ -29,7 +29,9 @@ export function LandingHowItWorks() {
     );
 
     const elements = sectionRef.current?.querySelectorAll(".reveal");
-    elements?.forEach((el) => observer.observe(el));
+    elements?.forEach((el) => {
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -65,11 +67,7 @@ export function LandingHowItWorks() {
           {stepKeys.map((key, i) => {
             const Icon = stepIcons[key];
             return (
-              <div
-                key={key}
-                className="reveal relative"
-                style={{ transitionDelay: `${0.1 * i}s` }}
-              >
+              <div key={key} className="reveal relative" style={{ transitionDelay: `${0.1 * i}s` }}>
                 {/* Connector line (desktop only) */}
                 {i < stepKeys.length - 1 && (
                   <div className="hidden lg:block absolute top-8 left-[calc(100%+0px)] w-full h-px">

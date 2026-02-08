@@ -22,7 +22,9 @@ export function LandingCta() {
     );
 
     const elements = sectionRef.current?.querySelectorAll(".reveal");
-    elements?.forEach((el) => observer.observe(el));
+    elements?.forEach((el) => {
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -36,16 +38,13 @@ export function LandingCta() {
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] animate-glow-pulse"
         style={{
-          background:
-            "radial-gradient(circle, rgba(232,185,49,0.05) 0%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(232,185,49,0.05) 0%, transparent 60%)",
         }}
       />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2
-            className="reveal font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white whitespace-pre-line"
-          >
+          <h2 className="reveal font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white whitespace-pre-line">
             {t("headline")}
           </h2>
           <p
@@ -65,9 +64,7 @@ export function LandingCta() {
               {t("button")}
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
-            <span className="font-mono text-[12px] text-white/20 tracking-wide">
-              {t("note")}
-            </span>
+            <span className="font-mono text-[12px] text-white/20 tracking-wide">{t("note")}</span>
           </div>
         </div>
       </div>
