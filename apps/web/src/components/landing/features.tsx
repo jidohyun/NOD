@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Brain,
-  Chrome,
-  Globe,
-  Network,
-  Sparkles,
-  Tags,
-} from "lucide-react";
+import { Brain, Chrome, Globe, Network, Sparkles, Tags } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
@@ -64,17 +57,15 @@ export function LandingFeatures() {
     );
 
     const elements = sectionRef.current?.querySelectorAll(".reveal");
-    elements?.forEach((el) => observer.observe(el));
+    elements?.forEach((el) => {
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="features"
-      className="relative bg-nod-surface py-32 lg:py-40"
-    >
+    <section ref={sectionRef} id="features" className="relative bg-nod-surface py-32 lg:py-40">
       {/* Top fade from hero */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-nod-surface to-transparent" />
 

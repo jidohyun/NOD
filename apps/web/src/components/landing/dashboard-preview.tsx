@@ -18,7 +18,9 @@ export function DashboardPreview() {
     );
 
     const elements = sectionRef.current?.querySelectorAll(".reveal");
-    elements?.forEach((el) => observer.observe(el));
+    elements?.forEach((el) => {
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -63,9 +65,21 @@ export function DashboardPreview() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {/* Article cards */}
               {[
-                { title: "Understanding React Server Components", status: "completed", concepts: ["React", "RSC", "Streaming"] },
-                { title: "Vector Databases Explained", status: "completed", concepts: ["pgvector", "Embeddings", "Cosine"] },
-                { title: "Building with FastAPI", status: "analyzing", concepts: ["Python", "ASGI"] },
+                {
+                  title: "Understanding React Server Components",
+                  status: "completed",
+                  concepts: ["React", "RSC", "Streaming"],
+                },
+                {
+                  title: "Vector Databases Explained",
+                  status: "completed",
+                  concepts: ["pgvector", "Embeddings", "Cosine"],
+                },
+                {
+                  title: "Building with FastAPI",
+                  status: "analyzing",
+                  concepts: ["Python", "ASGI"],
+                },
               ].map((article) => (
                 <div
                   key={article.title}
@@ -74,7 +88,9 @@ export function DashboardPreview() {
                   <div className="flex items-center gap-2 mb-3">
                     <div
                       className={`w-1.5 h-1.5 rounded-full ${
-                        article.status === "completed" ? "bg-emerald-400" : "bg-amber-400 animate-pulse"
+                        article.status === "completed"
+                          ? "bg-emerald-400"
+                          : "bg-amber-400 animate-pulse"
                       }`}
                     />
                     <span className="font-mono text-[10px] text-white/25 uppercase tracking-wider">
@@ -116,17 +132,20 @@ export function DashboardPreview() {
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {["React Patterns Deep Dive", "Next.js 16 Migration Guide", "TypeScript 5.9 Features", "Edge Computing Primer"].map(
-                  (title) => (
-                    <div
-                      key={title}
-                      className="flex items-center gap-2 rounded-lg bg-white/[0.02] border border-white/[0.04] px-3 py-2"
-                    >
-                      <div className="w-1 h-6 rounded-full bg-violet-400/30" />
-                      <span className="text-[12px] text-white/40">{title}</span>
-                    </div>
-                  )
-                )}
+                {[
+                  "React Patterns Deep Dive",
+                  "Next.js 16 Migration Guide",
+                  "TypeScript 5.9 Features",
+                  "Edge Computing Primer",
+                ].map((title) => (
+                  <div
+                    key={title}
+                    className="flex items-center gap-2 rounded-lg bg-white/[0.02] border border-white/[0.04] px-3 py-2"
+                  >
+                    <div className="w-1 h-6 rounded-full bg-violet-400/30" />
+                    <span className="text-[12px] text-white/40">{title}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

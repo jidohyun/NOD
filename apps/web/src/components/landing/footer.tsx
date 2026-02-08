@@ -49,9 +49,7 @@ export function LandingFooter() {
                 NOD
               </span>
             </Link>
-            <p className="text-[13px] text-white/25 max-w-xs leading-relaxed">
-              {t("tagline")}
-            </p>
+            <p className="text-[13px] text-white/25 max-w-xs leading-relaxed">{t("tagline")}</p>
           </div>
 
           {/* Link columns */}
@@ -82,12 +80,9 @@ export function LandingFooter() {
             &copy; {new Date().getFullYear()} NOD. {t("copyright")}
           </span>
           <div className="flex items-center gap-1">
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={`dot-${i}`}
-                className="w-1 h-1 rounded-full bg-nod-gold/30"
-              />
-            ))}
+            <div className="w-1 h-1 rounded-full bg-nod-gold/30" />
+            <div className="w-1 h-1 rounded-full bg-nod-gold/30" />
+            <div className="w-1 h-1 rounded-full bg-nod-gold/30" />
           </div>
         </div>
       </div>

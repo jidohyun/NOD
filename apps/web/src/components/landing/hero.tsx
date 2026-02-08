@@ -99,25 +99,20 @@ export function LandingHero() {
           >
             {/* Stacked avatars (abstract circles) */}
             <div className="flex -space-x-2">
-              {[
-                "bg-amber-500/60",
-                "bg-emerald-500/60",
-                "bg-sky-500/60",
-                "bg-violet-500/60",
-              ].map((bg, i) => (
-                <div
-                  key={bg}
-                  className={`w-7 h-7 rounded-full ${bg} border-2 border-[#0A0A0B] flex items-center justify-center`}
-                >
-                  <span className="text-[9px] font-mono text-white/80 font-bold">
-                    {["JK", "SM", "HY", "DW"][i]}
-                  </span>
-                </div>
-              ))}
+              {["bg-amber-500/60", "bg-emerald-500/60", "bg-sky-500/60", "bg-violet-500/60"].map(
+                (bg, i) => (
+                  <div
+                    key={bg}
+                    className={`w-7 h-7 rounded-full ${bg} border-2 border-[#0A0A0B] flex items-center justify-center`}
+                  >
+                    <span className="text-[9px] font-mono text-white/80 font-bold">
+                      {["JK", "SM", "HY", "DW"][i]}
+                    </span>
+                  </div>
+                )
+              )}
             </div>
-            <span className="text-[13px] text-white/30 font-mono">
-              {t("trustedBy")}
-            </span>
+            <span className="text-[13px] text-white/30 font-mono">{t("trustedBy")}</span>
           </div>
         </div>
       </div>

@@ -11,7 +11,9 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(async (config) => {
   const supabase = createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   if (session?.access_token && config.headers) {
     config.headers.Authorization = `Bearer ${session.access_token}`;
@@ -28,7 +30,10 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       const supabase = createClient();
-      const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+      const {
+        data: { session },
+        error: refreshError,
+      } = await supabase.auth.refreshSession();
 
       if (session?.access_token && !refreshError) {
         originalRequest.headers.Authorization = `Bearer ${session.access_token}`;

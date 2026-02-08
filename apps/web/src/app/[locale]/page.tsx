@@ -1,14 +1,12 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import {
-  DashboardPreview,
-  LandingCta,
-  LandingFeatures,
-  LandingFooter,
-  LandingHero,
-  LandingHowItWorks,
-  LandingNav,
-} from "@/components/landing";
+import { LandingCta } from "@/components/landing/cta";
+import { DashboardPreview } from "@/components/landing/dashboard-preview";
+import { LandingFeatures } from "@/components/landing/features";
+import { LandingFooter } from "@/components/landing/footer";
+import { LandingHero } from "@/components/landing/hero";
+import { LandingHowItWorks } from "@/components/landing/how-it-works";
+import { LandingNav } from "@/components/landing/nav";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;

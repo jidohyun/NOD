@@ -91,7 +91,7 @@ export function LandingNav() {
         </div>
 
         {/* Mobile menu */}
-        {mobileOpen && (
+        {mobileOpen ? (
           <div className="md:hidden pb-6 pt-2 border-t border-white/[0.04] animate-fade-in">
             <div className="flex flex-col gap-4">
               <button
@@ -121,7 +121,7 @@ export function LandingNav() {
               </Link>
             </div>
           </div>
-        )}
+        ) : null}
       </nav>
     </header>
   );
