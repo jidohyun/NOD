@@ -48,12 +48,16 @@ class GeminiProvider(AIProvider[Any]):
             ),
         )
         import json
+
         raw = json.loads(response.text or "{}")
         return schema(**raw)
 
     async def generate_embedding(self, text: str) -> list[float]:
-        response = await self._client.models.embed_content(
+        response = await self._client.aio.models.embed_content(
             model=self._embedding_model,
             contents=text,
         )
-        return list(response.embeddings[0].values)
+        embeddings = response.embeddings
+        if not embeddings or not embeddings[0].values:
+            raise ValueError("Gemini returned empty embeddings")
+        return list(embeddings[0].values)
