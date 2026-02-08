@@ -1,7 +1,6 @@
 "use client";
 
-import { Globe, Menu, Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Globe, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,14 +9,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { usePathname } from "@/lib/i18n/routing";
 import { UserMenu } from "./user-menu";
 
 const LOCALE_PREFIX_RE = /^\/[a-z]{2}(?=\/|$)/;
 
 export function DashboardHeader() {
-  const t = useTranslations("dashboard");
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
@@ -36,12 +33,6 @@ export function DashboardHeader() {
       <Button variant="ghost" size="icon-sm" data-testid="sidebar-toggle" className="md:hidden">
         <Menu className="h-5 w-5" />
       </Button>
-
-      {/* Search Input */}
-      <div className="relative flex-1 max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input type="search" placeholder={t("searchPlaceholder")} className="pl-9" />
-      </div>
 
       {/* Spacer */}
       <div className="flex-1" />
