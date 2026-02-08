@@ -219,6 +219,10 @@ function truncateContent(content: string): string {
  * Check if current page is likely an article
  */
 export function isArticlePage(): boolean {
+  if (!isEligiblePage()) {
+    return false;
+  }
+
   const sourceDocument = getSourceDocument();
   // Check for article-like elements
   const hasArticle = !!sourceDocument.querySelector("article");
@@ -234,6 +238,54 @@ export function isArticlePage(): boolean {
   const hasEnoughContent = wordCount > 100;
 
   return (hasArticle || hasMain || hasOgArticle) && hasEnoughContent;
+}
+
+function isEligiblePage(): boolean {
+  // Avoid non-HTML documents (e.g. PDFs)
+  if (document.contentType === "application/pdf") {
+    return false;
+  }
+
+  let url: URL;
+  try {
+    url = new URL(window.location.href);
+  } catch {
+    return false;
+  }
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return false;
+  }
+
+  // Don't attempt on homepages.
+  if (url.pathname === "/") {
+    return false;
+  }
+
+  const host = url.hostname.replace(/^www\./, "");
+  if (isBlockedHost(host)) {
+    return false;
+  }
+
+  return true;
+}
+
+function isBlockedHost(host: string): boolean {
+  // Based on Firefox Reader Mode blocked hosts.
+  // https://raw.githubusercontent.com/mozilla/firefox/main/toolkit/components/reader/Readerable.js
+  const blockedHosts = [
+    "amazon.com",
+    "github.com",
+    "mail.google.com",
+    "pinterest.com",
+    "reddit.com",
+    "twitter.com",
+    "x.com",
+    "youtube.com",
+    "app.slack.com",
+  ];
+
+  return blockedHosts.some((blocked) => host === blocked || host.endsWith(`.${blocked}`));
 }
 
 function getSourceDocument(): Document {
