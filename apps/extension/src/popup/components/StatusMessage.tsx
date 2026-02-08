@@ -48,6 +48,7 @@ export function ErrorMessage({ code, message, onRetry }: ErrorMessageProps) {
       </div>
       <p className="mb-0.5 text-sm font-semibold text-gray-900">{t("extErrorTitle")}</p>
       <p className="mb-4 text-center text-xs text-gray-500">{message}</p>
+      <p className="mb-4 text-center text-xs text-gray-500">{t("extRefreshHint")}</p>
       {isRecoverable && onRetry && (
         <button
           onClick={onRetry}
