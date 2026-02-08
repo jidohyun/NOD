@@ -4,6 +4,7 @@ import { apiClient } from "@/lib/api-client";
 export interface ArticleSummary {
   id: string;
   summary: string;
+  markdown_note?: string | null;
   concepts: string[];
   key_points: string[];
   reading_time_minutes: number | null;
