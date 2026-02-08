@@ -1,8 +1,12 @@
 "use client";
 
-import { useArticle, useDeleteArticle } from "@/lib/api/articles";
+import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { useArticle, useDeleteArticle } from "@/lib/api/articles";
+import { Link } from "@/lib/i18n/routing";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-primary/10 text-primary",
@@ -46,13 +50,34 @@ export function ArticleDetail({ id }: { id: string }) {
     day: "numeric",
   });
 
+  const downloadMarkdown = () => {
+    if (!article.summary?.markdown_note) return;
+    const blob = new Blob([article.summary.markdown_note], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `article-${article.id}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6">
+      <Link
+        href="/articles"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        {t("myArticles")}
+      </Link>
       {/* Header */}
       <div>
         <div className="flex items-start justify-between gap-4">
           <h1 className="text-2xl font-bold">{article.title}</h1>
           <button
+            type="button"
             onClick={handleDelete}
             className="shrink-0 rounded-md border border-destructive px-3 py-1 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground"
           >
@@ -67,7 +92,7 @@ export function ArticleDetail({ id }: { id: string }) {
           </span>
           <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">{article.source}</span>
           <time>{formattedDate}</time>
-          {article.url && (
+          {article.url ? (
             <a
               href={article.url}
               target="_blank"
@@ -76,7 +101,7 @@ export function ArticleDetail({ id }: { id: string }) {
             >
               {t("original")}
             </a>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -86,27 +111,89 @@ export function ArticleDetail({ id }: { id: string }) {
           <div className="flex items-center gap-2">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
             <p className="text-sm text-blue-800">
-              {article.status === "pending"
-                ? t("pendingAnalysis")
-                : t("analyzingArticle")}
+              {article.status === "pending" ? t("pendingAnalysis") : t("analyzingArticle")}
             </p>
           </div>
         </div>
       )}
 
       {/* Summary */}
-      {article.summary && (
+      {article.summary ? (
         <div className="space-y-4">
           <section className="rounded-lg border bg-card p-4">
             <h2 className="text-lg font-semibold mb-2">{t("summary")}</h2>
             <p className="text-sm leading-relaxed">{article.summary.summary}</p>
-            {article.summary.reading_time_minutes && (
+            {article.summary.reading_time_minutes ? (
               <p className="mt-2 text-xs text-muted-foreground">
                 {t("readTime", { minutes: article.summary.reading_time_minutes })}
-                {article.summary.language && ` · ${article.summary.language.toUpperCase()}`}
+                {article.summary.language ? ` · ${article.summary.language.toUpperCase()}` : null}
               </p>
-            )}
+            ) : null}
           </section>
+
+          {article.summary.markdown_note ? (
+            <section className="rounded-lg border bg-card p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h2 className="text-lg font-semibold">{t("markdownNote")}</h2>
+                <button
+                  type="button"
+                  onClick={downloadMarkdown}
+                  className="rounded-md border px-3 py-1 text-sm hover:bg-accent"
+                >
+                  {t("downloadMarkdown")}
+                </button>
+              </div>
+              <div className="text-sm leading-relaxed">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ children }) => (
+                      <h3 className="mt-4 first:mt-0 text-base font-semibold">{children}</h3>
+                    ),
+                    h2: ({ children }) => (
+                      <h4 className="mt-3 first:mt-0 text-sm font-semibold">{children}</h4>
+                    ),
+                    h3: ({ children }) => (
+                      <h5 className="mt-3 first:mt-0 text-sm font-semibold">{children}</h5>
+                    ),
+                    p: ({ children }) => <p className="mt-2 first:mt-0">{children}</p>,
+                    ul: ({ children }) => (
+                      <ul className="mt-2 list-disc pl-5 space-y-1">{children}</ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="mt-2 list-decimal pl-5 space-y-1">{children}</ol>
+                    ),
+                    li: ({ children }) => <li>{children}</li>,
+                    blockquote: ({ children }) => (
+                      <blockquote className="mt-3 border-l-2 pl-3 text-muted-foreground">
+                        {children}
+                      </blockquote>
+                    ),
+                    a: ({ children, href }) => (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        {children}
+                      </a>
+                    ),
+                    code: ({ children }) => (
+                      <code className="rounded bg-muted px-1 py-0.5 text-[0.9em]">{children}</code>
+                    ),
+                    pre: ({ children }) => (
+                      <pre className="mt-3 overflow-x-auto rounded bg-muted p-3 text-xs">
+                        {children}
+                      </pre>
+                    ),
+                  }}
+                >
+                  {article.summary.markdown_note}
+                </ReactMarkdown>
+              </div>
+            </section>
+          ) : null}
 
           {article.summary.concepts.length > 0 && (
             <section className="rounded-lg border bg-card p-4">
@@ -128,8 +215,8 @@ export function ArticleDetail({ id }: { id: string }) {
             <section className="rounded-lg border bg-card p-4">
               <h2 className="text-lg font-semibold mb-2">{t("keyPoints")}</h2>
               <ul className="list-disc list-inside space-y-1">
-                {article.summary.key_points.map((point, i) => (
-                  <li key={i} className="text-sm leading-relaxed">
+                {article.summary.key_points.map((point) => (
+                  <li key={point} className="text-sm leading-relaxed">
                     {point}
                   </li>
                 ))}
@@ -144,7 +231,7 @@ export function ArticleDetail({ id }: { id: string }) {
             })}
           </p>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
