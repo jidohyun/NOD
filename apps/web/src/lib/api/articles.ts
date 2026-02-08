@@ -127,6 +127,25 @@ export function useSimilarArticles(id: string) {
   });
 }
 
+export function useSemanticSearch(params: {
+  q: string;
+  limit?: number;
+  status?: string;
+  enabled?: boolean;
+}) {
+  return useQuery({
+    queryKey: ["articles", "semantic-search", params.q, params.status, params.limit],
+    queryFn: async () => {
+      const { data } = await apiClient.get<PaginatedResponse<ArticleListItem>>(
+        "/api/articles/search",
+        { params: { q: params.q, limit: params.limit, status: params.status } }
+      );
+      return data;
+    },
+    enabled: params.enabled !== false && params.q.length >= 2,
+  });
+}
+
 export function useDeleteArticle() {
   const queryClient = useQueryClient();
   return useMutation({
