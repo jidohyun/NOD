@@ -106,7 +106,9 @@ async def create_article(
         )
         await sub_service.increment_summary_usage(db, user.id)
         await db.commit()
-        article = await service.get_article(db, article.id, user.id)
+        updated = await service.get_article(db, article.id, user.id)
+        if updated:
+            article = updated
     else:
         logger.info("Summary limit reached, skipping analysis", user_id=str(user.id))
 
@@ -235,7 +237,9 @@ async def analyze_url(
         )
         await sub_service.increment_summary_usage(db, user.id)
         await db.commit()
-        article = await service.get_article(db, article.id, user.id)
+        updated = await service.get_article(db, article.id, user.id)
+        if updated:
+            article = updated
     else:
         logger.info("Summary limit reached, skipping analysis", user_id=str(user.id))
 

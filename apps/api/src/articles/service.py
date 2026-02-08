@@ -118,13 +118,17 @@ async def delete_article(
     article_id: uuid.UUID,
     user_id: str,
 ) -> bool:
-    result = await db.execute(
-        delete(Article).where(
-            Article.id == article_id,
-            Article.user_id == uuid.UUID(user_id),
-        )
+    uid = uuid.UUID(user_id)
+    existing = await db.execute(
+        select(Article.id).where(Article.id == article_id, Article.user_id == uid)
     )
-    return result.rowcount > 0
+    if existing.scalar_one_or_none() is None:
+        return False
+
+    await db.execute(
+        delete(Article).where(Article.id == article_id, Article.user_id == uid)
+    )
+    return True
 
 
 async def search_articles_semantic(

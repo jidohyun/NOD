@@ -13,7 +13,7 @@ class AIProvider[T](ABC):
         pass
 
     @abstractmethod
-    async def generate_stream(self, prompt: str, **kwargs: Any) -> AsyncIterator[str]:
+    def generate_stream(self, prompt: str, **kwargs: Any) -> AsyncIterator[str]:
         pass
 
     @abstractmethod
