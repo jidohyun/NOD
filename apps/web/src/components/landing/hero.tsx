@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowRight, ChevronDown } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Link } from "@/lib/i18n/routing";
 import { NeuralGraph } from "./neural-graph";
 
 export function LandingHero() {
@@ -65,7 +65,7 @@ export function LandingHero() {
 
           {/* Description */}
           <p
-            className="animate-fade-up mt-6 max-w-xl text-[17px] leading-relaxed text-white/45"
+            className="animate-fade-up mt-6 max-w-xl text-[17px] leading-relaxed text-white/60"
             style={{ animationDelay: "0.35s" }}
           >
             {t("description")}
@@ -112,7 +112,7 @@ export function LandingHero() {
                 )
               )}
             </div>
-            <span className="text-[13px] text-white/30 font-mono">{t("trustedBy")}</span>
+            <span className="text-[13px] text-white/45 font-mono">{t("trustedBy")}</span>
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@ export function LandingHero() {
       <button
         type="button"
         onClick={scrollToFeatures}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/20 hover:text-white/40 transition-colors animate-float"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/35 hover:text-white/55 transition-colors animate-float"
       >
         <ChevronDown className="w-5 h-5" />
       </button>

@@ -1,15 +1,26 @@
 "use client";
 
-import { ArrowRight, Menu, X } from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, Globe, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Link, usePathname } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils";
+
+const LOCALE_PREFIX_RE = /^\/[a-z]{2}(?=\/|$)/;
 
 export function LandingNav() {
   const t = useTranslations("landing.nav");
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -17,10 +28,18 @@ export function LandingNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const scrollTo = useCallback((id: string) => {
     setMobileOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }, []);
+
+  const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";
+  const hrefForLocale = (nextLocale: "ko" | "en" | "ja") =>
+    basePath === "/" ? `/${nextLocale}` : `/${nextLocale}${basePath}`;
 
   return (
     <header
@@ -61,10 +80,59 @@ export function LandingNav() {
             >
               {t("howItWorks")}
             </button>
+            <button
+              type="button"
+              onClick={() => scrollTo("pricing")}
+              className="text-[13px] text-white/50 hover:text-white/90 transition-colors font-mono tracking-wide uppercase"
+            >
+              {t("pricing")}
+            </button>
           </div>
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-4">
+            {mounted ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Change language"
+                    title="Change language"
+                    className="text-white/50 hover:text-white/90"
+                  >
+                    <Globe className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.location.assign(hrefForLocale("ko"));
+                    }}
+                  >
+                    <span className="flex-1">한국어</span>
+                    <span className="text-xs text-muted-foreground">KO</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.location.assign(hrefForLocale("en"));
+                    }}
+                  >
+                    <span className="flex-1">English</span>
+                    <span className="text-xs text-muted-foreground">EN</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.location.assign(hrefForLocale("ja"));
+                    }}
+                  >
+                    <span className="flex-1">日本語</span>
+                    <span className="text-xs text-muted-foreground">JA</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : null}
             <Link
               href="/login"
               className="text-[13px] text-white/50 hover:text-white/90 transition-colors"
@@ -107,6 +175,13 @@ export function LandingNav() {
                 className="text-sm text-white/60 hover:text-white text-left"
               >
                 {t("howItWorks")}
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollTo("pricing")}
+                className="text-sm text-white/60 hover:text-white text-left"
+              >
+                {t("pricing")}
               </button>
               <hr className="border-white/[0.06]" />
               <Link href="/login" className="text-sm text-white/60 hover:text-white">

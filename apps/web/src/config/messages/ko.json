@@ -21,8 +21,16 @@
     "nav": {
       "features": "기능",
       "howItWorks": "사용 방법",
+      "pricing": "요금제",
       "login": "로그인",
       "getStarted": "시작하기"
+    },
+    "pricing": {
+      "label": "요금제",
+      "headline": "읽는 방식에 맞는 플랜을 선택하세요",
+      "description": "Basic으로 시작하고, 무제한 요약과 더 좋은 모델이 필요해지면 Pro로 업그레이드하세요.",
+      "cta": "요금제 보기",
+      "note": "언제든 변경 가능"
     },
     "features": {
       "label": "기능",
@@ -140,6 +148,8 @@
     "downloadMarkdown": ".md 다운로드",
     "myArticles": "내 아티클",
     "searchArticles": "아티클 검색...",
+    "semanticSearch": "AI 검색",
+    "searchMinChars": "2자 이상 입력하세요",
     "allStatus": "전체 상태",
     "statusPending": "대기 중",
     "statusAnalyzing": "분석 중",

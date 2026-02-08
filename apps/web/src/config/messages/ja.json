@@ -21,8 +21,16 @@
     "nav": {
       "features": "機能",
       "howItWorks": "使い方",
+      "pricing": "料金プラン",
       "login": "ログイン",
       "getStarted": "始める"
+    },
+    "pricing": {
+      "label": "料金プラン",
+      "headline": "読書フローに合うプランを選択",
+      "description": "まずはBasic。要約無制限や高品質モデルが必要になったらProへアップグレード。",
+      "cta": "料金を見る",
+      "note": "いつでも変更可能"
     },
     "features": {
       "label": "機能",
@@ -140,6 +148,8 @@
     "downloadMarkdown": ".mdをダウンロード",
     "myArticles": "マイ記事",
     "searchArticles": "記事を検索...",
+    "semanticSearch": "AI検索",
+    "searchMinChars": "2文字以上入力してください",
     "allStatus": "すべてのステータス",
     "statusPending": "待機中",
     "statusAnalyzing": "分析中",
