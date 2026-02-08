@@ -35,6 +35,8 @@ resource "google_compute_backend_service" "web" {
   protocol    = "HTTPS"
   timeout_sec = 30
 
+  security_policy = google_compute_security_policy.main[0].id
+
   backend {
     group = google_compute_region_network_endpoint_group.web[0].id
   }
@@ -80,6 +82,8 @@ resource "google_compute_backend_service" "api" {
   name        = "${local.name_prefix}-api-backend"
   protocol    = "HTTPS"
   timeout_sec = 60
+
+  security_policy = google_compute_security_policy.main[0].id
 
   backend {
     group = google_compute_region_network_endpoint_group.api[0].id

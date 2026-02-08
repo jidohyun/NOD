@@ -254,11 +254,6 @@ resource "google_cloud_run_v2_service" "worker" {
         value = google_storage_bucket.uploads.name
       }
 
-      env {
-        name  = "WORKER_URL"
-        value = google_cloud_run_v2_service.worker.uri
-      }
-
       startup_probe {
         http_get {
           path = "/health"
