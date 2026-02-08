@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-07T07:36:47.784Z",
+  "lastUpdated": "2026-02-08T05:59:59.396Z",
   "activeFeatures": [
     "chrome-extension",
     "extension",
@@ -42,9 +42,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-05T11:29:41.966Z",
-        "lastUpdated": "2026-02-07T07:36:47.784Z"
+        "lastUpdated": "2026-02-08T05:59:59.396Z"
       },
-      "lastFile": "/Users/jidohyun/Desktop/Backup/NOD/apps/web/src/components/articles/article-detail.tsx"
+      "lastFile": "/Users/jidohyun/Desktop/Backup/NOD/apps/web/src/components/articles/article-list.tsx"
     },
     "api": {
       "phase": "do",
@@ -55,9 +55,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-06T05:59:16.489Z",
-        "lastUpdated": "2026-02-06T09:10:08.237Z"
+        "lastUpdated": "2026-02-08T04:16:31.137Z"
       },
-      "lastFile": "/Users/jidohyun/Desktop/Backup/NOD/apps/api/src/subscriptions/router.py"
+      "lastFile": "/Users/jidohyun/Desktop/Backup/NOD/apps/api/src/articles/router.py"
     }
   },
   "pipeline": {
@@ -68,7 +68,7 @@
   "session": {
     "startedAt": "2026-02-04T11:11:07.421Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-02-07T07:36:47.784Z"
+    "lastActivity": "2026-02-08T05:59:59.396Z"
   },
   "history": [
     {
@@ -1156,6 +1156,114 @@
     },
     {
       "timestamp": "2026-02-07T07:36:47.784Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:15:43.241Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:15:47.785Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:15:53.969Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:16:13.178Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:16:23.784Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:16:31.137Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:16:42.360Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:16:56.958Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:17:26.425Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:18:34.385Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T04:18:41.225Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:58:37.509Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:58:43.434Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:58:55.775Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:59:23.199Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:59:45.828Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:59:52.547Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-08T05:59:59.396Z",
       "feature": "web",
       "phase": "do",
       "action": "updated"
