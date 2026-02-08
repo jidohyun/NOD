@@ -6,13 +6,13 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
+from src.articles.model import Article, ArticleEmbedding, ArticleSummary  # noqa: F401
 from src.lib.config import settings
 from src.lib.database import Base
+from src.subscriptions.model import Subscription, UsageRecord  # noqa: F401
 
 # Import all models here for autogenerate
 from src.users.model import User  # noqa: F401
-from src.articles.model import Article, ArticleSummary, ArticleEmbedding  # noqa: F401
-from src.subscriptions.model import Subscription, UsageRecord  # noqa: F401
 
 config = context.config
 

@@ -8,9 +8,7 @@ from src.articles.model import Article, ArticleEmbedding, ArticleSummary
 from src.articles.schemas import (
     ArticleCreate,
     ArticleListResponse,
-    ArticleResponse,
     SimilarArticleResponse,
-    SummaryResponse,
 )
 from src.common.models.pagination import PaginatedResponse
 

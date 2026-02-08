@@ -1,5 +1,5 @@
 import uuid as uuid_lib
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -35,11 +35,9 @@ async def get_subscription(
     return result.scalar_one_or_none()
 
 
-async def get_or_create_usage(
-    db: AsyncSession, user_id: uuid_lib.UUID
-) -> UsageRecord:
+async def get_or_create_usage(db: AsyncSession, user_id: uuid_lib.UUID) -> UsageRecord:
     """Get or create usage record for the current month."""
-    current_month = datetime.now(timezone.utc).strftime("%Y-%m")
+    current_month = datetime.now(UTC).strftime("%Y-%m")
 
     result = await db.execute(
         select(UsageRecord).where(
@@ -62,9 +60,7 @@ async def get_or_create_usage(
     return usage
 
 
-async def get_usage_info(
-    db: AsyncSession, user_id: uuid_lib.UUID
-) -> UsageResponse:
+async def get_usage_info(db: AsyncSession, user_id: uuid_lib.UUID) -> UsageResponse:
     """Get combined subscription + usage info for the user."""
     subscription = await get_or_create_subscription(db, user_id)
     usage = await get_or_create_usage(db, user_id)
@@ -88,27 +84,21 @@ async def get_usage_info(
     )
 
 
-async def increment_summary_usage(
-    db: AsyncSession, user_id: uuid_lib.UUID
-) -> None:
+async def increment_summary_usage(db: AsyncSession, user_id: uuid_lib.UUID) -> None:
     """Increment the summary usage counter for the current month."""
     usage = await get_or_create_usage(db, user_id)
     usage.summaries_used = usage.summaries_used + 1
     await db.flush()
 
 
-async def increment_article_usage(
-    db: AsyncSession, user_id: uuid_lib.UUID
-) -> None:
+async def increment_article_usage(db: AsyncSession, user_id: uuid_lib.UUID) -> None:
     """Increment the article saved counter for the current month."""
     usage = await get_or_create_usage(db, user_id)
     usage.articles_saved = usage.articles_saved + 1
     await db.flush()
 
 
-async def check_can_summarize(
-    db: AsyncSession, user_id: uuid_lib.UUID
-) -> bool:
+async def check_can_summarize(db: AsyncSession, user_id: uuid_lib.UUID) -> bool:
     """Check if user can create another summary."""
     info = await get_usage_info(db, user_id)
     return info.can_summarize
