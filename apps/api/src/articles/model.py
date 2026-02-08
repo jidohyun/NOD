@@ -1,8 +1,7 @@
 import uuid as uuid_lib
-from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text, func, text
+from sqlalchemy import ForeignKey, Index, Integer, String, Text, text
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -48,6 +47,7 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
         nullable=False,
     )
     summary: Mapped[str] = mapped_column(Text, nullable=False)
+    markdown_note: Mapped[str | None] = mapped_column(Text, nullable=True)
     concepts: Mapped[dict] = mapped_column(JSON, nullable=False, default=list)
     key_points: Mapped[dict] = mapped_column(JSON, nullable=False, default=list)
     reading_time_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -68,9 +68,7 @@ class ArticleEmbedding(UUIDMixin, TimestampMixin, Base):
         unique=True,
         nullable=False,
     )
-    embedding: Mapped[list[float]] = mapped_column(
-        Vector(768), nullable=False
-    )
+    embedding: Mapped[list[float]] = mapped_column(Vector(768), nullable=False)
     ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)
     ai_model: Mapped[str] = mapped_column(String(100), nullable=False)
 

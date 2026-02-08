@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 
 
 class ArticleCreate(BaseModel):
@@ -23,6 +23,7 @@ class SummaryResponse(BaseModel):
 
     id: uuid.UUID
     summary: str
+    markdown_note: str | None = None
     concepts: list[str]
     key_points: list[str]
     reading_time_minutes: int | None = None
