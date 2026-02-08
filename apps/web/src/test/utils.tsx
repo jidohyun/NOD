@@ -1,10 +1,41 @@
-import type { ReactNode } from "react";
-import { render, type RenderOptions } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { type RenderOptions, render } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
+import type { ReactNode } from "react";
 
 const TEST_MESSAGES = {
   dashboard: {
+    sidebar: {
+      nav: {
+        dashboard: "Dashboard",
+        articles: "Articles",
+        settings: "Settings",
+        billing: "Manage Billing",
+        pricing: "Pricing",
+      },
+      user: {
+        profile: "Profile",
+        settings: "Settings",
+        billing: "Manage Billing",
+        help: "Help",
+        logout: "Log out",
+      },
+    },
+    overview: {
+      title: "Dashboard",
+      description: "Overview of your knowledge library.",
+      savedArticles: "Saved Articles",
+      aiSummaries: "AI Summaries",
+      currentPlan: "Current Plan",
+      viewArticlesTitle: "View Articles",
+      viewArticlesDescription: "Browse and search your saved articles.",
+      manageBillingTitle: "Manage Billing",
+      manageBillingDescription: "View your plan and usage details.",
+    },
+    searchPlaceholder: "Search...",
+    statusLabel: "Status",
+    markdownNote: "Note",
+    downloadMarkdown: "Download .md",
     myArticles: "My Articles",
     searchArticles: "Search articles...",
     allStatus: "All status",
@@ -36,6 +67,8 @@ const TEST_MESSAGES = {
     delete: "Delete",
   },
   subscription: {
+    basic: "Basic",
+    pro: "Pro",
     usage: "Usage",
     unlimited: "Unlimited",
     summariesUsed: "{used}/{limit} summaries used",
@@ -66,13 +99,8 @@ function TestProviders({ children }: { children: ReactNode }) {
   );
 }
 
-function renderWithProviders(
-  ui: React.ReactElement,
-  options?: Omit<RenderOptions, "wrapper">
-) {
+function renderWithProviders(ui: React.ReactElement, options?: Omit<RenderOptions, "wrapper">) {
   return render(ui, { wrapper: TestProviders, ...options });
 }
 
 export { renderWithProviders, createTestQueryClient, TestProviders };
-export { screen, within, waitFor } from "@testing-library/react";
-export { default as userEvent } from "@testing-library/user-event";

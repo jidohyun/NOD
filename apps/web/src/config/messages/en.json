@@ -107,6 +107,37 @@
   },
   "continueWithGoogle": "Continue with Google",
   "dashboard": {
+    "sidebar": {
+      "nav": {
+        "dashboard": "Dashboard",
+        "articles": "Articles",
+        "settings": "Settings",
+        "billing": "Manage Billing",
+        "pricing": "Pricing"
+      },
+      "user": {
+        "profile": "Profile",
+        "settings": "Settings",
+        "billing": "Manage Billing",
+        "help": "Help",
+        "logout": "Log out"
+      }
+    },
+    "overview": {
+      "title": "Dashboard",
+      "description": "Overview of your knowledge library.",
+      "savedArticles": "Saved Articles",
+      "aiSummaries": "AI Summaries",
+      "currentPlan": "Current Plan",
+      "viewArticlesTitle": "View Articles",
+      "viewArticlesDescription": "Browse and search your saved articles.",
+      "manageBillingTitle": "Manage Billing",
+      "manageBillingDescription": "View your plan and usage details."
+    },
+    "searchPlaceholder": "Search...",
+    "statusLabel": "Status",
+    "markdownNote": "Note",
+    "downloadMarkdown": "Download .md",
     "myArticles": "My Articles",
     "searchArticles": "Search articles...",
     "allStatus": "All status",
@@ -133,6 +164,24 @@
     "loadingSimilar": "Loading similar articles...",
     "similarity": "{percent}% match"
   },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings.",
+    "sections": {
+      "profile": "Profile",
+      "account": "Account",
+      "quickLinks": "Quick Links"
+    },
+    "fields": {
+      "email": "Email",
+      "authProvider": "Auth Provider",
+      "subscription": "Subscription"
+    },
+    "links": {
+      "manageBilling": "Manage Billing & Subscription",
+      "viewPricing": "View Pricing Plans"
+    }
+  },
   "subscription": {
     "pricing": "Pricing",
     "currentPlan": "Current Plan",
@@ -152,13 +201,13 @@
     "upgradePrompt": "Upgrade to Pro for more summaries",
     "features": {
       "basicSummaries": "10 AI summaries/month",
-      "proSummaries": "300 AI summaries/month",
+      "proSummaries": "Unlimited AI summaries",
       "basicArticles": "50 saved articles",
       "proArticles": "Unlimited saved articles",
       "basicSearch": "5 semantic searches/day",
       "proSearch": "Unlimited semantic searches",
-      "proExport": "Export to CSV/JSON",
-      "proPriority": "Priority analysis queue"
+      "basicModel": "Gemini 2.0 Flash model",
+      "proModel": "GPT-4o-mini"
     },
     "processing": "Processing...",
     "managePayment": "Manage Payment Method",

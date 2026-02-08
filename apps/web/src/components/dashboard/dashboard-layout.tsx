@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
-import { DashboardSidebar } from './dashboard-sidebar'
-import { DashboardHeader } from './dashboard-header'
+import type { ReactNode } from "react";
+import { DashboardHeader } from "./dashboard-header";
+import { DashboardSidebar } from "./dashboard-sidebar";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   return (
@@ -14,10 +14,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <DashboardHeader />
 
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

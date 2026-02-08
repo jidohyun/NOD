@@ -107,6 +107,37 @@
   },
   "continueWithGoogle": "Google로 계속하기",
   "dashboard": {
+    "sidebar": {
+      "nav": {
+        "dashboard": "대시보드",
+        "articles": "아티클",
+        "settings": "설정",
+        "billing": "결제 관리",
+        "pricing": "요금제"
+      },
+      "user": {
+        "profile": "프로필",
+        "settings": "설정",
+        "billing": "결제 관리",
+        "help": "도움말",
+        "logout": "로그아웃"
+      }
+    },
+    "overview": {
+      "title": "대시보드",
+      "description": "지식 라이브러리 개요입니다.",
+      "savedArticles": "저장한 아티클",
+      "aiSummaries": "AI 요약",
+      "currentPlan": "현재 플랜",
+      "viewArticlesTitle": "아티클 보기",
+      "viewArticlesDescription": "저장한 아티클을 찾아보고 검색하세요.",
+      "manageBillingTitle": "결제 관리",
+      "manageBillingDescription": "플랜과 사용량을 확인하세요."
+    },
+    "searchPlaceholder": "검색...",
+    "statusLabel": "상태",
+    "markdownNote": "노트",
+    "downloadMarkdown": ".md 다운로드",
     "myArticles": "내 아티클",
     "searchArticles": "아티클 검색...",
     "allStatus": "전체 상태",
@@ -133,6 +164,24 @@
     "loadingSimilar": "유사한 아티클 불러오는 중...",
     "similarity": "{percent}% 일치"
   },
+  "settings": {
+    "title": "설정",
+    "description": "계정 설정을 관리하세요.",
+    "sections": {
+      "profile": "프로필",
+      "account": "계정",
+      "quickLinks": "빠른 링크"
+    },
+    "fields": {
+      "email": "이메일",
+      "authProvider": "인증 제공자",
+      "subscription": "구독"
+    },
+    "links": {
+      "manageBilling": "결제 및 구독 관리",
+      "viewPricing": "요금제 보기"
+    }
+  },
   "subscription": {
     "pricing": "요금제",
     "currentPlan": "현재 플랜",
@@ -152,13 +201,13 @@
     "upgradePrompt": "더 많은 요약을 원하시면 Pro로 업그레이드하세요",
     "features": {
       "basicSummaries": "월 10회 AI 요약",
-      "proSummaries": "월 300회 AI 요약",
+      "proSummaries": "무제한 AI 요약",
       "basicArticles": "아티클 50개 저장",
       "proArticles": "무제한 아티클 저장",
       "basicSearch": "일 5회 시맨틱 검색",
       "proSearch": "무제한 시맨틱 검색",
-      "proExport": "CSV/JSON 내보내기",
-      "proPriority": "우선 분석 큐"
+      "basicModel": "Gemini 2.0 Flash 모델",
+      "proModel": "GPT-4o-mini"
     },
     "processing": "처리 중...",
     "managePayment": "결제 수단 관리",
