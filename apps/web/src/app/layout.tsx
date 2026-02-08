@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import type { ReactNode } from "react";
@@ -25,6 +26,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <body>{children}</body>
+      {process.env.NEXT_PUBLIC_GA_ID ? (
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+      ) : null}
     </html>
   );
 }
