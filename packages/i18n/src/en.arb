@@ -96,6 +96,10 @@
   "@extErrorTitle": {
     "description": "Extension error title"
   },
+  "extRefreshHint": "If this keeps happening, refresh the page and try again.",
+  "@extRefreshHint": {
+    "description": "Extension error hint suggesting refresh"
+  },
   "extTryAgain": "Try Again",
   "@extTryAgain": {
     "description": "Extension retry button"
@@ -107,5 +111,21 @@
   "extLogout": "Logout",
   "@extLogout": {
     "description": "Extension logout button"
+  },
+  "extUsageInfo": "{used}/{limit} summaries used",
+  "@extUsageInfo": {
+    "description": "Extension usage indicator with used/limit"
+  },
+  "extLimitReached": "Monthly limit reached",
+  "@extLimitReached": {
+    "description": "Extension message when monthly limit reached"
+  },
+  "extUpgradePrompt": "Upgrade to Pro for more",
+  "@extUpgradePrompt": {
+    "description": "Extension prompt to upgrade plan"
+  },
+  "extUsageUnlimited": "Unlimited summaries (Pro)",
+  "@extUsageUnlimited": {
+    "description": "Extension usage text for unlimited plan"
   }
 }

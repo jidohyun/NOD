@@ -24,7 +24,12 @@
   "extSaveSuccessSubtitle": "AI分析が進行中です",
   "extViewDashboard": "ダッシュボードで表示",
   "extErrorTitle": "問題が発生しました",
+  "extRefreshHint": "問題が続く場合は、ページを再読み込みしてからもう一度お試しください。",
   "extTryAgain": "再試行",
   "extMinRead": "分",
-  "extLogout": "ログアウト"
+  "extLogout": "ログアウト",
+  "extUsageInfo": "要約 {used}/{limit}件使用",
+  "extLimitReached": "月間上限に達しました",
+  "extUpgradePrompt": "Proにアップグレード",
+  "extUsageUnlimited": "無制限要約 (Pro)"
 }
