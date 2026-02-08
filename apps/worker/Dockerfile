@@ -14,4 +14,4 @@ COPY src ./src
 RUN useradd --create-home --shell /bin/bash appuser
 USER appuser
 EXPOSE 8080
-CMD ["uv", "run", "fastapi", "run", "src/main.py", "--port", "8080"]
+CMD ["sh", "-c", ".venv/bin/fastapi run src/main.py --host 0.0.0.0 --port ${PORT:-8080}"]
