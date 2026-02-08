@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -52,6 +52,12 @@ const EXTENSION_KEYS = [
   "extSaveButton", "extSaving",
   "extSaveSuccessTitle", "extSaveSuccessSubtitle", "extViewDashboard",
   "extErrorTitle", "extTryAgain", "extMinRead",
+  "extRefreshHint",
+  "extLogout",
+  "extUsageInfo",
+  "extLimitReached",
+  "extUpgradePrompt",
+  "extUsageUnlimited",
 ];
 
 function isArbMetadataKey(key: string): boolean {
@@ -144,13 +150,6 @@ function ensureDir(dir: string): void {
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
   }
-}
-
-function cleanDir(dir: string): void {
-  if (existsSync(dir)) {
-    rmSync(dir, { recursive: true, force: true });
-  }
-  mkdirSync(dir, { recursive: true });
 }
 
 function deepMerge(target: NestedJson, source: NestedJson): NestedJson {
