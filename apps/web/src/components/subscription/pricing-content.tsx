@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useCheckout, useSubscription } from "@/lib/api/subscriptions";
 import { Link } from "@/lib/i18n/routing";
@@ -10,6 +10,7 @@ import { openCheckout } from "@/lib/paddle";
 export function PricingContent() {
   const t = useTranslations("subscription");
   const td = useTranslations("dashboard");
+  const locale = useLocale();
   const checkout = useCheckout();
   const { data: subscription } = useSubscription();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -53,6 +54,7 @@ export function PricingContent() {
         priceId: data.price_id,
         userId: data.user_id,
         userEmail: data.user_email,
+        locale,
       });
     } catch {
       // Checkout overlay handles its own errors

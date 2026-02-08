@@ -29,12 +29,14 @@ export interface OpenCheckoutParams {
   priceId: string;
   userId: string;
   userEmail?: string | null;
+  locale?: string;
 }
 
 export async function openCheckout({
   priceId,
   userId,
   userEmail,
+  locale,
 }: OpenCheckoutParams): Promise<void> {
   const paddle = await getPaddle();
   if (!paddle) {
@@ -46,6 +48,7 @@ export async function openCheckout({
     customData: { user_id: userId },
     customer: userEmail ? { email: userEmail } : undefined,
     settings: {
+      locale,
       successUrl: `${window.location.origin}/settings/billing?checkout=success`,
     },
   });
