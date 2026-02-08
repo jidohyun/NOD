@@ -3,14 +3,13 @@ import uuid
 import structlog
 from sqlalchemy import select
 
+# Reuse models from analyze_article
+from src.jobs.analyze_article import Article, ArticleEmbedding, ArticleSummary
 from src.lib.ai.factory import create_ai_provider
 from src.lib.ai.prompts import EMBEDDING_TEXT_TEMPLATE
 from src.lib.config import settings
 from src.lib.database import async_session_factory
 from src.lib.retry import with_retry
-
-# Reuse models from analyze_article
-from src.jobs.analyze_article import Article, ArticleEmbedding, ArticleSummary
 
 logger = structlog.get_logger(__name__)
 
