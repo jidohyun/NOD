@@ -17,5 +17,7 @@ class ArticleAnalysisResult(BaseModel):
         description="ISO 639-1 language code of the article (e.g., 'en', 'ko', 'ja')"
     )
     reading_time_minutes: int = Field(
-        description="Estimated reading time in minutes based on content length and complexity"
+        description=(
+            "Estimated reading time in minutes based on content length and complexity"
+        )
     )

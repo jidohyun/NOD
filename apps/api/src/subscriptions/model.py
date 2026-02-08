@@ -1,7 +1,14 @@
 import uuid as uuid_lib
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, UniqueConstraint, func, text
+from sqlalchemy import (
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -28,9 +35,7 @@ class Subscription(UUIDMixin, TimestampMixin, Base):
     paddle_subscription_id: Mapped[str | None] = mapped_column(
         String(100), nullable=True, unique=True
     )
-    paddle_customer_id: Mapped[str | None] = mapped_column(
-        String(100), nullable=True
-    )
+    paddle_customer_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
     current_period_start: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )

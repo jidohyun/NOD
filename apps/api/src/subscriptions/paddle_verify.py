@@ -10,7 +10,6 @@ import time
 
 from fastapi import HTTPException, Request, status
 
-
 MAX_TIMESTAMP_AGE_SECONDS = 300  # 5 minutes
 
 
@@ -51,11 +50,11 @@ async def verify_paddle_signature(
     # Reject stale timestamps
     try:
         timestamp = int(timestamp_str)
-    except ValueError:
+    except ValueError as err:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid timestamp in Paddle-Signature",
-        )
+        ) from err
 
     age = int(time.time()) - timestamp
     if age > MAX_TIMESTAMP_AGE_SECONDS:

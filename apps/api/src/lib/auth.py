@@ -54,12 +54,14 @@ class RefreshTokenRequest(BaseModel):
 
 class CredentialLoginRequest(BaseModel):
     """Email/password login request."""
+
     email: str
     password: str
 
 
 class RegisterRequest(BaseModel):
     """Email/password register request."""
+
     email: str
     password: str
     name: str | None = None

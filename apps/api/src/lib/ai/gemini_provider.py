@@ -48,6 +48,7 @@ class GeminiProvider(AIProvider[Any]):
             ),
         )
         import json
+
         raw = json.loads(response.text or "{}")
         return schema(**raw)
 

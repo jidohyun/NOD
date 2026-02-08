@@ -148,7 +148,9 @@ async def paddle_webhook(
         )
         body = json.loads(raw_body)
     else:
-        logger.warning("PADDLE_WEBHOOK_SECRET not set — skipping signature verification")
+        logger.warning(
+            "PADDLE_WEBHOOK_SECRET not set — skipping signature verification"
+        )
         body = await request.json()
 
     event_type = body.get("event_type", "")
@@ -200,7 +202,9 @@ async def paddle_webhook(
             if period.get("ends_at"):
                 period_end = datetime.fromisoformat(period["ends_at"])
 
-        if data.get("scheduled_change") and data["scheduled_change"].get("effective_at"):
+        if data.get("scheduled_change") and data["scheduled_change"].get(
+            "effective_at"
+        ):
             cancel_at = datetime.fromisoformat(data["scheduled_change"]["effective_at"])
 
         await service.update_subscription_from_paddle(
