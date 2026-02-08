@@ -32,7 +32,7 @@ export function useArticle(): UseArticleResult {
 
       const response: ContentScriptResponse = await chrome.tabs.sendMessage(
         tab.id,
-        { type: "EXTRACT_CONTENT" }
+        { type: "CHECK_ARTICLE" }
       );
 
       if (response?.success) {
