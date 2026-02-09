@@ -230,53 +230,5 @@
       "basic": "Perfect for casual readers who want to try AI-powered article management.",
       "pro": "For power users who save and analyze articles daily."
     }
-  },
-  "onboarding": {
-    "title": "Get started",
-    "subtitle": "Let’s finish your first setup for {app}",
-    "common": {
-      "next": "Next"
-    },
-    "language": {
-      "title": "Choose your language",
-      "description": "Pick the language you’d like to use in NOD.",
-      "note": "You can change this anytime."
-    },
-    "extension": {
-      "title": "Install the Chrome extension",
-      "description": "Save any article from the web with one click.",
-      "statusInstalled": "Installed",
-      "statusConnected": "Connected",
-      "checking": "Checking...",
-      "yes": "Yes",
-      "no": "No",
-      "installCta": "Add to Chrome",
-      "recheck": "Check again",
-      "connect": "Connect extension",
-      "connecting": "Connecting...",
-      "note": "After installing, come back and click “Check again”."
-    },
-    "save": {
-      "title": "Save your first article",
-      "description": "Open the recommended article and save it with the extension.",
-      "recommended": "Recommended article",
-      "step1": "Open the recommended article in a new tab.",
-      "step2": "Click the extension icon and press Save.",
-      "step3": "Once saved, click the button below.",
-      "done": "I saved it",
-      "waiting": "Checking...",
-      "goArticles": "View my articles"
-    },
-    "summary": {
-      "title": "Generating summary",
-      "description": "AI is summarizing your first article.",
-      "waiting": "Generating summary...",
-      "success": "Summary is ready!"
-    },
-    "done": {
-      "title": "Welcome",
-      "description": "You’re all set. Head to the dashboard to see your saved articles and summaries.",
-      "cta": "Go to dashboard"
-    }
   }
 }
