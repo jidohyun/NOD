@@ -269,3 +269,36 @@ variable "API_URL" {
   type        = string
   default     = ""
 }
+
+# Paddle Billing
+variable "PADDLE_API_KEY" {
+  description = "Paddle API key for server-side operations"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "PADDLE_WEBHOOK_SECRET" {
+  description = "Paddle webhook signature verification secret"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "PADDLE_CLIENT_TOKEN" {
+  description = "Paddle client-side token for checkout"
+  type        = string
+  default     = ""
+}
+
+variable "PADDLE_PRICE_ID_PRO" {
+  description = "Paddle price ID for Pro plan"
+  type        = string
+  default     = ""
+}
+
+variable "PADDLE_ENVIRONMENT" {
+  description = "Paddle environment (sandbox or production)"
+  type        = string
+  default     = "sandbox"
+}

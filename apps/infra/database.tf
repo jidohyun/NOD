@@ -93,6 +93,42 @@ resource "google_secret_manager_secret_version" "db_password" {
   secret_data = random_password.db_password.result
 }
 
+# Paddle API Key Secret
+resource "google_secret_manager_secret" "paddle_api_key" {
+  count     = var.PADDLE_API_KEY != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-paddle-api-key"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "paddle_api_key" {
+  count       = var.PADDLE_API_KEY != "" ? 1 : 0
+  secret      = google_secret_manager_secret.paddle_api_key[0].id
+  secret_data = var.PADDLE_API_KEY
+}
+
+# Paddle Webhook Secret
+resource "google_secret_manager_secret" "paddle_webhook_secret" {
+  count     = var.PADDLE_WEBHOOK_SECRET != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-paddle-webhook-secret"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "paddle_webhook_secret" {
+  count       = var.PADDLE_WEBHOOK_SECRET != "" ? 1 : 0
+  secret      = google_secret_manager_secret.paddle_webhook_secret[0].id
+  secret_data = var.PADDLE_WEBHOOK_SECRET
+}
+
 # Redis (Memorystore)
 resource "google_redis_instance" "main" {
   name           = "${local.name_prefix}-redis"

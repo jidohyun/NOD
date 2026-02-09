@@ -99,6 +99,53 @@ resource "google_cloud_run_v2_service" "api" {
         value = google_cloud_run_v2_service.worker.uri
       }
 
+      dynamic "env" {
+        for_each = var.PADDLE_API_KEY != "" ? [1] : []
+        content {
+          name = "PADDLE_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.paddle_api_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.PADDLE_WEBHOOK_SECRET != "" ? [1] : []
+        content {
+          name = "PADDLE_WEBHOOK_SECRET"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.paddle_webhook_secret[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.PADDLE_CLIENT_TOKEN != "" ? [1] : []
+        content {
+          name  = "PADDLE_CLIENT_TOKEN"
+          value = var.PADDLE_CLIENT_TOKEN
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.PADDLE_PRICE_ID_PRO != "" ? [1] : []
+        content {
+          name  = "PADDLE_PRICE_ID_PRO"
+          value = var.PADDLE_PRICE_ID_PRO
+        }
+      }
+
+      env {
+        name  = "PADDLE_ENVIRONMENT"
+        value = var.PADDLE_ENVIRONMENT
+      }
+
       startup_probe {
         http_get {
           path = "/health"

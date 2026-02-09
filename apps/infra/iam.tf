@@ -70,6 +70,20 @@ resource "google_secret_manager_secret_iam_member" "api_db_password" {
   member    = "serviceAccount:${google_service_account.api.email}"
 }
 
+resource "google_secret_manager_secret_iam_member" "api_paddle_api_key" {
+  count     = var.PADDLE_API_KEY != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.paddle_api_key[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "api_paddle_webhook_secret" {
+  count     = var.PADDLE_WEBHOOK_SECRET != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.paddle_webhook_secret[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
 # Worker Service Account Permissions
 resource "google_project_iam_member" "worker_storage" {
   project = var.project_id
