@@ -230,53 +230,5 @@
       "basic": "AI 기반 아티클 관리를 체험하고 싶은 캐주얼 독자에게 적합합니다.",
       "pro": "매일 아티클을 저장하고 분석하는 파워 유저를 위한 플랜입니다."
     }
-  },
-  "onboarding": {
-    "title": "시작하기",
-    "subtitle": "{app} 첫 설정을 완료해요",
-    "common": {
-      "next": "다음"
-    },
-    "language": {
-      "title": "언어를 선택하세요",
-      "description": "원하는 언어로 NOD를 사용할 수 있어요.",
-      "note": "언어는 언제든 변경할 수 있어요."
-    },
-    "extension": {
-      "title": "크롬 익스텐션 설치",
-      "description": "익스텐션으로 웹에서 아티클을 한 번에 저장할 수 있어요.",
-      "statusInstalled": "설치 여부",
-      "statusConnected": "연결 여부",
-      "checking": "확인 중...",
-      "yes": "예",
-      "no": "아니오",
-      "installCta": "Chrome에 추가",
-      "recheck": "다시 확인",
-      "connect": "익스텐션 연결하기",
-      "connecting": "연결 중...",
-      "note": "설치 후 이 페이지에서 다시 확인을 눌러주세요."
-    },
-    "save": {
-      "title": "첫 아티클 저장",
-      "description": "추천 아티클을 열고 익스텐션으로 저장해보세요.",
-      "recommended": "추천 아티클",
-      "step1": "추천 아티클을 새 탭에서 엽니다.",
-      "step2": "크롬 익스텐션 아이콘을 눌러 Save를 실행합니다.",
-      "step3": "저장이 끝나면 아래 버튼을 누릅니다.",
-      "done": "저장했어요",
-      "waiting": "저장 확인 중...",
-      "goArticles": "내 아티클 보기"
-    },
-    "summary": {
-      "title": "요약 생성",
-      "description": "AI가 첫 아티클을 요약하고 있어요.",
-      "waiting": "요약을 생성하는 중...",
-      "success": "요약이 완성됐어요!"
-    },
-    "done": {
-      "title": "환영합니다",
-      "description": "이제 대시보드에서 저장한 아티클과 요약을 확인할 수 있어요.",
-      "cta": "대시보드로 이동"
-    }
   }
 }
