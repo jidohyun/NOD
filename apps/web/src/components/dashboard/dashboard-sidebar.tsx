@@ -11,7 +11,8 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useSidebarUser } from "@/components/dashboard/hooks/use-sidebar-user";
+import { SidebarNavLink } from "@/components/dashboard/sidebar-nav-link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -24,7 +25,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "@/lib/auth/auth-client";
 import { Link, usePathname, useRouter } from "@/lib/i18n/routing";
-import { createClient } from "@/lib/supabase/client";
 
 const LOCALE_PREFIX_RE = /^\/[a-z]{2}(?=\/|$)/;
 
@@ -32,10 +32,7 @@ export function DashboardSidebar() {
   const t = useTranslations("dashboard");
   const router = useRouter();
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const { mounted, userName, userEmail, avatarUrl, initials } = useSidebarUser();
 
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t("sidebar.nav.dashboard") },
@@ -48,39 +45,19 @@ export function DashboardSidebar() {
     { href: "/pricing", icon: Tag, label: t("sidebar.nav.pricing") },
   ] as const;
 
-  useEffect(() => {
-    setMounted(true);
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        const meta = user.user_metadata;
-        setUserName(meta?.full_name ?? meta?.name ?? user.email?.split("@")[0] ?? "");
-        setUserEmail(user.email ?? "");
-        setAvatarUrl(meta?.avatar_url ?? meta?.picture ?? "");
-      }
-    });
-  }, []);
-
-  const initials = userName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-
+  const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";
   function isActive(href: string) {
     // Strip locale prefix (e.g., /ko/articles → /articles)
-    const path = pathname.replace(LOCALE_PREFIX_RE, "") || "/";
     if (href === "/dashboard") {
-      return path === "/dashboard" || path === "/";
+      return basePath === "/dashboard" || basePath === "/";
     }
     if (href === "/settings/billing") {
-      return path === "/settings/billing";
+      return basePath === "/settings/billing";
     }
     if (href === "/settings") {
-      return path === "/settings";
+      return basePath === "/settings";
     }
-    return path.startsWith(href);
+    return basePath.startsWith(href);
   }
 
   return (
@@ -95,35 +72,25 @@ export function DashboardSidebar() {
       {/* Main Navigation */}
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map(({ href, icon: Icon, label }) => (
-          <Link
+          <SidebarNavLink
             key={href}
             href={href}
-            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              isActive(href)
-                ? "bg-primary/10 text-primary font-semibold"
-                : "text-muted-foreground hover:bg-primary/5 hover:text-foreground"
-            }`}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </Link>
+            icon={Icon}
+            label={label}
+            isActive={isActive(href)}
+          />
         ))}
 
         <div className="my-3 border-t" />
 
         {bottomNavItems.map(({ href, icon: Icon, label }) => (
-          <Link
+          <SidebarNavLink
             key={href}
             href={href}
-            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              isActive(href)
-                ? "bg-primary/10 text-primary font-semibold"
-                : "text-muted-foreground hover:bg-primary/5 hover:text-foreground"
-            }`}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </Link>
+            icon={Icon}
+            label={label}
+            isActive={isActive(href)}
+          />
         ))}
       </nav>
 
