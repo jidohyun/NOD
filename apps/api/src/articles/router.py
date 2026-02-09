@@ -27,7 +27,7 @@ async def _run_analysis(
     title: str,
     content: str,
     provider: Literal["gemini", "openai"],
-) -> None:
+) -> bool:
     """Background task: summarize article with AI and save to DB."""
     from src.articles.model import Article, ArticleSummary
     from src.lib.ai_service import summarize_article
@@ -73,8 +73,25 @@ async def _run_analysis(
                 "Failed to dispatch embedding task",
                 article_id=str(article_id),
             )
+        return True
     except Exception:
         logger.exception("Article analysis failed", article_id=str(article_id))
+        try:
+            from sqlalchemy import update
+
+            async with async_session_factory() as session:
+                await session.execute(
+                    update(Article)
+                    .where(Article.id == article_id)
+                    .values(status="failed")
+                )
+                await session.commit()
+        except Exception:
+            logger.exception(
+                "Failed to mark article as failed",
+                article_id=str(article_id),
+            )
+        return False
 
 
 @router.post("", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED)
@@ -101,11 +118,12 @@ async def create_article(
         selected_provider: Literal["gemini", "openai"] = (
             "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
         )
-        await _run_analysis(
+        ok = await _run_analysis(
             article.id, article.title, article.content, selected_provider
         )
-        await sub_service.increment_summary_usage(db, user.id)
-        await db.commit()
+        if ok:
+            await sub_service.increment_summary_usage(db, user.id)
+            await db.commit()
         updated = await service.get_article(db, article.id, user.id)
         if updated:
             article = updated
@@ -232,11 +250,12 @@ async def analyze_url(
         selected_provider: Literal["gemini", "openai"] = (
             "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
         )
-        await _run_analysis(
+        ok = await _run_analysis(
             article.id, article.title, article.content, selected_provider
         )
-        await sub_service.increment_summary_usage(db, user.id)
-        await db.commit()
+        if ok:
+            await sub_service.increment_summary_usage(db, user.id)
+            await db.commit()
         updated = await service.get_article(db, article.id, user.id)
         if updated:
             article = updated
