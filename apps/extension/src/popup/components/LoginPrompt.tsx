@@ -3,9 +3,10 @@ import { t } from "../../lib/i18n";
 
 export function LoginPrompt() {
   const handleLogin = () => {
-    const extId = chrome.runtime.id;
-    const returnUrl = encodeURIComponent(`/extension-auth?ext=${extId}`);
-    chrome.tabs.create({ url: `${WEB_BASE}/login?redirect=${returnUrl}` });
+    const returnUrl = encodeURIComponent("/extension-auth");
+    chrome.tabs.create({
+      url: `${WEB_BASE}/login?redirect=${returnUrl}`,
+    });
   };
 
   return (
