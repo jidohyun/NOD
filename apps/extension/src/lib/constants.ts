@@ -13,6 +13,7 @@ export const STORAGE_KEYS = {
   RECENT_ARTICLES: "nod_recent_articles",
   SETTINGS: "nod_settings",
   PENDING_SYNC: "nod_pending_sync",
+  LOCALE: "nod_locale",
 } as const;
 
 // Content Extraction

@@ -127,5 +127,9 @@
   "extUsageUnlimited": "Unlimited summaries (Pro)",
   "@extUsageUnlimited": {
     "description": "Extension usage text for unlimited plan"
+  },
+  "extLanguage": "Language",
+  "@extLanguage": {
+    "description": "Extension language selector label"
   }
 }
