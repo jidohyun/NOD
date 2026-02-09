@@ -248,3 +248,7 @@ app.include_router(
     prefix="/api/subscriptions",
     tags=["subscriptions"],
 )
+
+from src.users.router import router as users_router  # noqa: E402
+
+app.include_router(users_router, prefix="/api/users", tags=["users"])

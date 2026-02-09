@@ -23,6 +23,11 @@ class User(Base):
     image: Mapped[str | None] = mapped_column(String(500), nullable=True)
     email_verified: Mapped[bool] = mapped_column(default=False)
     password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
+    preferred_locale: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    onboarding_completed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -41,5 +46,7 @@ class UserResponse(BaseModel):
     name: str | None = None
     image: str | None = None
     email_verified: bool = False
+    preferred_locale: str | None = None
+    onboarding_completed_at: datetime | None = None
     created_at: datetime
     updated_at: datetime
