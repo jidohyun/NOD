@@ -20,7 +20,10 @@ export const env = createEnv({
     NEXT_PUBLIC_ENABLE_DEVTOOLS: z.enum(["true", "false"]).optional().default("false"),
     NEXT_PUBLIC_GIT_COMMIT: z.string().optional(),
     NEXT_PUBLIC_PADDLE_CLIENT_TOKEN: z.string().optional(),
-    NEXT_PUBLIC_PADDLE_ENVIRONMENT: z.enum(["sandbox", "production"]).optional().default("sandbox"),
+    NEXT_PUBLIC_PADDLE_ENVIRONMENT: z.preprocess(
+      (val) => (val === "" ? undefined : val),
+      z.enum(["sandbox", "production"]).optional().default("sandbox")
+    ),
   },
 
   runtimeEnv: {
