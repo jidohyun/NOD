@@ -1,14 +1,21 @@
 import { useState, useRef, useEffect } from "react";
 import { WEB_BASE } from "../../lib/constants";
-import { t } from "../../lib/i18n";
+import { t, SUPPORTED_LOCALES, type Locale } from "../../lib/i18n";
 import type { UserInfo } from "../../lib/auth";
 
 interface UserMenuProps {
   user: UserInfo;
   onLogout: () => void;
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
 }
 
-export function UserMenu({ user, onLogout }: UserMenuProps) {
+export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuProps) {
+  const localeLabels: Record<Locale, string> = {
+    en: "EN",
+    ko: "KO",
+    ja: "JA",
+  };
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -63,6 +70,25 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
           <div className="border-b border-gray-100 px-3 py-2.5">
             <p className="truncate text-sm font-medium text-gray-900">{user.name}</p>
             <p className="truncate text-xs text-gray-500">{user.email}</p>
+          </div>
+
+          <div className="border-b border-gray-100 px-3 py-2">
+            <p className="mb-1.5 text-xs font-medium text-gray-500">{t("extLanguage")}</p>
+            <div className="flex gap-1">
+              {SUPPORTED_LOCALES.map((loc) => (
+                <button
+                  key={loc}
+                  onClick={() => onLocaleChange(loc)}
+                  className={`flex-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                    locale === loc
+                      ? "bg-black text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {localeLabels[loc]}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="py-1">

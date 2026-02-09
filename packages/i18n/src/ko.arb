@@ -31,5 +31,9 @@
   "extUsageInfo": "요약 {used}/{limit}건 사용",
   "extLimitReached": "이번 달 사용량 초과",
   "extUpgradePrompt": "Pro로 업그레이드",
-  "extUsageUnlimited": "무제한 요약 (Pro)"
+  "extUsageUnlimited": "무제한 요약 (Pro)",
+  "extLanguage": "언어",
+  "@extLanguage": {
+    "description": "Extension language selector label"
+  }
 }
