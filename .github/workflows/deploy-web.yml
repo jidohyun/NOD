@@ -88,7 +88,9 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL=${{ vars.API_URL }} \
             --build-arg NEXT_PUBLIC_GA_ID=${{ vars.NEXT_PUBLIC_GA_ID }} \
             --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ vars.NEXT_PUBLIC_SUPABASE_URL || secrets.NEXT_PUBLIC_SUPABASE_URL }} \
-            --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY || secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+            --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY || secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
+            --build-arg NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=${{ vars.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN }} \
+            --build-arg NEXT_PUBLIC_PADDLE_ENVIRONMENT=${{ vars.NEXT_PUBLIC_PADDLE_ENVIRONMENT }}
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
