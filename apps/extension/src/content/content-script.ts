@@ -49,11 +49,24 @@ chrome.runtime.onMessage.addListener(
 window.addEventListener("message", (event: MessageEvent) => {
   if (event.source !== window) return;
 
-  if (event.data?.type === "NOD_AUTH_TOKEN" && event.data.token) {
-    chrome.runtime.sendMessage({
-      type: "SET_TOKEN",
-      token: event.data.token,
+  if (event.data?.type === "NOD_PING") {
+    chrome.runtime.sendMessage({ type: "GET_AUTH_STATUS" }, (response) => {
+      const authenticated = Boolean(response?.authenticated);
+      window.postMessage({ type: "NOD_PONG", authenticated }, "*");
     });
+    return;
+  }
+
+  if (event.data?.type === "NOD_AUTH_TOKEN" && event.data.token) {
+    chrome.runtime.sendMessage(
+      {
+        type: "SET_TOKEN",
+        token: event.data.token,
+      },
+      () => {
+        window.postMessage({ type: "NOD_AUTH_TOKEN_ACK" }, "*");
+      }
+    );
   }
 });
 
