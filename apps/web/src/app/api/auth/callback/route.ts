@@ -13,6 +13,13 @@ function firstForwardedValue(value: string | null): string | null {
 }
 
 function getOrigin(request: NextRequest): string {
+  // In local development, always trust the incoming request URL.
+  // Otherwise a configured NEXT_PUBLIC_SITE_URL (prod) can force redirects
+  // away from localhost.
+  if (process.env.NODE_ENV !== "production") {
+    return new URL(request.url).origin;
+  }
+
   const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const configuredOrigin = (() => {
     if (!configuredSiteUrl) return null;
@@ -50,13 +57,24 @@ export async function GET(request: NextRequest) {
   const origin = getOrigin(request);
   const code = searchParams.get("code");
   const nextParam = searchParams.get("next");
-  const next =
-    typeof nextParam === "string" && nextParam.startsWith("/") && !nextParam.startsWith("//")
+  const cookieStore = await cookies();
+  const cookieNext = cookieStore.get("nod_auth_next")?.value ?? null;
+
+  const candidateNext =
+    typeof nextParam === "string" && nextParam.length > 0
       ? nextParam
+      : typeof cookieNext === "string" && cookieNext.length > 0
+        ? decodeURIComponent(cookieNext)
+        : null;
+
+  const next =
+    typeof candidateNext === "string" &&
+    candidateNext.startsWith("/") &&
+    !candidateNext.startsWith("//")
+      ? candidateNext
       : "/articles";
 
   if (code) {
-    const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -76,9 +94,13 @@ export async function GET(request: NextRequest) {
 
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // Clear one-time redirect cookie.
+      cookieStore.set("nod_auth_next", "", { path: "/", maxAge: 0 });
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
+  // Clear cookie if auth fails.
+  cookieStore.set("nod_auth_next", "", { path: "/", maxAge: 0 });
   return NextResponse.redirect(`${origin}/login?error=auth`);
 }
