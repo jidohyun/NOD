@@ -72,6 +72,22 @@ resource "google_compute_security_policy" "main" {
   # The original example used 'XX', which is invalid and breaks policy creation.
   # Add your own deny rule here if/when needed.
 
+  # Allow auth/login flows to pass through.
+  # Cloud Armor preconfigured WAF rules can false-positive on URL-encoded redirect
+  # parameters (e.g., /login?redirect=%2Fextension-auth%3Fext%3D...).
+  rule {
+    action   = "allow"
+    priority = 150
+
+    match {
+      expr {
+        expression = "request.path == '/api/auth/callback' || request.path.endsWith('/login') || request.path.endsWith('/extension-auth')"
+      }
+    }
+
+    description = "Allow auth routes"
+  }
+
   # XSS protection
   rule {
     action   = "deny(403)"
