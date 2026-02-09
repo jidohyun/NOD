@@ -1,11 +1,11 @@
 "use client";
 
-import { CreditCard, Mail, Shield, User as UserIcon } from "lucide-react";
-import Link from "next/link";
+import { CreditCard, FileText, Mail, Shield, User as UserIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSubscription } from "@/lib/api/subscriptions";
+import { Link } from "@/lib/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
 
 export function SettingsProfile() {
@@ -109,6 +109,34 @@ export function SettingsProfile() {
           >
             <UserIcon className="h-4 w-4 text-muted-foreground" />
             {t("links.viewPricing")}
+          </Link>
+        </div>
+      </div>
+
+      {/* Legal */}
+      <div className="rounded-xl border bg-card p-6">
+        <h2 className="mb-4 text-lg font-semibold">{t("sections.legal")}</h2>
+        <div className="space-y-2">
+          <Link
+            href="/terms"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+          >
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            {t("links.terms")}
+          </Link>
+          <Link
+            href="/privacy"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+          >
+            <Shield className="h-4 w-4 text-muted-foreground" />
+            {t("links.privacy")}
+          </Link>
+          <Link
+            href="/refund"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+          >
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+            {t("links.refund")}
           </Link>
         </div>
       </div>

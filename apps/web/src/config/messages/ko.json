@@ -303,7 +303,8 @@
     "sections": {
       "profile": "프로필",
       "account": "계정",
-      "quickLinks": "빠른 링크"
+      "quickLinks": "빠른 링크",
+      "legal": "법적 고지"
     },
     "fields": {
       "email": "이메일",
@@ -312,7 +313,10 @@
     },
     "links": {
       "manageBilling": "결제 및 구독 관리",
-      "viewPricing": "요금제 보기"
+      "viewPricing": "요금제 보기",
+      "terms": "이용약관",
+      "privacy": "개인정보 처리방침",
+      "refund": "환불 정책"
     }
   },
   "subscription": {
