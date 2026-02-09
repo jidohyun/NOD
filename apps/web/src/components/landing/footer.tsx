@@ -27,7 +27,7 @@ export function LandingFooter() {
     {
       title: t("legal"),
       links: [
-        { label: t("privacy"), href: "#" },
+        { label: t("privacy"), href: "/privacy" },
         { label: t("terms"), href: "#" },
       ],
     },
