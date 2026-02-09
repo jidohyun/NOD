@@ -47,6 +47,11 @@ const SAMPLE_ARTICLE_URL = "https://stripe.com/blog/payment-api-design";
 
 type Step = "language" | "extension" | "save" | "summary" | "done";
 
+function setNextLocaleCookie(locale: LocaleId) {
+  // next-intl uses this cookie for locale detection when localePrefix="as-needed".
+  document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; samesite=lax`;
+}
+
 function getOnboardingPath(locale: LocaleId, step?: Step): string {
   const base = locale === "ko" ? "/onboarding" : `/${locale}/onboarding`;
   if (!step) return base;
@@ -108,7 +113,12 @@ export function OnboardingFlow() {
 
   const handleLocaleSelect = useCallback(
     async (next: LocaleId) => {
-      await patchMe({ preferred_locale: next });
+      setNextLocaleCookie(next);
+      try {
+        await patchMe({ preferred_locale: next });
+      } catch {
+        // If the API isn't deployed yet, avoid blocking onboarding.
+      }
       window.location.assign(getOnboardingPath(next, "extension"));
     },
     [patchMe]
