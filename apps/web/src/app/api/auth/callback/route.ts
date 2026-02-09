@@ -25,8 +25,7 @@ function getOrigin(request: NextRequest): string {
 
   const proto = firstForwardedValue(request.headers.get("x-forwarded-proto")) ?? "https";
   const host =
-    firstForwardedValue(request.headers.get("x-forwarded-host")) ??
-    request.headers.get("host");
+    firstForwardedValue(request.headers.get("x-forwarded-host")) ?? request.headers.get("host");
 
   if (host) {
     if (
