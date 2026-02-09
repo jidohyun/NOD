@@ -12,9 +12,9 @@ resource "google_cloud_run_v2_job" "api_migrate" {
       }
 
       containers {
-        # Run migrations using the currently deployed API image.
-        # (CI deploys commit-sha-tagged images.)
-        image   = google_cloud_run_v2_service.api.template[0].containers[0].image
+        # NOTE: Cloud Run images are tagged by git SHA (not :latest).
+        # Pin the migrate job to a known deployed image tag.
+        image   = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.main.repository_id}/api:4d3f4d93747429978f8634b64765a348f382b06a"
         command = ["sh", "-c"]
         args    = [".venv/bin/alembic upgrade head"]
 
