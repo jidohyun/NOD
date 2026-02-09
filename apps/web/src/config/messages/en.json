@@ -102,8 +102,131 @@
       "legal": "Legal",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
+      "refund": "Refund Policy",
       "tagline": "AI-powered article saving and knowledge management.",
       "copyright": "© 2025 NOD. All rights reserved."
+    }
+  },
+  "legal": {
+    "terms": {
+      "title": "Terms of Service",
+      "effectiveDate": "Effective Date: 2026-02-09",
+      "sections": {
+        "intro": {
+          "title": "1. Purpose",
+          "content": "These Terms of Service govern your use of NOD."
+        },
+        "account": {
+          "title": "2. Account",
+          "content": "You are responsible for maintaining the security of your account."
+        },
+        "service": {
+          "title": "3. Service Use",
+          "content": "NOD provides AI-powered article saving and summarization services."
+        },
+        "content": {
+          "title": "4. Content & Copyright",
+          "content": "You retain copyright of your content. We use it to provide the service."
+        },
+        "prohibited": {
+          "title": "5. Prohibited Acts",
+          "content": "Do not misuse the service or violate laws."
+        },
+        "termination": {
+          "title": "6. Termination",
+          "content": "You may cancel your account at any time."
+        },
+        "contact": {
+          "title": "7. Contact",
+          "content": "Contact us at shickcoong777@gmail.com."
+        }
+      }
+    },
+    "refund": {
+      "title": "Refund & Cancellation Policy",
+      "effectiveDate": "Effective Date: 2026-02-09",
+      "intro": "Our policy regarding refunds and cancellations.",
+      "sections": {
+        "cancellation": {
+          "title": "1. Cancellation",
+          "content": "You can cancel your subscription at any time. Access continues until the end of the billing period."
+        },
+        "refunds": {
+          "title": "2. Refunds",
+          "content": "Partial refunds are not provided for subscription periods already paid for, except where required by law."
+        },
+        "process": {
+          "title": "3. How to Request",
+          "content": "Contact shickcoong777@gmail.com for assistance."
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "effectiveDate": "Effective Date: 2026-02-09",
+      "intro": "NOD respects your privacy. This policy explains how we handle your data.",
+      "sections": {
+        "collection": {
+          "title": "1. Information We Collect",
+          "content": "We collect the following information:",
+          "items": {
+            "account": "Account info: Email, name.",
+            "content": "Content info: Saved URLs, article text, summaries.",
+            "usage": "Usage info: Feature usage logs.",
+            "payment": "Payment info: Processed by our payment provider.",
+            "analytics": "Web analytics info."
+          },
+          "note": "When using the Chrome extension, we may collect URL and page content of saved pages."
+        },
+        "purpose": {
+          "title": "2. How We Use Information",
+          "items": {
+            "auth": "Authentication and session management",
+            "core": "Providing core features like saving and summarization",
+            "billing": "Subscription management",
+            "improve": "Service improvement and security"
+          }
+        },
+        "sharing": {
+          "title": "3. Sharing",
+          "content": "We do not sell your data. We use trusted service providers for hosting, AI processing, and payments.",
+          "items": {
+            "cloud": "Cloud infrastructure",
+            "auth": "Auth providers",
+            "ai": "AI providers (e.g., OpenAI, Google)",
+            "payment": "Payment processors",
+            "analytics": "Analytics tools"
+          }
+        },
+        "retention": {
+          "title": "4. Retention",
+          "items": {
+            "principle": "We delete data when it is no longer needed.",
+            "deletion": "Data is deleted upon account deletion.",
+            "legal": "We retain data if required by law."
+          }
+        },
+        "rights": {
+          "title": "5. Your Rights",
+          "content": "You have the right to access, correct, or delete your data."
+        },
+        "cookies": {
+          "title": "6. Cookies",
+          "content": "We use cookies for authentication and analytics."
+        },
+        "security": {
+          "title": "7. Security",
+          "content": "We implement reasonable security measures to protect your data."
+        },
+        "contact": {
+          "title": "8. Contact",
+          "content": "Contact us at shickcoong777@gmail.com."
+        },
+        "changes": {
+          "title": "9. Changes",
+          "content": "We will notify you of significant changes to this policy."
+        }
+      }
     }
   },
   "loginWelcome": "Welcome back",

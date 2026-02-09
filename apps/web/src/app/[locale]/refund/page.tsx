@@ -1,5 +1,6 @@
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { LegalHeader } from "@/components/legal/legal-header";
 
 interface RefundPageProps {
   params: Promise<{ locale: string }>;
@@ -13,6 +14,8 @@ export default async function RefundPage({ params }: RefundPageProps) {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
+      <LegalHeader />
+
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-sm text-muted-foreground">{t("effectiveDate")}</p>
