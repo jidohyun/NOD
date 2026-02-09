@@ -214,6 +214,17 @@ variable "KAKAO_CLIENT_SECRET" {
 }
 
 # AI/ML
+variable "AI_PROVIDER" {
+  description = "AI provider (gemini or openai)"
+  type        = string
+  default     = "gemini"
+
+  validation {
+    condition     = contains(["gemini", "openai"], var.AI_PROVIDER)
+    error_message = "AI_PROVIDER must be one of: gemini, openai."
+  }
+}
+
 variable "OPENAI_API_KEY" {
   description = "OpenAI API key"
   type        = string

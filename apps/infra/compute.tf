@@ -35,6 +35,11 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       env {
+        name  = "AI_PROVIDER"
+        value = var.AI_PROVIDER
+      }
+
+      env {
         name  = "CORS_ORIGINS"
         value = var.domain != "" ? jsonencode(["https://${var.domain}"]) : jsonencode(["http://localhost:3000"])
       }
@@ -97,6 +102,32 @@ resource "google_cloud_run_v2_service" "api" {
       env {
         name  = "WORKER_URL"
         value = google_cloud_run_v2_service.worker.uri
+      }
+
+      dynamic "env" {
+        for_each = var.OPENAI_API_KEY != "" ? [1] : []
+        content {
+          name = "OPENAI_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.openai_api_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.GOOGLE_AI_API_KEY != "" ? [1] : []
+        content {
+          name = "GEMINI_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.google_ai_api_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
       }
 
       dynamic "env" {
@@ -180,6 +211,7 @@ resource "google_cloud_run_v2_service" "api" {
 
   depends_on = [
     google_secret_manager_secret_iam_member.api_db_password,
+    google_project_iam_member.api_secret_accessor,
   ]
 }
 
@@ -287,6 +319,11 @@ resource "google_cloud_run_v2_service" "worker" {
       }
 
       env {
+        name  = "AI_PROVIDER"
+        value = var.AI_PROVIDER
+      }
+
+      env {
         name  = "DATABASE_HOST"
         value = google_sql_database_instance.main.private_ip_address
       }
@@ -336,6 +373,32 @@ resource "google_cloud_run_v2_service" "worker" {
         value = google_storage_bucket.uploads.name
       }
 
+      dynamic "env" {
+        for_each = var.OPENAI_API_KEY != "" ? [1] : []
+        content {
+          name = "OPENAI_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.openai_api_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.GOOGLE_AI_API_KEY != "" ? [1] : []
+        content {
+          name = "GEMINI_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.google_ai_api_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
       startup_probe {
         http_get {
           path = "/health"
@@ -360,6 +423,7 @@ resource "google_cloud_run_v2_service" "worker" {
 
   depends_on = [
     google_secret_manager_secret_iam_member.worker_db_password,
+    google_project_iam_member.worker_secret_accessor,
   ]
 }
 

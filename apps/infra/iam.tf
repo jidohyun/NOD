@@ -52,6 +52,12 @@ resource "google_project_iam_member" "api_storage" {
   member  = "serviceAccount:${google_service_account.api.email}"
 }
 
+resource "google_project_iam_member" "api_secret_accessor" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${google_service_account.api.email}"
+}
+
 resource "google_project_iam_member" "api_pubsub" {
   project = var.project_id
   role    = "roles/pubsub.publisher"
@@ -84,10 +90,30 @@ resource "google_secret_manager_secret_iam_member" "api_paddle_webhook_secret" {
   member    = "serviceAccount:${google_service_account.api.email}"
 }
 
+resource "google_secret_manager_secret_iam_member" "api_openai_api_key" {
+  count     = var.OPENAI_API_KEY != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.openai_api_key[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "api_google_ai_api_key" {
+  count     = var.GOOGLE_AI_API_KEY != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.google_ai_api_key[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
 # Worker Service Account Permissions
 resource "google_project_iam_member" "worker_storage" {
   project = var.project_id
   role    = "roles/storage.objectUser"
+  member  = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_project_iam_member" "worker_secret_accessor" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.worker.email}"
 }
 
@@ -99,6 +125,20 @@ resource "google_project_iam_member" "worker_pubsub" {
 
 resource "google_secret_manager_secret_iam_member" "worker_db_password" {
   secret_id = google_secret_manager_secret.db_password.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "worker_openai_api_key" {
+  count     = var.OPENAI_API_KEY != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.openai_api_key[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "worker_google_ai_api_key" {
+  count     = var.GOOGLE_AI_API_KEY != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.google_ai_api_key[0].id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.worker.email}"
 }

@@ -129,6 +129,42 @@ resource "google_secret_manager_secret_version" "paddle_webhook_secret" {
   secret_data = var.PADDLE_WEBHOOK_SECRET
 }
 
+# OpenAI API Key Secret
+resource "google_secret_manager_secret" "openai_api_key" {
+  count     = var.OPENAI_API_KEY != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-openai-api-key"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "openai_api_key" {
+  count       = var.OPENAI_API_KEY != "" ? 1 : 0
+  secret      = google_secret_manager_secret.openai_api_key[0].id
+  secret_data = var.OPENAI_API_KEY
+}
+
+# Google AI (Gemini) API Key Secret
+resource "google_secret_manager_secret" "google_ai_api_key" {
+  count     = var.GOOGLE_AI_API_KEY != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-google-ai-api-key"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "google_ai_api_key" {
+  count       = var.GOOGLE_AI_API_KEY != "" ? 1 : 0
+  secret      = google_secret_manager_secret.google_ai_api_key[0].id
+  secret_data = var.GOOGLE_AI_API_KEY
+}
+
 # Redis (Memorystore)
 resource "google_redis_instance" "main" {
   name           = "${local.name_prefix}-redis"
