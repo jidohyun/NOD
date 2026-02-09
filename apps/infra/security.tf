@@ -88,32 +88,34 @@ resource "google_compute_security_policy" "main" {
     description = "Allow auth routes"
   }
 
-  # XSS protection
+  # XSS protection (preview mode to identify false positives before enforcing)
   rule {
     action   = "deny(403)"
     priority = "200"
+    preview  = true
 
     match {
       expr {
-        expression = "evaluatePreconfiguredExpr('xss-stable')"
+        expression = "evaluatePreconfiguredExpr('xss-v33-stable')"
       }
     }
 
-    description = "XSS protection"
+    description = "XSS protection (preview mode)"
   }
 
-  # SQL injection protection
+  # SQL injection protection (preview mode to identify false positives before enforcing)
   rule {
     action   = "deny(403)"
     priority = "300"
+    preview  = true
 
     match {
       expr {
-        expression = "evaluatePreconfiguredExpr('sqli-stable')"
+        expression = "evaluatePreconfiguredExpr('sqli-v33-stable')"
       }
     }
 
-    description = "SQL injection protection"
+    description = "SQL injection protection (preview mode)"
   }
 }
 

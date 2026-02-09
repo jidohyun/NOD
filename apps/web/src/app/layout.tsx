@@ -2,6 +2,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { GaPageView } from "@/components/analytics/ga-page-view";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,13 +23,15 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const locale = await getLocale();
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body>{children}</body>
-      {process.env.NEXT_PUBLIC_GA_ID ? (
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-      ) : null}
+      <body>
+        {children}
+        {gaId ? <GaPageView gaId={gaId} /> : null}
+        {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
+      </body>
     </html>
   );
 }
