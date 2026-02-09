@@ -8,11 +8,10 @@ import { Loading } from "./components/Loading";
 import { LoginPrompt } from "./components/LoginPrompt";
 import { ArticlePreview } from "./components/ArticlePreview";
 import { SaveButton } from "./components/SaveButton";
-import { UserMenu } from "./components/UserMenu";
 import { UsageIndicator } from "./components/UsageIndicator";
 import { SuccessMessage, ErrorMessage } from "./components/StatusMessage";
-import { t, type Locale } from "../lib/i18n";
-import type { UserInfo } from "../lib/auth";
+import { PopupLayout } from "./components/PopupLayout";
+import { t } from "../lib/i18n";
 
 export function App() {
   const auth = useAuth();
@@ -23,39 +22,39 @@ export function App() {
 
   if (auth.isLoading) {
     return (
-      <Layout>
+      <PopupLayout>
         <Loading message={t("extLoadingAuth")} />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   if (!auth.isAuthenticated) {
     return (
-      <Layout>
+      <PopupLayout>
         <LoginPrompt />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   if (article.isLoading) {
     return (
-      <Layout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
         <Loading message={t("extLoadingExtract")} />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   if (save.state === "success" && save.articleId) {
     return (
-      <Layout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
         <SuccessMessage articleId={save.articleId} />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   if (save.state === "error" && save.error) {
     return (
-      <Layout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
         <ErrorMessage
           code={save.error.code}
           message={save.error.message}
@@ -64,26 +63,26 @@ export function App() {
             article.refresh();
           }}
         />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   if (article.error) {
     return (
-      <Layout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
         <ErrorMessage
           code="EXTRACT_FAILED"
           message={article.error}
           onRetry={article.refresh}
         />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   if (article.article) {
     const saveDisabled = save.state === "saving" || (usage !== null && !usage.can_summarize);
     return (
-      <Layout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
         <ArticlePreview article={article.article} />
         {usage && <UsageIndicator usage={usage} />}
         <SaveButton
@@ -91,42 +90,13 @@ export function App() {
           loading={save.state === "saving"}
           disabled={saveDisabled}
         />
-      </Layout>
+      </PopupLayout>
     );
   }
 
   return (
-    <Layout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+    <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
       <Loading />
-    </Layout>
-  );
-}
-
-interface LayoutProps {
-  children: React.ReactNode;
-  user?: UserInfo | null;
-  onLogout?: () => void;
-  locale?: Locale;
-  onLocaleChange?: (locale: Locale) => void;
-}
-
-function Layout({ children, user, onLogout, locale, onLocaleChange }: LayoutProps) {
-  return (
-    <div className="flex flex-col">
-      <header className="flex items-center gap-2.5 bg-black px-4 py-3">
-        <div className="flex h-7 w-7 items-center justify-center rounded bg-[#E8B931] text-sm font-bold text-black">
-          N
-        </div>
-        <span className="text-sm font-semibold tracking-wide text-white">{t("extHeaderTitle")}</span>
-        <span className="text-xs text-gray-500">{t("extHeaderSubtitle")}</span>
-
-        {user && onLogout && locale && onLocaleChange && (
-          <UserMenu user={user} onLogout={onLogout} locale={locale} onLocaleChange={onLocaleChange} />
-        )}
-      </header>
-      <main className="p-4">
-        {children}
-      </main>
-    </div>
+    </PopupLayout>
   );
 }
