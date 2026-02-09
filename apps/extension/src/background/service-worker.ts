@@ -22,6 +22,17 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     });
     return true;
   }
+
+  if (message.type === "GET_AUTH_STATUS") {
+    isAuthenticated()
+      .then((authed) => {
+        sendResponse({ success: true, authenticated: authed });
+      })
+      .catch(() => {
+        sendResponse({ success: false, authenticated: false });
+      });
+    return true;
+  }
 });
 
 async function updateBadge(): Promise<void> {
