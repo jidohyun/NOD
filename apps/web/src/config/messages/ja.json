@@ -303,7 +303,8 @@
     "sections": {
       "profile": "プロフィール",
       "account": "アカウント",
-      "quickLinks": "クイックリンク"
+      "quickLinks": "クイックリンク",
+      "legal": "法的情報"
     },
     "fields": {
       "email": "メール",
@@ -312,7 +313,10 @@
     },
     "links": {
       "manageBilling": "請求とサブスクリプションを管理",
-      "viewPricing": "料金プランを見る"
+      "viewPricing": "料金プランを見る",
+      "terms": "利用規約",
+      "privacy": "プライバシーポリシー",
+      "refund": "返金ポリシー"
     }
   },
   "subscription": {

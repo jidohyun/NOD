@@ -303,7 +303,8 @@
     "sections": {
       "profile": "Profile",
       "account": "Account",
-      "quickLinks": "Quick Links"
+      "quickLinks": "Quick Links",
+      "legal": "Legal"
     },
     "fields": {
       "email": "Email",
@@ -312,7 +313,10 @@
     },
     "links": {
       "manageBilling": "Manage Billing & Subscription",
-      "viewPricing": "View Pricing Plans"
+      "viewPricing": "View Pricing Plans",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "refund": "Refund Policy"
     }
   },
   "subscription": {
