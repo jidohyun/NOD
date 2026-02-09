@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { OnboardingGate } from "@/components/onboarding/onboarding-gate";
 
 export default function ArticlesLayout({ children }: { children: ReactNode }) {
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <DashboardLayout>
+      <OnboardingGate>{children}</OnboardingGate>
+    </DashboardLayout>
+  );
 }
