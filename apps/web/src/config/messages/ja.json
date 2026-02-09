@@ -102,8 +102,131 @@
       "legal": "法的情報",
       "privacy": "プライバシーポリシー",
       "terms": "利用規約",
+      "refund": "返金ポリシー",
       "tagline": "AI搭載の記事保存とナレッジ管理。",
       "copyright": "© 2025 NOD. All rights reserved."
+    }
+  },
+  "legal": {
+    "terms": {
+      "title": "利用規約",
+      "effectiveDate": "施行日: 2026-02-09",
+      "sections": {
+        "intro": {
+          "title": "1. 目的",
+          "content": "本規約は、NODの利用条件を定めるものです。"
+        },
+        "account": {
+          "title": "2. アカウント",
+          "content": "アカウント情報の管理責任はユーザーにあります。"
+        },
+        "service": {
+          "title": "3. サービス利用",
+          "content": "NODはAIを活用した記事保存・要約サービスを提供します。"
+        },
+        "content": {
+          "title": "4. コンテンツ",
+          "content": "保存されたコンテンツの著作権はユーザーに帰属します。"
+        },
+        "prohibited": {
+          "title": "5. 禁止事項",
+          "content": "法令違反やサービスの妨害行為を禁止します。"
+        },
+        "termination": {
+          "title": "6. 解約",
+          "content": "ユーザーはいつでもアカウントを削除できます。"
+        },
+        "contact": {
+          "title": "7. お問い合わせ",
+          "content": "shickcoong777@gmail.com までご連絡ください。"
+        }
+      }
+    },
+    "refund": {
+      "title": "返金・キャンセルポリシー",
+      "effectiveDate": "施行日: 2026-02-09",
+      "intro": "返金およびキャンセルに関する規定です。",
+      "sections": {
+        "cancellation": {
+          "title": "1. キャンセル",
+          "content": "サブスクリプションはいつでもキャンセル可能です。"
+        },
+        "refunds": {
+          "title": "2. 返金",
+          "content": "原則として、支払い済みの期間に対する部分返金は行いません。"
+        },
+        "process": {
+          "title": "3. 申請方法",
+          "content": "shickcoong777@gmail.com までお問い合わせください。"
+        }
+      }
+    },
+    "privacy": {
+      "title": "プライバシーポリシー",
+      "effectiveDate": "施行日: 2026-02-09",
+      "intro": "NODはユーザーのプライバシーを尊重します。",
+      "sections": {
+        "collection": {
+          "title": "1. 収集する情報",
+          "content": "以下の情報を収集します。",
+          "items": {
+            "account": "アカウント情報",
+            "content": "コンテンツ情報（URL、本文など）",
+            "usage": "利用状況",
+            "payment": "支払い情報",
+            "analytics": "分析情報"
+          },
+          "note": "Chrome拡張機能使用時、ページのURLと本文を収集する場合があります。"
+        },
+        "purpose": {
+          "title": "2. 利用目的",
+          "items": {
+            "auth": "認証",
+            "core": "サービス提供",
+            "billing": "請求管理",
+            "improve": "サービス改善"
+          }
+        },
+        "sharing": {
+          "title": "3. 第三者への提供",
+          "content": "データの販売は行いません。信頼できるサービスプロバイダーを利用します。",
+          "items": {
+            "cloud": "クラウド基盤",
+            "auth": "認証プロバイダー",
+            "ai": "AIプロバイダー",
+            "payment": "決済処理",
+            "analytics": "分析ツール"
+          }
+        },
+        "retention": {
+          "title": "4. 保存期間",
+          "items": {
+            "principle": "目的達成時に削除します。",
+            "deletion": "アカウント削除時にデータを削除します。",
+            "legal": "法令に基づき保存する場合があります。"
+          }
+        },
+        "rights": {
+          "title": "5. ユーザーの権利",
+          "content": "情報のアクセス、訂正、削除を請求できます。"
+        },
+        "cookies": {
+          "title": "6. クッキー",
+          "content": "認証や分析のためにクッキーを使用します。"
+        },
+        "security": {
+          "title": "7. セキュリティ",
+          "content": "適切なセキュリティ対策を講じます。"
+        },
+        "contact": {
+          "title": "8. お問い合わせ",
+          "content": "shickcoong777@gmail.com"
+        },
+        "changes": {
+          "title": "9. 変更",
+          "content": "重要な変更がある場合は通知します。"
+        }
+      }
     }
   },
   "loginWelcome": "おかえりなさい",
