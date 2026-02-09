@@ -2,6 +2,7 @@
 
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { CHROME_EXTENSION_INSTALL_URL } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
 import { NeuralGraph } from "./neural-graph";
 
@@ -83,6 +84,14 @@ export function LandingHero() {
               {t("cta")}
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
+            <a
+              href={CHROME_EXTENSION_INSTALL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3 text-[15px] text-white/60 hover:text-white/90 hover:bg-white/[0.06] hover:border-white/15 transition-all"
+            >
+              Chrome에 추가
+            </a>
             <button
               type="button"
               onClick={scrollToFeatures}
