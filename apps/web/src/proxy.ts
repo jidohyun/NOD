@@ -30,7 +30,7 @@ function getLocaleFromPath(pathname: string): string {
   return defaultLocale;
 }
 
-const protectedPaths = ["/articles", "/dashboard", "/settings", "/extension-auth", "/onboarding"];
+const protectedPaths = ["/articles", "/dashboard", "/settings", "/extension-auth"];
 const authPaths = ["/login"];
 
 export async function proxy(request: NextRequest) {
