@@ -40,22 +40,22 @@ export function LandingHowItWorks() {
     <section
       ref={sectionRef}
       id="how-it-works"
-      className="relative bg-nod-surface-raised py-32 lg:py-40"
+      className="relative bg-[#0A0A0B] py-32 lg:py-48 ko-keep"
     >
       {/* Subtle top/bottom borders */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-nod-border to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-nod-border to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section header */}
         <div className="max-w-2xl mb-24">
           <div className="reveal">
-            <span className="font-mono text-[11px] text-nod-gold tracking-wider uppercase">
+            <span className="inline-block py-1 px-2 rounded bg-white/[0.03] border border-white/[0.06] font-mono text-[11px] text-nod-gold tracking-wider uppercase font-medium">
               {t("label")}
             </span>
           </div>
           <h2
-            className="reveal mt-4 font-display text-[clamp(2rem,4vw,3.5rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white whitespace-pre-line"
+            className="reveal mt-6 font-display text-[clamp(2.25rem,4vw,4rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white whitespace-pre-line"
             style={{ transitionDelay: "0.1s" }}
           >
             {t("headline")}
@@ -67,29 +67,36 @@ export function LandingHowItWorks() {
           {stepKeys.map((key, i) => {
             const Icon = stepIcons[key];
             return (
-              <div key={key} className="reveal relative" style={{ transitionDelay: `${0.1 * i}s` }}>
+              <div
+                key={key}
+                className="reveal relative group"
+                style={{ transitionDelay: `${0.1 * i}s` }}
+              >
                 {/* Connector line (desktop only) */}
                 {i < stepKeys.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-[calc(100%+0px)] w-full h-px">
-                    <div className="h-full w-full bg-gradient-to-r from-nod-border via-nod-gold/20 to-nod-border" />
+                  <div className="hidden lg:block absolute top-10 left-full w-8 h-px opacity-50 pointer-events-none">
+                    <div className="h-full w-full bg-gradient-to-r from-white/5 via-nod-gold/20 to-white/5" />
                   </div>
                 )}
 
                 {/* Step number */}
-                <div className="flex items-center gap-4 mb-8">
-                  <span className="font-mono text-[40px] font-light text-nod-gold/25 leading-none tracking-tighter">
+                <div className="flex items-center gap-6 mb-10">
+                  <span className="font-display text-[48px] font-bold text-white/5 group-hover:text-nod-gold/10 transition-colors leading-none tracking-tighter">
                     {t(`steps.${key}.number`)}
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-nod-gold/[0.08] border border-nod-gold/10 flex items-center justify-center">
-                    <Icon className="w-4.5 h-4.5 text-nod-gold" strokeWidth={1.5} />
+                  <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:border-nod-gold/20 group-hover:bg-nod-gold/[0.05] transition-all duration-300 shadow-xl shadow-black/20">
+                    <Icon
+                      className="w-5 h-5 text-white/80 group-hover:text-nod-gold transition-colors"
+                      strokeWidth={1.5}
+                    />
                   </div>
                 </div>
 
                 {/* Content */}
-                <h3 className="font-display text-2xl font-semibold text-white mb-3 tracking-tight">
+                <h3 className="font-display text-2xl font-bold text-white mb-4 tracking-tight">
                   {t(`steps.${key}.title`)}
                 </h3>
-                <p className="text-[15px] leading-relaxed text-white/40 max-w-sm">
+                <p className="text-[1.0625rem] leading-relaxed text-white/50 max-w-sm group-hover:text-white/70 transition-colors">
                   {t(`steps.${key}.description`)}
                 </p>
               </div>

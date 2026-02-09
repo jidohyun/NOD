@@ -46,8 +46,8 @@ export function LandingNav() {
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
         scrolled
-          ? "bg-[#0A0A0B]/80 backdrop-blur-xl border-b border-white/[0.04]"
-          : "bg-transparent"
+          ? "bg-[#0A0A0B]/60 backdrop-blur-xl border-b border-white/[0.08]"
+          : "bg-transparent border-b border-transparent"
       )}
     >
       <nav className="mx-auto max-w-7xl px-6 lg:px-8">
