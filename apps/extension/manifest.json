@@ -3,7 +3,7 @@
 	"name": "NOD - Article Analyzer",
 	"version": "0.1.0",
 	"description": "Save and analyze articles with AI-powered summarization",
-	"permissions": ["activeTab", "storage"],
+	"permissions": ["activeTab", "storage", "scripting"],
 	"host_permissions": ["https://api.nod-archive.com/*", "http://localhost:8000/*"],
 	"action": {
 		"default_popup": "src/popup/index.html",
