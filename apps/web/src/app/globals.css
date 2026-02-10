@@ -80,6 +80,18 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(44 80% 50%);
+  --landing-bg: #f8f8f9;
+  --landing-surface: #ffffff;
+  --landing-surface-raised: #f2f3f5;
+  --landing-card: rgba(255, 255, 255, 0.94);
+  --landing-card-muted: rgba(15, 23, 42, 0.03);
+  --landing-border: rgba(2, 6, 23, 0.12);
+  --landing-border-soft: rgba(2, 6, 23, 0.08);
+  --landing-text: #0a0a0b;
+  --landing-text-muted: rgba(10, 10, 11, 0.68);
+  --landing-text-subtle: rgba(10, 10, 11, 0.48);
+  --landing-grid-line: rgba(10, 10, 11, 0.18);
+  --landing-top-fade: #ffffff;
 }
 
 .dark {
@@ -110,6 +122,18 @@
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(44 85% 58%);
+  --landing-bg: #0a0a0b;
+  --landing-surface: #0a0a0b;
+  --landing-surface-raised: #141416;
+  --landing-card: rgba(255, 255, 255, 0.03);
+  --landing-card-muted: rgba(255, 255, 255, 0.02);
+  --landing-border: rgba(255, 255, 255, 0.1);
+  --landing-border-soft: rgba(255, 255, 255, 0.06);
+  --landing-text: #ffffff;
+  --landing-text-muted: rgba(255, 255, 255, 0.68);
+  --landing-text-subtle: rgba(255, 255, 255, 0.5);
+  --landing-grid-line: rgba(255, 255, 255, 0.3);
+  --landing-top-fade: #0a0a0b;
 }
 
 * {
@@ -243,5 +267,47 @@ html[lang="ko"] .ko-keep {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .landing-bg {
+    background-color: var(--landing-bg);
+  }
+
+  .landing-surface {
+    background-color: var(--landing-surface);
+  }
+
+  .landing-surface-raised {
+    background-color: var(--landing-surface-raised);
+  }
+
+  .landing-card {
+    background-color: var(--landing-card);
+  }
+
+  .landing-card-muted {
+    background-color: var(--landing-card-muted);
+  }
+
+  .landing-text {
+    color: var(--landing-text);
+  }
+
+  .landing-text-muted {
+    color: var(--landing-text-muted);
+  }
+
+  .landing-text-subtle {
+    color: var(--landing-text-subtle);
+  }
+
+  .landing-border {
+    border-color: var(--landing-border);
+  }
+
+  .landing-border-soft {
+    border-color: var(--landing-border-soft);
   }
 }
