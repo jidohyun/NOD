@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import type { ExtractedContent } from "../../types/article";
 import type { ContentScriptResponse } from "../../types/api";
 
@@ -9,8 +9,8 @@ interface UseArticleResult {
   refresh: () => void;
 }
 
+const RETRY_DELAY_MS = 800;
 const MAX_RETRIES = 3;
-const RETRY_DELAY_MS = 600;
 
 function isNaverBlog(url: string): boolean {
   try {
@@ -32,7 +32,7 @@ async function ensureContentScriptInjected(tabId: number): Promise<void> {
       files: ["content-script.js"],
     });
   } catch {
-    // Script might already be injected, which is fine
+    return;
   }
 }
 
@@ -40,6 +40,7 @@ export function useArticle(): UseArticleResult {
   const [isLoading, setIsLoading] = useState(true);
   const [article, setArticle] = useState<ExtractedContent | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const hasReloadedRef = useRef(false);
 
   const extractContent = useCallback(async () => {
     setIsLoading(true);
@@ -64,12 +65,13 @@ export function useArticle(): UseArticleResult {
         return;
       }
 
+      const isNaver = isNaverBlog(tabUrl);
+
       await ensureContentScriptInjected(tab.id);
 
-      const needsRetry = isNaverBlog(tabUrl);
       let lastError: string | null = null;
 
-      for (let attempt = 0; attempt < (needsRetry ? MAX_RETRIES : 1); attempt++) {
+      for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
         try {
           const response: ContentScriptResponse = await chrome.tabs.sendMessage(
             tab.id,
@@ -89,6 +91,12 @@ export function useArticle(): UseArticleResult {
         if (attempt < MAX_RETRIES - 1) {
           await delay(RETRY_DELAY_MS);
         }
+      }
+
+      if (isNaver && !hasReloadedRef.current) {
+        hasReloadedRef.current = true;
+        await chrome.tabs.reload(tab.id);
+        return;
       }
 
       setError(lastError || "Could not extract content from this page");
