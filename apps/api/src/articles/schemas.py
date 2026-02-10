@@ -16,6 +16,14 @@ class ArticleAnalyzeURL(BaseModel):
     title: str = Field(..., min_length=1, max_length=500)
     content: str = Field(..., min_length=1)
     source: str = Field(default="extension", pattern="^(web|extension|api)$")
+    summary_language: str | None = Field(
+        default=None,
+        description=(
+            "Language for the AI summary "
+            "(e.g. 'ko', 'en', 'ja'). "
+            "Defaults to Korean if not specified."
+        ),
+    )
 
 
 class SummaryResponse(BaseModel):
