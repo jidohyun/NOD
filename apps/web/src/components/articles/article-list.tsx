@@ -117,7 +117,7 @@ export function ArticleList() {
           <option value="">{t("allStatus")}</option>
           <option value="pending">{t("statusPending")}</option>
           <option value="analyzing">{t("statusAnalyzing")}</option>
-          <option value="completed">{t("statusCompleted")}</option>
+          <option value="analyzed">{t("statusCompleted")}</option>
           <option value="failed">{t("statusFailed")}</option>
         </select>
         <div className="flex gap-1">

@@ -7,11 +7,12 @@ import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note
 import { useArticle, useDeleteArticle } from "@/lib/api/articles";
 import { Link } from "@/lib/i18n/routing";
 
-const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-primary/10 text-primary",
-  analyzing: "bg-blue-100 text-blue-800",
-  completed: "bg-green-100 text-green-800",
-  failed: "bg-red-100 text-red-800",
+const STATUS_MAP: Record<string, { color: string; labelKey: string }> = {
+  pending: { color: "bg-amber-100 text-amber-800", labelKey: "statusPending" },
+  analyzing: { color: "bg-blue-100 text-blue-800", labelKey: "statusAnalyzing" },
+  analyzed: { color: "bg-green-100 text-green-800", labelKey: "statusCompleted" },
+  completed: { color: "bg-green-100 text-green-800", labelKey: "statusCompleted" },
+  failed: { color: "bg-red-100 text-red-800", labelKey: "statusFailed" },
 };
 
 const DATE_LOCALE_MAP: Record<string, string> = {
@@ -36,6 +37,12 @@ export function ArticleDetail({ id }: { id: string }) {
   if (isError || !article) {
     return <div className="py-12 text-center text-destructive">{t("articleNotFound")}</div>;
   }
+
+  // Derive effective status: if summary exists, analysis succeeded
+  const effectiveStatus =
+    article.summary && article.status === "failed"
+      ? "analyzed"
+      : article.status;
 
   const handleDelete = async () => {
     if (!confirm(t("deleteConfirm"))) return;
@@ -85,9 +92,9 @@ export function ArticleDetail({ id }: { id: string }) {
         </div>
         <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
           <span
-            className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[article.status] || ""}`}
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_MAP[effectiveStatus]?.color || ""}`}
           >
-            {article.status}
+            {STATUS_MAP[effectiveStatus] ? t(STATUS_MAP[effectiveStatus].labelKey as "statusPending" | "statusAnalyzing" | "statusCompleted" | "statusFailed") : effectiveStatus}
           </span>
           <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">{article.source}</span>
           <time>{formattedDate}</time>
@@ -105,12 +112,12 @@ export function ArticleDetail({ id }: { id: string }) {
       </div>
 
       {/* Status indicator for pending/analyzing */}
-      {(article.status === "pending" || article.status === "analyzing") && (
+      {(effectiveStatus === "pending" || effectiveStatus === "analyzing") && (
         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
           <div className="flex items-center gap-2">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
             <p className="text-sm text-blue-800">
-              {article.status === "pending" ? t("pendingAnalysis") : t("analyzingArticle")}
+              {effectiveStatus === "pending" ? t("pendingAnalysis") : t("analyzingArticle")}
             </p>
           </div>
         </div>
