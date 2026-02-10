@@ -27,6 +27,7 @@ async def _run_analysis(
     title: str,
     content: str,
     provider: Literal["gemini", "openai"],
+    summary_language: str = "ko",
 ) -> bool:
     """Background task: summarize article with AI and save to DB."""
     from src.articles.model import Article, ArticleSummary
@@ -34,7 +35,12 @@ async def _run_analysis(
     from src.lib.database import async_session_factory
 
     try:
-        result = await summarize_article(title, content, provider=provider)
+        result = await summarize_article(
+            title,
+            content,
+            provider=provider,
+            summary_language=summary_language,
+        )
 
         model_name = "gemini-2.0-flash" if provider == "gemini" else "gpt-4o-mini"
 
@@ -233,6 +239,7 @@ async def analyze_url(
         content=data.content,
         source=data.source,
     )
+    summary_language = data.summary_language or "ko"
     # Check article save limit
     usage_info = await sub_service.get_usage_info(db, user.id)
     if not usage_info.can_save_article:
@@ -251,7 +258,11 @@ async def analyze_url(
             "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
         )
         ok = await _run_analysis(
-            article.id, article.title, article.content, selected_provider
+            article.id,
+            article.title,
+            article.content,
+            selected_provider,
+            summary_language=summary_language,
         )
         if ok:
             await sub_service.increment_summary_usage(db, user.id)
@@ -260,6 +271,9 @@ async def analyze_url(
         if updated:
             article = updated
     else:
-        logger.info("Summary limit reached, skipping analysis", user_id=str(user.id))
+        logger.info(
+            "Summary limit reached, skipping analysis",
+            user_id=str(user.id),
+        )
 
     return ArticleResponse.model_validate(article)

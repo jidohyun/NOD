@@ -5,22 +5,33 @@ from typing import Literal
 import structlog
 from pydantic import BaseModel
 
-from src.lib.ai.prompts import (
-    ARTICLE_MARKDOWN_NOTE_USER_PROMPT,
-    KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT,
-)
+from src.lib.ai.prompts import build_system_prompt, build_user_prompt
 from src.lib.config import settings
 
 logger = structlog.get_logger(__name__)
 
-SUMMARIZE_PROMPT = """Return a JSON object with the following fields:
-- summary: 2-4 sentences in Korean
+LANG_NAMES: dict[str, str] = {
+    "ko": "Korean",
+    "en": "English",
+    "ja": "Japanese",
+    "zh": "Chinese",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+}
+
+
+def _build_summarize_prompt(lang: str = "ko") -> str:
+    lang_name = LANG_NAMES.get(lang, lang)
+    return f"""Return a JSON object with the following fields:
+- summary: 2-4 sentences in {lang_name}
 - concepts: 3-7 short keywords
 - key_points: 3-5 key points (one sentence each)
-- language: the article's language (ISO 639-1 code, e.g. \"en\", \"ko\", \"ja\")
-- reading_time_minutes: estimated reading time in minutes based on word count
+- language: the article's language (ISO 639-1 code)
+- reading_time_minutes: estimated reading time in minutes
   (~200 words/min)
-- markdown_note: a Korean markdown note following the exact template provided
+- markdown_note: a {lang_name} markdown note following the
+  exact template provided
 """
 
 
@@ -39,14 +50,18 @@ async def summarize_article(
     title: str,
     content: str,
     provider: Literal["gemini", "openai"] | None = None,
+    summary_language: str = "ko",
 ) -> ArticleSummaryResult:
-    """Summarize an article using the configured (or overridden) AI provider."""
-    user_prompt = ARTICLE_MARKDOWN_NOTE_USER_PROMPT.format(
+    """Summarize an article using the configured AI provider."""
+    json_prompt = _build_summarize_prompt(summary_language)
+    user_prompt = build_user_prompt(
         title=title,
         content=content[:15000],
+        lang=summary_language,
     )
+    system_prompt = build_system_prompt(summary_language)
 
-    prompt = f"{SUMMARIZE_PROMPT}\n\n{user_prompt}"
+    prompt = f"{json_prompt}\n\n{user_prompt}"
 
     resolved_provider = provider or settings.AI_PROVIDER
 
@@ -59,9 +74,9 @@ async def summarize_article(
         resolved_provider = "openai"
 
     if resolved_provider == "gemini":
-        gemini_prompt = f"{KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT}\n\n{prompt}"
+        gemini_prompt = f"{system_prompt}\n\n{prompt}"
         return await _summarize_with_gemini(gemini_prompt)
-    return await _summarize_with_openai(prompt)
+    return await _summarize_with_openai(prompt, system_prompt)
 
 
 async def _summarize_with_gemini(prompt: str) -> ArticleSummaryResult:
@@ -85,7 +100,10 @@ async def _summarize_with_gemini(prompt: str) -> ArticleSummaryResult:
     return ArticleSummaryResult.model_validate_json(response.text)
 
 
-async def _summarize_with_openai(prompt: str) -> ArticleSummaryResult:
+async def _summarize_with_openai(
+    prompt: str,
+    system_prompt: str,
+) -> ArticleSummaryResult:
     """Summarize using OpenAI with structured output."""
     from openai import AsyncOpenAI
 
@@ -94,7 +112,7 @@ async def _summarize_with_openai(prompt: str) -> ArticleSummaryResult:
     completion = await client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": KNOWLEDGE_ASSISTANT_SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
         ],
         response_format={
