@@ -6,6 +6,8 @@ import { renderWithProviders } from "@/test/utils";
 const RE_NO_SUMMARY_AVAILABLE = /no summary available/i;
 const RE_DATE_2026_FEB_02 = /feb|2026|02/i;
 const RE_DATE_2025_DEC_12_25 = /dec|2025|12|25/i;
+const RE_STATUS_PENDING = /pending/i;
+const RE_STATUS_COMPLETED = /completed/i;
 
 // Mock next/link
 vi.mock("next/link", () => ({
@@ -56,28 +58,28 @@ describe("ArticleCard", () => {
       const article = createTestArticle({ status: "pending" });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("pending")).toBeInTheDocument();
+      expect(screen.getByText(RE_STATUS_PENDING)).toBeInTheDocument();
     });
 
     it("shows analyzing status badge", () => {
       const article = createTestArticle({ status: "analyzing" });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("analyzing")).toBeInTheDocument();
+      expect(screen.getByText("Analyzing")).toBeInTheDocument();
     });
 
     it("shows completed status badge", () => {
       const article = createTestArticle({ status: "completed" });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("completed")).toBeInTheDocument();
+      expect(screen.getByText(RE_STATUS_COMPLETED)).toBeInTheDocument();
     });
 
     it("shows failed status badge", () => {
-      const article = createTestArticle({ status: "failed" });
+      const article = createTestArticle({ status: "failed", summary_preview: null });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("failed")).toBeInTheDocument();
+      expect(screen.getByText("Failed")).toBeInTheDocument();
     });
   });
 
@@ -209,7 +211,7 @@ describe("ArticleCard", () => {
 
       // Verify all key elements are present
       expect(screen.getByRole("link", { name: article.title })).toBeInTheDocument();
-      expect(screen.getByText(article.status)).toBeInTheDocument();
+      expect(screen.getByText(RE_STATUS_COMPLETED)).toBeInTheDocument();
       expect(screen.getByText(article.source)).toBeInTheDocument();
       expect(screen.getByText(article.summary_preview!)).toBeInTheDocument();
       expect(screen.getByText("React")).toBeInTheDocument();

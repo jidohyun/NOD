@@ -54,13 +54,18 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const hasConcepts = (article.concepts?.length ?? 0) > 0;
 
   // Derive effective status: if summary exists, analysis succeeded
-  const effectiveStatus =
-    hasSummary && article.status === "failed" ? "analyzed" : article.status;
+  const effectiveStatus = hasSummary && article.status === "failed" ? "analyzed" : article.status;
 
   const isPending = effectiveStatus === "pending" || effectiveStatus === "analyzing";
   const statusStyle = STATUS_STYLES[effectiveStatus];
   const statusLabel = statusStyle
-    ? t(statusStyle.labelKey as "statusPending" | "statusAnalyzing" | "statusCompleted" | "statusFailed")
+    ? t(
+        statusStyle.labelKey as
+          | "statusPending"
+          | "statusAnalyzing"
+          | "statusCompleted"
+          | "statusFailed"
+      )
     : effectiveStatus;
 
   return (
@@ -74,9 +79,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
             <span
               className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${statusStyle?.className ?? "bg-gray-100 text-gray-800 border-gray-200"}`}
             >
-              {isPending && (
+              {isPending ? (
                 <span className="h-2 w-2 animate-pulse rounded-full bg-current opacity-60" />
-              )}
+              ) : null}
               {statusLabel}
             </span>
             <Badge variant="outline">{article.source}</Badge>

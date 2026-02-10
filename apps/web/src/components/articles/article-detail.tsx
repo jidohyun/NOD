@@ -40,9 +40,17 @@ export function ArticleDetail({ id }: { id: string }) {
 
   // Derive effective status: if summary exists, analysis succeeded
   const effectiveStatus =
-    article.summary && article.status === "failed"
-      ? "analyzed"
-      : article.status;
+    article.summary && article.status === "failed" ? "analyzed" : article.status;
+  const statusMeta = STATUS_MAP[effectiveStatus];
+  const statusLabel = statusMeta
+    ? t(
+        statusMeta.labelKey as
+          | "statusPending"
+          | "statusAnalyzing"
+          | "statusCompleted"
+          | "statusFailed"
+      )
+    : effectiveStatus;
 
   const handleDelete = async () => {
     if (!confirm(t("deleteConfirm"))) return;
@@ -92,9 +100,9 @@ export function ArticleDetail({ id }: { id: string }) {
         </div>
         <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
           <span
-            className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_MAP[effectiveStatus]?.color || ""}`}
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusMeta?.color || ""}`}
           >
-            {STATUS_MAP[effectiveStatus] ? t(STATUS_MAP[effectiveStatus].labelKey as "statusPending" | "statusAnalyzing" | "statusCompleted" | "statusFailed") : effectiveStatus}
+            {statusLabel}
           </span>
           <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">{article.source}</span>
           <time>{formattedDate}</time>

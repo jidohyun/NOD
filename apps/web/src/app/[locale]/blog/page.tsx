@@ -1,6 +1,6 @@
+import Link from "next/link";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import Link from "next/link";
 
 interface BlogIndexProps {
   params: Promise<{ locale: string }>;
@@ -54,7 +54,10 @@ export default async function BlogIndex({ params }: BlogIndexProps) {
 
       <div className="space-y-8">
         {posts.map((post) => (
-          <article key={post.slug} className="group rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-colors hover:border-white/10 hover:bg-white/[0.04]">
+          <article
+            key={post.slug}
+            className="group rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-colors hover:border-white/10 hover:bg-white/[0.04]"
+          >
             <Link href={`/${locale}/blog/${post.slug}`} className="block">
               <time className="text-sm text-neutral-500" dateTime={post.date}>
                 {post.dateLabel[lang]}
@@ -62,9 +65,7 @@ export default async function BlogIndex({ params }: BlogIndexProps) {
               <h2 className="mt-2 text-xl font-semibold text-white group-hover:text-[#E8B931] transition-colors">
                 {post.title[lang]}
               </h2>
-              <p className="mt-2 text-sm text-neutral-400 line-clamp-2">
-                {post.excerpt[lang]}
-              </p>
+              <p className="mt-2 text-sm text-neutral-400 line-clamp-2">{post.excerpt[lang]}</p>
               <span className="mt-3 inline-block text-sm font-medium text-[#E8B931]">
                 {lang === "ko" ? "읽어보기 →" : "Read article →"}
               </span>
