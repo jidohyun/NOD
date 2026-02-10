@@ -32,10 +32,10 @@ export function LandingCta() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-nod-surface py-32 lg:py-48 overflow-hidden ko-keep"
+      className="landing-surface relative overflow-hidden py-32 lg:py-48 ko-keep"
     >
       {/* Top border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-black/15 to-transparent dark:via-white/10" />
 
       {/* Background radial glow */}
       <div
@@ -47,11 +47,11 @@ export function LandingCta() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="reveal font-display text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] text-white whitespace-pre-line drop-shadow-xl">
+          <h2 className="reveal landing-text font-display text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] whitespace-pre-line drop-shadow-xl">
             {t("headline")}
           </h2>
           <p
-            className="reveal mt-8 text-[1.125rem] leading-relaxed text-white/60 font-light"
+            className="reveal landing-text-muted mt-8 text-[1.125rem] leading-relaxed font-light"
             style={{ transitionDelay: "0.1s" }}
           >
             {t("description")}
@@ -67,7 +67,7 @@ export function LandingCta() {
               {t("button")}
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
-            <span className="font-mono text-[12px] text-white/30 tracking-wide uppercase">
+            <span className="font-mono text-[12px] tracking-wide text-black/35 uppercase dark:text-white/30">
               {t("note")}
             </span>
           </div>

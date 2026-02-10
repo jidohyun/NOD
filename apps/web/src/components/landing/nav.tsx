@@ -1,9 +1,9 @@
 "use client";
 
 import { ArrowRight, Globe, Menu, X } from "lucide-react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
+import { NodWordmark } from "@/components/brand/nod-wordmark";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -47,7 +47,7 @@ export function LandingNav() {
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
         scrolled
-          ? "bg-[#0A0A0B]/60 backdrop-blur-xl border-b border-white/[0.08]"
+          ? "border-b border-black/10 bg-white/85 backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#0A0A0B]/60"
           : "bg-transparent border-b border-transparent"
       )}
     >
@@ -55,13 +55,10 @@ export function LandingNav() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <Image
-              src="/brand/nod-logo.png"
-              alt="NOD"
-              width={120}
-              height={30}
-              className="h-7 w-auto opacity-90 transition-opacity group-hover:opacity-100"
+            <NodWordmark
+              size="sm"
               priority
+              className="opacity-90 transition-opacity group-hover:opacity-100"
             />
           </Link>
 
@@ -70,21 +67,21 @@ export function LandingNav() {
             <button
               type="button"
               onClick={() => scrollTo("features")}
-              className="text-[13px] text-white/50 hover:text-white/90 transition-colors font-mono tracking-wide uppercase"
+              className="font-mono text-[13px] tracking-wide text-black/55 uppercase transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
             >
               {t("features")}
             </button>
             <button
               type="button"
               onClick={() => scrollTo("how-it-works")}
-              className="text-[13px] text-white/50 hover:text-white/90 transition-colors font-mono tracking-wide uppercase"
+              className="font-mono text-[13px] tracking-wide text-black/55 uppercase transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
             >
               {t("howItWorks")}
             </button>
             <button
               type="button"
               onClick={() => scrollTo("pricing")}
-              className="text-[13px] text-white/50 hover:text-white/90 transition-colors font-mono tracking-wide uppercase"
+              className="font-mono text-[13px] tracking-wide text-black/55 uppercase transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
             >
               {t("pricing")}
             </button>
@@ -101,7 +98,7 @@ export function LandingNav() {
                     size="icon-sm"
                     aria-label="Change language"
                     title="Change language"
-                    className="text-white/50 hover:text-white/90"
+                    className="text-black/60 hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
                   >
                     <Globe className="h-5 w-5" />
                   </Button>
@@ -136,7 +133,7 @@ export function LandingNav() {
             ) : null}
             <Link
               href="/login"
-              className="text-[13px] text-white/50 hover:text-white/90 transition-colors"
+              className="text-[13px] text-black/55 transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
             >
               {t("login")}
             </Link>
@@ -152,7 +149,7 @@ export function LandingNav() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden text-white/60 hover:text-white/90 transition-colors"
+            className="text-black/60 transition-colors hover:text-black/90 dark:text-white/60 dark:hover:text-white/90 md:hidden"
             onClick={() => setMobileOpen((v) => !v)}
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -161,31 +158,34 @@ export function LandingNav() {
 
         {/* Mobile menu */}
         {mobileOpen ? (
-          <div className="md:hidden pb-6 pt-2 border-t border-white/[0.04] animate-fade-in">
+          <div className="border-t border-black/8 pb-6 pt-2 animate-fade-in dark:border-white/[0.06] md:hidden">
             <div className="flex flex-col gap-4">
               <button
                 type="button"
                 onClick={() => scrollTo("features")}
-                className="text-sm text-white/60 hover:text-white text-left"
+                className="text-left text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
               >
                 {t("features")}
               </button>
               <button
                 type="button"
                 onClick={() => scrollTo("how-it-works")}
-                className="text-sm text-white/60 hover:text-white text-left"
+                className="text-left text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
               >
                 {t("howItWorks")}
               </button>
               <button
                 type="button"
                 onClick={() => scrollTo("pricing")}
-                className="text-sm text-white/60 hover:text-white text-left"
+                className="text-left text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
               >
                 {t("pricing")}
               </button>
-              <hr className="border-white/[0.06]" />
-              <Link href="/login" className="text-sm text-white/60 hover:text-white">
+              <hr className="border-black/10 dark:border-white/[0.06]" />
+              <Link
+                href="/login"
+                className="text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+              >
                 {t("login")}
               </Link>
               <Link

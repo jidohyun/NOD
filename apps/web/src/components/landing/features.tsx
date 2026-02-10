@@ -68,21 +68,21 @@ export function LandingFeatures() {
     <section
       ref={sectionRef}
       id="features"
-      className="relative bg-nod-surface py-32 lg:py-40 ko-keep"
+      className="landing-surface relative py-32 lg:py-40 ko-keep"
     >
       {/* Top fade from hero */}
-      <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0A0A0B] to-transparent pointer-events-none" />
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[var(--landing-top-fade)] to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section header — left-aligned editorial style */}
         <div className="max-w-2xl mb-24">
           <div className="reveal">
-            <span className="inline-block py-1 px-2 rounded bg-nod-gold/5 border border-nod-gold/10 font-mono text-[11px] text-nod-gold tracking-wider uppercase font-medium">
+            <span className="inline-block rounded border border-nod-gold/10 bg-nod-gold/5 px-2 py-1 font-mono text-[11px] font-medium text-nod-gold tracking-wider uppercase">
               {t("label")}
             </span>
           </div>
           <h2
-            className="reveal mt-6 font-display text-[clamp(2.25rem,4vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] text-white whitespace-pre-line"
+            className="reveal landing-text mt-6 font-display text-[clamp(2.25rem,4vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] whitespace-pre-line"
             style={{ transitionDelay: "0.1s" }}
           >
             {t("headline")}
@@ -96,7 +96,7 @@ export function LandingFeatures() {
             return (
               <div
                 key={key}
-                className="reveal group relative bg-white/[0.02] border border-white/[0.05] p-8 lg:p-10 rounded-3xl overflow-hidden hover:bg-white/[0.04] transition-all duration-500 hover:-translate-y-1 hover:border-white/[0.08] hover:shadow-2xl hover:shadow-black/50"
+                className="reveal landing-card-muted landing-border-soft group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1 hover:border-black/15 hover:bg-black/[0.05] hover:shadow-2xl hover:shadow-black/15 dark:hover:border-white/[0.12] dark:hover:bg-white/[0.05] dark:hover:shadow-black/50 lg:p-10"
                 style={{ transitionDelay: `${0.05 * i}s` }}
               >
                 {/* Hover gradient */}
@@ -106,14 +106,14 @@ export function LandingFeatures() {
 
                 <div className="relative z-10">
                   <div
-                    className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors ${featureIconColors[key]}`}
+                    className={`mb-8 flex h-12 w-12 items-center justify-center rounded-2xl border border-black/10 bg-black/5 transition-colors group-hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:group-hover:bg-white/10 ${featureIconColors[key]}`}
                   >
                     <Icon className="w-6 h-6" strokeWidth={1.5} />
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-white mb-4 tracking-tight group-hover:text-white transition-colors">
+                  <h3 className="landing-text mb-4 font-display text-xl font-semibold tracking-tight transition-colors group-hover:text-black dark:group-hover:text-white">
                     {t(`items.${key}.title`)}
                   </h3>
-                  <p className="text-[15px] leading-relaxed text-white/50 group-hover:text-white/70 transition-colors">
+                  <p className="landing-text-subtle text-[15px] leading-relaxed transition-colors group-hover:text-black/70 dark:group-hover:text-white/70">
                     {t(`items.${key}.description`)}
                   </p>
                 </div>

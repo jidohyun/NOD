@@ -18,7 +18,7 @@ export default async function HomePage({ params }: HomePageProps) {
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="grain-overlay">
+    <div className="dark grain-overlay">
       <LandingNav />
       <main>
         <LandingHero />

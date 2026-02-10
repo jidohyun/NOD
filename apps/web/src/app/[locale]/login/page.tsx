@@ -48,7 +48,7 @@ function LoginContent() {
   return (
     <div className="min-h-screen bg-[#0A0A0B] flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
+        {/* Logo — always dark variant on dark login page */}
         <div className="flex justify-center mb-8">
           <Image
             src="/brand/nod-logo.png"

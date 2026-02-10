@@ -14,9 +14,9 @@ export function LandingHero() {
   };
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden ko-keep">
+    <section className="landing-surface relative flex min-h-[100dvh] items-center overflow-hidden ko-keep">
       {/* Background layers */}
-      <div className="absolute inset-0 bg-nod-surface" />
+      <div className="landing-surface absolute inset-0" />
 
       {/* Radial gradient glow behind hero */}
       <div
@@ -28,7 +28,7 @@ export function LandingHero() {
       />
 
       {/* Neural graph canvas */}
-      <div className="absolute inset-0 opacity-80 mix-blend-screen">
+      <div className="absolute inset-0 opacity-70 dark:opacity-80 dark:mix-blend-screen">
         <NeuralGraph />
       </div>
 
@@ -37,7 +37,7 @@ export function LandingHero() {
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)",
+            "linear-gradient(var(--landing-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--landing-grid-line) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
@@ -47,7 +47,7 @@ export function LandingHero() {
         <div className="max-w-3xl">
           {/* Badge */}
           <div
-            className="animate-fade-up inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-sm px-4 py-1.5 mb-8 hover:bg-white/[0.05] transition-colors cursor-default"
+            className="animate-fade-up mb-8 inline-flex cursor-default items-center gap-2.5 rounded-full border px-4 py-1.5 backdrop-blur-sm transition-colors landing-border-soft landing-card-muted"
             style={{ animationDelay: "0.1s" }}
           >
             <div className="w-1.5 h-1.5 rounded-full bg-nod-gold animate-glow-pulse shadow-[0_0_8px_rgba(232,185,49,0.5)]" />
@@ -58,7 +58,7 @@ export function LandingHero() {
 
           {/* Headline */}
           <h1
-            className="animate-fade-up font-display text-[clamp(2.75rem,6vw,5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-white whitespace-pre-line drop-shadow-2xl"
+            className="animate-fade-up font-display text-[clamp(2.75rem,6vw,5rem)] font-bold leading-[1.05] tracking-[-0.03em] whitespace-pre-line drop-shadow-2xl landing-text"
             style={{ animationDelay: "0.2s" }}
           >
             {t("headline")}
@@ -66,7 +66,7 @@ export function LandingHero() {
 
           {/* Description */}
           <p
-            className="animate-fade-up mt-8 max-w-xl text-[1.125rem] leading-relaxed text-white/70 font-light tracking-wide"
+            className="animate-fade-up mt-8 max-w-xl text-[1.125rem] leading-relaxed font-light tracking-wide landing-text-muted"
             style={{ animationDelay: "0.35s" }}
           >
             {t("description")}
@@ -88,14 +88,14 @@ export function LandingHero() {
               href={CHROME_EXTENSION_INSTALL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3.5 text-[15px] font-medium text-white/70 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all hover:-translate-y-0.5 backdrop-blur-sm"
+              className="landing-border-soft landing-card-muted landing-text-muted inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-[15px] font-medium transition-all backdrop-blur-sm hover:-translate-y-0.5 hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
             >
               Chrome에 추가
             </a>
             <button
               type="button"
               onClick={scrollToFeatures}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3.5 text-[15px] font-medium text-white/70 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all hover:-translate-y-0.5 backdrop-blur-sm"
+              className="landing-border-soft landing-card-muted landing-text-muted inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-[15px] font-medium transition-all backdrop-blur-sm hover:-translate-y-0.5 hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
             >
               {t("ctaSecondary")}
             </button>
@@ -107,7 +107,7 @@ export function LandingHero() {
       <button
         type="button"
         onClick={scrollToFeatures}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/35 hover:text-white/55 transition-colors animate-float"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float text-black/45 transition-colors hover:text-black/70 dark:text-white/35 dark:hover:text-white/55"
       >
         <ChevronDown className="w-5 h-5" />
       </button>

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { NodWordmark } from "@/components/brand/nod-wordmark";
 import { CHROME_EXTENSION_INSTALL_URL } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
 
@@ -10,7 +10,7 @@ export function LandingFooter() {
 
   const renderLink = (href: string, label: string) => {
     const className =
-      "text-[13px] text-white/50 hover:text-white transition-colors block font-medium";
+      "block text-[13px] font-medium text-black/55 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white";
 
     if (href.startsWith("http")) {
       return (
@@ -64,21 +64,18 @@ export function LandingFooter() {
   ];
 
   return (
-    <footer className="relative bg-[#050505] border-t border-white/[0.05] ko-keep">
+    <footer className="landing-surface relative border-t border-black/10 dark:border-white/[0.05] ko-keep">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-24">
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Brand */}
           <div className="col-span-2 pr-8">
             <Link href="/" className="mb-6 inline-flex items-center group">
-              <Image
-                src="/brand/nod-logo.png"
-                alt="NOD"
-                width={140}
-                height={35}
-                className="h-8 w-auto opacity-90 transition-opacity group-hover:opacity-100"
+              <NodWordmark
+                size="md"
+                className="opacity-90 transition-opacity group-hover:opacity-100"
               />
             </Link>
-            <p className="text-[14px] text-white/40 max-w-xs leading-relaxed font-light">
+            <p className="landing-text-subtle max-w-xs text-[14px] leading-relaxed font-light">
               {t("tagline")}
             </p>
           </div>
@@ -86,7 +83,7 @@ export function LandingFooter() {
           {/* Link columns */}
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="font-mono text-[10px] text-white/30 uppercase tracking-widest mb-6 font-medium">
+              <h4 className="mb-6 font-mono text-[10px] font-medium tracking-widest text-black/35 uppercase dark:text-white/30">
                 {col.title}
               </h4>
               <ul className="space-y-3.5">
@@ -99,8 +96,8 @@ export function LandingFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-20 pt-8 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-6">
-          <span className="font-mono text-[11px] text-white/20 tracking-wide">
+        <div className="mt-20 flex flex-col items-center justify-between gap-6 border-t border-black/10 pt-8 dark:border-white/[0.05] sm:flex-row">
+          <span className="font-mono text-[11px] tracking-wide text-black/30 dark:text-white/20">
             &copy; {new Date().getFullYear()} NOD. {t("copyright")}
           </span>
           <div className="flex items-center gap-1.5 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
