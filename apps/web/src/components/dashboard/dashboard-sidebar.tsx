@@ -6,12 +6,13 @@ import {
   HelpCircle,
   LayoutDashboard,
   LogOut,
+  Network,
   Settings,
   Tag,
   User as UserIcon,
 } from "lucide-react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { NodWordmark } from "@/components/brand/nod-wordmark";
 import { useSidebarUser } from "@/components/dashboard/hooks/use-sidebar-user";
 import { SidebarNavLink } from "@/components/dashboard/sidebar-nav-link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUsage } from "@/lib/api/subscriptions";
 import { signOut } from "@/lib/auth/auth-client";
 import { Link, usePathname, useRouter } from "@/lib/i18n/routing";
 
@@ -34,11 +36,14 @@ export function DashboardSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { mounted, userName, userEmail, avatarUrl, initials } = useSidebarUser();
+  const { data: usage } = useUsage();
+  const isPro = usage?.plan === "pro";
 
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t("sidebar.nav.dashboard") },
     { href: "/articles", icon: FileText, label: t("sidebar.nav.articles") },
-  ] as const;
+    ...(isPro ? [{ href: "/dashboard/graph", icon: Network, label: t("sidebar.nav.graph") }] : []),
+  ];
 
   const bottomNavItems = [
     { href: "/settings", icon: Settings, label: t("sidebar.nav.settings") },
@@ -66,14 +71,7 @@ export function DashboardSidebar() {
       {/* Brand/Logo */}
       <div className="flex h-16 items-center border-b px-6">
         <Link href="/dashboard" className="inline-flex items-center">
-          <Image
-            src="/brand/nod-logo.png"
-            alt="NOD"
-            width={120}
-            height={30}
-            className="h-7 w-auto"
-            priority
-          />
+          <NodWordmark size="sm" priority />
           <span className="sr-only">NOD</span>
         </Link>
       </div>
@@ -147,7 +145,7 @@ export function DashboardSidebar() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/blog/web-clipper-guide")}>
                 <HelpCircle />
                 <span>{t("sidebar.user.help")}</span>
               </DropdownMenuItem>
