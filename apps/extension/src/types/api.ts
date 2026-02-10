@@ -9,6 +9,7 @@ export interface SaveArticleRequest {
   publishedAt?: string;
   wordCount?: number;
   source: "extension" | "web" | "api";
+  summary_language?: string;
 }
 
 // API Response Types

@@ -4,6 +4,8 @@ import { useArticle } from "./hooks/useArticle";
 import { useSaveArticle } from "./hooks/useSaveArticle";
 import { useUsage } from "./hooks/useUsage";
 import { useLocale } from "./hooks/useLocale";
+import { useTheme } from "./hooks/useTheme";
+import { useSummaryLanguage } from "./hooks/useSummaryLanguage";
 import { Loading } from "./components/Loading";
 import { LoginPrompt } from "./components/LoginPrompt";
 import { ArticlePreview } from "./components/ArticlePreview";
@@ -11,6 +13,7 @@ import { SaveButton } from "./components/SaveButton";
 import { UsageIndicator } from "./components/UsageIndicator";
 import { SuccessMessage, ErrorMessage } from "./components/StatusMessage";
 import { PopupLayout } from "./components/PopupLayout";
+import { SummaryLanguageSelector } from "./components/SummaryLanguageSelector";
 import { t } from "../lib/i18n";
 
 export function App() {
@@ -19,10 +22,12 @@ export function App() {
   const save = useSaveArticle();
   const { usage } = useUsage();
   const { locale, setLocale } = useLocale();
+  const { theme, toggle: toggleTheme } = useTheme();
+  const { summaryLanguage, setSummaryLanguage } = useSummaryLanguage();
 
   if (auth.isLoading) {
     return (
-      <PopupLayout>
+      <PopupLayout theme={theme} onThemeToggle={toggleTheme}>
         <Loading message={t("extLoadingAuth")} />
       </PopupLayout>
     );
@@ -30,7 +35,7 @@ export function App() {
 
   if (!auth.isAuthenticated) {
     return (
-      <PopupLayout>
+      <PopupLayout theme={theme} onThemeToggle={toggleTheme}>
         <LoginPrompt />
       </PopupLayout>
     );
@@ -38,7 +43,7 @@ export function App() {
 
   if (article.isLoading) {
     return (
-      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <Loading message={t("extLoadingExtract")} />
       </PopupLayout>
     );
@@ -46,7 +51,7 @@ export function App() {
 
   if (save.state === "success" && save.articleId) {
     return (
-      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <SuccessMessage articleId={save.articleId} />
       </PopupLayout>
     );
@@ -54,7 +59,7 @@ export function App() {
 
   if (save.state === "error" && save.error) {
     return (
-      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <ErrorMessage
           code={save.error.code}
           message={save.error.message}
@@ -69,7 +74,7 @@ export function App() {
 
   if (article.error) {
     return (
-      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <ErrorMessage
           code="EXTRACT_FAILED"
           message={article.error}
@@ -82,11 +87,15 @@ export function App() {
   if (article.article) {
     const saveDisabled = save.state === "saving" || (usage !== null && !usage.can_summarize);
     return (
-      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <ArticlePreview article={article.article} />
         {usage && <UsageIndicator usage={usage} />}
+        <SummaryLanguageSelector
+          value={summaryLanguage}
+          onChange={setSummaryLanguage}
+        />
         <SaveButton
-          onClick={() => save.save(article.article!)}
+          onClick={() => save.save(article.article!, summaryLanguage)}
           loading={save.state === "saving"}
           disabled={saveDisabled}
         />
@@ -95,7 +104,7 @@ export function App() {
   }
 
   return (
-    <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale}>
+    <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
       <Loading />
     </PopupLayout>
   );

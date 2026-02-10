@@ -15,7 +15,10 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
-    const payload = atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"));
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const binaryStr = atob(base64);
+    const bytes = Uint8Array.from(binaryStr, (c) => c.charCodeAt(0));
+    const payload = new TextDecoder("utf-8").decode(bytes);
     return JSON.parse(payload);
   } catch {
     return null;
@@ -75,9 +78,20 @@ export async function setToken(
 }
 
 /**
- * Get stored user info
+ * Get user info — always re-extracts from JWT to ensure correct encoding
  */
 export async function getUserInfo(): Promise<UserInfo | null> {
+  const token = await getToken();
+  if (!token) return null;
+
+  const freshInfo = extractUserInfo(token);
+  if (freshInfo) {
+    // Update storage with correctly decoded info
+    await chrome.storage.local.set({ [USER_INFO]: freshInfo });
+    return freshInfo;
+  }
+
+  // Fallback to stored info
   const result = await chrome.storage.local.get([USER_INFO]);
   return result[USER_INFO] || null;
 }

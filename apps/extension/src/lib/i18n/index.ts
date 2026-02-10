@@ -26,7 +26,8 @@ const translations = {
     "extLimitReached": "이번 달 사용량 초과",
     "extUpgradePrompt": "Pro로 업그레이드",
     "extUsageUnlimited": "무제한 요약 (Pro)",
-    "extLanguage": "언어"
+    "extLanguage": "언어",
+    "extSummaryLanguage": "요약 언어"
   },
   "ja": {
     "extHeaderTitle": "NOD",
@@ -53,7 +54,8 @@ const translations = {
     "extLimitReached": "月間上限に達しました",
     "extUpgradePrompt": "Proにアップグレード",
     "extUsageUnlimited": "無制限要約 (Pro)",
-    "extLanguage": "言語"
+    "extLanguage": "言語",
+    "extSummaryLanguage": "要約言語"
   },
   "en": {
     "extHeaderTitle": "NOD",
@@ -80,7 +82,8 @@ const translations = {
     "extLimitReached": "Monthly limit reached",
     "extUpgradePrompt": "Upgrade to Pro for more",
     "extUsageUnlimited": "Unlimited summaries (Pro)",
-    "extLanguage": "Language"
+    "extLanguage": "Language",
+    "extSummaryLanguage": "Summary Language"
   }
 } as const;
 

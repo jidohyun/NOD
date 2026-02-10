@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch",
-    "build": "vite build && BUILD_TARGET=content-script vite build",
-    "build:main": "vite build",
-    "build:content": "BUILD_TARGET=content-script vite build",
+    "dev": "vite build --watch --mode development & BUILD_TARGET=content-script vite build --watch --mode development",
+    "build": "vite build --mode production && BUILD_TARGET=content-script vite build --mode production",
+    "build:main": "vite build --mode production",
+    "build:content": "BUILD_TARGET=content-script vite build --mode production",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
