@@ -32,10 +32,14 @@ export function PopupLayout({
           borderBottom: `1px solid var(--header-border)`,
         }}
       >
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E8B931] text-sm font-bold text-black logo-glow">
-          N
+        <div className="flex items-center gap-2">
+          <img
+            src="/icons/icon48.png"
+            alt="NOD icon"
+            className="h-7 w-7 rounded-lg logo-glow"
+          />
+          <img src="/icons/logo.png" alt="NOD" className="h-5 w-auto opacity-95" />
         </div>
-        <span className="text-sm font-semibold tracking-wide text-white">{t("extHeaderTitle")}</span>
         <span className="text-xs text-gray-500">{t("extHeaderSubtitle")}</span>
 
         <div className="ml-auto flex items-center gap-1.5">

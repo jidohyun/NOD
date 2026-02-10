@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 export function DashboardPreview() {
@@ -54,8 +55,14 @@ export function DashboardPreview() {
             {/* Top bar */}
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-nod-gold flex items-center justify-center shadow-lg shadow-nod-gold/20">
-                  <span className="text-[10px] font-bold text-[#0A0A0B] font-display">NOD</span>
+                <div className="h-8 w-8 overflow-hidden rounded-lg border border-nod-gold/20 shadow-lg shadow-nod-gold/20">
+                  <Image
+                    src="/brand/nod-icon.png"
+                    alt="NOD icon"
+                    width={32}
+                    height={32}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[12px] text-white/80 font-medium leading-none">

@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Globe, Menu, X } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -53,15 +54,15 @@ export function LandingNav() {
       <nav className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rounded-sm bg-nod-gold flex items-center justify-center">
-              <span className="font-display font-bold text-xs text-[#0A0A0B] tracking-tight">
-                N
-              </span>
-            </div>
-            <span className="font-display font-semibold text-sm text-white/90 tracking-tight">
-              NOD
-            </span>
+          <Link href="/" className="flex items-center group">
+            <Image
+              src="/brand/nod-logo.png"
+              alt="NOD"
+              width={120}
+              height={30}
+              className="h-7 w-auto opacity-90 transition-opacity group-hover:opacity-100"
+              priority
+            />
           </Link>
 
           {/* Desktop links */}

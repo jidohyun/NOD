@@ -10,6 +10,7 @@ import {
   Tag,
   User as UserIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useSidebarUser } from "@/components/dashboard/hooks/use-sidebar-user";
 import { SidebarNavLink } from "@/components/dashboard/sidebar-nav-link";
@@ -64,8 +65,16 @@ export function DashboardSidebar() {
     <aside className="flex h-full w-64 flex-col border-r bg-background">
       {/* Brand/Logo */}
       <div className="flex h-16 items-center border-b px-6">
-        <Link href="/dashboard" className="text-xl font-bold">
-          NOD
+        <Link href="/dashboard" className="inline-flex items-center">
+          <Image
+            src="/brand/nod-logo.png"
+            alt="NOD"
+            width={120}
+            height={30}
+            className="h-7 w-auto"
+            priority
+          />
+          <span className="sr-only">NOD</span>
         </Link>
       </div>
 
