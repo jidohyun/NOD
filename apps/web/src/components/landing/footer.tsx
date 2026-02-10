@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { CHROME_EXTENSION_INSTALL_URL } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
@@ -68,15 +69,14 @@ export function LandingFooter() {
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Brand */}
           <div className="col-span-2 pr-8">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
-              <div className="w-7 h-7 rounded-md bg-nod-gold flex items-center justify-center shadow-lg shadow-nod-gold/10 group-hover:shadow-nod-gold/20 transition-all">
-                <span className="font-display font-bold text-[11px] text-[#0A0A0B] tracking-tight">
-                  N
-                </span>
-              </div>
-              <span className="font-display font-semibold text-[15px] text-white/90 tracking-tight">
-                NOD
-              </span>
+            <Link href="/" className="mb-6 inline-flex items-center group">
+              <Image
+                src="/brand/nod-logo.png"
+                alt="NOD"
+                width={140}
+                height={35}
+                className="h-8 w-auto opacity-90 transition-opacity group-hover:opacity-100"
+              />
             </Link>
             <p className="text-[14px] text-white/40 max-w-xs leading-relaxed font-light">
               {t("tagline")}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -49,9 +50,14 @@ function LoginContent() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <div className="w-12 h-12 rounded-lg bg-nod-gold flex items-center justify-center">
-            <span className="font-display font-bold text-lg text-[#0A0A0B] tracking-tight">N</span>
-          </div>
+          <Image
+            src="/brand/nod-logo.png"
+            alt="NOD"
+            width={160}
+            height={40}
+            className="h-10 w-auto"
+            priority
+          />
         </div>
 
         {/* Card */}
