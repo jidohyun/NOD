@@ -10,6 +10,7 @@ from src.articles.schemas import (
     ArticleCreate,
     ArticleListResponse,
     ArticleResponse,
+    ConceptGraphResponse,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
@@ -173,6 +174,22 @@ async def search_articles(
         return await service.list_articles(
             db, user.id, page=page, limit=limit, search=q, status_filter=status_filter
         )
+
+
+@router.get("/graph", response_model=ConceptGraphResponse)
+async def get_concept_graph(
+    db: DBSession,
+    user: CurrentUser,
+    max_nodes: int = Query(default=1000, ge=100, le=1000),
+) -> ConceptGraphResponse:
+    usage_info = await sub_service.get_usage_info(db, user.id)
+    if usage_info.plan != "pro":
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail="Graph View is available on Pro plan only.",
+        )
+
+    return await service.get_concept_graph(db, user.id, max_nodes=max_nodes)
 
 
 @router.get("/{article_id}", response_model=ArticleResponse)
