@@ -2,6 +2,7 @@
 
 import { Globe, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -36,6 +37,8 @@ export function DashboardHeader() {
 
       {/* Spacer */}
       <div className="flex-1" />
+
+      <ThemeToggle />
 
       {/* Language */}
       {mounted ? (

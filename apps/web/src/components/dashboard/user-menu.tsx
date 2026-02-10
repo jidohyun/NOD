@@ -94,21 +94,21 @@ export function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/settings")}>
             <UserIcon />
             <span>{t("sidebar.user.profile")}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/settings")}>
             <Settings />
             <span>{t("sidebar.user.settings")}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/settings/billing")}>
             <CreditCard />
             <span>{t("sidebar.user.billing")}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/blog/web-clipper-guide")}>
           <HelpCircle />
           <span>{t("sidebar.user.help")}</span>
         </DropdownMenuItem>

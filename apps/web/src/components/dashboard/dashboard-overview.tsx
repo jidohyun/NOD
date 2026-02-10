@@ -2,6 +2,7 @@
 
 import { ArrowRight, Brain, CreditCard, FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { DashboardGraphPreview } from "@/components/dashboard/dashboard-graph-preview";
 import { useArticles } from "@/lib/api/articles";
 import { useUsage } from "@/lib/api/subscriptions";
 import { Link } from "@/lib/i18n/routing";
@@ -17,6 +18,7 @@ export function DashboardOverview() {
   const summariesUsed = usage?.summaries_used ?? 0;
   const summariesLimit = usage?.summaries_limit ?? 0;
   const planLabel = usageLoading ? "—" : plan === "pro" ? ts("pro") : ts("basic");
+  const isPro = usage?.plan === "pro";
 
   return (
     <div className="space-y-8">
@@ -99,6 +101,8 @@ export function DashboardOverview() {
           <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
+
+      <DashboardGraphPreview isPro={isPro} usageLoading={usageLoading} />
     </div>
   );
 }
