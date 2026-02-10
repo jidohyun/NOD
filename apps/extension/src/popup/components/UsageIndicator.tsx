@@ -12,8 +12,8 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
 
   if (isUnlimited) {
     return (
-      <div className="flex items-center gap-1.5 text-xs text-gray-400">
-        <div className="h-1.5 w-1.5 rounded-full bg-green-400" />
+      <div className="flex items-center gap-1.5 text-xs t-muted">
+        <div className="h-1.5 w-1.5 rounded-full bg-green-400 progress-glow" />
         <span>{t("extUsageUnlimited")}</span>
       </div>
     );
@@ -28,22 +28,22 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
     .replace("{used}", String(usage.summaries_used))
     .replace("{limit}", String(usage.summaries_limit));
 
+  const barColor = isAtLimit
+    ? "bg-red-500"
+    : percentage >= 80
+      ? "bg-yellow-500"
+      : "bg-emerald-400";
+
   return (
-    <div className="space-y-1.5">
+    <div className="mt-3 space-y-2">
       <div className="flex items-center justify-between text-xs">
-        <span className={isAtLimit ? "text-red-400" : "text-gray-400"}>
+        <span className={isAtLimit ? "text-red-400" : "t-muted"}>
           {usageText}
         </span>
       </div>
-      <div className="h-1 rounded-full bg-gray-700">
+      <div className="h-1 overflow-hidden rounded-full" style={{ background: "var(--progress-track)" }}>
         <div
-          className={`h-1 rounded-full transition-all ${
-            isAtLimit
-              ? "bg-red-500"
-              : percentage >= 80
-                ? "bg-yellow-500"
-                : "bg-green-500"
-          }`}
+          className={`h-1 rounded-full transition-all duration-500 ease-out ${barColor}`}
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -54,7 +54,7 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
             href={`${WEB_BASE}/pricing`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-medium text-blue-400 hover:text-blue-300"
+            className="text-xs font-medium text-[#E8B931] hover:opacity-80 transition-opacity"
           >
             {t("extUpgradePrompt")}
           </a>

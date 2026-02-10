@@ -9,7 +9,7 @@ interface UseSaveArticleResult {
   state: SaveState;
   articleId: string | null;
   error: { code: ErrorCode; message: string } | null;
-  save: (content: ExtractedContent) => Promise<void>;
+  save: (content: ExtractedContent, summaryLanguage?: string) => Promise<void>;
   reset: () => void;
 }
 
@@ -21,7 +21,7 @@ export function useSaveArticle(): UseSaveArticleResult {
     message: string;
   } | null>(null);
 
-  async function save(content: ExtractedContent) {
+  async function save(content: ExtractedContent, summaryLanguage?: string) {
     setState("saving");
     setError(null);
 
@@ -36,6 +36,7 @@ export function useSaveArticle(): UseSaveArticleResult {
         publishedAt: content.publishedAt,
         wordCount: content.wordCount,
         source: "extension",
+        summary_language: summaryLanguage,
       });
 
       setArticleId(result.id);

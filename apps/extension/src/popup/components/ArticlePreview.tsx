@@ -7,22 +7,22 @@ interface ArticlePreviewProps {
 
 export function ArticlePreview({ article }: ArticlePreviewProps) {
   return (
-    <div className="rounded-lg border border-gray-100 bg-white p-3.5 shadow-sm">
-      <div className="border-l-2 border-[#E8B931] pl-3">
-        <h2 className="mb-1.5 line-clamp-2 text-sm font-semibold leading-snug text-gray-900">
+    <div className="glass-card rounded-xl p-4 animate-slide-up">
+      <div className="border-l-2 border-[#E8B931] pl-3.5">
+        <h2 className="mb-1.5 line-clamp-2 text-sm font-semibold leading-snug t-primary">
           {article.title}
         </h2>
-        <p className="mb-2.5 line-clamp-2 text-xs leading-relaxed text-gray-500">
+        <p className="mb-3 line-clamp-2 text-xs leading-relaxed t-muted">
           {article.excerpt}
         </p>
       </div>
-      <div className="flex items-center gap-1.5 text-xs text-gray-400">
-        <span className="font-medium text-gray-500">{article.siteName}</span>
-        <span>·</span>
+      <div className="flex items-center gap-1.5 text-xs t-muted">
+        <span className="font-medium t-secondary">{article.siteName}</span>
+        <span style={{ opacity: 0.3 }}>·</span>
         <span>{article.readingTime} {t("extMinRead")}</span>
         {article.author && (
           <>
-            <span>·</span>
+            <span style={{ opacity: 0.3 }}>·</span>
             <span className="truncate">{article.author}</span>
           </>
         )}

@@ -14,6 +14,8 @@ export const STORAGE_KEYS = {
   SETTINGS: "nod_settings",
   PENDING_SYNC: "nod_pending_sync",
   LOCALE: "nod_locale",
+  THEME: "nod_theme",
+  SUMMARY_LANGUAGE: "nod_summary_language",
 } as const;
 
 // Content Extraction
