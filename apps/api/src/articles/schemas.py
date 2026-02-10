@@ -77,3 +77,29 @@ class SimilarArticleResponse(BaseModel):
     similarity: float
     shared_concepts: list[str] = []
     summary_preview: str | None = None
+
+
+class ConceptGraphNode(BaseModel):
+    id: str
+    label: str
+    value: int
+
+
+class ConceptGraphEdge(BaseModel):
+    source: str
+    target: str
+    weight: int
+
+
+class ConceptGraphMeta(BaseModel):
+    total_articles: int
+    total_unique_concepts: int
+    returned_nodes: int
+    returned_edges: int
+    max_nodes: int
+
+
+class ConceptGraphResponse(BaseModel):
+    nodes: list[ConceptGraphNode]
+    edges: list[ConceptGraphEdge]
+    meta: ConceptGraphMeta

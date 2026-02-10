@@ -1,4 +1,6 @@
 import uuid
+from collections import Counter
+from itertools import combinations
 
 from sqlalchemy import String, cast, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +10,10 @@ from src.articles.model import Article, ArticleEmbedding, ArticleSummary
 from src.articles.schemas import (
     ArticleCreate,
     ArticleListResponse,
+    ConceptGraphEdge,
+    ConceptGraphMeta,
+    ConceptGraphNode,
+    ConceptGraphResponse,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
@@ -256,3 +262,90 @@ async def get_similar_articles(
         )
 
     return similar
+
+
+def _normalize_concept(value: str) -> str:
+    return " ".join(value.split()).strip().casefold()
+
+
+async def get_concept_graph(
+    db: AsyncSession,
+    user_id: str,
+    max_nodes: int = 1000,
+) -> ConceptGraphResponse:
+    rows = await db.execute(
+        select(ArticleSummary.concepts)
+        .join(Article, ArticleSummary.article_id == Article.id)
+        .where(
+            Article.user_id == uuid.UUID(user_id),
+            Article.status.in_(["analyzed", "completed"]),
+        )
+    )
+    concepts_per_article = rows.scalars().all()
+
+    concept_counts: Counter[str] = Counter()
+    concept_labels: dict[str, Counter[str]] = {}
+    article_concept_sets: list[set[str]] = []
+
+    for concepts in concepts_per_article:
+        if not isinstance(concepts, list):
+            continue
+
+        normalized_in_article: set[str] = set()
+        for raw in concepts:
+            if not isinstance(raw, str):
+                continue
+            label = " ".join(raw.split()).strip()
+            if not label:
+                continue
+
+            normalized = _normalize_concept(label)
+            if not normalized:
+                continue
+
+            concept_counts[normalized] += 1
+            label_counter = concept_labels.setdefault(normalized, Counter())
+            label_counter[label] += 1
+            normalized_in_article.add(normalized)
+
+        if normalized_in_article:
+            article_concept_sets.append(normalized_in_article)
+
+    selected_norms = [
+        concept for concept, _count in concept_counts.most_common(max_nodes)
+    ]
+    selected_set = set(selected_norms)
+
+    nodes: list[ConceptGraphNode] = []
+    for norm in selected_norms:
+        label_counts = concept_labels.get(norm)
+        if not label_counts:
+            continue
+        label = label_counts.most_common(1)[0][0]
+        nodes.append(ConceptGraphNode(id=norm, label=label, value=concept_counts[norm]))
+
+    edge_counts: Counter[tuple[str, str]] = Counter()
+    for concept_set in article_concept_sets:
+        filtered = sorted(concept for concept in concept_set if concept in selected_set)
+        if len(filtered) < 2:
+            continue
+        for left, right in combinations(filtered, 2):
+            edge_counts[(left, right)] += 1
+
+    edges = [
+        ConceptGraphEdge(source=source, target=target, weight=weight)
+        for (source, target), weight in edge_counts.items()
+    ]
+    edges.sort(key=lambda edge: edge.weight, reverse=True)
+
+    return ConceptGraphResponse(
+        nodes=nodes,
+        edges=edges,
+        meta=ConceptGraphMeta(
+            total_articles=len(article_concept_sets),
+            total_unique_concepts=len(concept_counts),
+            returned_nodes=len(nodes),
+            returned_edges=len(edges),
+            max_nodes=max_nodes,
+        ),
+    )
