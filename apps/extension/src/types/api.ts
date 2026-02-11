@@ -1,3 +1,9 @@
+// Environment Globals
+declare global {
+  const __DEV__: boolean;
+  const __MODE__: string;
+}
+
 // API Request Types
 export interface SaveArticleRequest {
   url: string;
