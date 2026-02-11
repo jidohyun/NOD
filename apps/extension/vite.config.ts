@@ -72,34 +72,41 @@ function generateManifest(mode: string) {
   return JSON.stringify(manifest, null, 2);
 }
 
+function generateManifestPlugin(mode: string) {
+  return {
+    name: "generate-manifest",
+    closeBundle() {
+      if (isContentScript) return;
+
+      const isDev = mode === "development";
+      const outDir = isDev ? "dist/dev" : "dist/prod";
+      const manifestContent = generateManifest(mode);
+      const manifestPath = resolve(__dirname, outDir, "manifest.json");
+      fs.writeFileSync(manifestPath, manifestContent);
+
+      const configSrc = resolve(__dirname, "config", `config.${mode}.json`);
+      const configDest = resolve(__dirname, outDir, "config.json");
+      if (fs.existsSync(configSrc)) {
+        fs.copyFileSync(configSrc, configDest);
+      }
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
   const outDir = isDev ? "dist/dev" : "dist/prod";
 
-  if (!isContentScript) {
-    const manifestContent = generateManifest(mode);
-    const manifestPath = resolve(__dirname, outDir, "manifest.json");
-    if (!fs.existsSync(resolve(__dirname, outDir))) {
-      fs.mkdirSync(resolve(__dirname, outDir), { recursive: true });
-    }
-    fs.writeFileSync(manifestPath, manifestContent);
-
-    const configSrc = resolve(__dirname, "config", `config.${mode}.json`);
-    const configDest = resolve(__dirname, outDir, "config.json");
-    if (fs.existsSync(configSrc)) {
-      fs.copyFileSync(configSrc, configDest);
-    }
-  }
-
   return {
-  plugins: [
-    react(),
-    viteStaticCopy({
-      targets: [
-        { src: "icons/*", dest: "icons" },
-      ],
-    }),
-  ],
+    plugins: [
+      react(),
+      generateManifestPlugin(mode),
+      viteStaticCopy({
+        targets: [
+          { src: "icons/*", dest: "icons" },
+        ],
+      }),
+    ],
   base: "./",
   define: {
     __DEV__: mode === "development",
