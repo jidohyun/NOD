@@ -34,6 +34,11 @@ export function PopupLayout({
       >
         <div className="flex items-center gap-2">
           <img src="/icons/logo.png" alt="NOD" className="h-5 w-auto opacity-95" />
+          {__DEV__ && (
+            <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
+              DEV
+            </span>
+          )}
         </div>
         <span className="text-xs text-gray-500">{t("extHeaderSubtitle")}</span>
 

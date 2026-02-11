@@ -4,10 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch --mode development & BUILD_TARGET=content-script vite build --watch --mode development",
-    "build": "vite build --mode production && BUILD_TARGET=content-script vite build --mode production",
-    "build:main": "vite build --mode production",
-    "build:content": "BUILD_TARGET=content-script vite build --mode production",
+    "dev": "npm run dev:main & npm run dev:content",
+    "dev:main": "vite build --watch --mode development",
+    "dev:content": "BUILD_TARGET=content-script vite build --watch --mode development",
+    "build": "npm run build:prod",
+    "build:prod": "vite build --mode production && BUILD_TARGET=content-script vite build --mode production",
+    "build:dev": "vite build --mode development && BUILD_TARGET=content-script vite build --mode development",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
