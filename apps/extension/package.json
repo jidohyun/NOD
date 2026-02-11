@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npm run dev:main & npm run dev:content",
+    "dev": "rm -rf dist/dev && npm run dev:main & npm run dev:content",
     "dev:main": "vite build --watch --mode development",
     "dev:content": "BUILD_TARGET=content-script vite build --watch --mode development",
     "build": "npm run build:prod",
-    "build:prod": "vite build --mode production && BUILD_TARGET=content-script vite build --mode production",
-    "build:dev": "vite build --mode development && BUILD_TARGET=content-script vite build --mode development",
+    "build:prod": "rm -rf dist/prod && vite build --mode production && BUILD_TARGET=content-script vite build --mode production",
+    "build:dev": "rm -rf dist/dev && vite build --mode development && BUILD_TARGET=content-script vite build --mode development",
+    "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

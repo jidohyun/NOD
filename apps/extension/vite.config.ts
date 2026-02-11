@@ -1,18 +1,30 @@
 import { defineConfig, loadEnv } from "vite";
 import fs from "fs";
+import { execSync } from "child_process";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { resolve } from "path";
 
 const isContentScript = process.env.BUILD_TARGET === "content-script";
 
+function getGitCommit(): string {
+  try {
+    return execSync("git rev-parse --short HEAD").toString().trim();
+  } catch {
+    return "unknown";
+  }
+}
+
 function generateManifest(mode: string) {
   const isDev = mode === "development";
+  const commit = getGitCommit();
+  const versionName = isDev ? `0.1.0-dev-${commit}` : `0.1.0-${commit}`;
 
-  const manifest = {
+  const manifest: Record<string, unknown> = {
     manifest_version: 3,
     name: isDev ? "NOD - Article Analyzer (Dev)" : "NOD - Article Analyzer",
     version: "0.1.0",
+    version_name: versionName,
     description: isDev
       ? "[DEV] Save and analyze articles with AI-powered summarization"
       : "Save and analyze articles with AI-powered summarization",
@@ -48,20 +60,35 @@ function generateManifest(mode: string) {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
-    }
+    },
+    web_accessible_resources: [
+      {
+        resources: ["config.json"],
+        matches: ["<all_urls>"]
+      }
+    ]
   };
 
   return JSON.stringify(manifest, null, 2);
 }
 
 export default defineConfig(({ mode }) => {
+  const isDev = mode === "development";
+  const outDir = isDev ? "dist/dev" : "dist/prod";
+
   if (!isContentScript) {
     const manifestContent = generateManifest(mode);
-    const manifestPath = resolve(__dirname, "dist", "manifest.json");
-    if (!fs.existsSync(resolve(__dirname, "dist"))) {
-      fs.mkdirSync(resolve(__dirname, "dist"), { recursive: true });
+    const manifestPath = resolve(__dirname, outDir, "manifest.json");
+    if (!fs.existsSync(resolve(__dirname, outDir))) {
+      fs.mkdirSync(resolve(__dirname, outDir), { recursive: true });
     }
     fs.writeFileSync(manifestPath, manifestContent);
+
+    const configSrc = resolve(__dirname, "config", `config.${mode}.json`);
+    const configDest = resolve(__dirname, outDir, "config.json");
+    if (fs.existsSync(configSrc)) {
+      fs.copyFileSync(configSrc, configDest);
+    }
   }
 
   return {
@@ -79,7 +106,7 @@ export default defineConfig(({ mode }) => {
     __MODE__: JSON.stringify(mode),
   },
   build: {
-    outDir: "dist",
+    outDir: isDev ? "dist/dev" : "dist/prod",
     emptyOutDir: !isContentScript,
     rollupOptions: isContentScript
       ? {
