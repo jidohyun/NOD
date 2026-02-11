@@ -1,0 +1,10 @@
+{
+  "env": "development",
+  "apiBase": "http://localhost:8000",
+  "webBase": "http://localhost:3000",
+  "features": {
+    "verboseLogging": true,
+    "debugPanel": true,
+    "mockData": false
+  }
+}
