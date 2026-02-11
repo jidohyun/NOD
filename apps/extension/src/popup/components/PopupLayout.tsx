@@ -33,11 +33,6 @@ export function PopupLayout({
         }}
       >
         <div className="flex items-center gap-2">
-          <img
-            src="/icons/icon48.png"
-            alt="NOD icon"
-            className="h-7 w-7 rounded-lg logo-glow"
-          />
           <img src="/icons/logo.png" alt="NOD" className="h-5 w-auto opacity-95" />
         </div>
         <span className="text-xs text-gray-500">{t("extHeaderSubtitle")}</span>
