@@ -17,6 +17,9 @@ export function useTheme() {
       const resolved = saved === "light" || saved === "dark" ? saved : "dark";
       setThemeState(resolved);
       applyTheme(resolved);
+      try {
+        localStorage.setItem('nod_ext_theme', resolved);
+      } catch {}
     });
   }, []);
 
@@ -24,6 +27,9 @@ export function useTheme() {
     setThemeState(newTheme);
     applyTheme(newTheme);
     chrome.storage.local.set({ [STORAGE_KEYS.THEME]: newTheme });
+    try {
+      localStorage.setItem('nod_ext_theme', newTheme);
+    } catch {}
   }, []);
 
   const toggle = useCallback(() => {

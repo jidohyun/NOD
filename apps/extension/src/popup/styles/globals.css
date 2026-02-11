@@ -100,10 +100,6 @@
   --scrollbar-thumb: rgba(0,0,0,0.12);
   --scrollbar-thumb-hover: rgba(0,0,0,0.2);
 
-  --header-from: #0a0a0a;
-  --header-to: #111111;
-  --header-border: rgba(255,255,255,0.05);
-
   --spinner-ring: rgba(0,0,0,0.08);
   --progress-track: rgba(0,0,0,0.06);
 
@@ -118,6 +114,10 @@
 
   --logout-text: #dc2626;
   --logout-hover: rgba(239,68,68,0.06);
+
+  --header-from: #f5f5f5;
+  --header-to: #ffffff;
+  --header-border: rgba(0,0,0,0.08);
 }
 
 @layer base {
