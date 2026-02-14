@@ -6,3 +6,5 @@ export {
   applyRepelForce,
   applySpringForce
 } from "./forces";
+export { GraphEngine } from "./engine";
+export type { GraphEngineOptions } from "./engine";
