@@ -12,6 +12,7 @@ import {
   DRAG_HOLD_ALPHA
 } from "./drag";
 import { getKHopNeighborhood } from "./neighborhood";
+import { applyRadialForce } from "./radial";
 import type { GraphEdge, GraphNode, NodeId, Position, Velocity } from "./types";
 
 export interface GraphEngineOptions {
@@ -28,6 +29,9 @@ export interface GraphEngineOptions {
   collisionPadding?: number;
   dragNeighborhoodHops?: number;
   localInfluenceBoost?: number;
+  radialEnabled?: boolean;
+  radialTargetRadius?: number;
+  radialStrength?: number;
 }
 
 const DEFAULT_OPTIONS: Required<GraphEngineOptions> = {
@@ -43,7 +47,10 @@ const DEFAULT_OPTIONS: Required<GraphEngineOptions> = {
   collisionStrength: 0.5,
   collisionPadding: 0,
   dragNeighborhoodHops: 1,
-  localInfluenceBoost: 2
+  localInfluenceBoost: 2,
+  radialEnabled: false,
+  radialTargetRadius: 0,
+  radialStrength: 0.1
 };
 
 function cloneNode(node: GraphNode): GraphNode {
@@ -177,6 +184,16 @@ export class GraphEngine {
       }
       sum.vx += centerForce.vx;
       sum.vy += centerForce.vy;
+
+      if (this.options.radialEnabled) {
+        const radialForce = applyRadialForce(node, this.options.center, {
+          targetRadius: this.options.radialTargetRadius,
+          strength:
+            this.options.radialStrength * this.alpha * this.getNodeInfluenceScale(node.id)
+        });
+        sum.vx += radialForce.vx;
+        sum.vy += radialForce.vy;
+      }
     }
 
     for (let i = 0; i < this.nodes.length; i += 1) {
