@@ -19,3 +19,5 @@ export {
 } from "./drag";
 export { getKHopNeighborhood } from "./neighborhood";
 export { applyRadialForce } from "./radial";
+export { createPreset } from "./presets";
+export type { GraphPhysicsPreset, GraphPhysicsPresetName } from "./presets";
