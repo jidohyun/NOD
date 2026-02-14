@@ -68,4 +68,57 @@ describe("GraphEngine", () => {
     engine.tick();
     expect(engine.getAlpha()).toBeCloseTo(0.2, 10);
   });
+
+  it("keeps pinned nodes fixed at fx/fy and zero velocity during tick", () => {
+    const nodes: GraphNode[] = [
+      {
+        id: "pinned",
+        pos: { x: 100, y: 100 },
+        vel: { vx: 5, vy: -5 },
+        radius: 4,
+        pinned: true,
+        fx: 0,
+        fy: 0
+      },
+      {
+        id: "free",
+        pos: { x: 10, y: 0 },
+        vel: { vx: 0, vy: 0 },
+        radius: 4,
+        pinned: false
+      }
+    ];
+
+    const edges: GraphEdge[] = [
+      {
+        sourceId: "pinned",
+        targetId: "free",
+        restLength: 10,
+        strength: 1
+      }
+    ];
+
+    const engine = new GraphEngine(nodes, edges, {
+      center: { x: 0, y: 0 },
+      dt: 1,
+      damping: 1,
+      centerStrength: 0,
+      repelStrength: 0,
+      springStrength: 1,
+      collisionStrength: 0,
+      alpha: 1,
+      alphaDecay: 1,
+      alphaMin: 0
+    });
+
+    engine.tick();
+
+    const [pinned, free] = engine.getNodes();
+    expect(pinned.pos.x).toBe(0);
+    expect(pinned.pos.y).toBe(0);
+    expect(pinned.vel.vx).toBe(0);
+    expect(pinned.vel.vy).toBe(0);
+    expect(free.vel.vx).toBeCloseTo(0, 10);
+    expect(free.vel.vy).toBeCloseTo(0, 10);
+  });
 });

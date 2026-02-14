@@ -64,6 +64,17 @@ export class GraphEngine {
     const nodeById = new Map<NodeId, GraphNode>();
 
     for (const node of this.nodes) {
+      if (node.pinned) {
+        if (node.fx !== undefined) {
+          node.pos.x = node.fx;
+        }
+        if (node.fy !== undefined) {
+          node.pos.y = node.fy;
+        }
+        node.vel.vx = 0;
+        node.vel.vy = 0;
+      }
+
       forces.set(node.id, { vx: 0, vy: 0 });
       nodeById.set(node.id, node);
     }
@@ -136,18 +147,23 @@ export class GraphEngine {
         continue;
       }
 
+      if (node.pinned) {
+        if (node.fx !== undefined) {
+          node.pos.x = node.fx;
+        }
+        if (node.fy !== undefined) {
+          node.pos.y = node.fy;
+        }
+        node.vel.vx = 0;
+        node.vel.vy = 0;
+        continue;
+      }
+
       node.vel.vx = (node.vel.vx + force.vx * this.options.dt) * this.options.damping;
       node.vel.vy = (node.vel.vy + force.vy * this.options.dt) * this.options.damping;
 
       node.pos.x += node.vel.vx * this.options.dt;
       node.pos.y += node.vel.vy * this.options.dt;
-
-      if (node.pinned) {
-        node.pos.x = node.fx ?? node.pos.x;
-        node.pos.y = node.fy ?? node.pos.y;
-        node.vel.vx = 0;
-        node.vel.vy = 0;
-      }
     }
 
     this.alpha = Math.max(this.options.alphaMin, this.alpha * this.options.alphaDecay);
