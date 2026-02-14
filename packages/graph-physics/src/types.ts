@@ -1,13 +1,19 @@
+export type NodeId = string;
+
+export interface Position {
+  x: number;
+  y: number;
+}
+
+export interface Velocity {
+  vx: number;
+  vy: number;
+}
+
 export interface GraphNode {
-  id: string;
-  pos: {
-    x: number;
-    y: number;
-  };
-  vel: {
-    vx: number;
-    vy: number;
-  };
+  id: NodeId;
+  pos: Position;
+  vel: Velocity;
   radius: number;
   pinned: boolean;
   mass?: number;
@@ -17,8 +23,8 @@ export interface GraphNode {
 }
 
 export interface GraphEdge {
-  sourceId: string;
-  targetId: string;
+  sourceId: NodeId;
+  targetId: NodeId;
   restLength: number;
   strength: number;
   weight?: number;
