@@ -4,6 +4,13 @@ import {
   applyRepelForce,
   applySpringForce
 } from "./forces";
+import {
+  applyDragEnd,
+  applyDragMove,
+  applyDragStart,
+  DRAG_COOL_DECAY,
+  DRAG_HOLD_ALPHA
+} from "./drag";
 import type { GraphEdge, GraphNode, NodeId, Position, Velocity } from "./types";
 
 export interface GraphEngineOptions {
@@ -47,6 +54,7 @@ export class GraphEngine {
   private readonly edges: GraphEdge[];
   private readonly options: Required<GraphEngineOptions>;
   private alpha: number;
+  private isDragCooling: boolean;
 
   constructor(nodes: readonly GraphNode[], edges: readonly GraphEdge[], options: GraphEngineOptions) {
     this.nodes = nodes.map(cloneNode);
@@ -57,6 +65,40 @@ export class GraphEngine {
       center: { ...options.center }
     };
     this.alpha = this.options.alpha;
+    this.isDragCooling = false;
+  }
+
+  public onDragStart(nodeId: NodeId, cursor: Position): void {
+    const node = this.nodes.find((currentNode) => currentNode.id === nodeId);
+    if (!node) {
+      return;
+    }
+
+    const targetAlpha = applyDragStart(node, cursor);
+    this.alpha = Math.max(this.alpha, targetAlpha);
+    this.isDragCooling = false;
+  }
+
+  public onDragMove(nodeId: NodeId, cursor: Position): void {
+    const node = this.nodes.find((currentNode) => currentNode.id === nodeId);
+    if (!node) {
+      return;
+    }
+
+    applyDragMove(node, cursor);
+    this.alpha = DRAG_HOLD_ALPHA;
+    this.isDragCooling = false;
+  }
+
+  public onDragEnd(nodeId: NodeId): void {
+    const node = this.nodes.find((currentNode) => currentNode.id === nodeId);
+    if (!node) {
+      return;
+    }
+
+    const targetAlpha = applyDragEnd(node);
+    this.alpha = targetAlpha;
+    this.isDragCooling = true;
   }
 
   public tick(): void {
@@ -164,6 +206,15 @@ export class GraphEngine {
 
       node.pos.x += node.vel.vx * this.options.dt;
       node.pos.y += node.vel.vy * this.options.dt;
+    }
+
+    if (this.isDragCooling) {
+      this.alpha = Math.max(0, this.alpha * DRAG_COOL_DECAY);
+      if (this.alpha < 0.0001) {
+        this.alpha = 0;
+        this.isDragCooling = false;
+      }
+      return;
     }
 
     this.alpha = Math.max(this.options.alphaMin, this.alpha * this.options.alphaDecay);
