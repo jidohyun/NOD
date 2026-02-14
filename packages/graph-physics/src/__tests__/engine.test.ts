@@ -121,4 +121,65 @@ describe("GraphEngine", () => {
     expect(free.vel.vx).toBeCloseTo(0, 10);
     expect(free.vel.vy).toBeCloseTo(0, 10);
   });
+
+  it("boosts local k-hop neighborhood influence during drag", () => {
+    const nodes: GraphNode[] = [
+      {
+        id: "dragged",
+        pos: { x: 0, y: 0 },
+        vel: { vx: 0, vy: 0 },
+        radius: 4,
+        pinned: false
+      },
+      {
+        id: "local",
+        pos: { x: 10, y: 0 },
+        vel: { vx: 0, vy: 0 },
+        radius: 4,
+        pinned: false
+      },
+      {
+        id: "remote",
+        pos: { x: 10, y: 0 },
+        vel: { vx: 0, vy: 0 },
+        radius: 4,
+        pinned: false
+      }
+    ];
+
+    const edges: GraphEdge[] = [
+      {
+        sourceId: "dragged",
+        targetId: "local",
+        restLength: 10,
+        strength: 1
+      }
+    ];
+
+    const engine = new GraphEngine(nodes, edges, {
+      center: { x: 0, y: 0 },
+      dt: 1,
+      damping: 1,
+      alpha: 1,
+      alphaDecay: 1,
+      alphaMin: 0,
+      centerStrength: 1,
+      repelStrength: 0,
+      springStrength: 0,
+      collisionStrength: 0,
+      dragNeighborhoodHops: 1,
+      localInfluenceBoost: 3
+    });
+
+    engine.onDragStart("dragged", { x: 0, y: 0 });
+    engine.tick();
+
+    const updated = engine.getNodes();
+    const local = updated.find((node) => node.id === "local");
+    const remote = updated.find((node) => node.id === "remote");
+
+    expect(local).toBeDefined();
+    expect(remote).toBeDefined();
+    expect(Math.abs(local!.vel.vx)).toBeGreaterThan(Math.abs(remote!.vel.vx) * 2);
+  });
 });
