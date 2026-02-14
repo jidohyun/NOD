@@ -14,7 +14,9 @@ export function createDeterministicRingSeeds(
   ids: readonly NodeId[],
   center: Position
 ): Record<NodeId, Position> {
-  const sortedIds = Array.from(new Set(ids)).sort((a, b) => a.localeCompare(b));
+  const sortedIds = Array.from(new Set(ids)).sort((a, b) =>
+    a < b ? -1 : a > b ? 1 : 0
+  );
   const total = sortedIds.length;
 
   if (total === 0) {

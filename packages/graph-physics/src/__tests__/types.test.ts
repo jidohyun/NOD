@@ -55,7 +55,7 @@ describe("graph-physics domain model", () => {
     expectTypeOf(weightedEdge.weight).toEqualTypeOf<number | undefined>();
   });
 
-  it("exposes only minimal task-1 runtime surface", () => {
-    expect(Object.keys(typesModule)).toEqual([]);
+  it("exposes initializer runtime export", () => {
+    expect(typesModule.createDeterministicRingSeeds).toBeTypeOf("function");
   });
 });
