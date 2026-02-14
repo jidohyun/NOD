@@ -11,6 +11,7 @@ import {
   DRAG_COOL_DECAY,
   DRAG_HOLD_ALPHA
 } from "./drag";
+import { getKHopNeighborhood } from "./neighborhood";
 import type { GraphEdge, GraphNode, NodeId, Position, Velocity } from "./types";
 
 export interface GraphEngineOptions {
@@ -25,6 +26,8 @@ export interface GraphEngineOptions {
   springStrength?: number;
   collisionStrength?: number;
   collisionPadding?: number;
+  dragNeighborhoodHops?: number;
+  localInfluenceBoost?: number;
 }
 
 const DEFAULT_OPTIONS: Required<GraphEngineOptions> = {
@@ -38,7 +41,9 @@ const DEFAULT_OPTIONS: Required<GraphEngineOptions> = {
   repelStrength: 50,
   springStrength: 0.2,
   collisionStrength: 0.5,
-  collisionPadding: 0
+  collisionPadding: 0,
+  dragNeighborhoodHops: 1,
+  localInfluenceBoost: 2
 };
 
 function cloneNode(node: GraphNode): GraphNode {
@@ -55,6 +60,8 @@ export class GraphEngine {
   private readonly options: Required<GraphEngineOptions>;
   private alpha: number;
   private isDragCooling: boolean;
+  private draggedNodeId: NodeId | null;
+  private dragNeighborhood: Set<NodeId>;
 
   constructor(nodes: readonly GraphNode[], edges: readonly GraphEdge[], options: GraphEngineOptions) {
     this.nodes = nodes.map(cloneNode);
@@ -66,6 +73,34 @@ export class GraphEngine {
     };
     this.alpha = this.options.alpha;
     this.isDragCooling = false;
+    this.draggedNodeId = null;
+    this.dragNeighborhood = new Set();
+  }
+
+  private updateDragNeighborhood(nodeId: NodeId): void {
+    this.dragNeighborhood = getKHopNeighborhood(
+      nodeId,
+      this.edges,
+      this.options.dragNeighborhoodHops
+    );
+  }
+
+  private getNodeInfluenceScale(nodeId: NodeId): number {
+    if (!this.draggedNodeId) {
+      return 1;
+    }
+
+    return this.dragNeighborhood.has(nodeId) ? this.options.localInfluenceBoost : 1;
+  }
+
+  private getEdgeInfluenceScale(edge: GraphEdge): number {
+    if (!this.draggedNodeId) {
+      return 1;
+    }
+
+    const inNeighborhood =
+      this.dragNeighborhood.has(edge.sourceId) && this.dragNeighborhood.has(edge.targetId);
+    return inNeighborhood ? this.options.localInfluenceBoost : 1;
   }
 
   public onDragStart(nodeId: NodeId, cursor: Position): void {
@@ -77,6 +112,8 @@ export class GraphEngine {
     const targetAlpha = applyDragStart(node, cursor);
     this.alpha = Math.max(this.alpha, targetAlpha);
     this.isDragCooling = false;
+    this.draggedNodeId = nodeId;
+    this.updateDragNeighborhood(nodeId);
   }
 
   public onDragMove(nodeId: NodeId, cursor: Position): void {
@@ -88,6 +125,10 @@ export class GraphEngine {
     applyDragMove(node, cursor);
     this.alpha = DRAG_HOLD_ALPHA;
     this.isDragCooling = false;
+    if (this.draggedNodeId !== nodeId) {
+      this.draggedNodeId = nodeId;
+      this.updateDragNeighborhood(nodeId);
+    }
   }
 
   public onDragEnd(nodeId: NodeId): void {
@@ -99,6 +140,10 @@ export class GraphEngine {
     const targetAlpha = applyDragEnd(node);
     this.alpha = targetAlpha;
     this.isDragCooling = true;
+    if (this.draggedNodeId === nodeId) {
+      this.draggedNodeId = null;
+      this.dragNeighborhood = new Set();
+    }
   }
 
   public tick(): void {
@@ -123,7 +168,8 @@ export class GraphEngine {
 
     for (const node of this.nodes) {
       const centerForce = applyCenterForce(node, this.options.center, {
-        strength: this.options.centerStrength * this.alpha
+        strength:
+          this.options.centerStrength * this.alpha * this.getNodeInfluenceScale(node.id)
       });
       const sum = forces.get(node.id);
       if (!sum) {
@@ -152,10 +198,13 @@ export class GraphEngine {
           continue;
         }
 
-        forceA.vx += repel.a.vx + collision.a.vx;
-        forceA.vy += repel.a.vy + collision.a.vy;
-        forceB.vx += repel.b.vx + collision.b.vx;
-        forceB.vy += repel.b.vy + collision.b.vy;
+        const scaleA = this.getNodeInfluenceScale(a.id);
+        const scaleB = this.getNodeInfluenceScale(b.id);
+
+        forceA.vx += (repel.a.vx + collision.a.vx) * scaleA;
+        forceA.vy += (repel.a.vy + collision.a.vy) * scaleA;
+        forceB.vx += (repel.b.vx + collision.b.vx) * scaleB;
+        forceB.vy += (repel.b.vy + collision.b.vy) * scaleB;
       }
     }
 
@@ -168,7 +217,11 @@ export class GraphEngine {
 
       const spring = applySpringForce(source, target, {
         restLength: edge.restLength,
-        strength: this.options.springStrength * edge.strength * this.alpha
+        strength:
+          this.options.springStrength *
+          edge.strength *
+          this.alpha *
+          this.getEdgeInfluenceScale(edge)
       });
 
       const sourceForce = forces.get(source.id);

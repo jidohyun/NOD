@@ -17,3 +17,4 @@ export {
   DRAG_RELEASE_ALPHA,
   DRAG_REHEAT_ALPHA
 } from "./drag";
+export { getKHopNeighborhood } from "./neighborhood";
