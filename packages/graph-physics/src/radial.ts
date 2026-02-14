@@ -16,7 +16,15 @@ function getRadialDirection(node: NodePoint, center: Position): { x: number; y: 
   const distance = Math.hypot(dx, dy);
 
   if (distance === 0) {
-    return { x: 1, y: 0, distance: 0 };
+    // Deterministic fallback based on node ID to avoid constant +X bias
+    let hash = 0;
+    const idStr = String(node.id);
+    for (let i = 0; i < idStr.length; i++) {
+      hash = (hash << 5) - hash + idStr.charCodeAt(i);
+      hash |= 0;
+    }
+    const angle = (Math.abs(hash) % 1000) / 1000 * 2 * Math.PI;
+    return { x: Math.cos(angle), y: Math.sin(angle), distance: 0 };
   }
 
   return {

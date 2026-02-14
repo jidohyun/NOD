@@ -34,17 +34,37 @@ describe("applyRadialForce", () => {
   });
 
   it("uses deterministic fallback direction at center", () => {
-    const force = applyRadialForce(
-      {
-        id: "n1",
-        pos: { x: 0, y: 0 }
-      },
-      { x: 0, y: 0 },
-      { targetRadius: 10, strength: 0.5 }
+    const options = { targetRadius: 10, strength: 0.5 };
+    const center = { x: 0, y: 0 };
+
+    const force1 = applyRadialForce(
+      { id: "n1", pos: { x: 0, y: 0 } },
+      center,
+      options
+    );
+    const force2 = applyRadialForce(
+      { id: "n1", pos: { x: 0, y: 0 } },
+      center,
+      options
+    );
+    const force3 = applyRadialForce(
+      { id: "n2", pos: { x: 0, y: 0 } },
+      center,
+      options
     );
 
-    expect(force.vx).toBeCloseTo(5, 10);
-    expect(force.vy).toBeCloseTo(0, 10);
+    // Invariant: Magnitude should be strength * targetRadius
+    const expectedMagnitude = options.strength * options.targetRadius;
+    expect(Math.hypot(force1.vx, force1.vy)).toBeCloseTo(expectedMagnitude, 10);
+
+    // Invariant: Deterministic for same ID
+    expect(force1.vx).toBe(force2.vx);
+    expect(force1.vy).toBe(force2.vy);
+
+    // Invariant: Should not be hardcoded to +X (unless by rare chance)
+    // and should differ between different IDs
+    expect(force1.vx).not.toBe(force3.vx);
+    expect(force1.vy).not.toBe(force3.vy);
   });
 });
 
