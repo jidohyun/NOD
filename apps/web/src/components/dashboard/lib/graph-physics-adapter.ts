@@ -1,10 +1,12 @@
 import type { ConceptGraphEdge, ConceptGraphNode } from "@/lib/api/articles";
 import {
   createDeterministicRingSeeds,
+  createPreset,
   type GraphEdge,
   GraphEngine,
   type GraphEngineOptions,
   type GraphNode,
+  type GraphPhysicsPresetName,
   type NodeId,
   type Position,
 } from "../../../../../../packages/graph-physics/src";
@@ -14,24 +16,6 @@ const MAX_NODE_RADIUS = 17;
 const DEFAULT_EDGE_REST_LENGTH = 150;
 const DEFAULT_EDGE_STRENGTH = 0.7;
 
-const DEFAULT_ENGINE_OPTIONS: Omit<GraphEngineOptions, "center"> = {
-  dt: 1,
-  damping: 0.9,
-  alpha: 1,
-  alphaDecay: 0.99,
-  alphaMin: 0.001,
-  centerStrength: 0.08,
-  repelStrength: 1200,
-  springStrength: 0.85,
-  collisionStrength: 1,
-  collisionPadding: 2,
-  dragNeighborhoodHops: 1,
-  localInfluenceBoost: 2,
-  radialEnabled: false,
-  radialTargetRadius: 0,
-  radialStrength: 0,
-};
-
 export interface ConceptGraphPhysicsModel {
   nodes: GraphNode[];
   edges: GraphEdge[];
@@ -39,6 +23,7 @@ export interface ConceptGraphPhysicsModel {
 }
 
 export interface GraphPhysicsAdapterOptions extends Partial<GraphEngineOptions> {
+  preset?: GraphPhysicsPresetName;
   tickStepsPerFrame?: number;
 }
 
@@ -118,13 +103,15 @@ export class GraphPhysicsAdapter {
     center: Position,
     options?: GraphPhysicsAdapterOptions
   ) {
-    const { tickStepsPerFrame = 1, ...engineOptions } = options ?? {};
+    const { preset = "obsidianLike", tickStepsPerFrame, ...engineOptions } = options ?? {};
+    const presetConfig = createPreset(preset);
+    const { tickStepsPerFrame: presetTickStepsPerFrame, ...presetEngineOptions } = presetConfig;
     const physicsModel = mapConceptGraphToPhysicsModel(nodes, edges, center);
 
     this.initialPositions = physicsModel.initialPositions;
-    this.tickStepsPerFrame = Math.max(1, Math.floor(tickStepsPerFrame));
+    this.tickStepsPerFrame = Math.max(1, Math.floor(tickStepsPerFrame ?? presetTickStepsPerFrame));
     this.engine = new GraphEngine(physicsModel.nodes, physicsModel.edges, {
-      ...DEFAULT_ENGINE_OPTIONS,
+      ...presetEngineOptions,
       ...engineOptions,
       center,
     });
