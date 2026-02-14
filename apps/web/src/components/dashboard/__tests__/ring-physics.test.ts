@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allocateClusterArcs, buildRingAnchors } from "../lib/ring-physics";
+import { allocateClusterArcs, buildRingAnchors, getKHopNeighborhood } from "../lib/ring-physics";
 
 describe("allocateClusterArcs", () => {
   it("allocates deterministic non-overlapping arc ranges", () => {
@@ -27,4 +27,15 @@ it("creates stable targetAngle per node across reruns", () => {
   const b = buildRingAnchors(nodes, edges);
 
   expect(a).toEqual(b);
+});
+
+it("returns 1-hop and 2-hop neighborhoods correctly", () => {
+  const edges = [
+    { source: "a", target: "b" },
+    { source: "b", target: "c" },
+    { source: "c", target: "d" },
+  ];
+
+  expect(getKHopNeighborhood("a", edges, 1)).toEqual(new Set(["a", "b"]));
+  expect(getKHopNeighborhood("a", edges, 2)).toEqual(new Set(["a", "b", "c"]));
 });

@@ -149,3 +149,48 @@ export function buildRingAnchors(nodes: RingNodeInput[], edges: RingEdgeInput[])
     .map((node) => anchorsByNodeId.get(node.id))
     .filter((anchor): anchor is RingAnchor => anchor !== undefined);
 }
+
+export function getKHopNeighborhood(
+  nodeId: string,
+  edges: RingEdgeInput[],
+  k: number
+): Set<string> {
+  const adjacency = new Map<string, Set<string>>();
+
+  for (const edge of edges) {
+    if (!adjacency.has(edge.source)) {
+      adjacency.set(edge.source, new Set<string>());
+    }
+    if (!adjacency.has(edge.target)) {
+      adjacency.set(edge.target, new Set<string>());
+    }
+    adjacency.get(edge.source)?.add(edge.target);
+    adjacency.get(edge.target)?.add(edge.source);
+  }
+
+  const visited = new Set<string>([nodeId]);
+  let frontier = new Set<string>([nodeId]);
+
+  for (let depth = 0; depth < k; depth += 1) {
+    const nextFrontier = new Set<string>();
+    for (const currentNodeId of frontier) {
+      const neighbors = adjacency.get(currentNodeId);
+      if (!neighbors) {
+        continue;
+      }
+      for (const neighborId of neighbors) {
+        if (visited.has(neighborId)) {
+          continue;
+        }
+        visited.add(neighborId);
+        nextFrontier.add(neighborId);
+      }
+    }
+    frontier = nextFrontier;
+    if (frontier.size === 0) {
+      break;
+    }
+  }
+
+  return visited;
+}
