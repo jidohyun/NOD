@@ -1,13 +1,16 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
-import * as typesModule from "../types";
+import * as typesModule from "../index";
 import {
   type GraphEdge,
-  type GraphNode
-} from "../types";
+  type GraphNode,
+  type NodeId,
+  type Position,
+  type Velocity
+} from "../index";
 
 describe("graph-physics domain model", () => {
-  it("defines minimal node and edge fields from spec", () => {
+  it("enforces type intent for the minimal node and edge model", () => {
     const node: GraphNode = {
       id: "node-1",
       pos: { x: 10, y: -5 },
@@ -43,17 +46,16 @@ describe("graph-physics domain model", () => {
       weight: 2
     };
 
-    expect(node.id).toBe("node-1");
-    expect(node.pos.x).toBe(10);
-    expect(node.vel.vy).toBe(-1);
-    expect(nodeWithOptionalFields.fx).toBe(100);
-    expect(nodeWithOptionalFields.charge).toBe(-3);
-    expect(edge.sourceId).toBe("node-1");
-    expect(edge.restLength).toBe(120);
-    expect(weightedEdge.weight).toBe(2);
+    expectTypeOf(node.id).toEqualTypeOf<NodeId>();
+    expectTypeOf(node.pos).toEqualTypeOf<Position>();
+    expectTypeOf(node.vel).toEqualTypeOf<Velocity>();
+    expectTypeOf(nodeWithOptionalFields.mass).toEqualTypeOf<number | undefined>();
+    expectTypeOf(edge.sourceId).toEqualTypeOf<NodeId>();
+    expectTypeOf(edge.restLength).toEqualTypeOf<number>();
+    expectTypeOf(weightedEdge.weight).toEqualTypeOf<number | undefined>();
   });
 
   it("exposes only minimal task-1 runtime surface", () => {
-    expect("DEFAULT_GRAPH_PHYSICS_CONFIG" in typesModule).toBe(false);
+    expect(Object.keys(typesModule)).toEqual([]);
   });
 });

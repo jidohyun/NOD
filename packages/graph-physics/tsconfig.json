@@ -9,7 +9,6 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/index.ts",
-    "src/types.ts"
+    "src/**/*.ts"
   ]
 }
