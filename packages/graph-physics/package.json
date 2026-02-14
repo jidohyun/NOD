@@ -1,0 +1,12 @@
+{
+  "name": "@nod/graph-physics",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "test": "bunx vitest run",
+    "typecheck": "bunx tsc --noEmit src/index.ts src/types.ts"
+  }
+}
