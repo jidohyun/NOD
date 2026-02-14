@@ -6,8 +6,6 @@ import cytoscape, {
   type EventObject,
   type NodeSingular,
 } from "cytoscape";
-import cola from "cytoscape-cola";
-import d3Force from "cytoscape-d3-force";
 import {
   forwardRef,
   useCallback,
@@ -19,6 +17,7 @@ import {
 } from "react";
 import type { ConceptGraphEdge, ConceptGraphNode } from "@/lib/api/articles";
 import { cn } from "@/lib/utils";
+import { GraphPhysicsAdapter } from "./lib/graph-physics-adapter";
 
 interface ConceptGraphCanvasProps {
   nodes: ConceptGraphNode[];
@@ -78,17 +77,6 @@ const DEFAULT_CONTEXT_MENU_LABELS: ContextMenuLabels = {
   pinSelected: "Pin selected",
 };
 
-let jugglPluginsRegistered = false;
-
-function ensureJugglPlugins() {
-  if (jugglPluginsRegistered) {
-    return;
-  }
-  cytoscape.use(cola);
-  cytoscape.use(d3Force);
-  jugglPluginsRegistered = true;
-}
-
 function getGraphThemeTokens(): GraphThemeTokens {
   const isDark = document.documentElement.classList.contains("dark");
 
@@ -132,39 +120,45 @@ function buildLayout(readOnly: boolean): cytoscape.LayoutOptions {
   }
 
   return {
-    name: "d3-force",
-    animate: "end",
-    maxIterations: 0,
-    maxSimulationTime: 1500,
-    ungrabifyWhileSimulating: false,
-    fixedAfterDragging: false,
+    name: "preset",
+    animate: false,
     fit: true,
-    padding: 30,
-    alpha: 1,
-    alphaMin: 0.001,
-    alphaDecay: 1 - 0.001 ** (1 / 300),
-    alphaTarget: 0,
-    velocityDecay: 0.4,
-    collideRadius: 60,
-    collideStrength: 0.9,
-    collideIterations: 1,
-    linkDistance: 150,
-    linkStrength: 0.7,
-    linkIterations: 1,
-    linkId: (d: { id: string }) => d.id,
-    manyBodyStrength: -600,
-    manyBodyDistanceMin: 5,
-    xStrength: 0.1,
-    xX: 0,
-    yStrength: 0.1,
-    yY: 0,
-    radialStrength: 0.1,
-    radialX: 0,
-    radialY: 0,
-    radialRadius: 10,
-    randomize: false,
-    infinite: false,
-  } as cytoscape.LayoutOptions;
+    padding: 80,
+  };
+}
+
+function buildElements(
+  nodes: readonly ConceptGraphNode[],
+  edges: readonly ConceptGraphEdge[],
+  initialPositions?: Record<string, { x: number; y: number }>
+): ElementDefinition[] {
+  const nodeElements: ElementDefinition[] = nodes.map((node) => ({
+    group: "nodes",
+    data: {
+      id: node.id,
+      label: node.label,
+      value: node.value,
+    },
+    position: initialPositions?.[node.id],
+  }));
+
+  const nodeIdSet = new Set(nodes.map((node) => node.id));
+  const edgeElements: ElementDefinition[] = edges
+    .filter(
+      (edge) =>
+        edge.source !== edge.target && nodeIdSet.has(edge.source) && nodeIdSet.has(edge.target)
+    )
+    .map((edge, index) => ({
+      group: "edges",
+      data: {
+        id: `edge-${index}-${edge.source}-${edge.target}`,
+        source: edge.source,
+        target: edge.target,
+        weight: edge.weight,
+      },
+    }));
+
+  return [...nodeElements, ...edgeElements];
 }
 
 function buildStyles(
@@ -268,6 +262,8 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
     const containerRef = useRef<HTMLDivElement | null>(null);
     const menuRef = useRef<HTMLDivElement | null>(null);
     const cyRef = useRef<Core | null>(null);
+    const adapterRef = useRef<GraphPhysicsAdapter | null>(null);
+    const rafRef = useRef<number | null>(null);
     const primaryNodeIdRef = useRef<string | null>(null);
     const [selectionState, setSelectionState] = useState<GraphSelectionState>({
       selectedNodeIds: [],
@@ -278,35 +274,6 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
     const highlightNodeIdSet = useMemo(() => new Set(highlightNodeIds ?? []), [highlightNodeIds]);
 
     const showNodeLabels = nodes.length <= 1000;
-
-    const elements = useMemo<ElementDefinition[]>(() => {
-      const nodeElements: ElementDefinition[] = nodes.map((node) => ({
-        group: "nodes",
-        data: {
-          id: node.id,
-          label: node.label,
-          value: node.value,
-        },
-      }));
-
-      const nodeIdSet = new Set(nodes.map((node) => node.id));
-      const edgeElements: ElementDefinition[] = edges
-        .filter(
-          (edge) =>
-            edge.source !== edge.target && nodeIdSet.has(edge.source) && nodeIdSet.has(edge.target)
-        )
-        .map((edge, index) => ({
-          group: "edges",
-          data: {
-            id: `edge-${index}-${edge.source}-${edge.target}`,
-            source: edge.source,
-            target: edge.target,
-            weight: edge.weight,
-          },
-        }));
-
-      return [...nodeElements, ...edgeElements];
-    }, [edges, nodes]);
 
     const maxNodeValue = useMemo(() => Math.max(1, ...nodes.map((node) => node.value)), [nodes]);
     const maxEdgeWeight = useMemo(() => Math.max(1, ...edges.map((edge) => edge.weight)), [edges]);
@@ -349,6 +316,9 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         for (const node of nodesToPin) {
           node.lock();
           node.addClass("pinned");
+          const position = node.position();
+          adapterRef.current?.onDragStart(node.id(), { x: position.x, y: position.y });
+          adapterRef.current?.onDragMove(node.id(), { x: position.x, y: position.y });
         }
         emitPinnedIds();
       },
@@ -360,6 +330,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         for (const node of nodesToUnpin) {
           node.unlock();
           node.removeClass("pinned");
+          adapterRef.current?.onDragEnd(node.id());
         }
         emitPinnedIds();
       },
@@ -453,17 +424,31 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
     );
 
     useEffect(() => {
-      if (!containerRef.current) {
+      const container = containerRef.current;
+      if (!container) {
         return;
       }
 
-      ensureJugglPlugins();
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
 
       cyRef.current?.destroy();
+      adapterRef.current = null;
+
+      const containerRect = container.getBoundingClientRect();
+      const center = {
+        x: Math.max(1, containerRect.width / 2),
+        y: Math.max(1, containerRect.height / 2),
+      };
+
+      const adapter = readOnly ? null : new GraphPhysicsAdapter(nodes, edges, center);
+      adapterRef.current = adapter;
 
       const cy = cytoscape({
-        container: containerRef.current,
-        elements,
+        container,
+        elements: buildElements(nodes, edges, adapter?.getInitialPositions()),
         layout: buildLayout(readOnly),
         style: buildStyles(
           readOnly,
@@ -484,6 +469,43 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
       });
 
       cyRef.current = cy;
+
+      const syncPhysicsFrame = () => {
+        const instance = cyRef.current;
+        const activeAdapter = adapterRef.current;
+        if (!instance || !activeAdapter || readOnly) {
+          return;
+        }
+
+        const physicsNodes = activeAdapter.tick();
+        instance.batch(() => {
+          for (const physicsNode of physicsNodes) {
+            const graphNode = instance.$id(physicsNode.id);
+            if (graphNode.empty() || graphNode.locked() || graphNode.grabbed()) {
+              continue;
+            }
+
+            graphNode.position({
+              x: physicsNode.pos.x,
+              y: physicsNode.pos.y,
+            });
+          }
+        });
+
+        rafRef.current = window.requestAnimationFrame(syncPhysicsFrame);
+      };
+
+      if (!readOnly && adapter) {
+        rafRef.current = window.requestAnimationFrame(syncPhysicsFrame);
+      }
+
+      cy.one("layoutstop", () => {
+        if (cyRef.current !== cy) {
+          return;
+        }
+        cy.resize();
+        cy.fit(cy.elements(), 80);
+      });
 
       const clearHover = () => {
         const instance = cyRef.current;
@@ -578,6 +600,23 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         emitSelectionState();
       };
 
+      const handleNodeGrab = (event: EventObject) => {
+        const node = event.target as NodeSingular;
+        const position = node.position();
+        adapterRef.current?.onDragStart(node.id(), { x: position.x, y: position.y });
+      };
+
+      const handleNodeDrag = (event: EventObject) => {
+        const node = event.target as NodeSingular;
+        const position = node.position();
+        adapterRef.current?.onDragMove(node.id(), { x: position.x, y: position.y });
+      };
+
+      const handleNodeFree = (event: EventObject) => {
+        const node = event.target as NodeSingular;
+        adapterRef.current?.onDragEnd(node.id());
+      };
+
       if (!readOnly) {
         cy.on("mouseover", "node", handleNodeHover);
         cy.on("mouseout", "node", clearHover);
@@ -587,6 +626,9 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         cy.on("select", "node", handleSelectionChanged);
         cy.on("unselect", "node", handleSelectionChanged);
         cy.on("dbltap", "node", handleNodeOpen);
+        cy.on("grab", "node", handleNodeGrab);
+        cy.on("drag", "node", handleNodeDrag);
+        cy.on("free", "node", handleNodeFree);
       }
 
       const handleKeyDown = (keyboardEvent: KeyboardEvent) => {
@@ -632,6 +674,14 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         attributeFilter: ["class"],
       });
 
+      const resizeObserver = new ResizeObserver(() => {
+        if (cyRef.current !== cy) {
+          return;
+        }
+        cy.resize();
+      });
+      resizeObserver.observe(container);
+
       emitSelectionState();
       emitPinnedIds();
 
@@ -646,18 +696,28 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
           cy.off("select", "node", handleSelectionChanged);
           cy.off("unselect", "node", handleSelectionChanged);
           cy.off("dbltap", "node", handleNodeOpen);
+          cy.off("grab", "node", handleNodeGrab);
+          cy.off("drag", "node", handleNodeDrag);
+          cy.off("free", "node", handleNodeFree);
         }
         observer.disconnect();
+        resizeObserver.disconnect();
+        if (rafRef.current !== null) {
+          window.cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+        adapterRef.current = null;
         cy.destroy();
         cyRef.current = null;
       };
     }, [
       clearSelection,
-      elements,
+      edges,
       emitPinnedIds,
       emitSelectionState,
       maxEdgeWeight,
       maxNodeValue,
+      nodes,
       onNodeOpen,
       readOnly,
       showNodeLabels,
