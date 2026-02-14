@@ -77,6 +77,9 @@ const DEFAULT_CONTEXT_MENU_LABELS: ContextMenuLabels = {
   pinSelected: "Pin selected",
 };
 
+const SIMULATION_ALPHA_SLEEP_THRESHOLD = 0.001;
+const SIMULATION_VELOCITY_SLEEP_THRESHOLD = 0.01;
+
 function getGraphThemeTokens(): GraphThemeTokens {
   const isDark = document.documentElement.classList.contains("dark");
 
@@ -264,6 +267,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
     const cyRef = useRef<Core | null>(null);
     const adapterRef = useRef<GraphPhysicsAdapter | null>(null);
     const rafRef = useRef<number | null>(null);
+    const startSimulationRef = useRef<() => void>(() => {});
     const primaryNodeIdRef = useRef<string | null>(null);
     const [selectionState, setSelectionState] = useState<GraphSelectionState>({
       selectedNodeIds: [],
@@ -320,6 +324,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
           adapterRef.current?.onDragStart(node.id(), { x: position.x, y: position.y });
           adapterRef.current?.onDragMove(node.id(), { x: position.x, y: position.y });
         }
+        startSimulationRef.current();
         emitPinnedIds();
       },
       [emitPinnedIds]
@@ -332,6 +337,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
           node.removeClass("pinned");
           adapterRef.current?.onDragEnd(node.id());
         }
+        startSimulationRef.current();
         emitPinnedIds();
       },
       [emitPinnedIds]
@@ -433,6 +439,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         window.cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
+      startSimulationRef.current = () => {};
 
       cyRef.current?.destroy();
       adapterRef.current = null;
@@ -474,6 +481,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         const instance = cyRef.current;
         const activeAdapter = adapterRef.current;
         if (!instance || !activeAdapter || readOnly) {
+          rafRef.current = null;
           return;
         }
 
@@ -492,11 +500,34 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
           }
         });
 
-        rafRef.current = window.requestAnimationFrame(syncPhysicsFrame);
+        const hasMotion = physicsNodes.some(
+          (node) =>
+            Math.abs(node.vel.vx) > SIMULATION_VELOCITY_SLEEP_THRESHOLD ||
+            Math.abs(node.vel.vy) > SIMULATION_VELOCITY_SLEEP_THRESHOLD
+        );
+
+        const shouldContinue =
+          activeAdapter.getAlpha() > SIMULATION_ALPHA_SLEEP_THRESHOLD || hasMotion;
+
+        if (shouldContinue) {
+          rafRef.current = window.requestAnimationFrame(syncPhysicsFrame);
+          return;
+        }
+
+        rafRef.current = null;
       };
 
-      if (!readOnly && adapter) {
+      const ensureSimulationRunning = () => {
+        if (readOnly || !adapterRef.current || rafRef.current !== null) {
+          return;
+        }
+
         rafRef.current = window.requestAnimationFrame(syncPhysicsFrame);
+      };
+      startSimulationRef.current = ensureSimulationRunning;
+
+      if (!readOnly && adapter) {
+        ensureSimulationRunning();
       }
 
       cy.one("layoutstop", () => {
@@ -604,17 +635,20 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
         const node = event.target as NodeSingular;
         const position = node.position();
         adapterRef.current?.onDragStart(node.id(), { x: position.x, y: position.y });
+        ensureSimulationRunning();
       };
 
       const handleNodeDrag = (event: EventObject) => {
         const node = event.target as NodeSingular;
         const position = node.position();
         adapterRef.current?.onDragMove(node.id(), { x: position.x, y: position.y });
+        ensureSimulationRunning();
       };
 
       const handleNodeFree = (event: EventObject) => {
         const node = event.target as NodeSingular;
         adapterRef.current?.onDragEnd(node.id());
+        ensureSimulationRunning();
       };
 
       if (!readOnly) {
@@ -706,6 +740,7 @@ export const ConceptGraphCanvas = forwardRef<ConceptGraphCanvasHandle, ConceptGr
           window.cancelAnimationFrame(rafRef.current);
           rafRef.current = null;
         }
+        startSimulationRef.current = () => {};
         adapterRef.current = null;
         cy.destroy();
         cyRef.current = null;

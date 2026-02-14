@@ -1,4 +1,3 @@
-import type { ConceptGraphEdge, ConceptGraphNode } from "@/lib/api/articles";
 import {
   createDeterministicRingSeeds,
   createPreset,
@@ -9,7 +8,8 @@ import {
   type GraphPhysicsPresetName,
   type NodeId,
   type Position,
-} from "../../../../../../packages/graph-physics/src";
+} from "@workspace/graph-physics";
+import type { ConceptGraphEdge, ConceptGraphNode } from "@/lib/api/articles";
 
 const MIN_NODE_RADIUS = 7;
 const MAX_NODE_RADIUS = 17;
@@ -143,5 +143,9 @@ export class GraphPhysicsAdapter {
 
   public onDragEnd(nodeId: NodeId): void {
     this.engine.onDragEnd(nodeId);
+  }
+
+  public getAlpha(): number {
+    return this.engine.getAlpha();
   }
 }

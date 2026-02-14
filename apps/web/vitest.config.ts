@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       "@": resolve(__dirname, "./src"),
       "next/navigation": resolve(__dirname, "./src/test/shims/next-navigation.ts"),
+      "@workspace/graph-physics": resolve(__dirname, "../../packages/graph-physics/src/index.ts"),
     },
   },
   test: {
