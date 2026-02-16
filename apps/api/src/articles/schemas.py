@@ -55,6 +55,10 @@ class ArticleResponse(BaseModel):
     summary: SummaryResponse | None = None
 
 
+class ArticleSaveResponse(ArticleResponse):
+    already_saved: bool = False
+
+
 class ArticleListResponse(BaseModel):
     model_config = {"from_attributes": True}
 
@@ -83,6 +87,8 @@ class ConceptGraphNode(BaseModel):
     id: str
     label: str
     value: int
+    kind: str | None = None
+    article_id: uuid.UUID | None = None
 
 
 class ConceptGraphEdge(BaseModel):

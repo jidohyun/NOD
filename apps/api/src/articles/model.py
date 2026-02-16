@@ -49,6 +49,12 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     markdown_note: Mapped[str | None] = mapped_column(Text, nullable=True)
     concepts: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
+    root_concept_label: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    root_concept_norm: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+        index=True,
+    )
     key_points: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
     reading_time_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
     language: Mapped[str | None] = mapped_column(String(10), nullable=True)

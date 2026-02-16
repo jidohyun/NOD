@@ -43,7 +43,7 @@ _LANG_CONFIG: dict[str, dict[str, str]] = {
         "native": "日本語",
         "summary_heading": "要点まとめ",
         "detail_heading": "詳細",
-        "code_heading": "コードスニペット（要点のみ）",
+        "code_heading": "コードスニペット(要点のみ)",
         "insight_heading": "インサイト / アクション",
     },
 }
@@ -89,19 +89,19 @@ Input:
 Requirements:
 1) Follow this format strictly:
 # {lc["summary_heading"]}
-- 3–5 key points
+- 3-5 key points
 
 # {lc["detail_heading"]}
 - Important concepts / definitions / decisions / trade-offs as bullets
 
 # {lc["code_heading"]}
-- If the article has code, excerpt / abbreviate 1–3 blocks that
+- If the article has code, excerpt / abbreviate 1-3 blocks that
   explain the key idea
 - Add a one-line description above each block explaining what it shows
 - Omit this section if there is no code
 
 # {lc["insight_heading"]}
-- 2–5 actionable items (use checkboxes if possible)
+- 2-5 actionable items (use checkboxes if possible)
 
 2) Code handling rules:
 - Do NOT copy long code blocks verbatim

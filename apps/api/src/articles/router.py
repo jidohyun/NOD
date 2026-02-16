@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from typing import Literal
 
@@ -10,13 +11,16 @@ from src.articles.schemas import (
     ArticleCreate,
     ArticleListResponse,
     ArticleResponse,
-    ConceptGraphResponse,
+    ArticleSaveResponse,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
 from src.lib.config import settings
 from src.lib.dependencies import AIService, CurrentUser, DBSession
 from src.subscriptions import service as sub_service
+
+# Keep references to background tasks so they are not garbage-collected.
+_background_tasks: set[asyncio.Task] = set()  # type: ignore[type-arg]
 
 logger = structlog.get_logger(__name__)
 
@@ -35,22 +39,78 @@ async def _run_analysis(
     from src.lib.ai_service import summarize_article
     from src.lib.database import async_session_factory
 
+    logger.info(
+        "Starting article analysis",
+        article_id=str(article_id),
+        provider=provider,
+        summary_language=summary_language,
+        content_length=len(content),
+    )
+
     try:
+        logger.info(
+            "Calling summarize_article", article_id=str(article_id), provider=provider
+        )
         result = await summarize_article(
             title,
             content,
             provider=provider,
             summary_language=summary_language,
         )
+        logger.info(
+            "summarize_article completed successfully",
+            article_id=str(article_id),
+            result_summary_length=len(result.summary),
+            concepts_count=len(result.concepts),
+        )
 
-        model_name = "gemini-2.0-flash" if provider == "gemini" else "gpt-4o-mini"
+        model_name = settings.GEMINI_MODEL if provider == "gemini" else "gpt-4o-mini"
+        root_concept_label = (result.root_concept or "").strip()
+        if not root_concept_label and result.concepts:
+            root_concept_label = result.concepts[0].strip()
 
+        logger.info("Saving summary to database", article_id=str(article_id))
         async with async_session_factory() as session:
+            from sqlalchemy import select
+
+            user_res = await session.execute(
+                select(Article.user_id).where(Article.id == article_id)
+            )
+            user_id = user_res.scalar_one_or_none()
+
+            existing_norms: list[str] = []
+            if user_id:
+                norms_res = await session.execute(
+                    select(ArticleSummary.root_concept_norm)
+                    .join(Article, ArticleSummary.article_id == Article.id)
+                    .where(
+                        Article.user_id == user_id,
+                        ArticleSummary.root_concept_norm.is_not(None),
+                        ArticleSummary.root_concept_norm != "",
+                    )
+                    .distinct()
+                )
+                existing_norms = [n for n in norms_res.scalars().all() if n]
+
+            (
+                resolved_root_label,
+                resolved_root_norm,
+                resolved_concepts,
+            ) = service.resolve_concept_candidates(
+                root_concept_label=root_concept_label,
+                concepts=result.concepts,
+                existing_norms=existing_norms,
+                max_candidates=2,
+                threshold=0.92,
+            )
+
             summary = ArticleSummary(
                 article_id=article_id,
                 summary=result.summary,
                 markdown_note=result.markdown_note,
-                concepts=result.concepts,
+                concepts=resolved_concepts,
+                root_concept_label=resolved_root_label,
+                root_concept_norm=resolved_root_norm,
                 key_points=result.key_points,
                 reading_time_minutes=result.reading_time_minutes,
                 language=result.language,
@@ -67,6 +127,10 @@ async def _run_analysis(
                 .values(status="analyzed")
             )
             await session.commit()
+            logger.info(
+                "Summary saved and status updated to analyzed",
+                article_id=str(article_id),
+            )
 
         logger.info("Article analysis complete", article_id=str(article_id))
 
@@ -81,8 +145,14 @@ async def _run_analysis(
                 article_id=str(article_id),
             )
         return True
-    except Exception:
-        logger.exception("Article analysis failed", article_id=str(article_id))
+    except Exception as e:
+        logger.exception(
+            "Article analysis failed",
+            article_id=str(article_id),
+            error_type=type(e).__name__,
+            error_message=str(e),
+            exc_info=True,
+        )
         try:
             from sqlalchemy import update
 
@@ -93,12 +163,57 @@ async def _run_analysis(
                     .values(status="failed")
                 )
                 await session.commit()
-        except Exception:
+                logger.info("Status updated to failed", article_id=str(article_id))
+        except Exception as db_error:
             logger.exception(
                 "Failed to mark article as failed",
                 article_id=str(article_id),
+                db_error_type=type(db_error).__name__,
+                db_error_message=str(db_error),
             )
         return False
+
+
+async def _run_analysis_async(
+    article_id: uuid.UUID,
+    title: str,
+    content: str,
+    provider: Literal["gemini", "openai"],
+    summary_language: str,
+    user_id: str,
+) -> None:
+    """Background wrapper to run analysis and update summary usage."""
+    logger.info(
+        "Background analysis task started",
+        article_id=str(article_id),
+        user_id=user_id,
+        provider=provider,
+    )
+    try:
+        ok = await _run_analysis(
+            article_id,
+            title,
+            content,
+            provider,
+            summary_language=summary_language,
+        )
+        if ok:
+            logger.info(
+                "Analysis succeeded, incrementing summary usage",
+                article_id=str(article_id),
+                user_id=user_id,
+            )
+            from src.lib.database import async_session_factory
+
+            async with async_session_factory() as session:
+                await sub_service.increment_summary_usage(session, user_id)
+                await session.commit()
+    except Exception as exc:
+        logger.exception(
+            "Analysis wrapper failed for article",
+            article_id=str(article_id),
+            error=str(exc),
+        )
 
 
 @router.post("", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED)
@@ -121,10 +236,7 @@ async def create_article(
 
     # Check usage limits before running analysis
     if usage_info.can_summarize:
-        # Pro plan always uses GPT-4o mini.
-        selected_provider: Literal["gemini", "openai"] = (
-            "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
-        )
+        selected_provider: Literal["gemini", "openai"] = "gemini"
         ok = await _run_analysis(
             article.id, article.title, article.content, selected_provider
         )
@@ -135,6 +247,9 @@ async def create_article(
         if updated:
             article = updated
     else:
+        await service.update_article_status(article.id, "completed")
+        article.status = "completed"
+        await db.commit()
         logger.info("Summary limit reached, skipping analysis", user_id=str(user.id))
 
     return ArticleResponse.model_validate(article)
@@ -174,22 +289,6 @@ async def search_articles(
         return await service.list_articles(
             db, user.id, page=page, limit=limit, search=q, status_filter=status_filter
         )
-
-
-@router.get("/graph", response_model=ConceptGraphResponse)
-async def get_concept_graph(
-    db: DBSession,
-    user: CurrentUser,
-    max_nodes: int = Query(default=1000, ge=100, le=1000),
-) -> ConceptGraphResponse:
-    usage_info = await sub_service.get_usage_info(db, user.id)
-    if usage_info.plan != "pro":
-        raise HTTPException(
-            status_code=status.HTTP_402_PAYMENT_REQUIRED,
-            detail="Graph View is available on Pro plan only.",
-        )
-
-    return await service.get_concept_graph(db, user.id, max_nodes=max_nodes)
 
 
 @router.get("/{article_id}", response_model=ArticleResponse)
@@ -238,14 +337,68 @@ async def get_similar_articles(
     return await service.get_similar_articles(db, article_id, user.id, limit=limit)
 
 
+@router.post("/{article_id}/retry", response_model=ArticleResponse)
+async def retry_article_analysis(
+    article_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+) -> ArticleResponse:
+    article = await service.get_article(db, article_id, user.id)
+    if not article:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Article not found",
+        )
+
+    if article.status != "failed":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only retry failed articles",
+        )
+
+    usage_info = await sub_service.get_usage_info(db, user.id)
+    if not usage_info.can_summarize:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail="Summary limit reached. Upgrade to Pro for more summaries.",
+        )
+
+    await service.update_article_status(article.id, "processing")
+    article.status = "processing"
+
+    selected_provider: Literal["gemini", "openai"] = "gemini"
+
+    summary_language = "ko"
+    if article.summary and article.summary.language:
+        summary_language = article.summary.language
+
+    task = asyncio.create_task(
+        _run_analysis_async(
+            article.id,
+            article.title,
+            article.content,
+            selected_provider,
+            summary_language,
+            user.id,
+        ),
+        name=f"article-analysis-retry-{article.id}",
+    )
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
+
+    return ArticleResponse.model_validate(article)
+
+
 @router.post(
-    "/analyze-url", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED
+    "/analyze-url",
+    response_model=ArticleSaveResponse,
+    status_code=status.HTTP_201_CREATED,
 )
 async def analyze_url(
     data: ArticleAnalyzeURL,
     db: DBSession,
     user: CurrentUser,
-) -> ArticleResponse:
+) -> ArticleSaveResponse:
     """Convenience endpoint for the Chrome Extension.
 
     Accepts a URL plus pre-extracted content.
@@ -257,6 +410,13 @@ async def analyze_url(
         source=data.source,
     )
     summary_language = data.summary_language or "ko"
+
+    existing_article = await service.get_article_by_url(db, user.id, data.url)
+    if existing_article:
+        existing_response = ArticleSaveResponse.model_validate(existing_article)
+        existing_response.already_saved = True
+        return existing_response
+
     # Check article save limit
     usage_info = await sub_service.get_usage_info(db, user.id)
     if not usage_info.can_save_article:
@@ -271,26 +431,37 @@ async def analyze_url(
 
     # Check usage limits before running analysis
     if usage_info.can_summarize:
-        selected_provider: Literal["gemini", "openai"] = (
-            "openai" if usage_info.plan == "pro" else settings.AI_PROVIDER
+        selected_provider: Literal["gemini", "openai"] = "gemini"
+        await service.update_article_status(article.id, "processing")
+        article.status = "processing"
+
+        analysis_task = asyncio.create_task(
+            _run_analysis_async(
+                article.id,
+                article.title,
+                article.content,
+                selected_provider,
+                summary_language,
+                user.id,
+            ),
+            name=f"article-analysis-{article.id}",
         )
-        ok = await _run_analysis(
-            article.id,
-            article.title,
-            article.content,
-            selected_provider,
-            summary_language=summary_language,
-        )
-        if ok:
-            await sub_service.increment_summary_usage(db, user.id)
-            await db.commit()
-        updated = await service.get_article(db, article.id, user.id)
-        if updated:
-            article = updated
-    else:
+        _background_tasks.add(analysis_task)
+        analysis_task.add_done_callback(_background_tasks.discard)
         logger.info(
-            "Summary limit reached, skipping analysis",
+            "Dispatched article analysis task",
+            article_id=str(article.id),
+            task_name=analysis_task.get_name(),
+        )
+
+        # Keep sync path for create endpoint unchanged.
+    else:
+        await service.update_article_status(article.id, "completed")
+        article.status = "completed"
+        await db.commit()
+        logger.info(
+            "Summary limit reached, marked article as completed without analysis",
             user_id=str(user.id),
         )
 
-    return ArticleResponse.model_validate(article)
+    return ArticleSaveResponse.model_validate(article)

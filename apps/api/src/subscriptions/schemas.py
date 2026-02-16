@@ -7,9 +7,9 @@ from pydantic import BaseModel, Field
 # Plan limits configuration
 PLAN_LIMITS = {
     "basic": {
-        "summaries_per_month": 10,
+        "summaries_per_month": 20,
         "max_articles": 50,
-        "searches_per_day": 5,
+        "searches_per_day": -1,
     },
     "pro": {
         "summaries_per_month": -1,
