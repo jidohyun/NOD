@@ -110,7 +110,7 @@ async def analyze_article(article_id: str) -> None:
             ai_model = (
                 "gpt-4o-mini"
                 if settings.AI_PROVIDER == "openai"
-                else "gemini-2.0-flash"
+                else settings.GEMINI_MODEL
             )
 
             # Create summary record

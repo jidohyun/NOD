@@ -11,7 +11,7 @@ from src.lib.config import settings
 class GeminiProvider(AIProvider[Any]):
     def __init__(self) -> None:
         self._client = genai.Client(api_key=settings.GEMINI_API_KEY)
-        self._model = "gemini-2.0-flash"
+        self._model = settings.GEMINI_MODEL
         self._embedding_model = "text-embedding-004"
 
     async def analyze_image(self, image_data: bytes | list[bytes]) -> Any:
