@@ -103,7 +103,7 @@ export default defineConfig(({ mode }) => {
       generateManifestPlugin(mode),
       viteStaticCopy({
         targets: [
-          { src: "icons/*", dest: "icons" },
+          { src: "icons/*.png", dest: "icons" },
         ],
       }),
     ],
