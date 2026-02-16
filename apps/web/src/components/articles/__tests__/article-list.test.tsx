@@ -17,6 +17,7 @@ const RE_LOAD_MORE = /load more/i;
 vi.mock("@/lib/api/articles", () => ({
   useInfiniteArticles: vi.fn(),
   useSemanticSearch: vi.fn(),
+  useRetryArticle: vi.fn(() => ({ mutate: vi.fn() })),
 }));
 
 // Mock ArticleCard to simplify testing
