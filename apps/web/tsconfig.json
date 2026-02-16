@@ -26,6 +26,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@workspace/graph-physics": [
+        "../../packages/graph-physics/src/index.ts"
+      ],
+      "@workspace/graph-physics/*": [
+        "../../packages/graph-physics/src/*"
       ]
     }
   },
