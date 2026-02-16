@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     # AI
     AI_PROVIDER: Literal["gemini", "openai"] = "gemini"
     GEMINI_API_KEY: str | None = None
+    GEMINI_MODEL: str = "gemini-3-flash-preview"
     OPENAI_API_KEY: str | None = None
 
     # Worker URL (self, for chaining tasks)

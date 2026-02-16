@@ -59,7 +59,7 @@ async def generate_embedding(article_id: str) -> None:
             ai_model = (
                 "text-embedding-3-small"
                 if settings.AI_PROVIDER == "openai"
-                else "text-embedding-004"
+                else settings.GEMINI_MODEL
             )
 
             # Create embedding record
