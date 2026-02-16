@@ -37,6 +37,20 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
+  const i18n = {
+    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
+    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
+    breadcrumb:
+      locale === "ko"
+        ? "웹 클리퍼 가이드"
+        : locale === "ja"
+          ? "ウェブクリッパーガイド"
+          : "Web Clipper Guide",
+    date:
+      locale === "ko" ? "2026년 2월 10일" : locale === "ja" ? "2026年2月10日" : "February 10, 2026",
+    readTime: locale === "ko" ? "8분 읽기" : locale === "ja" ? "8分で読める" : "8 min read",
+  };
+
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
       <meta
@@ -60,7 +74,7 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">홈</span>
+              <span itemProp="name">{i18n.home}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -71,14 +85,14 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">블로그</span>
+              <span itemProp="name">{i18n.blog}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              웹 클리퍼 가이드
+              {i18n.breadcrumb}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -88,9 +102,9 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
       {/* 헤더 */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-10">2026년 2월 10일</time>
+          <time dateTime="2026-02-10">{i18n.date}</time>
           <span className="text-neutral-700">·</span>
-          <span>8분 읽기</span>
+          <span>{i18n.readTime}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           웹 클리퍼 크롬 확장 프로그램 추천 — 아티클 저장 완벽 가이드

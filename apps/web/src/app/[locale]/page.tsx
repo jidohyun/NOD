@@ -8,6 +8,7 @@ import { LandingHero } from "@/components/landing/hero";
 import { LandingHowItWorks } from "@/components/landing/how-it-works";
 import { LandingNav } from "@/components/landing/nav";
 import { LandingPricing } from "@/components/landing/pricing";
+import { SoftwareApplicationJsonLd } from "@/components/seo/json-ld";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -19,6 +20,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <div className="dark grain-overlay">
+      <SoftwareApplicationJsonLd />
       <LandingNav />
       <main>
         <LandingHero />
