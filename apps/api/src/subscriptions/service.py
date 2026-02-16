@@ -1,9 +1,10 @@
 import uuid as uuid_lib
 from datetime import UTC, datetime
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.articles.model import Article
 from src.subscriptions.model import Subscription, UsageRecord
 from src.subscriptions.schemas import PLAN_LIMITS, UsageResponse
 
@@ -69,22 +70,28 @@ async def get_usage_info(
     db: AsyncSession, user_id: uuid_lib.UUID | str
 ) -> UsageResponse:
     """Get combined subscription + usage info for the user."""
+    uid = _normalize_user_id(user_id)
     subscription = await get_or_create_subscription(db, user_id)
     usage = await get_or_create_usage(db, user_id)
     limits = PLAN_LIMITS.get(subscription.plan, PLAN_LIMITS["basic"])
+
+    total_articles_result = await db.execute(
+        select(func.count()).select_from(Article).where(Article.user_id == uid)
+    )
+    total_articles_saved = int(total_articles_result.scalar_one() or 0)
 
     summaries_limit = limits["summaries_per_month"]
     articles_limit = limits["max_articles"]
 
     can_summarize = summaries_limit == -1 or usage.summaries_used < summaries_limit
-    can_save = articles_limit == -1 or usage.articles_saved < articles_limit
+    can_save = articles_limit == -1 or total_articles_saved < articles_limit
 
     return UsageResponse(
         plan=subscription.plan,
         status=subscription.status,
         summaries_used=usage.summaries_used,
         summaries_limit=summaries_limit,
-        articles_saved=usage.articles_saved,
+        articles_saved=total_articles_saved,
         articles_limit=articles_limit,
         can_summarize=can_summarize,
         can_save_article=can_save,

@@ -26,6 +26,7 @@ def _build_summarize_prompt(lang: str = "ko") -> str:
     return f"""Return a JSON object with the following fields:
 - summary: 2-4 sentences in {lang_name}
 - concepts: 3-7 short keywords
+- root_concept: one representative concept label from concepts
 - key_points: 3-5 key points (one sentence each)
 - language: the article's language (ISO 639-1 code)
 - reading_time_minutes: estimated reading time in minutes
@@ -40,6 +41,7 @@ class ArticleSummaryResult(BaseModel):
 
     summary: str
     concepts: list[str]
+    root_concept: str | None = None
     key_points: list[str]
     language: str
     reading_time_minutes: int
@@ -53,6 +55,14 @@ async def summarize_article(
     summary_language: str = "ko",
 ) -> ArticleSummaryResult:
     """Summarize an article using the configured AI provider."""
+    logger.info(
+        "Starting article summarization",
+        title_length=len(title),
+        content_length=len(content),
+        requested_provider=provider,
+        summary_language=summary_language,
+    )
+
     json_prompt = _build_summarize_prompt(summary_language)
     user_prompt = build_user_prompt(
         title=title,
@@ -64,6 +74,7 @@ async def summarize_article(
     prompt = f"{json_prompt}\n\n{user_prompt}"
 
     resolved_provider = provider or settings.AI_PROVIDER
+    logger.info("Resolved AI provider", provider=resolved_provider)
 
     if resolved_provider == "openai" and not settings.OPENAI_API_KEY:
         logger.warning("OpenAI key not set, falling back to Gemini")
@@ -74,8 +85,11 @@ async def summarize_article(
         resolved_provider = "openai"
 
     if resolved_provider == "gemini":
+        logger.info("Using Gemini for summarization")
         gemini_prompt = f"{system_prompt}\n\n{prompt}"
         return await _summarize_with_gemini(gemini_prompt)
+
+    logger.info("Using OpenAI for summarization")
     return await _summarize_with_openai(prompt, system_prompt)
 
 
@@ -87,7 +101,7 @@ async def _summarize_with_gemini(prompt: str) -> ArticleSummaryResult:
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     response = await client.aio.models.generate_content(
-        model="gemini-2.0-flash",
+        model=settings.GEMINI_MODEL,
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
@@ -109,23 +123,16 @@ async def _summarize_with_openai(
 
     client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
-    completion = await client.chat.completions.create(
+    completion = await client.beta.chat.completions.parse(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
         ],
-        response_format={
-            "type": "json_schema",
-            "json_schema": {
-                "name": "article_summary",
-                "schema": ArticleSummaryResult.model_json_schema(),
-                "strict": True,
-            },
-        },
+        response_format=ArticleSummaryResult,
     )
 
-    content = completion.choices[0].message.content
-    if not content:
-        raise ValueError("OpenAI returned empty response")
-    return ArticleSummaryResult.model_validate_json(content)
+    parsed = completion.choices[0].message.parsed
+    if parsed is None:
+        raise ValueError("OpenAI returned unparseable structured response")
+    return parsed
