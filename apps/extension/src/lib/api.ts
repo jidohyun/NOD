@@ -38,7 +38,18 @@ async function apiRequest<T>(
       if (response.status === 401) {
         await clearToken();
       }
-      throw ExtensionError.fromResponse(response);
+
+      let errorMessage: string | undefined;
+      try {
+        const payload = (await response.clone().json()) as { detail?: string };
+        if (typeof payload?.detail === "string" && payload.detail.trim().length > 0) {
+          errorMessage = payload.detail;
+        }
+      } catch {
+        errorMessage = undefined;
+      }
+
+      throw ExtensionError.fromResponse(response, errorMessage);
     }
 
     return response.json();
@@ -112,7 +123,10 @@ export interface UsageInfo {
   status: string;
   summaries_used: number;
   summaries_limit: number;
+  articles_saved: number;
+  articles_limit: number;
   can_summarize: boolean;
+  can_save_article: boolean;
 }
 
 export async function getUsageInfo(): Promise<UsageInfo> {

@@ -11,7 +11,7 @@ import { LoginPrompt } from "./components/LoginPrompt";
 import { ArticlePreview } from "./components/ArticlePreview";
 import { SaveButton } from "./components/SaveButton";
 import { UsageIndicator } from "./components/UsageIndicator";
-import { SuccessMessage, ErrorMessage } from "./components/StatusMessage";
+import { SuccessMessage, ErrorMessage, RequestSentMessage, AlreadySavedMessage } from "./components/StatusMessage";
 import { PopupLayout } from "./components/PopupLayout";
 import { SummaryLanguageSelector } from "./components/SummaryLanguageSelector";
 import { t } from "../lib/i18n";
@@ -45,6 +45,22 @@ export function App() {
     return (
       <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <Loading message={t("extLoadingExtract")} />
+      </PopupLayout>
+    );
+  }
+
+  if (save.state === "request_sent" && save.articleId) {
+    return (
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
+        <RequestSentMessage articleId={save.articleId} />
+      </PopupLayout>
+    );
+  }
+
+  if (save.state === "already_saved" && save.articleId) {
+    return (
+      <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
+        <AlreadySavedMessage articleId={save.articleId} />
       </PopupLayout>
     );
   }
@@ -85,7 +101,7 @@ export function App() {
   }
 
   if (article.article) {
-    const saveDisabled = save.state === "saving" || (usage !== null && !usage.can_summarize);
+    const saveDisabled = save.state === "saving";
     return (
       <PopupLayout user={auth.user} onLogout={auth.logout} locale={locale} onLocaleChange={setLocale} theme={theme} onThemeToggle={toggleTheme}>
         <ArticlePreview article={article.article} />

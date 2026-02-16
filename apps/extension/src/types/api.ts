@@ -22,7 +22,8 @@ export interface SaveArticleRequest {
 export interface SaveArticleResponse {
   id: string;
   title: string;
-  status: "processing" | "completed" | "failed";
+  status: "processing" | "analyzed" | "completed" | "failed";
+  already_saved?: boolean;
   summary?: {
     coreSummary: string;
     concepts: string[];
