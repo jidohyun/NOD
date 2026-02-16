@@ -6,7 +6,6 @@ import {
   HelpCircle,
   LayoutDashboard,
   LogOut,
-  Network,
   Settings,
   Tag,
   User as UserIcon,
@@ -25,7 +24,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUsage } from "@/lib/api/subscriptions";
 import { signOut } from "@/lib/auth/auth-client";
 import { Link, usePathname, useRouter } from "@/lib/i18n/routing";
 
@@ -36,13 +34,9 @@ export function DashboardSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { mounted, userName, userEmail, avatarUrl, initials } = useSidebarUser();
-  const { data: usage } = useUsage();
-  const isPro = usage?.plan === "pro";
-
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t("sidebar.nav.dashboard") },
     { href: "/articles", icon: FileText, label: t("sidebar.nav.articles") },
-    ...(isPro ? [{ href: "/dashboard/graph", icon: Network, label: t("sidebar.nav.graph") }] : []),
   ];
 
   const bottomNavItems = [

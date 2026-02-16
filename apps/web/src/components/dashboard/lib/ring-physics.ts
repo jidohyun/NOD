@@ -46,7 +46,7 @@ export function deriveClusterId(node: RingNodeInput, edges: RingEdgeInput[]): st
 
   const conceptNeighbors = edges
     .map((edge) => getOtherNodeId(edge, node.id))
-    .filter((value): value is string => value !== null && value.startsWith("concept:"))
+    .filter((value): value is string => value?.startsWith("concept:") ?? false)
     .sort((a, b) => a.localeCompare(b));
 
   if (conceptNeighbors.length > 0) {

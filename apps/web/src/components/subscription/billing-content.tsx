@@ -24,7 +24,7 @@ export function BillingContent() {
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { data: subscription, isLoading: subLoading } = useSubscription();
-  const { isLoading: usageLoading } = useUsage();
+  const { data: usage, isLoading: usageLoading } = useUsage();
   const { refetch: fetchPortalUrl } = usePortalUrl();
   const invalidate = useInvalidateSubscription();
 
@@ -64,6 +64,13 @@ export function BillingContent() {
     });
   }
 
+  const summariesUsed = usage?.summaries_used ?? 0;
+  const summariesLimit = usage?.summaries_limit ?? 0;
+  const isUnlimited = summariesLimit === -1;
+  const articlesUsed = usage?.articles_saved ?? 0;
+  const articlesLimit = usage?.articles_limit ?? 0;
+  const articlesUnlimited = articlesLimit === -1;
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">{t("manageBilling")}</h1>
@@ -75,58 +82,153 @@ export function BillingContent() {
         </div>
       )}
 
-      {/* Current Plan */}
-      <div className="rounded-lg border bg-card p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">{t("currentPlan")}</p>
-            <p className="text-xl font-bold">
-              {isPro ? t("pro") : t("basic")} — {isPro ? t("proPrice") : t("basicPrice")}
-            </p>
-            {subscription?.current_period_end ? (
-              <p className="mt-1 text-xs text-muted-foreground">
-                {t("nextBilling", {
-                  date: new Date(subscription.current_period_end).toLocaleDateString(dateLocale),
-                })}
-              </p>
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+        {/* Left Column */}
+        <div className="space-y-6">
+          {/* Current Plan */}
+          <div className="rounded-lg border bg-card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">{t("currentPlan")}</p>
+                <p className="text-xl font-bold">
+                  {isPro ? t("pro") : t("basic")} — {isPro ? t("proPrice") : t("basicPrice")}
+                </p>
+                {subscription?.current_period_end ? (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("nextBilling", {
+                      date: new Date(subscription.current_period_end).toLocaleDateString(
+                        dateLocale
+                      ),
+                    })}
+                  </p>
+                ) : null}
+              </div>
+              {!isPro && (
+                <Link
+                  href="/pricing"
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                >
+                  {t("upgrade")}
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Usage */}
+          <UsageBar />
+
+          {/* Usage Details */}
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-sm font-semibold">{t("usage")}</h2>
+            <div className="space-y-4">
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {t("featureComparison.aiSummaries")}
+                  </span>
+                  <span className="font-medium">
+                    {isUnlimited ? t("unlimited") : `${summariesUsed}/${summariesLimit}`}
+                  </span>
+                </div>
+                {!isUnlimited ? (
+                  <div className="mt-1.5 h-1.5 rounded-full bg-secondary">
+                    <div
+                      className="h-1.5 rounded-full bg-primary transition-all"
+                      style={{
+                        width: `${Math.min((summariesUsed / summariesLimit) * 100, 100)}%`,
+                      }}
+                    />
+                  </div>
+                ) : null}
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {t("featureComparison.savedArticles")}
+                  </span>
+                  <span className="font-medium">
+                    {articlesUnlimited ? t("unlimited") : `${articlesUsed}/${articlesLimit}`}
+                  </span>
+                </div>
+                {!articlesUnlimited ? (
+                  <div className="mt-1.5 h-1.5 rounded-full bg-secondary">
+                    <div
+                      className="h-1.5 rounded-full bg-primary transition-all"
+                      style={{
+                        width: `${Math.min((articlesUsed / articlesLimit) * 100, 100)}%`,
+                      }}
+                    />
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-6">
+          {/* Plan Features */}
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-sm font-semibold">{isPro ? t("pro") : t("basic")}</h2>
+            <ul className="space-y-3">
+              {(isPro
+                ? [t("features.proSummaries"), t("features.proArticles"), t("features.proSearch")]
+                : [
+                    t("features.basicSummaries"),
+                    t("features.basicArticles"),
+                    t("features.basicSearch"),
+                  ]
+              ).map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm">
+                  <svg
+                    className="h-4 w-4 shrink-0 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <title>Check</title>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            {!isPro ? (
+              <Link
+                href="/pricing"
+                className="mt-4 block w-full rounded-lg bg-primary py-2.5 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              >
+                {t("upgrade")}
+              </Link>
             ) : null}
           </div>
-          {!isPro && (
-            <Link
-              href="/pricing"
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-            >
-              {t("upgrade")}
-            </Link>
-          )}
+
+          {/* Pro Management */}
+          {isPro && subscription?.status === "active" ? (
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={handleManagePayment}
+                className="w-full rounded-lg border bg-card p-4 text-left text-sm font-medium hover:bg-muted/50"
+              >
+                {t("managePayment")}
+              </button>
+              <div className="rounded-lg border border-destructive/20 p-4">
+                <p className="text-sm text-muted-foreground">{t("cancelDescription")}</p>
+                <button
+                  type="button"
+                  onClick={handleCancelSubscription}
+                  className="mt-2 rounded-md border border-destructive px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10"
+                >
+                  {t("cancel")}
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
-
-      {/* Usage */}
-      <UsageBar />
-
-      {/* Pro Management */}
-      {isPro && subscription?.status === "active" ? (
-        <div className="space-y-3">
-          <button
-            type="button"
-            onClick={handleManagePayment}
-            className="w-full rounded-lg border bg-card p-4 text-left text-sm font-medium hover:bg-muted/50"
-          >
-            {t("managePayment")}
-          </button>
-          <div className="rounded-lg border border-destructive/20 p-4">
-            <p className="text-sm text-muted-foreground">{t("cancelDescription")}</p>
-            <button
-              type="button"
-              onClick={handleCancelSubscription}
-              className="mt-2 rounded-md border border-destructive px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10"
-            >
-              {t("cancel")}
-            </button>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

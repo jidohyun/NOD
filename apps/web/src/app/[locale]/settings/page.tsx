@@ -11,7 +11,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="mx-auto max-w-2xl py-8 px-4">
+    <div className="mx-auto max-w-5xl py-8 px-4">
       <SettingsProfile />
     </div>
   );
