@@ -1,7 +1,6 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { ArticleDetail } from "@/components/articles/article-detail";
-import { ArticleSidebar } from "@/components/articles/article-sidebar";
 
 interface ArticleDetailPageProps {
   params: Promise<{ locale: string; id: string }>;
@@ -12,9 +11,8 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
+    <div className="mx-auto max-w-4xl">
       <ArticleDetail id={id} />
-      <ArticleSidebar articleId={id} />
     </div>
   );
 }
