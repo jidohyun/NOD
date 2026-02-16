@@ -2,8 +2,76 @@ import { WEB_BASE } from "../../lib/constants";
 import { t } from "../../lib/i18n";
 import type { ErrorCode } from "../../lib/errors";
 
+interface RequestSentMessageProps {
+  articleId: string;
+}
+
+export function RequestSentMessage({ articleId }: RequestSentMessageProps) {
+  const handleViewArticle = () => {
+    chrome.tabs.create({ url: `${WEB_BASE}/articles/${articleId}` });
+  };
+
+  return (
+    <div className="flex flex-col items-center py-6 animate-fade-in">
+      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full" style={{ background: "var(--icon-info-bg, rgba(59, 130, 246, 0.15))" }}>
+        <svg className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <p className="mb-0.5 text-sm font-semibold t-primary">{t("extSaveRequestSentTitle")}</p>
+      <p className="mb-4 text-xs t-muted">{t("extSaveRequestSentSubtitle")}</p>
+      <button
+        onClick={handleViewArticle}
+        className="w-full rounded-xl py-2 text-sm font-medium t-secondary transition-all"
+        style={{
+          border: "1px solid var(--border-default)",
+          background: "var(--bg-elevated)",
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-hover)"}
+        onMouseLeave={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
+      >
+        {t("extCheckDashboard")}
+      </button>
+    </div>
+  );
+}
+
 interface SuccessMessageProps {
   articleId: string;
+}
+
+interface AlreadySavedMessageProps {
+  articleId: string;
+}
+
+export function AlreadySavedMessage({ articleId }: AlreadySavedMessageProps) {
+  const handleViewArticle = () => {
+    chrome.tabs.create({ url: `${WEB_BASE}/articles/${articleId}` });
+  };
+
+  return (
+    <div className="flex flex-col items-center py-6 animate-fade-in">
+      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full" style={{ background: "var(--icon-info-bg, rgba(59, 130, 246, 0.15))" }}>
+        <svg className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 21a9 9 0 100-18 9 9 0 000 18z" />
+        </svg>
+      </div>
+      <p className="mb-0.5 text-sm font-semibold t-primary">{t("extAlreadySavedTitle")}</p>
+      <p className="mb-4 text-xs t-muted">{t("extAlreadySavedSubtitle")}</p>
+      <button
+        onClick={handleViewArticle}
+        className="w-full rounded-xl py-2 text-sm font-medium t-secondary transition-all"
+        style={{
+          border: "1px solid var(--border-default)",
+          background: "var(--bg-elevated)",
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-hover)"}
+        onMouseLeave={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
+      >
+        {t("extViewSavedArticle")}
+      </button>
+    </div>
+  );
 }
 
 export function SuccessMessage({ articleId }: SuccessMessageProps) {
@@ -44,6 +112,7 @@ interface ErrorMessageProps {
 
 export function ErrorMessage({ code, message, onRetry }: ErrorMessageProps) {
   const isRecoverable = code !== "EXTRACT_FAILED";
+  const isUsageLimited = code === "USAGE_LIMIT_REACHED";
 
   return (
     <div className="flex flex-col items-center py-6 animate-fade-in">
@@ -55,7 +124,17 @@ export function ErrorMessage({ code, message, onRetry }: ErrorMessageProps) {
       <p className="mb-0.5 text-sm font-semibold t-primary">{t("extErrorTitle")}</p>
       <p className="mb-2 text-center text-xs t-muted">{message}</p>
       <p className="mb-4 text-center text-xs t-muted" style={{ opacity: 0.6 }}>{t("extRefreshHint")}</p>
-      {isRecoverable && onRetry && (
+      {isUsageLimited ? (
+        <a
+          href={`${WEB_BASE}/pricing`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full rounded-xl py-2 text-sm font-medium text-center text-[#E8B931] transition-opacity hover:opacity-80"
+          style={{ border: "1px solid var(--border-default)", background: "var(--bg-elevated)" }}
+        >
+          {t("extUpgradePrompt")}
+        </a>
+      ) : isRecoverable && onRetry ? (
         <button
           onClick={onRetry}
           className="w-full rounded-xl py-2 text-sm font-medium t-secondary transition-all"
@@ -68,7 +147,7 @@ export function ErrorMessage({ code, message, onRetry }: ErrorMessageProps) {
         >
           {t("extTryAgain")}
         </button>
-      )}
+      ) : null}
     </div>
   );
 }
