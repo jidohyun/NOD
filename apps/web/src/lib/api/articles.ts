@@ -46,6 +46,18 @@ export interface SimilarArticle {
   summary_preview: string | null;
 }
 
+export interface ConceptGraphNode {
+  id: string;
+  label: string;
+  value: number;
+}
+
+export interface ConceptGraphEdge {
+  source: string;
+  target: string;
+  weight: number;
+}
+
 interface PaginatedResponse<T> {
   data: T[];
   meta: {
