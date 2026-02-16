@@ -1,12 +1,14 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { NodWordmark } from "@/components/brand/nod-wordmark";
-import { CHROME_EXTENSION_INSTALL_URL } from "@/lib/chrome-extension";
+import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
 
 export function LandingFooter() {
+  const locale = useLocale();
   const t = useTranslations("landing.footer");
+  const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 
   const renderLink = (href: string, label: string) => {
     const className =
@@ -40,7 +42,7 @@ export function LandingFooter() {
       title: t("product"),
       links: [
         { label: t("dashboard"), href: "/articles" },
-        { label: t("extension"), href: CHROME_EXTENSION_INSTALL_URL },
+        { label: t("extension"), href: extensionInstallUrl },
         { label: t("mobile"), href: "#features" },
         { label: t("api"), href: "/api/health" },
       ],

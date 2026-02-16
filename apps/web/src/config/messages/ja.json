@@ -15,6 +15,7 @@
       "headline": "記事を保存し、インサイトを発見",
       "description": "NODはAIを活用して記事を分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
       "cta": "無料で始める",
+      "ctaExtension": "Chromeに追加",
       "ctaSecondary": "詳しく見る",
       "trustedBy": "世界中のナレッジワーカーに信頼されています"
     },
@@ -264,7 +265,13 @@
       "viewArticlesTitle": "記事を見る",
       "viewArticlesDescription": "保存した記事を閲覧・検索します。",
       "manageBillingTitle": "請求管理",
-      "manageBillingDescription": "プランと使用状況を確認します。"
+      "manageBillingDescription": "プランと使用状況を確認します。",
+      "installExtensionTitle": "Chrome拡張機能をインストール",
+      "installExtensionDescription": "ブラウジング中の記事をワンクリックで保存します。",
+      "recentArticlesTitle": "最近の記事",
+      "recentArticlesDescription": "最近保存した記事です。",
+      "noRecentArticles": "まだ記事がありません。",
+      "viewAll": "すべて見る"
     },
     "graph": {
       "sectionLabel": "ナレッジグラフ",
@@ -317,12 +324,17 @@
     "searchMinChars": "2文字以上入力してください",
     "allStatus": "すべてのステータス",
     "statusPending": "待機中",
+    "statusProcessing": "処理中",
     "statusAnalyzing": "分析中",
     "statusCompleted": "完了",
     "statusFailed": "失敗",
+    "checkStatus": "ステータス確認",
+    "refreshing": "更新中...",
+    "retryAnalysis": "再試行",
     "loadingArticles": "記事を読み込み中...",
     "loadError": "記事の読み込みに失敗しました。",
     "noArticles": "まだ記事がありません。Chrome拡張機能で記事を保存してください。",
+    "installExtensionCta": "Chromeに追加",
     "loadMore": "もっと見る",
     "noSummary": "要約なし",
     "articleNotFound": "記事が見つかりません。",
@@ -337,7 +349,14 @@
     "analyzedBy": "{provider}/{model}で分析",
     "similarArticles": "類似記事",
     "loadingSimilar": "類似記事を読み込み中...",
-    "similarity": "{percent}%一致"
+    "similarity": "{percent}%一致",
+    "articleInfo": "記事情報",
+    "savedDate": "保存日",
+    "readingTime": "読了時間",
+    "minuteRead": "{minutes}分",
+    "sourceLabel": "ソース",
+    "viewOriginal": "原文を見る",
+    "language": "言語"
   },
   "settings": {
     "title": "設定",
@@ -356,6 +375,7 @@
     "links": {
       "manageBilling": "請求とサブスクリプションを管理",
       "viewPricing": "料金プランを見る",
+      "installExtension": "Chrome拡張機能をインストール",
       "terms": "利用規約",
       "privacy": "プライバシーポリシー",
       "refund": "返金ポリシー"
@@ -364,9 +384,9 @@
   "subscription": {
     "pricing": "料金プラン",
     "currentPlan": "現在のプラン",
-    "basic": "Basic",
+    "basic": "Free",
     "pro": "Pro",
-    "basicPrice": "無料",
+    "basicPrice": "$0",
     "proPrice": "$5/月（税込）",
     "upgrade": "Proにアップグレード",
     "manageBilling": "請求管理",
@@ -379,14 +399,12 @@
     "limitReached": "今月の上限に達しました",
     "upgradePrompt": "Proにアップグレードしてより多くの要約を利用",
     "features": {
-      "basicSummaries": "月10回 AI要約",
+      "basicSummaries": "月20回 AI要約",
       "proSummaries": "無制限 AI要約",
       "basicArticles": "50記事保存",
       "proArticles": "無制限記事保存",
-      "basicSearch": "1日5回セマンティック検索",
-      "proSearch": "無制限セマンティック検索",
-      "basicModel": "Gemini 2.0 Flashモデル",
-      "proModel": "GPT-4o-mini"
+      "basicSearch": "無制限 セマンティック検索",
+      "proSearch": "無制限セマンティック検索"
     },
     "processing": "処理中...",
     "managePayment": "お支払い方法の管理",
@@ -398,6 +416,37 @@
     "planDescription": {
       "basic": "AI搭載の記事管理を試したいカジュアルな読者に最適です。",
       "pro": "毎日記事を保存・分析するパワーユーザー向けのプランです。"
+    },
+    "faq": "よくある質問",
+    "faqItems": {
+      "q1": "Proにすると何が変わりますか？",
+      "a1": "無制限のAI要約、無制限の記事保存が利用可能になります。",
+      "q2": "いつでもキャンセルできますか？",
+      "a2": "はい、いつでもキャンセルできます。現在の請求期間の終了までPro機能をご利用いただけます。",
+      "q3": "どの支払い方法に対応していますか？",
+      "a3": "クレジットカード、デビットカードなどに対応しています。Paddleにより安全に処理されます。"
+    },
+    "comparisonTitle": "プラン比較",
+    "featureComparison": {
+      "aiSummaries": "AI要約",
+      "savedArticles": "記事保存",
+      "semanticSearch": "セマンティック検索",
+      "markdownExport": "マークダウンエクスポート",
+      "conceptExtraction": "コンセプト抽出"
+    },
+    "basicValue": {
+      "aiSummaries": "月20回",
+      "savedArticles": "50件",
+      "semanticSearch": "無制限",
+      "markdownExport": "対応",
+      "conceptExtraction": "対応"
+    },
+    "proValue": {
+      "aiSummaries": "無制限",
+      "savedArticles": "無制限",
+      "semanticSearch": "無制限",
+      "markdownExport": "対応",
+      "conceptExtraction": "対応"
     }
   }
 }

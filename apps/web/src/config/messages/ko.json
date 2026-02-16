@@ -15,6 +15,7 @@
       "headline": "아티클을 저장하고, 인사이트를 발견하세요",
       "description": "NOD는 AI를 활용하여 아티클을 분석하고 요약하며, 언제든 검색하고 참조할 수 있는 개인 지식 라이브러리를 구축합니다.",
       "cta": "무료로 시작하기",
+      "ctaExtension": "Chrome에 추가",
       "ctaSecondary": "더 알아보기",
       "trustedBy": "전 세계 지식 근로자들이 신뢰합니다"
     },
@@ -264,7 +265,13 @@
       "viewArticlesTitle": "아티클 보기",
       "viewArticlesDescription": "저장한 아티클을 찾아보고 검색하세요.",
       "manageBillingTitle": "결제 관리",
-      "manageBillingDescription": "플랜과 사용량을 확인하세요."
+      "manageBillingDescription": "플랜과 사용량을 확인하세요.",
+      "installExtensionTitle": "크롬 익스텐션 설치",
+      "installExtensionDescription": "웹을 보면서 아티클을 원클릭으로 저장하세요.",
+      "recentArticlesTitle": "최근 저장한 아티클",
+      "recentArticlesDescription": "최근에 저장한 아티클입니다.",
+      "noRecentArticles": "아직 저장한 아티클이 없습니다.",
+      "viewAll": "전체 보기"
     },
     "graph": {
       "sectionLabel": "지식 그래프",
@@ -317,12 +324,17 @@
     "searchMinChars": "2자 이상 입력하세요",
     "allStatus": "전체 상태",
     "statusPending": "대기 중",
+    "statusProcessing": "처리 중",
     "statusAnalyzing": "분석 중",
     "statusCompleted": "완료",
     "statusFailed": "실패",
+    "checkStatus": "상태 확인",
+    "refreshing": "새로고침 중...",
+    "retryAnalysis": "다시 시도",
     "loadingArticles": "아티클 불러오는 중...",
     "loadError": "아티클을 불러오지 못했습니다.",
     "noArticles": "아직 아티클이 없습니다. 크롬 익스텐션으로 아티클을 저장하세요.",
+    "installExtensionCta": "Chrome에 추가",
     "loadMore": "더 보기",
     "noSummary": "요약 없음",
     "articleNotFound": "아티클을 찾을 수 없습니다.",
@@ -337,7 +349,14 @@
     "analyzedBy": "{provider}/{model}로 분석됨",
     "similarArticles": "유사한 아티클",
     "loadingSimilar": "유사한 아티클 불러오는 중...",
-    "similarity": "{percent}% 일치"
+    "similarity": "{percent}% 일치",
+    "articleInfo": "아티클 정보",
+    "savedDate": "저장일",
+    "readingTime": "읽기 시간",
+    "minuteRead": "{minutes}분",
+    "sourceLabel": "소스",
+    "viewOriginal": "원문 보기",
+    "language": "언어"
   },
   "settings": {
     "title": "설정",
@@ -356,6 +375,7 @@
     "links": {
       "manageBilling": "결제 및 구독 관리",
       "viewPricing": "요금제 보기",
+      "installExtension": "크롬 익스텐션 설치",
       "terms": "이용약관",
       "privacy": "개인정보 처리방침",
       "refund": "환불 정책"
@@ -364,9 +384,9 @@
   "subscription": {
     "pricing": "요금제",
     "currentPlan": "현재 플랜",
-    "basic": "Basic",
+    "basic": "Free",
     "pro": "Pro",
-    "basicPrice": "무료",
+    "basicPrice": "$0",
     "proPrice": "$5/월 (부가세 포함)",
     "upgrade": "Pro로 업그레이드",
     "manageBilling": "결제 관리",
@@ -379,14 +399,12 @@
     "limitReached": "이번 달 사용량 초과",
     "upgradePrompt": "더 많은 요약을 원하시면 Pro로 업그레이드하세요",
     "features": {
-      "basicSummaries": "월 10회 AI 요약",
+      "basicSummaries": "월 20회 AI 요약",
       "proSummaries": "무제한 AI 요약",
       "basicArticles": "아티클 50개 저장",
       "proArticles": "무제한 아티클 저장",
-      "basicSearch": "일 5회 시맨틱 검색",
-      "proSearch": "무제한 시맨틱 검색",
-      "basicModel": "Gemini 2.0 Flash 모델",
-      "proModel": "GPT-4o-mini"
+      "basicSearch": "무제한 시맨틱 검색",
+      "proSearch": "무제한 시맨틱 검색"
     },
     "processing": "처리 중...",
     "managePayment": "결제 수단 관리",
@@ -398,6 +416,37 @@
     "planDescription": {
       "basic": "AI 기반 아티클 관리를 체험하고 싶은 캐주얼 독자에게 적합합니다.",
       "pro": "매일 아티클을 저장하고 분석하는 파워 유저를 위한 플랜입니다."
+    },
+    "faq": "자주 묻는 질문",
+    "faqItems": {
+      "q1": "Pro로 업그레이드하면 어떤 혜택이 있나요?",
+      "a1": "무제한 AI 요약, 무제한 아티클 저장이 가능합니다.",
+      "q2": "언제든 취소할 수 있나요?",
+      "a2": "네, 언제든 취소 가능합니다. 취소 후에도 현재 결제 기간이 끝날 때까지 Pro 기능을 사용할 수 있습니다.",
+      "q3": "결제 수단은 무엇을 지원하나요?",
+      "a3": "신용카드, 체크카드 등 다양한 결제 수단을 지원합니다. Paddle을 통해 안전하게 처리됩니다."
+    },
+    "comparisonTitle": "플랜 비교",
+    "featureComparison": {
+      "aiSummaries": "AI 요약",
+      "savedArticles": "아티클 저장",
+      "semanticSearch": "시맨틱 검색",
+      "markdownExport": "마크다운 내보내기",
+      "conceptExtraction": "개념 추출"
+    },
+    "basicValue": {
+      "aiSummaries": "월 20회",
+      "savedArticles": "50개",
+      "semanticSearch": "무제한",
+      "markdownExport": "지원",
+      "conceptExtraction": "지원"
+    },
+    "proValue": {
+      "aiSummaries": "무제한",
+      "savedArticles": "무제한",
+      "semanticSearch": "무제한",
+      "markdownExport": "지원",
+      "conceptExtraction": "지원"
     }
   }
 }

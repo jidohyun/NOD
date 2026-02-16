@@ -1,13 +1,15 @@
 "use client";
 
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { CHROME_EXTENSION_INSTALL_URL } from "@/lib/chrome-extension";
+import { useLocale, useTranslations } from "next-intl";
+import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
 import { NeuralGraph } from "./neural-graph";
 
 export function LandingHero() {
+  const locale = useLocale();
   const t = useTranslations("landing.hero");
+  const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 
   const scrollToFeatures = () => {
     document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
@@ -85,12 +87,12 @@ export function LandingHero() {
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <a
-              href={CHROME_EXTENSION_INSTALL_URL}
+              href={extensionInstallUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="landing-border-soft landing-card-muted landing-text-muted inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-[15px] font-medium transition-all backdrop-blur-sm hover:-translate-y-0.5 hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
             >
-              Chrome에 추가
+              {t("ctaExtension")}
             </a>
             <button
               type="button"

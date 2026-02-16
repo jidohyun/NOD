@@ -15,6 +15,7 @@
       "headline": "Save Articles, Unlock Insights",
       "description": "NOD uses AI to analyze and summarize articles, building your personal knowledge library that you can search and reference anytime.",
       "cta": "Get Started Free",
+      "ctaExtension": "Add to Chrome",
       "ctaSecondary": "Learn More",
       "trustedBy": "Trusted by knowledge workers worldwide"
     },
@@ -264,7 +265,13 @@
       "viewArticlesTitle": "View Articles",
       "viewArticlesDescription": "Browse and search your saved articles.",
       "manageBillingTitle": "Manage Billing",
-      "manageBillingDescription": "View your plan and usage details."
+      "manageBillingDescription": "View your plan and usage details.",
+      "installExtensionTitle": "Install Chrome Extension",
+      "installExtensionDescription": "Save articles in one click while you browse.",
+      "recentArticlesTitle": "Recent Articles",
+      "recentArticlesDescription": "Your recently saved articles.",
+      "noRecentArticles": "No articles saved yet.",
+      "viewAll": "View All"
     },
     "graph": {
       "sectionLabel": "Knowledge Graph",
@@ -317,12 +324,17 @@
     "searchMinChars": "Type at least 2 characters to search",
     "allStatus": "All status",
     "statusPending": "Pending",
+    "statusProcessing": "Processing",
     "statusAnalyzing": "Analyzing",
     "statusCompleted": "Completed",
     "statusFailed": "Failed",
+    "checkStatus": "Check Status",
+    "refreshing": "Refreshing...",
+    "retryAnalysis": "Retry",
     "loadingArticles": "Loading articles...",
     "loadError": "Failed to load articles.",
     "noArticles": "No articles yet. Save articles using the Chrome extension.",
+    "installExtensionCta": "Add to Chrome",
     "loadMore": "Load more",
     "noSummary": "No summary available",
     "articleNotFound": "Article not found.",
@@ -337,7 +349,14 @@
     "analyzedBy": "Analyzed by {provider}/{model}",
     "similarArticles": "Similar Articles",
     "loadingSimilar": "Loading similar articles...",
-    "similarity": "{percent}% match"
+    "similarity": "{percent}% match",
+    "articleInfo": "Article Info",
+    "savedDate": "Saved Date",
+    "readingTime": "Reading Time",
+    "minuteRead": "{minutes} min",
+    "sourceLabel": "Source",
+    "viewOriginal": "View Original",
+    "language": "Language"
   },
   "settings": {
     "title": "Settings",
@@ -356,6 +375,7 @@
     "links": {
       "manageBilling": "Manage Billing & Subscription",
       "viewPricing": "View Pricing Plans",
+      "installExtension": "Install Chrome Extension",
       "terms": "Terms of Service",
       "privacy": "Privacy Policy",
       "refund": "Refund Policy"
@@ -364,9 +384,9 @@
   "subscription": {
     "pricing": "Pricing",
     "currentPlan": "Current Plan",
-    "basic": "Basic",
+    "basic": "Free",
     "pro": "Pro",
-    "basicPrice": "Free",
+    "basicPrice": "$0",
     "proPrice": "$5/mo (tax included)",
     "upgrade": "Upgrade to Pro",
     "manageBilling": "Manage Billing",
@@ -379,14 +399,12 @@
     "limitReached": "Monthly limit reached",
     "upgradePrompt": "Upgrade to Pro for more summaries",
     "features": {
-      "basicSummaries": "10 AI summaries/month",
+      "basicSummaries": "20 AI summaries/month",
       "proSummaries": "Unlimited AI summaries",
       "basicArticles": "50 saved articles",
       "proArticles": "Unlimited saved articles",
-      "basicSearch": "5 semantic searches/day",
-      "proSearch": "Unlimited semantic searches",
-      "basicModel": "Gemini 2.0 Flash model",
-      "proModel": "GPT-4o-mini"
+      "basicSearch": "Unlimited semantic searches",
+      "proSearch": "Unlimited semantic searches"
     },
     "processing": "Processing...",
     "managePayment": "Manage Payment Method",
@@ -398,6 +416,37 @@
     "planDescription": {
       "basic": "Perfect for casual readers who want to try AI-powered article management.",
       "pro": "For power users who save and analyze articles daily."
+    },
+    "faq": "Frequently Asked Questions",
+    "faqItems": {
+      "q1": "What do I get with Pro?",
+      "a1": "Unlimited AI summaries and unlimited article storage.",
+      "q2": "Can I cancel anytime?",
+      "a2": "Yes, you can cancel anytime. You'll keep Pro features until the end of your billing period.",
+      "q3": "What payment methods are supported?",
+      "a3": "We support credit cards, debit cards, and more. Payments are securely processed via Paddle."
+    },
+    "comparisonTitle": "Compare Plans",
+    "featureComparison": {
+      "aiSummaries": "AI Summaries",
+      "savedArticles": "Saved Articles",
+      "semanticSearch": "Semantic Search",
+      "markdownExport": "Markdown Export",
+      "conceptExtraction": "Concept Extraction"
+    },
+    "basicValue": {
+      "aiSummaries": "20/month",
+      "savedArticles": "50",
+      "semanticSearch": "Unlimited",
+      "markdownExport": "Included",
+      "conceptExtraction": "Included"
+    },
+    "proValue": {
+      "aiSummaries": "Unlimited",
+      "savedArticles": "Unlimited",
+      "semanticSearch": "Unlimited",
+      "markdownExport": "Included",
+      "conceptExtraction": "Included"
     }
   }
 }

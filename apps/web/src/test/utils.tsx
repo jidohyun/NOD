@@ -40,6 +40,7 @@ const TEST_MESSAGES = {
     searchArticles: "Search articles...",
     allStatus: "All status",
     statusPending: "Pending",
+    statusProcessing: "Processing",
     statusAnalyzing: "Analyzing",
     statusCompleted: "Completed",
     statusFailed: "Failed",

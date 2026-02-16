@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronDown, ChevronLeft } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useCheckout, useSubscription } from "@/lib/api/subscriptions";
@@ -14,6 +14,7 @@ export function PricingContent() {
   const checkout = useCheckout();
   const { data: subscription } = useSubscription();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [openFaqKey, setOpenFaqKey] = useState<string | null>(null);
 
   const currentPlan = subscription?.plan;
 
@@ -26,7 +27,6 @@ export function PricingContent() {
         t("features.basicSummaries"),
         t("features.basicArticles"),
         t("features.basicSearch"),
-        t("features.basicModel"),
       ],
       id: "basic",
     },
@@ -34,15 +34,24 @@ export function PricingContent() {
       name: t("pro"),
       price: t("proPrice"),
       description: t("planDescription.pro"),
-      features: [
-        t("features.proSummaries"),
-        t("features.proArticles"),
-        t("features.proSearch"),
-        t("features.proModel"),
-      ],
+      features: [t("features.proSummaries"), t("features.proArticles"), t("features.proSearch")],
       highlighted: true,
       id: "pro",
     },
+  ];
+
+  const comparisonFeatures = [
+    "aiSummaries",
+    "savedArticles",
+    "semanticSearch",
+    "markdownExport",
+    "conceptExtraction",
+  ] as const;
+
+  const faqItems = [
+    { q: t("faqItems.q1"), a: t("faqItems.a1") },
+    { q: t("faqItems.q2"), a: t("faqItems.a2") },
+    { q: t("faqItems.q3"), a: t("faqItems.a3") },
   ];
 
   async function handleUpgrade() {
@@ -64,7 +73,7 @@ export function PricingContent() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl py-12 px-4">
+    <div className="mx-auto max-w-5xl py-12 px-4">
       <Link
         href="/dashboard"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -75,6 +84,8 @@ export function PricingContent() {
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold">{t("pricing")}</h1>
       </div>
+
+      {/* Pricing Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {plans.map((plan) => (
           <div
@@ -124,6 +135,70 @@ export function PricingContent() {
             ) : null}
           </div>
         ))}
+      </div>
+
+      {/* Feature Comparison Table */}
+      <div className="mt-16">
+        <h2 className="text-center text-2xl font-bold mb-8">{t("comparisonTitle")}</h2>
+        <div className="overflow-hidden rounded-xl border">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b bg-muted/50">
+                <th className="px-6 py-4 text-left text-sm font-semibold" />
+                <th className="px-6 py-4 text-center text-sm font-semibold">{t("basic")}</th>
+                <th className="px-6 py-4 text-center text-sm font-semibold text-primary">
+                  {t("pro")}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonFeatures.map((featureKey, index) => (
+                <tr
+                  key={featureKey}
+                  className={index < comparisonFeatures.length - 1 ? "border-b" : ""}
+                >
+                  <td className="px-6 py-4 text-sm font-medium">
+                    {t(`featureComparison.${featureKey}`)}
+                  </td>
+                  <td className="px-6 py-4 text-center text-sm text-muted-foreground">
+                    {t(`basicValue.${featureKey}`)}
+                  </td>
+                  <td className="px-6 py-4 text-center text-sm font-medium">
+                    {t(`proValue.${featureKey}`)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="mt-16">
+        <h2 className="text-center text-2xl font-bold mb-8">{t("faq")}</h2>
+        <div className="mx-auto max-w-3xl space-y-3">
+          {faqItems.map((item) => (
+            <div key={item.q} className="rounded-xl border bg-card">
+              <button
+                type="button"
+                onClick={() => setOpenFaqKey(openFaqKey === item.q ? null : item.q)}
+                className="flex w-full items-center justify-between p-5 text-left"
+              >
+                <span className="text-sm font-semibold">{item.q}</span>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${
+                    openFaqKey === item.q ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              {openFaqKey === item.q ? (
+                <div className="px-5 pb-5">
+                  <p className="text-sm text-muted-foreground">{item.a}</p>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
