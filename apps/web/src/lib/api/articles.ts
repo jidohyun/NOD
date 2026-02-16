@@ -46,30 +46,6 @@ export interface SimilarArticle {
   summary_preview: string | null;
 }
 
-export interface ConceptGraphNode {
-  id: string;
-  label: string;
-  value: number;
-}
-
-export interface ConceptGraphEdge {
-  source: string;
-  target: string;
-  weight: number;
-}
-
-export interface ConceptGraphData {
-  nodes: ConceptGraphNode[];
-  edges: ConceptGraphEdge[];
-  meta: {
-    total_articles: number;
-    total_unique_concepts: number;
-    returned_nodes: number;
-    returned_edges: number;
-    max_nodes: number;
-  };
-}
-
 interface PaginatedResponse<T> {
   data: T[];
   meta: {
@@ -130,7 +106,7 @@ export function useArticle(id: string) {
     enabled: !!id,
     refetchInterval: (query) => {
       const article = query.state.data;
-      if (article && (article.status === "pending" || article.status === "analyzing")) {
+      if (article && (article.status === "pending" || article.status === "processing" || article.status === "analyzing")) {
         return 3000;
       }
       return false;
@@ -182,19 +158,16 @@ export function useDeleteArticle() {
   });
 }
 
-export function useConceptGraph(params?: {
-  maxNodes?: number;
-  enabled?: boolean;
-}) {
-  const maxNodes = params?.maxNodes ?? 1000;
-  return useQuery({
-    queryKey: ["articles", "graph", maxNodes],
-    queryFn: async () => {
-      const { data } = await apiClient.get<ConceptGraphData>("/api/articles/graph", {
-        params: { max_nodes: maxNodes },
-      });
+export function useRetryArticle() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await apiClient.post<Article>(`/api/articles/${id}/retry`);
       return data;
     },
-    enabled: params?.enabled ?? true,
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ["articles", id] });
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
   });
 }

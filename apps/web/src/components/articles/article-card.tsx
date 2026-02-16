@@ -1,13 +1,18 @@
 "use client";
 
+import { RefreshCw, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { ArticleListItem } from "@/lib/api/articles";
 
 export interface ArticleCardProps {
   article: ArticleListItem & { concepts?: string[] };
+  onRefresh?: (id: string) => void;
+  onRetry?: (id: string) => void;
+  isRefreshing?: boolean;
 }
 
 const DATE_LOCALE_MAP: Record<string, string> = {
@@ -20,6 +25,10 @@ const STATUS_STYLES: Record<string, { className: string; labelKey: string }> = {
   pending: {
     className: "bg-amber-100 text-amber-800 border-amber-200",
     labelKey: "statusPending",
+  },
+  processing: {
+    className: "bg-blue-100 text-blue-800 border-blue-200",
+    labelKey: "statusProcessing",
   },
   analyzing: {
     className: "bg-blue-100 text-blue-800 border-blue-200",
@@ -39,7 +48,7 @@ const STATUS_STYLES: Record<string, { className: string; labelKey: string }> = {
   },
 };
 
-export function ArticleCard({ article }: ArticleCardProps) {
+export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: ArticleCardProps) {
   const t = useTranslations("dashboard");
   const locale = useLocale();
 
@@ -56,12 +65,16 @@ export function ArticleCard({ article }: ArticleCardProps) {
   // Derive effective status: if summary exists, analysis succeeded
   const effectiveStatus = hasSummary && article.status === "failed" ? "analyzed" : article.status;
 
-  const isPending = effectiveStatus === "pending" || effectiveStatus === "analyzing";
+  const isPending =
+    effectiveStatus === "pending" ||
+    effectiveStatus === "analyzing" ||
+    effectiveStatus === "processing";
   const statusStyle = STATUS_STYLES[effectiveStatus];
   const statusLabel = statusStyle
     ? t(
         statusStyle.labelKey as
           | "statusPending"
+          | "statusProcessing"
           | "statusAnalyzing"
           | "statusCompleted"
           | "statusFailed"
@@ -107,6 +120,36 @@ export function ArticleCard({ article }: ArticleCardProps) {
               ))}
             </div>
           ) : null}
+
+          {effectiveStatus === "processing" && onRefresh && (
+            <div className="flex items-center gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onRefresh(article.id)}
+                disabled={isRefreshing}
+                className="text-xs"
+              >
+                <RefreshCw className={`h-3 w-3 mr-1 ${isRefreshing ? "animate-spin" : ""}`} />
+                {isRefreshing ? t("refreshing") : t("checkStatus")}
+              </Button>
+            </div>
+          )}
+
+          {effectiveStatus === "failed" && onRetry && (
+            <div className="flex items-center gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onRetry(article.id)}
+                disabled={isRefreshing}
+                className="text-xs border-red-200 hover:bg-red-50"
+              >
+                <RotateCcw className="h-3 w-3 mr-1" />
+                {t("retryAnalysis")}
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

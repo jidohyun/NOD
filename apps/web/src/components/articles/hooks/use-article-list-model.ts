@@ -4,7 +4,7 @@ import type { KeyboardEvent } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { AnalyticsEvents } from "@/lib/analytics";
-import { useInfiniteArticles, useSemanticSearch } from "@/lib/api/articles";
+import { useInfiniteArticles, useRetryArticle, useSemanticSearch } from "@/lib/api/articles";
 
 type ViewMode = "grid" | "list";
 
@@ -24,6 +24,16 @@ export function useArticleListModel() {
     search: !isSemanticMode && debouncedSearch ? debouncedSearch : undefined,
     status: statusFilter || undefined,
   });
+
+  const retryMutation = useRetryArticle();
+
+  const handleRefresh = (_id: string) => {
+    infiniteQuery.refetch();
+  };
+
+  const handleRetry = (id: string) => {
+    retryMutation.mutate(id);
+  };
 
   const semanticQuery = useSemanticSearch({
     q: debouncedSearch,
@@ -117,5 +127,8 @@ export function useArticleListModel() {
     activeQuery,
     articles,
     infiniteQuery,
+    onRefresh: handleRefresh,
+    onRetry: handleRetry,
+    isRetrying: retryMutation.isPending,
   };
 }

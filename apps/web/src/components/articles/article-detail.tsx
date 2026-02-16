@@ -9,6 +9,7 @@ import { Link } from "@/lib/i18n/routing";
 
 const STATUS_MAP: Record<string, { color: string; labelKey: string }> = {
   pending: { color: "bg-amber-100 text-amber-800", labelKey: "statusPending" },
+  processing: { color: "bg-blue-100 text-blue-800", labelKey: "statusProcessing" },
   analyzing: { color: "bg-blue-100 text-blue-800", labelKey: "statusAnalyzing" },
   analyzed: { color: "bg-green-100 text-green-800", labelKey: "statusCompleted" },
   completed: { color: "bg-green-100 text-green-800", labelKey: "statusCompleted" },
@@ -46,6 +47,7 @@ export function ArticleDetail({ id }: { id: string }) {
     ? t(
         statusMeta.labelKey as
           | "statusPending"
+          | "statusProcessing"
           | "statusAnalyzing"
           | "statusCompleted"
           | "statusFailed"
@@ -119,8 +121,10 @@ export function ArticleDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      {/* Status indicator for pending/analyzing */}
-      {(effectiveStatus === "pending" || effectiveStatus === "analyzing") && (
+      {/* Status indicator for pending/processing/analyzing */}
+      {(effectiveStatus === "pending" ||
+        effectiveStatus === "processing" ||
+        effectiveStatus === "analyzing") && (
         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
           <div className="flex items-center gap-2">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />

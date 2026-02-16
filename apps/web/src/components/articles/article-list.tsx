@@ -1,13 +1,15 @@
 "use client";
 
 import { LayoutGrid, List, Sparkles } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ArticleCard } from "@/components/articles/article-card";
 import { useArticleListModel } from "@/components/articles/hooks/use-article-list-model";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 
 export function ArticleList() {
+  const locale = useLocale();
   const t = useTranslations("dashboard");
   const {
     search,
@@ -30,10 +32,14 @@ export function ArticleList() {
     activeQuery,
     articles,
     infiniteQuery,
+    onRefresh,
+    onRetry,
+    isRetrying,
   } = useArticleListModel();
 
   const isLoading = activeQuery.isLoading;
   const isError = activeQuery.isError;
+  const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 
   return (
     <div className="space-y-4">
@@ -116,6 +122,7 @@ export function ArticleList() {
         >
           <option value="">{t("allStatus")}</option>
           <option value="pending">{t("statusPending")}</option>
+          <option value="processing">{t("statusProcessing")}</option>
           <option value="analyzing">{t("statusAnalyzing")}</option>
           <option value="analyzed">{t("statusCompleted")}</option>
           <option value="failed">{t("statusFailed")}</option>
@@ -151,7 +158,14 @@ export function ArticleList() {
       ) : null}
       {isError ? <div className="py-12 text-center text-destructive">{t("loadError")}</div> : null}
       {!isLoading && !isError && articles.length === 0 ? (
-        <div className="py-12 text-center text-muted-foreground">{t("noArticles")}</div>
+        <div className="py-12 text-center">
+          <p className="text-muted-foreground">{t("noArticles")}</p>
+          <Button asChild className="mt-4">
+            <a href={extensionInstallUrl} target="_blank" rel="noopener noreferrer">
+              {t("installExtensionCta")}
+            </a>
+          </Button>
+        </div>
       ) : null}
 
       <div
@@ -160,7 +174,13 @@ export function ArticleList() {
         }
       >
         {articles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+          <ArticleCard
+            key={article.id}
+            article={article}
+            onRefresh={onRefresh}
+            onRetry={onRetry}
+            isRefreshing={isRetrying}
+          />
         ))}
       </div>
 
