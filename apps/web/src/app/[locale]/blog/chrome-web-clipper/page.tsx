@@ -36,6 +36,20 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
+  const i18n = {
+    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
+    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
+    breadcrumb:
+      locale === "ko"
+        ? "Chrome 웹 클리퍼"
+        : locale === "ja"
+          ? "Chrome ウェブクリッパー"
+          : "Chrome Web Clipper",
+    date:
+      locale === "ko" ? "2026년 2월 10일" : locale === "ja" ? "2026年2月10日" : "February 10, 2026",
+    readTime: locale === "ko" ? "8분 분량" : locale === "ja" ? "8分で読める" : "8 min read",
+  };
+
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
       <meta
@@ -58,7 +72,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">Home</span>
+              <span itemProp="name">{i18n.home}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -69,14 +83,14 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">Blog</span>
+              <span itemProp="name">{i18n.blog}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              Chrome Web Clipper
+              {i18n.breadcrumb}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -86,9 +100,9 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
       {/* Article Header */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-10">February 10, 2026</time>
+          <time dateTime="2026-02-10">{i18n.date}</time>
           <span className="text-neutral-700">·</span>
-          <span>8 min read</span>
+          <span>{i18n.readTime}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           Chrome Web Clipper: The Complete Guide to Saving and Organizing Web Content
@@ -379,7 +393,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               NOD
             </Link>{" "}
             is a Chrome extension that saves articles in one click, automatically extracts key
-            insights, and lets you search across your saved content. It has a free plan with 10
+            insights, and lets you search across your saved content. It has a free plan with 20
             summaries per month and a Pro plan for heavier usage. It&apos;s worth trying if you want
             to organize web content without setting up a complex system. You can install it from the{" "}
             <Link
@@ -409,7 +423,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                 <p className="mt-2 text-sm text-neutral-400" itemProp="text">
                   For general use, Raindrop.io and Pocket both offer solid free plans. If you need
-                  AI summaries, NOD provides 10 free clippings per month. The best choice depends on
+                  AI summaries, NOD provides 20 free clippings per month. The best choice depends on
                   whether you prioritize visual organization, read-later features, or automatic
                   content analysis.
                 </p>
