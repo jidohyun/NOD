@@ -48,6 +48,15 @@ const STATUS_STYLES: Record<string, { className: string; labelKey: string }> = {
   },
 };
 
+const CONTENT_TYPE_LABELS: Record<string, { label: string; className: string }> = {
+  tech_blog: { label: "Tech Blog", className: "bg-blue-50 text-blue-700 border-blue-200" },
+  academic_paper: { label: "Paper", className: "bg-purple-50 text-purple-700 border-purple-200" },
+  general_news: { label: "News", className: "bg-gray-50 text-gray-700 border-gray-200" },
+  github_repo: { label: "GitHub", className: "bg-slate-50 text-slate-700 border-slate-200" },
+  official_docs: { label: "Docs", className: "bg-teal-50 text-teal-700 border-teal-200" },
+  video_podcast: { label: "Video", className: "bg-pink-50 text-pink-700 border-pink-200" },
+};
+
 export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: ArticleCardProps) {
   const t = useTranslations("dashboard");
   const locale = useLocale();
@@ -98,6 +107,18 @@ export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: Artic
               {statusLabel}
             </span>
             <Badge variant="outline">{article.source}</Badge>
+            {article.content_type &&
+              article.content_type !== "general_news" &&
+              (() => {
+                const ctMeta = CONTENT_TYPE_LABELS[article.content_type];
+                return ctMeta ? (
+                  <span
+                    className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${ctMeta.className}`}
+                  >
+                    {ctMeta.label}
+                  </span>
+                ) : null;
+              })()}
           </div>
         </div>
       </CardHeader>

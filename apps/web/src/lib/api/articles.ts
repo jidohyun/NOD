@@ -12,6 +12,8 @@ export interface ArticleSummary {
   ai_provider: string;
   ai_model: string;
   created_at: string;
+  content_type?: string;
+  type_metadata?: Record<string, unknown>;
 }
 
 export interface Article {
@@ -34,6 +36,7 @@ export interface ArticleListItem {
   status: string;
   created_at: string;
   summary_preview: string | null;
+  content_type?: string;
 }
 
 export interface SimilarArticle {
