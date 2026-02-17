@@ -6,7 +6,7 @@ export type SummaryLanguage = "ko" | "en" | "ja";
 const VALID_LANGUAGES: SummaryLanguage[] = ["ko", "en", "ja"];
 
 export function useSummaryLanguage() {
-  const [language, setLangState] = useState<SummaryLanguage>("ko");
+  const [language, setLangState] = useState<SummaryLanguage>("en");
 
   useEffect(() => {
     chrome.storage.local.get(STORAGE_KEYS.SUMMARY_LANGUAGE, (result) => {

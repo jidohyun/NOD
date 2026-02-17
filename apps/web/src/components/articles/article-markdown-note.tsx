@@ -33,10 +33,11 @@ const MARKDOWN_COMPONENTS: NonNullable<React.ComponentProps<typeof ReactMarkdown
 };
 
 export function ArticleMarkdownNote({ markdownNote }: { markdownNote: string }) {
+  const normalized = markdownNote.replace(/\\n/g, "\n");
   return (
     <div className="text-sm leading-relaxed">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={MARKDOWN_COMPONENTS}>
-        {markdownNote}
+        {normalized}
       </ReactMarkdown>
     </div>
   );

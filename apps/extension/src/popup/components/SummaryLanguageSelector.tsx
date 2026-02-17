@@ -7,12 +7,15 @@ interface SummaryLanguageSelectorProps {
 }
 
 const LANGUAGES: { code: SummaryLanguage; label: string; flag: string }[] = [
-  { code: "ko", label: "한국어", flag: "🇰🇷" },
   { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "ko", label: "한국어", flag: "🇰🇷" },
   { code: "ja", label: "日本語", flag: "🇯🇵" },
 ];
 
-export function SummaryLanguageSelector({ value, onChange }: SummaryLanguageSelectorProps) {
+export function SummaryLanguageSelector({
+  value,
+  onChange,
+}: SummaryLanguageSelectorProps) {
   return (
     <div className="mt-3 flex items-center justify-between">
       <span className="text-xs t-muted">{t("extSummaryLanguage")}</span>
@@ -23,8 +26,14 @@ export function SummaryLanguageSelector({ value, onChange }: SummaryLanguageSele
             onClick={() => onChange(lang.code)}
             className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium transition-all duration-150"
             style={{
-              background: value === lang.code ? "var(--locale-active-bg)" : "var(--locale-bg)",
-              color: value === lang.code ? "var(--locale-active-text)" : "var(--locale-text)",
+              background:
+                value === lang.code
+                  ? "var(--locale-active-bg)"
+                  : "var(--locale-bg)",
+              color:
+                value === lang.code
+                  ? "var(--locale-active-text)"
+                  : "var(--locale-text)",
             }}
             title={lang.label}
           >
