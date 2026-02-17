@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
+import { TypeMetadataSection } from "@/components/articles/type-metadata";
 import { useArticle, useDeleteArticle } from "@/lib/api/articles";
 import { Link } from "@/lib/i18n/routing";
 
@@ -20,6 +21,15 @@ const DATE_LOCALE_MAP: Record<string, string> = {
   ko: "ko-KR",
   en: "en-US",
   ja: "ja-JP",
+};
+
+const CONTENT_TYPE_LABELS: Record<string, { label: string; className: string }> = {
+  tech_blog: { label: "Tech Blog", className: "bg-blue-100 text-blue-800" },
+  academic_paper: { label: "Paper", className: "bg-purple-100 text-purple-800" },
+  general_news: { label: "News", className: "bg-gray-100 text-gray-800" },
+  github_repo: { label: "GitHub", className: "bg-slate-100 text-slate-800" },
+  official_docs: { label: "Docs", className: "bg-teal-100 text-teal-800" },
+  video_podcast: { label: "Video", className: "bg-pink-100 text-pink-800" },
 };
 
 export function ArticleDetail({ id }: { id: string }) {
@@ -107,6 +117,18 @@ export function ArticleDetail({ id }: { id: string }) {
             {statusLabel}
           </span>
           <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">{article.source}</span>
+          {article.summary?.content_type &&
+            article.summary.content_type !== "general_news" &&
+            (() => {
+              const ctMeta = CONTENT_TYPE_LABELS[article.summary.content_type];
+              return ctMeta ? (
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${ctMeta.className}`}
+                >
+                  {ctMeta.label}
+                </span>
+              ) : null;
+            })()}
           <time>{formattedDate}</time>
           {article.url ? (
             <a
@@ -193,6 +215,22 @@ export function ArticleDetail({ id }: { id: string }) {
               </ul>
             </section>
           )}
+
+          {article.summary.content_type &&
+            article.summary.type_metadata &&
+            Object.keys(article.summary.type_metadata).length > 0 && (
+              <section className="rounded-lg border bg-card p-4">
+                <h2 className="text-lg font-semibold mb-2">
+                  {CONTENT_TYPE_LABELS[article.summary.content_type]?.label ||
+                    article.summary.content_type}{" "}
+                  Details
+                </h2>
+                <TypeMetadataSection
+                  contentType={article.summary.content_type}
+                  metadata={article.summary.type_metadata}
+                />
+              </section>
+            )}
 
           <p className="text-xs text-muted-foreground">
             {t("analyzedBy", {
