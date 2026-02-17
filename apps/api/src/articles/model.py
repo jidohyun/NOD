@@ -61,7 +61,7 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
     content_type: Mapped[str] = mapped_column(
         String(30), nullable=False, server_default=text("'general_news'")
     )
-    type_metadata: Mapped[dict] = mapped_column(
+    type_metadata: Mapped[dict[str, object]] = mapped_column(
         JSON, nullable=False, server_default=text("'{}'")
     )
     ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)

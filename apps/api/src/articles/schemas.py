@@ -39,7 +39,7 @@ class SummaryResponse(BaseModel):
     ai_provider: str
     ai_model: str
     content_type: str = "general_news"
-    type_metadata: dict = {}
+    type_metadata: dict[str, object] = {}
     created_at: datetime
 
 
