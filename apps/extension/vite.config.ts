@@ -104,6 +104,7 @@ export default defineConfig(({ mode }) => {
       viteStaticCopy({
         targets: [
           { src: "icons/*.png", dest: "icons" },
+          { src: "src/popup/theme-init.js", dest: "src/popup" },
         ],
       }),
     ],
