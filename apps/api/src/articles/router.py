@@ -33,6 +33,7 @@ async def _run_analysis(
     content: str,
     provider: Literal["gemini", "openai"],
     summary_language: str = "ko",
+    article_url: str | None = None,
 ) -> bool:
     """Background task: summarize article with AI and save to DB."""
     from src.articles.model import Article, ArticleSummary
@@ -51,9 +52,10 @@ async def _run_analysis(
         logger.info(
             "Calling summarize_article", article_id=str(article_id), provider=provider
         )
-        result = await summarize_article(
+        result, content_type = await summarize_article(
             title,
             content,
+            url=article_url,
             provider=provider,
             summary_language=summary_language,
         )
@@ -104,6 +106,16 @@ async def _run_analysis(
                 threshold=0.92,
             )
 
+            # Extract type-specific metadata (fields beyond base)
+            from src.lib.agents.base import BaseSummaryResult
+
+            base_fields = set(BaseSummaryResult.model_fields.keys())
+            type_metadata = {
+                k: v
+                for k, v in result.model_dump().items()
+                if k not in base_fields
+            }
+
             summary = ArticleSummary(
                 article_id=article_id,
                 summary=result.summary,
@@ -114,6 +126,8 @@ async def _run_analysis(
                 key_points=result.key_points,
                 reading_time_minutes=result.reading_time_minutes,
                 language=result.language,
+                content_type=str(content_type),
+                type_metadata=type_metadata,
                 ai_provider=provider,
                 ai_model=model_name,
             )
@@ -181,6 +195,7 @@ async def _run_analysis_async(
     provider: Literal["gemini", "openai"],
     summary_language: str,
     user_id: str,
+    article_url: str | None = None,
 ) -> None:
     """Background wrapper to run analysis and update summary usage."""
     logger.info(
@@ -196,6 +211,7 @@ async def _run_analysis_async(
             content,
             provider,
             summary_language=summary_language,
+            article_url=article_url,
         )
         if ok:
             logger.info(
@@ -238,7 +254,8 @@ async def create_article(
     if usage_info.can_summarize:
         selected_provider: Literal["gemini", "openai"] = "gemini"
         ok = await _run_analysis(
-            article.id, article.title, article.content, selected_provider
+            article.id, article.title, article.content, selected_provider,
+            article_url=article.url,
         )
         if ok:
             await sub_service.increment_summary_usage(db, user.id)
@@ -380,6 +397,7 @@ async def retry_article_analysis(
             selected_provider,
             summary_language,
             user.id,
+            article_url=article.url,
         ),
         name=f"article-analysis-retry-{article.id}",
     )
@@ -443,6 +461,7 @@ async def analyze_url(
                 selected_provider,
                 summary_language,
                 user.id,
+                article_url=data.url,
             ),
             name=f"article-analysis-{article.id}",
         )

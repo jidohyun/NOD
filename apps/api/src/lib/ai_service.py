@@ -1,75 +1,41 @@
-"""AI service for article summarization using Gemini or OpenAI."""
+"""AI service for article summarization using content-type-aware agents."""
 
 from typing import Literal
 
 import structlog
-from pydantic import BaseModel
 
-from src.lib.ai.prompts import build_system_prompt, build_user_prompt
+from src.lib.agents.base import BaseSummaryResult
+from src.lib.agents.registry import get_agent
 from src.lib.config import settings
+from src.lib.content_classifier import ContentType, classify_url
 
 logger = structlog.get_logger(__name__)
-
-LANG_NAMES: dict[str, str] = {
-    "ko": "Korean",
-    "en": "English",
-    "ja": "Japanese",
-    "zh": "Chinese",
-    "es": "Spanish",
-    "fr": "French",
-    "de": "German",
-}
-
-
-def _build_summarize_prompt(lang: str = "ko") -> str:
-    lang_name = LANG_NAMES.get(lang, lang)
-    return f"""Return a JSON object with the following fields:
-- summary: 2-4 sentences in {lang_name}
-- concepts: 3-7 short keywords
-- root_concept: one representative concept label from concepts
-- key_points: 3-5 key points (one sentence each)
-- language: the article's language (ISO 639-1 code)
-- reading_time_minutes: estimated reading time in minutes
-  (~200 words/min)
-- markdown_note: a {lang_name} markdown note following the
-  exact template provided
-"""
-
-
-class ArticleSummaryResult(BaseModel):
-    """Structured output from AI summarization."""
-
-    summary: str
-    concepts: list[str]
-    root_concept: str | None = None
-    key_points: list[str]
-    language: str
-    reading_time_minutes: int
-    markdown_note: str
 
 
 async def summarize_article(
     title: str,
     content: str,
+    url: str | None = None,
     provider: Literal["gemini", "openai"] | None = None,
     summary_language: str = "ko",
-) -> ArticleSummaryResult:
-    """Summarize an article using the configured AI provider."""
+) -> tuple[BaseSummaryResult, ContentType]:
+    """Summarize an article using content-type-aware agents."""
+    content_type = classify_url(url) if url else ContentType.GENERAL_NEWS
+    agent = get_agent(content_type)
+
     logger.info(
         "Starting article summarization",
         title_length=len(title),
         content_length=len(content),
+        content_type=str(content_type),
         requested_provider=provider,
         summary_language=summary_language,
     )
 
-    json_prompt = _build_summarize_prompt(summary_language)
-    user_prompt = build_user_prompt(
-        title=title,
-        content=content[:15000],
-        lang=summary_language,
-    )
-    system_prompt = build_system_prompt(summary_language)
+    result_schema = agent.get_result_schema()
+    system_prompt = agent.build_system_prompt(summary_language)
+    user_prompt = agent.build_user_prompt(title, content[:15000], summary_language)
+    json_prompt = agent.build_json_prompt(summary_language)
 
     prompt = f"{json_prompt}\n\n{user_prompt}"
 
@@ -87,13 +53,18 @@ async def summarize_article(
     if resolved_provider == "gemini":
         logger.info("Using Gemini for summarization")
         gemini_prompt = f"{system_prompt}\n\n{prompt}"
-        return await _summarize_with_gemini(gemini_prompt)
+        result = await _summarize_with_gemini(gemini_prompt, result_schema)
+    else:
+        logger.info("Using OpenAI for summarization")
+        result = await _summarize_with_openai(prompt, system_prompt, result_schema)
 
-    logger.info("Using OpenAI for summarization")
-    return await _summarize_with_openai(prompt, system_prompt)
+    return result, content_type
 
 
-async def _summarize_with_gemini(prompt: str) -> ArticleSummaryResult:
+async def _summarize_with_gemini(
+    prompt: str,
+    result_schema: type[BaseSummaryResult],
+) -> BaseSummaryResult:
     """Summarize using Google Gemini with structured output."""
     from google import genai
     from google.genai import types
@@ -105,19 +76,20 @@ async def _summarize_with_gemini(prompt: str) -> ArticleSummaryResult:
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
-            response_schema=ArticleSummaryResult,
+            response_schema=result_schema,
         ),
     )
 
     if not response.text:
         raise ValueError("Gemini returned empty response")
-    return ArticleSummaryResult.model_validate_json(response.text)
+    return result_schema.model_validate_json(response.text)
 
 
 async def _summarize_with_openai(
     prompt: str,
     system_prompt: str,
-) -> ArticleSummaryResult:
+    result_schema: type[BaseSummaryResult],
+) -> BaseSummaryResult:
     """Summarize using OpenAI with structured output."""
     from openai import AsyncOpenAI
 
@@ -129,7 +101,7 @@ async def _summarize_with_openai(
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
         ],
-        response_format=ArticleSummaryResult,
+        response_format=result_schema,
     )
 
     parsed = completion.choices[0].message.parsed
