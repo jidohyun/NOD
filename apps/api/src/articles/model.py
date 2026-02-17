@@ -58,6 +58,12 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
     key_points: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
     reading_time_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
     language: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    content_type: Mapped[str] = mapped_column(
+        String(30), nullable=False, server_default=text("'general_news'")
+    )
+    type_metadata: Mapped[dict] = mapped_column(
+        JSON, nullable=False, server_default=text("'{}'")
+    )
     ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)
     ai_model: Mapped[str] = mapped_column(String(100), nullable=False)
 

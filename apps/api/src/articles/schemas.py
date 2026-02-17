@@ -38,6 +38,8 @@ class SummaryResponse(BaseModel):
     language: str | None = None
     ai_provider: str
     ai_model: str
+    content_type: str = "general_news"
+    type_metadata: dict = {}
     created_at: datetime
 
 
@@ -69,6 +71,7 @@ class ArticleListResponse(BaseModel):
     status: str
     created_at: datetime
     summary_preview: str | None = None
+    content_type: str | None = None
 
 
 class SimilarArticleResponse(BaseModel):
