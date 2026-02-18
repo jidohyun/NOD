@@ -22,14 +22,21 @@ export default async function TermsPage({ params }: TermsPageProps) {
       </header>
 
       <div className="mt-8 space-y-8 text-sm leading-6">
-        {["intro", "account", "service", "content", "prohibited", "termination", "contact"].map(
-          (key) => (
-            <section key={key} className="space-y-2">
-              <h2 className="text-base font-semibold">{s(`${key}.title`)}</h2>
-              <p>{s(`${key}.content`)}</p>
-            </section>
-          )
-        )}
+        {[
+          "intro",
+          "account",
+          "service",
+          "payment",
+          "content",
+          "prohibited",
+          "termination",
+          "contact",
+        ].map((key) => (
+          <section key={key} className="space-y-2">
+            <h2 className="text-base font-semibold">{s(`${key}.title`)}</h2>
+            <p>{s(`${key}.content`)}</p>
+          </section>
+        ))}
       </div>
     </main>
   );

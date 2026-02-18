@@ -25,7 +25,7 @@ export default async function RefundPage({ params }: RefundPageProps) {
         <section className="space-y-2">
           <p>{t("intro")}</p>
         </section>
-        {["cancellation", "refunds", "process"].map((key) => (
+        {["cancellation", "refunds", "process", "exceptions"].map((key) => (
           <section key={key} className="space-y-2">
             <h2 className="text-base font-semibold">{s(`${key}.title`)}</h2>
             <p>{s(`${key}.content`)}</p>

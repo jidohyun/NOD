@@ -96,6 +96,7 @@
       "extension": "Chrome Extension",
       "mobile": "Mobile App",
       "api": "API",
+      "pricing": "Pricing",
       "resources": "Resources",
       "docs": "Documentation",
       "github": "GitHub",
@@ -111,121 +112,129 @@
   "legal": {
     "terms": {
       "title": "Terms of Service",
-      "effectiveDate": "Effective Date: 2026-02-09",
+      "effectiveDate": "Effective Date: 2026-02-19",
       "sections": {
         "intro": {
           "title": "1. Purpose",
-          "content": "These Terms of Service govern your use of NOD."
+          "content": "These Terms of Service (\"Terms\") govern the legal relationship between NOD (\"we\", \"us\", or \"our\") and users (\"you\") of the NOD service. These Terms define the rights and obligations of both parties. By accessing or using the NOD service, you agree to be bound by these Terms. If you do not agree, please discontinue use of the service."
         },
         "account": {
           "title": "2. Account",
-          "content": "You are responsible for maintaining the security of your account."
+          "content": "You may create an account using your email address or a supported social login provider (e.g., Google). You are responsible for providing accurate and up-to-date information and for maintaining the confidentiality and security of your account credentials. You must notify us promptly at shickcoong777@gmail.com if you suspect unauthorized access to your account. Each individual may maintain only one account. Account sharing or transferring access to third parties is not permitted."
         },
         "service": {
           "title": "3. Service Use",
-          "content": "NOD provides AI-powered article saving and summarization services."
+          "content": "NOD provides an AI-powered knowledge management service including article saving, AI-generated summarization, semantic search, and concept extraction. We may update, modify, or discontinue features of the service at any time with reasonable notice. The service is offered in two tiers: a free Basic plan and a paid Pro plan ($5/month). All use of the service is subject to fair use guidelines; excessive automated use that degrades service performance for other users is not permitted."
+        },
+        "payment": {
+          "title": "4. Payment Processing",
+          "content": "Payments for paid services (Pro plan) are processed through Paddle.com. Paddle acts as the Merchant of Record, handling payment processing, tax collection, and refunds. For payment-related inquiries, please contact shickcoong777@gmail.com or Paddle's customer support."
         },
         "content": {
-          "title": "4. Content & Copyright",
-          "content": "You retain copyright of your content. We use it to provide the service."
+          "title": "5. Content & Copyright",
+          "content": "You retain full ownership and copyright of all content you save to NOD. By saving content to the service, you grant NOD a limited, non-exclusive license to store, process, and analyze that content solely for the purpose of providing the service to you. NOD does not claim ownership of your content and will not use it for any purpose beyond service provision. You are responsible for ensuring you have the necessary rights to save and process any content through NOD. NOD reserves the right to remove content that violates these Terms or applicable law."
         },
         "prohibited": {
-          "title": "5. Prohibited Acts",
-          "content": "Do not misuse the service or violate laws."
+          "title": "6. Prohibited Acts",
+          "content": "The following activities are strictly prohibited: (a) reverse engineering, decompiling, or attempting to extract the source code of the service; (b) circumventing or attempting to bypass any access controls or security measures; (c) automated scraping or crawling of the service beyond normal use through the official interface or API; (d) sharing account credentials or allowing others to use your account; (e) uploading or transmitting malicious code, viruses, or any harmful content; (f) using the service in violation of any applicable local, national, or international law; (g) taking any action that interferes with or disrupts the normal operation of the service or its infrastructure."
         },
         "termination": {
-          "title": "6. Termination",
-          "content": "You may cancel your account at any time."
+          "title": "7. Termination",
+          "content": "You may cancel your account at any time through the account settings or by contacting us. NOD may suspend or terminate your account if you violate these Terms, engage in fraudulent activity, or otherwise misuse the service. Upon termination, your data may be retained for a reasonable period before permanent deletion, unless you request immediate deletion. Provisions of these Terms that by their nature should survive termination (including, without limitation, ownership provisions, warranty disclaimers, and limitations of liability) shall survive termination."
         },
         "contact": {
-          "title": "7. Contact",
-          "content": "Contact us at shickcoong777@gmail.com."
+          "title": "8. Contact",
+          "content": "If you have any questions or concerns regarding these Terms, please contact us at shickcoong777@gmail.com. We aim to respond to all inquiries within 3 business days."
         }
       }
     },
     "refund": {
       "title": "Refund & Cancellation Policy",
-      "effectiveDate": "Effective Date: 2026-02-09",
-      "intro": "Our policy regarding refunds and cancellations.",
+      "effectiveDate": "Effective Date: 2026-02-18",
+      "intro": "Our policy regarding refunds and cancellations for NOD's paid plan (Pro). All payments are processed through Paddle.com.",
       "sections": {
         "cancellation": {
-          "title": "1. Cancellation",
-          "content": "You can cancel your subscription at any time. Access continues until the end of the billing period."
+          "title": "1. Subscription Cancellation",
+          "content": "You can cancel your subscription at any time. Upon cancellation, you will retain access to Pro features until the end of your current billing period. No further charges will be made."
         },
         "refunds": {
-          "title": "2. Refunds",
-          "content": "Partial refunds are not provided for subscription periods already paid for, except where required by law."
+          "title": "2. Refund Policy",
+          "content": "You may request a full refund within 14 days of your subscription renewal date or initial purchase date. After 14 days, refunds are not available; however, you may cancel your subscription at any time. Payments are processed through Paddle, and Paddle's refund policy applies."
         },
         "process": {
-          "title": "3. How to Request",
-          "content": "Contact shickcoong777@gmail.com for assistance."
+          "title": "3. Refund Processing",
+          "content": "Once approved, refunds will be processed to your original payment method within 5-10 business days. You can submit refund requests via shickcoong777@gmail.com or through Paddle's customer support."
+        },
+        "exceptions": {
+          "title": "4. Exceptions",
+          "content": "If the service is unusable due to a critical defect, a full refund will be provided regardless of the time elapsed since purchase."
         }
       }
     },
     "privacy": {
       "title": "Privacy Policy",
-      "effectiveDate": "Effective Date: 2026-02-09",
-      "intro": "NOD respects your privacy. This policy explains how we handle your data.",
+      "effectiveDate": "Effective Date: 2026-02-19",
+      "intro": "NOD respects your privacy. This policy explains what personal information we collect, how we use it, and your rights regarding your data.",
       "sections": {
         "collection": {
           "title": "1. Information We Collect",
-          "content": "We collect the following information:",
+          "content": "We collect the following categories of information:",
           "items": {
-            "account": "Account info: Email, name.",
-            "content": "Content info: Saved URLs, article text, summaries.",
-            "usage": "Usage info: Feature usage logs.",
-            "payment": "Payment info: Processed by our payment provider.",
-            "analytics": "Web analytics info."
+            "account": "Account information: Email address, name and profile image (as provided by social login provider), authentication tokens.",
+            "content": "Content information: Saved article URLs, titles, extracted text, AI-generated summaries, notes, and related metadata.",
+            "usage": "Usage information: Feature usage logs (e.g., save/summarize counts), error and diagnostic data.",
+            "payment": "Payment information: Billing data for paid plans, processed by our payment provider (Paddle).",
+            "analytics": "Web analytics: Website usage statistics (e.g., page views and events via Google Analytics)."
           },
-          "note": "When using the Chrome extension, we may collect URL and page content of saved pages."
+          "note": "When using the Chrome extension, we may collect the URL and body text of pages you choose to save."
         },
         "purpose": {
           "title": "2. How We Use Information",
           "items": {
-            "auth": "Authentication and session management",
-            "core": "Providing core features like saving and summarization",
-            "billing": "Subscription management",
-            "improve": "Service improvement and security"
+            "auth": "User identification, login, and session management",
+            "core": "Providing core features including article saving, AI summarization, semantic search, and concept extraction",
+            "billing": "Subscription and payment management",
+            "improve": "Service quality improvement, error analysis, security, and fraud prevention"
           }
         },
         "sharing": {
           "title": "3. Sharing",
-          "content": "We do not sell your data. We use trusted service providers for hosting, AI processing, and payments.",
+          "content": "We do not sell your personal data. We use trusted third-party service providers to operate and improve the service.",
           "items": {
-            "cloud": "Cloud infrastructure",
-            "auth": "Auth providers",
-            "ai": "AI providers (e.g., OpenAI, Google)",
-            "payment": "Payment processors",
-            "analytics": "Analytics tools"
+            "cloud": "Cloud infrastructure and hosting: Service operation, data storage, and processing",
+            "auth": "Authentication: Social login (OAuth) providers and authentication services",
+            "ai": "AI processing: Article content (titles, text) may be sent to AI providers (e.g., OpenAI, Google Gemini) for summarization and embedding generation",
+            "payment": "Payment processing: Paddle and related payment services",
+            "analytics": "Analytics and monitoring: Google Analytics and similar tools"
           }
         },
         "retention": {
           "title": "4. Retention",
           "items": {
-            "principle": "We delete data when it is no longer needed.",
-            "deletion": "Data is deleted upon account deletion.",
-            "legal": "We retain data if required by law."
+            "principle": "We delete personal data when it is no longer needed for its original purpose.",
+            "deletion": "When you delete your account or request deletion, your data will be removed within a reasonable period.",
+            "legal": "We may retain data longer where required by applicable law."
           }
         },
         "rights": {
           "title": "5. Your Rights",
-          "content": "You have the right to access, correct, or delete your data."
+          "content": "You have the right to access, correct, delete, or restrict the processing of your personal data. To exercise these rights, please contact us using the information below."
         },
         "cookies": {
           "title": "6. Cookies",
-          "content": "We use cookies for authentication and analytics."
+          "content": "We use cookies and similar technologies for authentication, session management, user preferences, and analytics. You can configure your browser to reject cookies, but some features may be limited."
         },
         "security": {
           "title": "7. Security",
-          "content": "We implement reasonable security measures to protect your data."
+          "content": "We implement reasonable security measures to protect your personal data, including access controls, encryption in transit, and secure data storage practices."
         },
         "contact": {
           "title": "8. Contact",
-          "content": "Contact us at shickcoong777@gmail.com."
+          "content": "For questions about our privacy practices, please contact us at:\nEmail: shickcoong777@gmail.com"
         },
         "changes": {
           "title": "9. Changes",
-          "content": "We will notify you of significant changes to this policy."
+          "content": "We may update this Privacy Policy from time to time. We will notify you of significant changes through in-service announcements or direct communication."
         }
       }
     }
@@ -356,7 +365,14 @@
     "minuteRead": "{minutes} min",
     "sourceLabel": "Source",
     "viewOriginal": "View Original",
-    "language": "Language"
+    "language": "Language",
+    "allContentTypes": "All Types",
+    "typeTechBlog": "Tech Blog",
+    "typePaper": "Paper",
+    "typeNews": "News",
+    "typeGitHub": "GitHub",
+    "typeDocs": "Docs",
+    "typeVideo": "Video/Podcast"
   },
   "settings": {
     "title": "Settings",

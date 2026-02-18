@@ -43,6 +43,7 @@ export function LandingFooter() {
       links: [
         { label: t("dashboard"), href: "/articles" },
         { label: t("extension"), href: extensionInstallUrl },
+        { label: t("pricing"), href: "/pricing" },
         { label: t("mobile"), href: "#features" },
         { label: t("api"), href: "/api/health" },
       ],
