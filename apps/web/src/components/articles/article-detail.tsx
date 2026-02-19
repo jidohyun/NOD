@@ -23,13 +23,13 @@ const DATE_LOCALE_MAP: Record<string, string> = {
   ja: "ja-JP",
 };
 
-const CONTENT_TYPE_LABELS: Record<string, { label: string; className: string }> = {
-  tech_blog: { label: "Tech Blog", className: "bg-blue-100 text-blue-800" },
-  academic_paper: { label: "Paper", className: "bg-purple-100 text-purple-800" },
-  general_news: { label: "News", className: "bg-gray-100 text-gray-800" },
-  github_repo: { label: "GitHub", className: "bg-slate-100 text-slate-800" },
-  official_docs: { label: "Docs", className: "bg-teal-100 text-teal-800" },
-  video_podcast: { label: "Video", className: "bg-pink-100 text-pink-800" },
+const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string }> = {
+  tech_blog: { labelKey: "typeTechBlog", className: "bg-blue-100 text-blue-800" },
+  academic_paper: { labelKey: "typePaper", className: "bg-purple-100 text-purple-800" },
+  general_news: { labelKey: "typeNews", className: "bg-gray-100 text-gray-800" },
+  github_repo: { labelKey: "typeGitHub", className: "bg-slate-100 text-slate-800" },
+  official_docs: { labelKey: "typeDocs", className: "bg-teal-100 text-teal-800" },
+  video_podcast: { labelKey: "typeVideo", className: "bg-pink-100 text-pink-800" },
 };
 
 export function ArticleDetail({ id }: { id: string }) {
@@ -116,19 +116,23 @@ export function ArticleDetail({ id }: { id: string }) {
           >
             {statusLabel}
           </span>
-          <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">{article.source}</span>
-          {article.summary?.content_type &&
-            article.summary.content_type !== "general_news" &&
-            (() => {
-              const ctMeta = CONTENT_TYPE_LABELS[article.summary.content_type];
-              return ctMeta ? (
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${ctMeta.className}`}
-                >
-                  {ctMeta.label}
-                </span>
-              ) : null;
-            })()}
+          {(() => {
+            const ct = article.summary?.content_type || "general_news";
+            const ctStyle = CONTENT_TYPE_STYLES[ct] || CONTENT_TYPE_STYLES.general_news;
+            return (
+              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${ctStyle.className}`}>
+                {t(
+                  ctStyle.labelKey as
+                    | "typeTechBlog"
+                    | "typePaper"
+                    | "typeNews"
+                    | "typeGitHub"
+                    | "typeDocs"
+                    | "typeVideo"
+                )}
+              </span>
+            );
+          })()}
           <time>{formattedDate}</time>
           {article.url ? (
             <a
@@ -221,8 +225,15 @@ export function ArticleDetail({ id }: { id: string }) {
             Object.keys(article.summary.type_metadata).length > 0 && (
               <section className="rounded-lg border bg-card p-4">
                 <h2 className="text-lg font-semibold mb-2">
-                  {CONTENT_TYPE_LABELS[article.summary.content_type]?.label ||
-                    article.summary.content_type}{" "}
+                  {t(
+                    (CONTENT_TYPE_STYLES[article.summary.content_type]?.labelKey || "typeNews") as
+                      | "typeTechBlog"
+                      | "typePaper"
+                      | "typeNews"
+                      | "typeGitHub"
+                      | "typeDocs"
+                      | "typeVideo"
+                  )}{" "}
                   Details
                 </h2>
                 <TypeMetadataSection

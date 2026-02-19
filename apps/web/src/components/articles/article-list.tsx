@@ -17,6 +17,8 @@ export function ArticleList() {
     isSemanticMode,
     statusFilter,
     setStatusFilter,
+    contentTypeFilter,
+    setContentTypeFilter,
     viewMode,
     setViewMode,
     listboxId,
@@ -126,6 +128,23 @@ export function ArticleList() {
           <option value="analyzing">{t("statusAnalyzing")}</option>
           <option value="analyzed">{t("statusCompleted")}</option>
           <option value="failed">{t("statusFailed")}</option>
+        </select>
+        <label htmlFor="content-type-filter" className="sr-only">
+          Content Type
+        </label>
+        <select
+          id="content-type-filter"
+          value={contentTypeFilter}
+          onChange={(e) => setContentTypeFilter(e.target.value)}
+          className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+        >
+          <option value="">{t("allContentTypes")}</option>
+          <option value="tech_blog">{t("typeTechBlog")}</option>
+          <option value="academic_paper">{t("typePaper")}</option>
+          <option value="general_news">{t("typeNews")}</option>
+          <option value="github_repo">{t("typeGitHub")}</option>
+          <option value="official_docs">{t("typeDocs")}</option>
+          <option value="video_podcast">{t("typeVideo")}</option>
         </select>
         <div className="flex gap-1">
           <Button

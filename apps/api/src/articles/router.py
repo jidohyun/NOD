@@ -280,9 +280,11 @@ async def list_articles(
     limit: int = Query(default=20, ge=1, le=100),
     search: str | None = Query(default=None),
     status_filter: str | None = Query(default=None, alias="status"),
+    content_type_filter: str | None = Query(default=None, alias="content_type"),
 ) -> PaginatedResponse[ArticleListResponse]:
     return await service.list_articles(
-        db, user.id, page=page, limit=limit, search=search, status_filter=status_filter
+        db, user.id, page=page, limit=limit, search=search,
+        status_filter=status_filter, content_type_filter=content_type_filter,
     )
 
 
@@ -295,16 +297,19 @@ async def search_articles(
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=20, ge=1, le=100),
     status_filter: str | None = Query(default=None, alias="status"),
+    content_type_filter: str | None = Query(default=None, alias="content_type"),
 ) -> PaginatedResponse[ArticleListResponse]:
     try:
         embedding = await ai.generate_embedding(q)
         return await service.search_articles_semantic(
-            db, user.id, embedding, page=page, limit=limit, status_filter=status_filter
+            db, user.id, embedding, page=page, limit=limit,
+            status_filter=status_filter, content_type_filter=content_type_filter,
         )
     except Exception:
         logger.warning("Semantic search failed, falling back to text search", query=q)
         return await service.list_articles(
-            db, user.id, page=page, limit=limit, search=q, status_filter=status_filter
+            db, user.id, page=page, limit=limit, search=q,
+            status_filter=status_filter, content_type_filter=content_type_filter,
         )
 
 

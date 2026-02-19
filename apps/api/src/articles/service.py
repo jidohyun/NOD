@@ -102,9 +102,11 @@ async def list_articles(
     limit: int = 20,
     search: str | None = None,
     status_filter: str | None = None,
+    content_type_filter: str | None = None,
 ) -> PaginatedResponse[ArticleListResponse]:
     base_query = select(Article).where(Article.user_id == uuid.UUID(user_id))
 
+    has_summary_join = False
     if search:
         search_term = search.strip()
         if search_term:
@@ -119,8 +121,17 @@ async def list_articles(
                     cast(ArticleSummary.concepts, String).ilike(term),
                 )
             )
+            has_summary_join = True
     if status_filter:
         base_query = base_query.where(Article.status == status_filter)
+    if content_type_filter:
+        if not has_summary_join:
+            base_query = base_query.outerjoin(
+                ArticleSummary, ArticleSummary.article_id == Article.id
+            )
+        base_query = base_query.where(
+            ArticleSummary.content_type == content_type_filter
+        )
 
     # Count
     count_query = select(func.count()).select_from(base_query.subquery())
@@ -146,6 +157,7 @@ async def list_articles(
             status=a.status,
             created_at=a.created_at,
             summary_preview=a.summary.summary[:200] if a.summary else None,
+            content_type=a.summary.content_type if a.summary else None,
         )
         for a in articles
     ]
@@ -183,6 +195,7 @@ async def search_articles_semantic(
     page: int = 1,
     limit: int = 20,
     status_filter: str | None = None,
+    content_type_filter: str | None = None,
     similarity_threshold: float = 0.3,
 ) -> PaginatedResponse[ArticleListResponse]:
     similarity_expr = 1 - ArticleEmbedding.embedding.cosine_distance(query_embedding)
@@ -198,6 +211,10 @@ async def search_articles_semantic(
 
     if status_filter:
         base_query = base_query.where(Article.status == status_filter)
+    if content_type_filter:
+        base_query = base_query.outerjoin(
+            ArticleSummary, ArticleSummary.article_id == Article.id
+        ).where(ArticleSummary.content_type == content_type_filter)
 
     # Count
     count_query = select(func.count()).select_from(base_query.subquery())
@@ -223,6 +240,7 @@ async def search_articles_semantic(
             status=article.status,
             created_at=article.created_at,
             summary_preview=article.summary.summary[:200] if article.summary else None,
+            content_type=article.summary.content_type if article.summary else None,
         )
         for article, _similarity in rows
     ]
