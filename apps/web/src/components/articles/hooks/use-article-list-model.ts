@@ -11,6 +11,7 @@ type ViewMode = "grid" | "list";
 export function useArticleListModel() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const [contentTypeFilter, setContentTypeFilter] = useState<string>("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const listboxId = useId();
   const [isFocused, setIsFocused] = useState(false);
@@ -23,6 +24,7 @@ export function useArticleListModel() {
     limit: 20,
     search: !isSemanticMode && debouncedSearch ? debouncedSearch : undefined,
     status: statusFilter || undefined,
+    content_type: contentTypeFilter || undefined,
   });
 
   const retryMutation = useRetryArticle();
@@ -39,6 +41,7 @@ export function useArticleListModel() {
     q: debouncedSearch,
     limit: 20,
     status: statusFilter || undefined,
+    content_type: contentTypeFilter || undefined,
     enabled: isSemanticMode,
   });
 
@@ -111,6 +114,8 @@ export function useArticleListModel() {
     isSemanticMode,
     statusFilter,
     setStatusFilter,
+    contentTypeFilter,
+    setContentTypeFilter,
     viewMode,
     setViewMode,
     listboxId,

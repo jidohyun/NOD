@@ -95,6 +95,7 @@ export function useInfiniteArticles(params: {
   limit?: number;
   search?: string;
   status?: string;
+  content_type?: string;
 }) {
   return useInfiniteQuery({
     queryKey: ["articles", "infinite", params],
@@ -146,14 +147,15 @@ export function useSemanticSearch(params: {
   q: string;
   limit?: number;
   status?: string;
+  content_type?: string;
   enabled?: boolean;
 }) {
   return useQuery({
-    queryKey: ["articles", "semantic-search", params.q, params.status, params.limit],
+    queryKey: ["articles", "semantic-search", params.q, params.status, params.content_type, params.limit],
     queryFn: async () => {
       const { data } = await apiClient.get<PaginatedResponse<ArticleListItem>>(
         "/api/articles/search",
-        { params: { q: params.q, limit: params.limit, status: params.status } }
+        { params: { q: params.q, limit: params.limit, status: params.status, content_type: params.content_type } }
       );
       return data;
     },
