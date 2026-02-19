@@ -107,26 +107,26 @@ describe("ArticleCard", () => {
     });
   });
 
-  describe("Source Badge", () => {
-    it("shows web source badge", () => {
-      const article = createTestArticle({ source: "web" });
+  describe("Content Type Badge", () => {
+    it("shows default content type badge when content_type is not set", () => {
+      const article = createTestArticle();
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("web")).toBeInTheDocument();
+      expect(screen.getByText("News")).toBeInTheDocument();
     });
 
-    it("shows extension source badge", () => {
-      const article = createTestArticle({ source: "extension" });
+    it("shows tech blog content type badge", () => {
+      const article = createTestArticle({ content_type: "tech_blog" });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("extension")).toBeInTheDocument();
+      expect(screen.getByText("Tech Blog")).toBeInTheDocument();
     });
 
-    it("shows api source badge", () => {
-      const article = createTestArticle({ source: "api" });
+    it("shows github content type badge", () => {
+      const article = createTestArticle({ content_type: "github_repo" });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByText("api")).toBeInTheDocument();
+      expect(screen.getByText("GitHub")).toBeInTheDocument();
     });
   });
 
@@ -212,7 +212,7 @@ describe("ArticleCard", () => {
       // Verify all key elements are present
       expect(screen.getByRole("link", { name: article.title })).toBeInTheDocument();
       expect(screen.getByText(RE_STATUS_COMPLETED)).toBeInTheDocument();
-      expect(screen.getByText(article.source)).toBeInTheDocument();
+      expect(screen.getByText("News")).toBeInTheDocument();
       expect(screen.getByText(article.summary_preview!)).toBeInTheDocument();
       expect(screen.getByText("React")).toBeInTheDocument();
       expect(screen.getByText("Testing")).toBeInTheDocument();
