@@ -266,6 +266,7 @@
         "settings": "설정",
         "billing": "결제 관리",
         "help": "도움말",
+        "feedback": "피드백 보내기",
         "logout": "로그아웃"
       }
     },
@@ -400,6 +401,7 @@
       "manageBilling": "결제 및 구독 관리",
       "viewPricing": "요금제 보기",
       "installExtension": "크롬 익스텐션 설치",
+      "feedback": "피드백 보내기",
       "terms": "이용약관",
       "privacy": "개인정보 처리방침",
       "refund": "환불 정책"

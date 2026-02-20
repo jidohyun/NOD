@@ -266,6 +266,7 @@
         "settings": "Settings",
         "billing": "Manage Billing",
         "help": "Help",
+        "feedback": "Feedback",
         "logout": "Log out"
       }
     },
@@ -400,6 +401,7 @@
       "manageBilling": "Manage Billing & Subscription",
       "viewPricing": "View Pricing Plans",
       "installExtension": "Install Chrome Extension",
+      "feedback": "Send Feedback",
       "terms": "Terms of Service",
       "privacy": "Privacy Policy",
       "refund": "Refund Policy"

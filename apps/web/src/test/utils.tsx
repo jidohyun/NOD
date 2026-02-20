@@ -18,6 +18,7 @@ const TEST_MESSAGES = {
         settings: "Settings",
         billing: "Manage Billing",
         help: "Help",
+        feedback: "Feedback",
         logout: "Log out",
       },
     },
