@@ -1,6 +1,7 @@
+import inspect
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING, Literal, cast
+from typing import Literal
 from uuid import uuid4
 
 import structlog
@@ -15,9 +16,6 @@ from src.lib.config import settings
 from src.lib.database import async_session_factory
 from src.lib.logging import configure_logging, get_logger
 from src.lib.telemetry import configure_telemetry, instrument_app
-
-if TYPE_CHECKING:
-    import redis.asyncio as redis_module
 
 # Configure logging first
 configure_logging()
@@ -167,10 +165,12 @@ async def check_redis() -> ServiceStatus | None:
 
     start = time.perf_counter()
     try:
-        import redis.asyncio as redis
+        import redis.asyncio as redis_module
 
-        client = cast(redis_module.Redis, redis.from_url(settings.REDIS_URL))  # type: ignore[no-untyped-call]
-        await client.ping()  # type: ignore[misc]
+        client = redis_module.from_url(settings.REDIS_URL)  # type: ignore[no-untyped-call]
+        ping_result = client.ping()
+        if inspect.isawaitable(ping_result):
+            await ping_result
         await client.aclose()
         latency = (time.perf_counter() - start) * 1000
         return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
