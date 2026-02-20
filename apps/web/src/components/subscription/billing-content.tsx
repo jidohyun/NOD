@@ -67,10 +67,6 @@ export function BillingContent() {
   const summariesUsed = usage?.summaries_used ?? 0;
   const summariesLimit = usage?.summaries_limit ?? 0;
   const isUnlimited = summariesLimit === -1;
-  const articlesUsed = usage?.articles_saved ?? 0;
-  const articlesLimit = usage?.articles_limit ?? 0;
-  const articlesUnlimited = articlesLimit === -1;
-
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">{t("manageBilling")}</h1>
@@ -136,26 +132,6 @@ export function BillingContent() {
                       className="h-1.5 rounded-full bg-primary transition-all"
                       style={{
                         width: `${Math.min((summariesUsed / summariesLimit) * 100, 100)}%`,
-                      }}
-                    />
-                  </div>
-                ) : null}
-              </div>
-              <div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {t("featureComparison.savedArticles")}
-                  </span>
-                  <span className="font-medium">
-                    {articlesUnlimited ? t("unlimited") : `${articlesUsed}/${articlesLimit}`}
-                  </span>
-                </div>
-                {!articlesUnlimited ? (
-                  <div className="mt-1.5 h-1.5 rounded-full bg-secondary">
-                    <div
-                      className="h-1.5 rounded-full bg-primary transition-all"
-                      style={{
-                        width: `${Math.min((articlesUsed / articlesLimit) * 100, 100)}%`,
                       }}
                     />
                   </div>

@@ -19,12 +19,7 @@ export function DashboardOverview() {
   const plan = usage?.plan ?? "basic";
   const summariesUsed = usage?.summaries_used ?? 0;
   const summariesLimit = usage?.summaries_limit ?? 0;
-  const articleUsageLabel =
-    !usageLoading && !articlesLoading && usage
-      ? `${totalArticles}/${usage.articles_limit === -1 ? "∞" : usage.articles_limit}`
-      : usageLoading || articlesLoading
-        ? "—"
-        : totalArticles.toLocaleString();
+  const articleUsageLabel = articlesLoading ? "—" : totalArticles.toLocaleString();
   const planLabel = usageLoading ? "—" : plan === "pro" ? ts("pro") : ts("basic");
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 

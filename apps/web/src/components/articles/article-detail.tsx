@@ -1,11 +1,12 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { BookOpen, Brain, ChevronLeft, FileText, Pencil, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
 import { TypeMetadataSection } from "@/components/articles/type-metadata";
-import { useArticle, useDeleteArticle } from "@/lib/api/articles";
+import { useArticle, useDeleteArticle, useUpdateArticle } from "@/lib/api/articles";
 import { Link } from "@/lib/i18n/routing";
 
 const STATUS_MAP: Record<string, { color: string; labelKey: string }> = {
@@ -39,6 +40,17 @@ export function ArticleDetail({ id }: { id: string }) {
   const { data: article, isLoading, isError } = useArticle(id);
   const deleteArticle = useDeleteArticle();
   const router = useRouter();
+  const updateArticle = useUpdateArticle();
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const titleInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditingTitle && titleInputRef.current) {
+      titleInputRef.current.focus();
+      titleInputRef.current.select();
+    }
+  }, [isEditingTitle]);
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
 
@@ -63,6 +75,42 @@ export function ArticleDetail({ id }: { id: string }) {
           | "statusFailed"
       )
     : effectiveStatus;
+
+  const startEditingTitle = () => {
+    if (!article) return;
+    setEditTitle(article.title);
+    setIsEditingTitle(true);
+  };
+
+  const cancelEditingTitle = () => {
+    setIsEditingTitle(false);
+    setEditTitle("");
+  };
+
+  const saveTitle = async () => {
+    if (!article) return;
+    const trimmed = editTitle.trim();
+    if (!trimmed || trimmed.length > 500 || trimmed === article.title) {
+      cancelEditingTitle();
+      return;
+    }
+    await updateArticle.mutateAsync({ id, data: { title: trimmed } });
+    setIsEditingTitle(false);
+  };
+
+  const restoreOriginalTitle = async () => {
+    if (!article?.original_title || article.original_title === article.title) return;
+    await updateArticle.mutateAsync({ id, data: { title: article.original_title } });
+  };
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      void saveTitle();
+    } else if (e.key === "Escape") {
+      cancelEditingTitle();
+    }
+  };
 
   const handleDelete = async () => {
     if (!confirm(t("deleteConfirm"))) return;
@@ -101,14 +149,53 @@ export function ArticleDetail({ id }: { id: string }) {
       {/* Header */}
       <div>
         <div className="flex items-start justify-between gap-4">
-          <h1 className="text-2xl font-bold">{article.title}</h1>
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="shrink-0 rounded-md border border-destructive px-3 py-1 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground"
-          >
-            {tc("delete")}
-          </button>
+          {isEditingTitle ? (
+            <input
+              ref={titleInputRef}
+              type="text"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              onBlur={saveTitle}
+              onKeyDown={handleTitleKeyDown}
+              maxLength={500}
+              className="w-full text-2xl font-bold bg-transparent border-b-2 border-primary outline-none"
+              disabled={updateArticle.isPending}
+              style={{ opacity: updateArticle.isPending ? 0.5 : 1 }}
+            />
+          ) : (
+            <h1 className="text-2xl font-bold">
+              <button
+                type="button"
+                className="group inline-flex items-center cursor-pointer hover:text-primary/80 transition-colors"
+                onClick={startEditingTitle}
+                title={tc("edit")}
+              >
+                {article.title}
+                <Pencil className="ml-2 inline-block h-4 w-4 opacity-0 group-hover:opacity-50 transition-opacity" />
+              </button>
+            </h1>
+          )}
+          <div className="flex shrink-0 gap-2">
+            {article.original_title && article.title !== article.original_title && (
+              <button
+                type="button"
+                onClick={restoreOriginalTitle}
+                disabled={updateArticle.isPending}
+                className="rounded-md border px-3 py-1 text-sm text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-50"
+                title={tc("restoreOriginal")}
+              >
+                <RotateCcw className="mr-1 inline-block h-3 w-3" />
+                {tc("restoreOriginal")}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="rounded-md border border-destructive px-3 py-1 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            >
+              {tc("delete")}
+            </button>
+          </div>
         </div>
         <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
           <span
@@ -150,18 +237,9 @@ export function ArticleDetail({ id }: { id: string }) {
       {/* Status indicator for pending/processing/analyzing */}
       {(effectiveStatus === "pending" ||
         effectiveStatus === "processing" ||
-        effectiveStatus === "analyzing") && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-            <p className="text-sm text-blue-800">
-              {effectiveStatus === "pending" ? t("pendingAnalysis") : t("analyzingArticle")}
-            </p>
-          </div>
-        </div>
-      )}
+        effectiveStatus === "analyzing") && <AnalysisProgress status={effectiveStatus} />}
 
-      {/* Summary */}
+      {/* Summary — only after analysis completes */}
       {article.summary ? (
         <div className="space-y-4">
           <section className="rounded-lg border bg-card p-4">
@@ -251,6 +329,75 @@ export function ArticleDetail({ id }: { id: string }) {
           </p>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function AnalysisProgress({ status }: { status: string }) {
+  const t = useTranslations("dashboard");
+
+  const steps = useMemo(
+    () => [
+      { key: "reading" as const, icon: BookOpen, label: t("analysisStepReading") },
+      { key: "analyzing" as const, icon: Brain, label: t("analysisStepAnalyzing") },
+      { key: "summary" as const, icon: FileText, label: t("analysisStepSummary") },
+    ],
+    [t]
+  );
+
+  const activeIndex = status === "pending" ? 0 : status === "processing" ? 1 : 2;
+
+  return (
+    <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+      <div className="mb-5 flex items-center gap-2">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+        <p className="text-sm font-medium text-blue-900">
+          {status === "pending" ? t("pendingAnalysis") : t("analyzingArticle")}
+        </p>
+      </div>
+
+      {/* Steps */}
+      <div className="flex items-center gap-3">
+        {steps.map((step, i) => {
+          const Icon = step.icon;
+          const isDone = i < activeIndex;
+          const isActive = i === activeIndex;
+
+          return (
+            <div key={step.key} className="flex flex-1 items-center gap-3">
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-500 ${
+                    isDone
+                      ? "bg-blue-600 text-white"
+                      : isActive
+                        ? "bg-blue-100 text-blue-700 ring-2 ring-blue-400 ring-offset-2 animate-pulse"
+                        : "bg-gray-100 text-gray-400"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                </div>
+                <span
+                  className={`text-xs text-center font-medium ${
+                    isDone ? "text-blue-700" : isActive ? "text-blue-900" : "text-gray-400"
+                  }`}
+                >
+                  {step.label}
+                </span>
+              </div>
+              {i < steps.length - 1 && (
+                <div
+                  className={`h-0.5 w-6 shrink-0 rounded-full transition-colors duration-500 -mt-5 ${
+                    isDone ? "bg-blue-400" : "bg-gray-200"
+                  }`}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="mt-5 text-xs text-blue-700/70">{t("analysisDescription")}</p>
     </div>
   );
 }

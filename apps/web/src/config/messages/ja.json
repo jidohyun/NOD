@@ -7,13 +7,15 @@
     "save": "保存",
     "cancel": "キャンセル",
     "confirm": "確認",
-    "delete": "削除"
+    "delete": "削除",
+    "edit": "編集",
+    "restoreOriginal": "元に戻す"
   },
   "landing": {
     "hero": {
       "badge": "AI搭載ナレッジ管理",
-      "headline": "記事を保存し、インサイトを発見",
-      "description": "NODはAIを活用して記事を分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
+      "headline": "コンテンツを保存し、インサイトを発見",
+      "description": "NODはAIを活用してコンテンツを分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
       "cta": "無料で始める",
       "ctaExtension": "Chromeに追加",
       "ctaSecondary": "詳しく見る",
@@ -31,7 +33,9 @@
       "headline": "読書フローに合うプランを選択",
       "description": "まずはBasic。要約無制限や高品質モデルが必要になったらProへアップグレード。",
       "cta": "料金を見る",
-      "note": "いつでも変更可能"
+      "note": "いつでも変更可能",
+      "basicAnalyzableTypes": "分析可能タイプ: ニュース・技術ブログ・公式ドキュメント",
+      "proAnalyzableTypes": "分析可能タイプ: 全タイプ（GitHub・論文・動画を含む）"
     },
     "features": {
       "label": "機能",
@@ -39,15 +43,15 @@
       "items": {
         "aiSummary": {
           "title": "AI要約",
-          "description": "あらゆる記事のキーポイントとインサイトを強調するAI生成要約を即座に取得できます。"
+          "description": "あらゆるコンテンツのキーポイントとインサイトを強調するAI生成要約を即座に取得できます。"
         },
         "vectorSearch": {
           "title": "セマンティック検索",
-          "description": "キーワードではなく意味で記事を検索。ベクトル検索があなたの探しているものを理解します。"
+          "description": "キーワードではなく意味でコンテンツを検索。ベクトル検索があなたの探しているものを理解します。"
         },
         "chromeExtension": {
           "title": "Chrome拡張機能",
-          "description": "ブラウザからワンクリックで記事を保存。コピー＆ペースト不要です。"
+          "description": "ブラウザからワンクリックでコンテンツを保存。コピー＆ペースト不要です。"
         },
         "multiPlatform": {
           "title": "マルチプラットフォーム",
@@ -55,11 +59,11 @@
         },
         "concepts": {
           "title": "コンセプト抽出",
-          "description": "記事から主要なコンセプト、テーマ、トピックを自動的に識別しタグ付けします。"
+          "description": "コンテンツから主要なコンセプト、テーマ、トピックを自動的に識別しタグ付けします。"
         },
         "multilingual": {
           "title": "多言語対応",
-          "description": "あらゆる言語の記事を保存・分析できます。AI要約はお好みの言語で提供されます。"
+          "description": "あらゆる言語のコンテンツを保存・分析できます。AI要約はお好みの言語で提供されます。"
         }
       }
     },
@@ -70,12 +74,12 @@
         "save": {
           "number": "01",
           "title": "保存",
-          "description": "Chrome拡張機能でWebの記事を保存するか、URLを貼り付けてください。"
+          "description": "Chrome拡張機能でWebのコンテンツを保存するか、URLを貼り付けてください。"
         },
         "analyze": {
           "number": "02",
           "title": "分析",
-          "description": "AIが自動で記事を要約し、キーコンセプトを抽出し、ライブラリに整理します。"
+          "description": "AIが自動でコンテンツを要約し、キーコンセプトを抽出し、ライブラリに整理します。"
         },
         "recall": {
           "number": "03",
@@ -86,7 +90,7 @@
     },
     "cta": {
       "headline": "ナレッジライブラリの構築を始めましょう",
-      "description": "NODで記事を保存・分析・想起する数千人の読者と一緒に。",
+      "description": "NODでコンテンツを保存・分析・想起する数千人の読者と一緒に。",
       "button": "無料で始める",
       "note": "クレジットカード不要"
     },
@@ -105,7 +109,7 @@
       "privacy": "プライバシーポリシー",
       "terms": "利用規約",
       "refund": "返金ポリシー",
-      "tagline": "AI搭載の記事保存とナレッジ管理。",
+      "tagline": "AI搭載のコンテンツ保存とナレッジ管理。",
       "copyright": "© 2025 NOD. All rights reserved."
     }
   },
@@ -251,7 +255,7 @@
     "sidebar": {
       "nav": {
         "dashboard": "ダッシュボード",
-        "articles": "記事",
+        "articles": "コンテンツ",
         "graph": "グラフビュー",
         "settings": "設定",
         "billing": "請求管理",
@@ -268,24 +272,24 @@
     "overview": {
       "title": "ダッシュボード",
       "description": "ナレッジライブラリの概要です。",
-      "savedArticles": "保存した記事",
+      "savedArticles": "保存したコンテンツ",
       "aiSummaries": "AI要約",
       "currentPlan": "現在のプラン",
-      "viewArticlesTitle": "記事を見る",
-      "viewArticlesDescription": "保存した記事を閲覧・検索します。",
+      "viewArticlesTitle": "コンテンツを見る",
+      "viewArticlesDescription": "保存したコンテンツを閲覧・検索します。",
       "manageBillingTitle": "請求管理",
       "manageBillingDescription": "プランと使用状況を確認します。",
       "installExtensionTitle": "Chrome拡張機能をインストール",
-      "installExtensionDescription": "ブラウジング中の記事をワンクリックで保存します。",
-      "recentArticlesTitle": "最近の記事",
-      "recentArticlesDescription": "最近保存した記事です。",
-      "noRecentArticles": "まだ記事がありません。",
+      "installExtensionDescription": "ブラウジング中のコンテンツをワンクリックで保存します。",
+      "recentArticlesTitle": "最近のコンテンツ",
+      "recentArticlesDescription": "最近保存したコンテンツです。",
+      "noRecentArticles": "まだコンテンツがありません。",
       "viewAll": "すべて見る"
     },
     "graph": {
       "sectionLabel": "ナレッジグラフ",
       "pageTitle": "グラフビュー",
-      "pageDescription": "要約した記事のコア概念のつながりを可視化します。",
+      "pageDescription": "要約したコンテンツのコア概念のつながりを可視化します。",
       "previewTitle": "グラフビュー プレビュー",
       "previewDescription": "ダッシュボード下部で読み取り専用プレビューを表示します。",
       "openFull": "フルグラフを開く",
@@ -293,8 +297,8 @@
       "lockedDescription": "Proにアップグレードすると概念グラフを利用できます。",
       "upgrade": "Proにアップグレード",
       "loadError": "グラフデータの読み込みに失敗しました。",
-      "empty": "まだグラフデータがありません。記事を保存して要約してください。",
-      "statsArticles": "記事",
+      "empty": "まだグラフデータがありません。コンテンツを保存して要約してください。",
+      "statsArticles": "コンテンツ",
       "statsConcepts": "ユニーク概念",
       "statsNodes": "ノード",
       "statsEdges": "接続",
@@ -327,8 +331,8 @@
     "statusLabel": "ステータス",
     "markdownNote": "ノート",
     "downloadMarkdown": ".mdをダウンロード",
-    "myArticles": "マイ記事",
-    "searchArticles": "記事を検索...",
+    "myArticles": "マイコンテンツ",
+    "searchArticles": "コンテンツを検索...",
     "semanticSearch": "AI検索",
     "searchMinChars": "2文字以上入力してください",
     "allStatus": "すべてのステータス",
@@ -340,26 +344,30 @@
     "checkStatus": "ステータス確認",
     "refreshing": "更新中...",
     "retryAnalysis": "再試行",
-    "loadingArticles": "記事を読み込み中...",
-    "loadError": "記事の読み込みに失敗しました。",
-    "noArticles": "まだ記事がありません。Chrome拡張機能で記事を保存してください。",
+    "loadingArticles": "コンテンツを読み込み中...",
+    "loadError": "コンテンツの読み込みに失敗しました。",
+    "noArticles": "まだコンテンツがありません。Chrome拡張機能でコンテンツを保存してください。",
     "installExtensionCta": "Chromeに追加",
     "loadMore": "もっと見る",
     "noSummary": "要約なし",
-    "articleNotFound": "記事が見つかりません。",
-    "deleteConfirm": "この記事を削除しますか？",
+    "articleNotFound": "コンテンツが見つかりません。",
+    "deleteConfirm": "このコンテンツを削除しますか？",
     "original": "原文を見る",
     "pendingAnalysis": "分析待機中...",
-    "analyzingArticle": "AIが記事を分析しています...",
+    "analyzingArticle": "AIがコンテンツを分析しています...",
+    "analysisStepReading": "コンテンツ読み取り",
+    "analysisStepAnalyzing": "AI分析中",
+    "analysisStepSummary": "要約生成",
+    "analysisDescription": "AIがコンテンツを読み、主要な概念を抽出し、構造化された要約を生成します。通常30秒〜1分かかります。",
     "summary": "要約",
     "readTime": "約{minutes}分",
     "concepts": "キーコンセプト",
     "keyPoints": "主要ポイント",
     "analyzedBy": "{provider}/{model}で分析",
-    "similarArticles": "類似記事",
-    "loadingSimilar": "類似記事を読み込み中...",
+    "similarArticles": "類似コンテンツ",
+    "loadingSimilar": "類似コンテンツを読み込み中...",
     "similarity": "{percent}%一致",
-    "articleInfo": "記事情報",
+    "articleInfo": "コンテンツ情報",
     "savedDate": "保存日",
     "readingTime": "読了時間",
     "minuteRead": "{minutes}分",
@@ -415,10 +423,10 @@
     "limitReached": "今月の上限に達しました",
     "upgradePrompt": "Proにアップグレードしてより多くの要約を利用",
     "features": {
-      "basicSummaries": "月20回 AI要約",
-      "proSummaries": "無制限 AI要約",
-      "basicArticles": "50記事保存",
-      "proArticles": "無制限記事保存",
+      "basicSummaries": "月20回 AI分析",
+      "proSummaries": "無制限 AI分析",
+      "basicArticles": "保存時に自動AI分析",
+      "proArticles": "無制限保存・分析",
       "basicSearch": "無制限 セマンティック検索",
       "proSearch": "無制限セマンティック検索"
     },
@@ -430,13 +438,13 @@
     "nextBilling": "次回請求日: {date}",
     "activeSince": "{date}から有効",
     "planDescription": {
-      "basic": "AI搭載の記事管理を試したいカジュアルな読者に最適です。",
-      "pro": "毎日記事を保存・分析するパワーユーザー向けのプランです。"
+      "basic": "AI搭載のコンテンツ管理を試したいカジュアルな読者に最適です。",
+      "pro": "毎日コンテンツを保存・分析するパワーユーザー向けのプランです。"
     },
     "faq": "よくある質問",
     "faqItems": {
       "q1": "Proにすると何が変わりますか？",
-      "a1": "無制限のAI要約、無制限の記事保存が利用可能になります。",
+      "a1": "無制限のAI分析、無制限のコンテンツ保存が利用可能になります。",
       "q2": "いつでもキャンセルできますか？",
       "a2": "はい、いつでもキャンセルできます。現在の請求期間の終了までPro機能をご利用いただけます。",
       "q3": "どの支払い方法に対応していますか？",
@@ -444,22 +452,22 @@
     },
     "comparisonTitle": "プラン比較",
     "featureComparison": {
-      "aiSummaries": "AI要約",
-      "savedArticles": "記事保存",
+      "aiSummaries": "AI分析",
+      "savedArticles": "分析可能なコンテンツタイプ",
       "semanticSearch": "セマンティック検索",
       "markdownExport": "マークダウンエクスポート",
       "conceptExtraction": "コンセプト抽出"
     },
     "basicValue": {
       "aiSummaries": "月20回",
-      "savedArticles": "50件",
+      "savedArticles": "ニュース・技術ブログ・公式ドキュメント",
       "semanticSearch": "無制限",
       "markdownExport": "対応",
       "conceptExtraction": "対応"
     },
     "proValue": {
       "aiSummaries": "無制限",
-      "savedArticles": "無制限",
+      "savedArticles": "全タイプ（GitHub・論文・動画を含む）",
       "semanticSearch": "無制限",
       "markdownExport": "対応",
       "conceptExtraction": "対応"

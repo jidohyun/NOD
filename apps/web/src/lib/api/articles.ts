@@ -21,6 +21,7 @@ export interface Article {
   user_id: string;
   url: string | null;
   title: string;
+  original_title: string | null;
   source: string;
   status: string;
   created_at: string;
@@ -116,10 +117,13 @@ export function useArticle(id: string) {
   return useQuery({
     queryKey: ["articles", id],
     queryFn: async () => {
-      const { data } = await apiClient.get<Article>(`/api/articles/${id}`);
+      const { data } = await apiClient.get<Article>(`/api/articles/${id}`, {
+        headers: { "Cache-Control": "no-cache" },
+      });
       return data;
     },
     enabled: !!id,
+    staleTime: 0,
     refetchInterval: (query) => {
       const article = query.state.data;
       if (article && (article.status === "pending" || article.status === "processing" || article.status === "analyzing")) {
@@ -184,6 +188,20 @@ export function useRetryArticle() {
     },
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ["articles", id] });
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+}
+
+export function useUpdateArticle() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: { title?: string } }) => {
+      const { data: result } = await apiClient.patch<Article>(`/api/articles/${id}`, data);
+      return result;
+    },
+    onSuccess: (result) => {
+      queryClient.setQueryData(["articles", result.id], result);
       queryClient.invalidateQueries({ queryKey: ["articles"] });
     },
   });

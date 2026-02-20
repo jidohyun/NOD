@@ -8,7 +8,7 @@ declare global {
 export interface SaveArticleRequest {
   url: string;
   title: string;
-  content: string;
+  content?: string;
   excerpt?: string;
   siteName?: string;
   author?: string;
