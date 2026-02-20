@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import { resolveWebClipperSlugForLocale } from "../web-clipper-slug-routing";
 
 // 한국어 SEO 메타데이터
 export const metadata: Metadata = {
@@ -35,6 +37,12 @@ interface BlogPostProps {
 
 export default async function WebClipperGuideKo({ params }: BlogPostProps) {
   const { locale } = await params;
+  const expectedSlug = resolveWebClipperSlugForLocale(locale, "web-clipper-guide");
+
+  if (expectedSlug !== "web-clipper-guide") {
+    redirect(`/${locale}/blog/${expectedSlug}`);
+  }
+
   setRequestLocale(locale as Locale);
 
   const i18n = {
