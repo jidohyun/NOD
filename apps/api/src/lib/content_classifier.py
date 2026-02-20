@@ -66,17 +66,61 @@ _DOMAIN_RULES: list[tuple[list[str], ContentType]] = [
     # Official Docs
     (
         [
+            # Python / Rust / Go
             "docs.python.org",
-            "docs.microsoft.com",
-            "developer.mozilla.org",
-            "developer.apple.com",
-            "cloud.google.com",
             "docs.rs",
             "pkg.go.dev",
-            "reactjs.org",
+            # Microsoft / Apple / Google
+            "docs.microsoft.com",
+            "learn.microsoft.com",
+            "developer.apple.com",
+            "cloud.google.com",
+            "developers.google.com",
+            # Mozilla
+            "developer.mozilla.org",
+            # JavaScript frameworks (current domains)
+            "react.dev",
             "nextjs.org",
             "vuejs.org",
             "angular.io",
+            "angular.dev",
+            "svelte.dev",
+            "kit.svelte.dev",
+            "solidjs.com",
+            "preactjs.com",
+            "astro.build",
+            # JavaScript frameworks (legacy domains)
+            "reactjs.org",
+            "legacy.reactjs.org",
+            # TypeScript / Node / Deno / Bun
+            "typescriptlang.org",
+            "nodejs.org",
+            "deno.land",
+            "deno.com",
+            "bun.sh",
+            # CSS / UI frameworks
+            "tailwindcss.com",
+            "getbootstrap.com",
+            # Backend frameworks
+            "fastapi.tiangolo.com",
+            "docs.djangoproject.com",
+            "flask.palletsprojects.com",
+            "spring.io",
+            "rubyonrails.org",
+            # Databases
+            "redis.io",
+            "postgresql.org",
+            "mongodb.com",
+            # Cloud / DevOps
+            "docs.aws.amazon.com",
+            "vercel.com",
+            "docs.docker.com",
+            "kubernetes.io",
+            # Other
+            "graphql.org",
+            "docs.github.com",
+            "platform.openai.com",
+            "docs.anthropic.com",
         ],
         ContentType.OFFICIAL_DOCS,
     ),
@@ -95,7 +139,16 @@ def classify_url(url: str) -> ContentType:
             return content_type
 
     # Path-based heuristics
-    if host.startswith("docs.") or "/docs/" in path or "/documentation/" in path:
+    docs_paths = (
+        "/docs/",
+        "/documentation/",
+        "/reference/",
+        "/api/",
+        "/guide/",
+        "/learn/",
+        "/tutorial/",
+    )
+    if host.startswith("docs.") or any(p in path for p in docs_paths):
         return ContentType.OFFICIAL_DOCS
     if host.startswith("blog.") or "/blog/" in path or "/posts/" in path:
         return ContentType.TECH_BLOG

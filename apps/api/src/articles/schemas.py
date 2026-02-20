@@ -9,12 +9,13 @@ class ArticleCreate(BaseModel):
     title: str = Field(..., min_length=1, max_length=500)
     content: str = Field(..., min_length=1)
     source: str = Field(default="web", pattern="^(web|extension|api)$")
+    requested_summary_language: str | None = Field(default=None, max_length=10)
 
 
 class ArticleAnalyzeURL(BaseModel):
     url: str = Field(..., max_length=2048)
     title: str = Field(..., min_length=1, max_length=500)
-    content: str = Field(..., min_length=1)
+    content: str | None = Field(default=None)
     source: str = Field(default="extension", pattern="^(web|extension|api)$")
     summary_language: str | None = Field(
         default=None,
@@ -50,6 +51,7 @@ class ArticleResponse(BaseModel):
     user_id: uuid.UUID
     url: str | None = None
     title: str
+    original_title: str | None = None
     source: str
     status: str
     created_at: datetime
@@ -112,3 +114,7 @@ class ConceptGraphResponse(BaseModel):
     nodes: list[ConceptGraphNode]
     edges: list[ConceptGraphEdge]
     meta: ConceptGraphMeta
+
+
+class ArticleUpdate(BaseModel):
+    title: str | None = Field(None, min_length=1, max_length=500)

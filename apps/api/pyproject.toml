@@ -28,6 +28,8 @@ dependencies = [
     "openai>=1.82.0",
     "google-genai>=1.14.0",
     "bcrypt>=4.0.0",
+    "pypdf>=4.0.0",
+    "youtube-transcript-api>=1.2.3",
 ]
 
 [dependency-groups]
@@ -106,4 +108,12 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = ["bcrypt.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["pypdf.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["youtube_transcript_api.*"]
 ignore_missing_imports = true

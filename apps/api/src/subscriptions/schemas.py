@@ -8,12 +8,10 @@ from pydantic import BaseModel, Field
 PLAN_LIMITS = {
     "basic": {
         "summaries_per_month": 20,
-        "max_articles": 50,
         "searches_per_day": -1,
     },
     "pro": {
         "summaries_per_month": -1,
-        "max_articles": -1,  # unlimited
         "searches_per_day": -1,  # unlimited
     },
 }
@@ -39,10 +37,7 @@ class UsageResponse(BaseModel):
     status: str
     summaries_used: int
     summaries_limit: int
-    articles_saved: int
-    articles_limit: int
     can_summarize: bool
-    can_save_article: bool
 
 
 class PaddleWebhookEvent(BaseModel):
