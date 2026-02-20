@@ -6,6 +6,7 @@ import {
   HelpCircle,
   LayoutDashboard,
   LogOut,
+  MessageSquare,
   Settings,
   Tag,
   User as UserIcon,
@@ -142,6 +143,16 @@ export function DashboardSidebar() {
               <DropdownMenuItem onClick={() => router.push("/blog/web-clipper-guide")}>
                 <HelpCircle />
                 <span>{t("sidebar.user.help")}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a
+                  href="https://nodarchive.featurebase.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageSquare />
+                  <span>{t("sidebar.user.feedback")}</span>
+                </a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

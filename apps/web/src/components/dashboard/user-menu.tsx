@@ -1,6 +1,13 @@
 "use client";
 
-import { CreditCard, HelpCircle, LogOut, Settings, User as UserIcon } from "lucide-react";
+import {
+  CreditCard,
+  HelpCircle,
+  LogOut,
+  MessageSquare,
+  Settings,
+  User as UserIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -111,6 +118,12 @@ export function UserMenu() {
         <DropdownMenuItem onClick={() => router.push("/blog/web-clipper-guide")}>
           <HelpCircle />
           <span>{t("sidebar.user.help")}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <a href="https://nodarchive.featurebase.app/" target="_blank" rel="noopener noreferrer">
+            <MessageSquare />
+            <span>{t("sidebar.user.feedback")}</span>
+          </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={handleLogout}>

@@ -266,6 +266,7 @@
         "settings": "設定",
         "billing": "請求管理",
         "help": "ヘルプ",
+        "feedback": "フィードバック",
         "logout": "ログアウト"
       }
     },
@@ -400,6 +401,7 @@
       "manageBilling": "請求とサブスクリプションを管理",
       "viewPricing": "料金プランを見る",
       "installExtension": "Chrome拡張機能をインストール",
+      "feedback": "フィードバックを送る",
       "terms": "利用規約",
       "privacy": "プライバシーポリシー",
       "refund": "返金ポリシー"

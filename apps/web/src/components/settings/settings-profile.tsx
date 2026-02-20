@@ -1,6 +1,14 @@
 "use client";
 
-import { CreditCard, FileText, Mail, Puzzle, Shield, User as UserIcon } from "lucide-react";
+import {
+  CreditCard,
+  FileText,
+  Mail,
+  MessageSquare,
+  Puzzle,
+  Shield,
+  User as UserIcon,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -165,6 +173,15 @@ export function SettingsProfile() {
               >
                 <Puzzle className="h-4 w-4 text-muted-foreground" />
                 {t("links.installExtension")}
+              </a>
+              <a
+                href="https://nodarchive.featurebase.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
+              >
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                {t("links.feedback")}
               </a>
             </div>
           </div>
