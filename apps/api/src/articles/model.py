@@ -20,9 +20,14 @@ class Article(UUIDMixin, TimestampMixin, Base):
     )
     url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
     title: Mapped[str] = mapped_column(String(500), nullable=False)
+    original_title: Mapped[str | None] = mapped_column(String(500), nullable=True)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     source: Mapped[str] = mapped_column(
         String(50), nullable=False, server_default=text("'web'")
+    )
+    requested_summary_language: Mapped[str | None] = mapped_column(
+        String(10),
+        nullable=True,
     )
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default=text("'pending'")

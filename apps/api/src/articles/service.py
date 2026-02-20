@@ -12,6 +12,7 @@ from src.articles.model import Article, ArticleEmbedding, ArticleSummary
 from src.articles.schemas import (
     ArticleCreate,
     ArticleListResponse,
+    ArticleUpdate,
     ConceptGraphEdge,
     ConceptGraphMeta,
     ConceptGraphNode,
@@ -38,8 +39,10 @@ async def create_article(
         user_id=uuid.UUID(user_id),
         url=data.url,
         title=data.title,
+        original_title=data.title,
         content=data.content,
         source=data.source,
+        requested_summary_language=data.requested_summary_language,
     )
     db.add(article)
     await db.flush()
@@ -168,6 +171,27 @@ async def list_articles(
         page=page,
         limit=limit,
     )
+
+
+async def update_article(
+    db: AsyncSession,
+    article_id: uuid.UUID,
+    user_id: str,
+    data: ArticleUpdate,
+) -> Article | None:
+    article = await get_article(db, article_id, user_id)
+    if not article:
+        return None
+    update_data = data.model_dump(exclude_unset=True)
+    if not update_data:
+        return article
+    await db.execute(
+        update(Article)
+        .where(Article.id == article_id, Article.user_id == uuid.UUID(user_id))
+        .values(**update_data)
+    )
+    await db.flush()
+    return await get_article(db, article_id, user_id)
 
 
 async def delete_article(

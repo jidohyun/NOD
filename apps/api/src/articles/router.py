@@ -12,19 +12,124 @@ from src.articles.schemas import (
     ArticleListResponse,
     ArticleResponse,
     ArticleSaveResponse,
+    ArticleUpdate,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
 from src.lib.config import settings
+from src.lib.content_classifier import ContentType, classify_url
 from src.lib.dependencies import AIService, CurrentUser, DBSession
+from src.lib.pdf_extractor import extract_text_from_pdf_url
+from src.lib.video_transcript import (
+    TranscriptProviderError,
+    TranscriptUnavailableError,
+    UnsupportedVideoUrlError,
+    get_video_transcript_service,
+)
 from src.subscriptions import service as sub_service
 
 # Keep references to background tasks so they are not garbage-collected.
-_background_tasks: set[asyncio.Task] = set()  # type: ignore[type-arg]
+_background_tasks: set[asyncio.Task[None]] = set()
 
 logger = structlog.get_logger(__name__)
 
 router = APIRouter()
+
+VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS = int(
+    getattr(settings, "VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS", 100)
+)
+
+
+def resolve_content_type_for_retry(article: object) -> ContentType:
+    summary = getattr(article, "summary", None)
+    summary_content_type = getattr(summary, "content_type", None)
+    if isinstance(summary_content_type, str):
+        try:
+            return ContentType(summary_content_type)
+        except ValueError:
+            pass
+
+    article_url = getattr(article, "url", None)
+    if isinstance(article_url, str) and article_url:
+        return classify_url(article_url)
+
+    return ContentType.GENERAL_NEWS
+
+
+def resolve_summary_language_for_retry(article: object) -> str:
+    summary = getattr(article, "summary", None)
+    summary_language = getattr(summary, "language", None)
+    if isinstance(summary_language, str) and summary_language.strip():
+        return summary_language
+
+    requested_language = getattr(article, "requested_summary_language", None)
+    if isinstance(requested_language, str) and requested_language.strip():
+        return requested_language
+
+    return "ko"
+
+
+def enforce_content_type_access(plan: str, content_type: ContentType) -> None:
+    if sub_service.can_access_content_type(plan, content_type):
+        return
+    raise HTTPException(
+        status_code=status.HTTP_402_PAYMENT_REQUIRED,
+        detail=(
+            "This content type is available on Pro plan only. "
+            "Free plan supports general news, tech blog, and official docs."
+        ),
+    )
+
+
+async def prepare_analyze_url_content(
+    *,
+    url: str,
+    title: str,
+    content: str | None,
+) -> tuple[str, str]:
+    normalized_content = (content or "").strip()
+    if len(normalized_content) >= VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS:
+        return title, normalized_content
+
+    requested_content_type = classify_url(url)
+    if requested_content_type == ContentType.VIDEO_PODCAST:
+        transcript_service = get_video_transcript_service()
+        try:
+            transcript = await transcript_service.extract_transcript(url)
+            return title, transcript.text
+        except (TranscriptUnavailableError, UnsupportedVideoUrlError) as exc:
+            if normalized_content:
+                return title, normalized_content
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="Could not extract transcript from this video URL",
+            ) from exc
+        except TranscriptProviderError as exc:
+            logger.warning(
+                "Transcript provider failed",
+                url=url,
+                is_transient=exc.is_transient,
+            )
+            if normalized_content:
+                return title, normalized_content
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=(
+                    "Transcript provider is temporarily unavailable. Please try again."
+                ),
+            ) from exc
+
+    pdf_result = await extract_text_from_pdf_url(url)
+    if pdf_result:
+        return (pdf_result.title or title), pdf_result.text
+
+    if normalized_content:
+        return title, normalized_content
+
+    raise HTTPException(
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        detail="Could not extract content from this URL",
+    )
 
 
 async def _run_analysis(
@@ -111,9 +216,7 @@ async def _run_analysis(
 
             base_fields = set(BaseSummaryResult.model_fields.keys())
             type_metadata = {
-                k: v
-                for k, v in result.model_dump().items()
-                if k not in base_fields
+                k: v for k, v in result.model_dump().items() if k not in base_fields
             }
 
             summary = ArticleSummary(
@@ -238,36 +341,36 @@ async def create_article(
     db: DBSession,
     user: CurrentUser,
 ) -> ArticleResponse:
-    # Check article save limit
+    # Check analysis credit
     usage_info = await sub_service.get_usage_info(db, user.id)
-    if not usage_info.can_save_article:
+    if not usage_info.can_summarize:
         raise HTTPException(
             status_code=status.HTTP_402_PAYMENT_REQUIRED,
-            detail="Article save limit reached. Upgrade to Pro for unlimited articles.",
+            detail="Analysis limit reached. Upgrade to Pro for unlimited.",
         )
+
+    requested_content_type = (
+        classify_url(data.url) if data.url else ContentType.GENERAL_NEWS
+    )
+    enforce_content_type_access(usage_info.plan, requested_content_type)
 
     article = await service.create_article(db, user.id, data)
-    await sub_service.increment_article_usage(db, user.id)
     await db.commit()
 
-    # Check usage limits before running analysis
-    if usage_info.can_summarize:
-        selected_provider: Literal["gemini", "openai"] = "gemini"
-        ok = await _run_analysis(
-            article.id, article.title, article.content, selected_provider,
-            article_url=article.url,
-        )
-        if ok:
-            await sub_service.increment_summary_usage(db, user.id)
-            await db.commit()
-        updated = await service.get_article(db, article.id, user.id)
-        if updated:
-            article = updated
-    else:
-        await service.update_article_status(article.id, "completed")
-        article.status = "completed"
+    selected_provider: Literal["gemini", "openai"] = "gemini"
+    ok = await _run_analysis(
+        article.id,
+        article.title,
+        article.content,
+        selected_provider,
+        article_url=article.url,
+    )
+    if ok:
+        await sub_service.increment_summary_usage(db, user.id)
         await db.commit()
-        logger.info("Summary limit reached, skipping analysis", user_id=str(user.id))
+    updated = await service.get_article(db, article.id, user.id)
+    if updated:
+        article = updated
 
     return ArticleResponse.model_validate(article)
 
@@ -283,8 +386,13 @@ async def list_articles(
     content_type_filter: str | None = Query(default=None, alias="content_type"),
 ) -> PaginatedResponse[ArticleListResponse]:
     return await service.list_articles(
-        db, user.id, page=page, limit=limit, search=search,
-        status_filter=status_filter, content_type_filter=content_type_filter,
+        db,
+        user.id,
+        page=page,
+        limit=limit,
+        search=search,
+        status_filter=status_filter,
+        content_type_filter=content_type_filter,
     )
 
 
@@ -302,14 +410,24 @@ async def search_articles(
     try:
         embedding = await ai.generate_embedding(q)
         return await service.search_articles_semantic(
-            db, user.id, embedding, page=page, limit=limit,
-            status_filter=status_filter, content_type_filter=content_type_filter,
+            db,
+            user.id,
+            embedding,
+            page=page,
+            limit=limit,
+            status_filter=status_filter,
+            content_type_filter=content_type_filter,
         )
     except Exception:
         logger.warning("Semantic search failed, falling back to text search", query=q)
         return await service.list_articles(
-            db, user.id, page=page, limit=limit, search=q,
-            status_filter=status_filter, content_type_filter=content_type_filter,
+            db,
+            user.id,
+            page=page,
+            limit=limit,
+            search=q,
+            status_filter=status_filter,
+            content_type_filter=content_type_filter,
         )
 
 
@@ -325,6 +443,23 @@ async def get_article(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Article not found",
         )
+    return ArticleResponse.model_validate(article)
+
+
+@router.patch("/{article_id}", response_model=ArticleResponse)
+async def update_article(
+    article_id: uuid.UUID,
+    data: ArticleUpdate,
+    db: DBSession,
+    user: CurrentUser,
+) -> ArticleResponse:
+    article = await service.update_article(db, article_id, user.id, data)
+    if not article:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Article not found",
+        )
+    await db.commit()
     return ArticleResponse.model_validate(article)
 
 
@@ -382,17 +517,18 @@ async def retry_article_analysis(
     if not usage_info.can_summarize:
         raise HTTPException(
             status_code=status.HTTP_402_PAYMENT_REQUIRED,
-            detail="Summary limit reached. Upgrade to Pro for more summaries.",
+            detail="Analysis limit reached. Upgrade to Pro for unlimited.",
         )
+
+    requested_content_type = resolve_content_type_for_retry(article)
+    enforce_content_type_access(usage_info.plan, requested_content_type)
 
     await service.update_article_status(article.id, "processing")
     article.status = "processing"
 
     selected_provider: Literal["gemini", "openai"] = "gemini"
 
-    summary_language = "ko"
-    if article.summary and article.summary.language:
-        summary_language = article.summary.language
+    summary_language = resolve_summary_language_for_retry(article)
 
     task = asyncio.create_task(
         _run_analysis_async(
@@ -422,70 +558,63 @@ async def analyze_url(
     db: DBSession,
     user: CurrentUser,
 ) -> ArticleSaveResponse:
-    """Convenience endpoint for the Chrome Extension.
-
-    Accepts a URL plus pre-extracted content.
-    """
-    create_data = ArticleCreate(
-        url=data.url,
-        title=data.title,
-        content=data.content,
-        source=data.source,
-    )
-    summary_language = data.summary_language or "ko"
-
     existing_article = await service.get_article_by_url(db, user.id, data.url)
     if existing_article:
         existing_response = ArticleSaveResponse.model_validate(existing_article)
         existing_response.already_saved = True
         return existing_response
 
-    # Check article save limit
+    # Check analysis credit
     usage_info = await sub_service.get_usage_info(db, user.id)
-    if not usage_info.can_save_article:
+    if not usage_info.can_summarize:
         raise HTTPException(
             status_code=status.HTTP_402_PAYMENT_REQUIRED,
-            detail="Article save limit reached. Upgrade to Pro for unlimited articles.",
+            detail="Analysis limit reached. Upgrade to Pro for unlimited.",
         )
+
+    requested_content_type = classify_url(data.url)
+    enforce_content_type_access(usage_info.plan, requested_content_type)
+
+    title, content = await prepare_analyze_url_content(
+        url=data.url,
+        title=data.title,
+        content=data.content,
+    )
+    summary_language = data.summary_language or "ko"
+
+    create_data = ArticleCreate(
+        url=data.url,
+        title=title,
+        content=content,
+        source=data.source,
+        requested_summary_language=summary_language,
+    )
 
     article = await service.create_article(db, user.id, create_data)
-    await sub_service.increment_article_usage(db, user.id)
     await db.commit()
 
-    # Check usage limits before running analysis
-    if usage_info.can_summarize:
-        selected_provider: Literal["gemini", "openai"] = "gemini"
-        await service.update_article_status(article.id, "processing")
-        article.status = "processing"
+    selected_provider: Literal["gemini", "openai"] = "gemini"
+    await service.update_article_status(article.id, "processing")
+    article.status = "processing"
 
-        analysis_task = asyncio.create_task(
-            _run_analysis_async(
-                article.id,
-                article.title,
-                article.content,
-                selected_provider,
-                summary_language,
-                user.id,
-                article_url=data.url,
-            ),
-            name=f"article-analysis-{article.id}",
-        )
-        _background_tasks.add(analysis_task)
-        analysis_task.add_done_callback(_background_tasks.discard)
-        logger.info(
-            "Dispatched article analysis task",
-            article_id=str(article.id),
-            task_name=analysis_task.get_name(),
-        )
-
-        # Keep sync path for create endpoint unchanged.
-    else:
-        await service.update_article_status(article.id, "completed")
-        article.status = "completed"
-        await db.commit()
-        logger.info(
-            "Summary limit reached, marked article as completed without analysis",
-            user_id=str(user.id),
-        )
+    analysis_task = asyncio.create_task(
+        _run_analysis_async(
+            article.id,
+            article.title,
+            article.content,
+            selected_provider,
+            summary_language,
+            user.id,
+            article_url=data.url,
+        ),
+        name=f"article-analysis-{article.id}",
+    )
+    _background_tasks.add(analysis_task)
+    analysis_task.add_done_callback(_background_tasks.discard)
+    logger.info(
+        "Dispatched article analysis task",
+        article_id=str(article.id),
+        task_name=analysis_task.get_name(),
+    )
 
     return ArticleSaveResponse.model_validate(article)
