@@ -6,6 +6,20 @@ import { MAX_CONTENT_LENGTH, EXCERPT_LENGTH, WORDS_PER_MINUTE } from "../lib/con
  * Extract article content from the current page
  */
 export function extractContent(): ExtractedContent {
+  // PDF: send minimal content, let server extract
+  if (document.contentType === "application/pdf") {
+    return extractPDFContent();
+  }
+
+  // GitHub repository: use specialized extractor
+  if (isGitHubRepo(window.location.href)) {
+    return extractGitHubContent();
+  }
+
+  if (isYouTubeVideoPage(window.location.href)) {
+    return extractYouTubeContent();
+  }
+
   // Try Readability first
   const readabilityResult = tryReadability();
   if (readabilityResult) {
@@ -53,7 +67,6 @@ function tryReadability(): ExtractedContent | null {
  * Fallback heuristic extraction
  */
 function heuristicExtraction(): ExtractedContent {
-  const sourceDocument = getSourceDocument();
   const title = extractTitle();
   const content = extractMainContent();
   const wordCount = countWords(content);
@@ -219,8 +232,22 @@ function truncateContent(content: string): string {
  * Check if current page is likely an article
  */
 export function isArticlePage(): boolean {
+  // PDF pages: always treat as article (server-side extraction)
+  if (document.contentType === "application/pdf") {
+    return true;
+  }
+
   if (!isEligiblePage()) {
     return false;
+  }
+
+  // GitHub repositories: allow if README-like content exists
+  if (isGitHubRepo(window.location.href)) {
+    return !!document.querySelector('article, [class*="markdown" i]');
+  }
+
+  if (isYouTubeVideoPage(window.location.href)) {
+    return true;
   }
 
   const sourceDocument = getSourceDocument();
@@ -241,9 +268,9 @@ export function isArticlePage(): boolean {
 }
 
 function isEligiblePage(): boolean {
-  // Avoid non-HTML documents (e.g. PDFs)
+  // PDF documents are handled separately via isArticlePage() + extractPDFContent()
   if (document.contentType === "application/pdf") {
-    return false;
+    return true;
   }
 
   let url: URL;
@@ -270,18 +297,133 @@ function isEligiblePage(): boolean {
   return true;
 }
 
+function isGitHubRepo(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host !== "github.com") return false;
+    // /{owner}/{repo} pattern (minimum 2 segments)
+    const segments = parsed.pathname.split("/").filter(Boolean);
+    return segments.length >= 2;
+  } catch {
+    return false;
+  }
+}
+
+function isYouTubeVideoPage(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") {
+      return parsed.pathname.length > 1;
+    }
+
+    if (host !== "youtube.com" && host !== "m.youtube.com") {
+      return false;
+    }
+
+    if (parsed.pathname === "/watch") {
+      return parsed.searchParams.has("v");
+    }
+
+    return (
+      parsed.pathname.startsWith("/shorts/") ||
+      parsed.pathname.startsWith("/live/")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function extractGitHubContent(): ExtractedContent {
+  const sourceDocument = getSourceDocument();
+
+  // GitHub repo description
+  const aboutSection =
+    sourceDocument.querySelector('[class*="About"] p, .f4.my-3')?.textContent?.trim() || "";
+
+  // README content - GitHub uses article tag or markdown class elements
+  const readmeElement =
+    sourceDocument.querySelector("article") ||
+    sourceDocument.querySelector('[class*="markdown" i]');
+  const readmeContent = readmeElement?.textContent?.replace(/\s+/g, " ").trim() || "";
+
+  // Topics/tags
+  const topics = Array.from(
+    sourceDocument.querySelectorAll('a[data-octo-click="topic_click"]')
+  )
+    .map((el) => el.textContent?.trim())
+    .filter(Boolean)
+    .join(", ");
+
+  const content = [aboutSection, topics ? `Topics: ${topics}` : "", readmeContent]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const title = extractTitle();
+  const wordCount = countWords(content);
+
+  return {
+    title,
+    content: truncateContent(content),
+    excerpt: createExcerpt(aboutSection || content),
+    url: window.location.href,
+    siteName: "GitHub",
+    author: extractAuthor(),
+    publishedAt: undefined,
+    wordCount,
+    readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+  };
+}
+
+function extractYouTubeContent(): ExtractedContent {
+  const url = window.location.href;
+  const title = extractTitle();
+  const siteName = new URL(url).hostname.replace("www.", "");
+
+  return {
+    title,
+    content: "",
+    excerpt: "YouTube video",
+    url,
+    siteName,
+    author: extractAuthor(),
+    publishedAt: extractPublishedDate(),
+    wordCount: 0,
+    readingTime: 0,
+  };
+}
+
+function extractPDFContent(): ExtractedContent {
+  const url = window.location.href;
+  const title =
+    document.title ||
+    url.split("/").pop()?.replace(".pdf", "") ||
+    "PDF Document";
+
+  return {
+    title,
+    content: "",
+    excerpt: "PDF document",
+    url,
+    siteName: new URL(url).hostname.replace("www.", ""),
+    author: undefined,
+    publishedAt: undefined,
+    wordCount: 0,
+    readingTime: 0,
+  };
+}
+
 function isBlockedHost(host: string): boolean {
   // Based on Firefox Reader Mode blocked hosts.
   // https://raw.githubusercontent.com/mozilla/firefox/main/toolkit/components/reader/Readerable.js
   const blockedHosts = [
     "amazon.com",
-    "github.com",
     "mail.google.com",
     "pinterest.com",
     "reddit.com",
     "twitter.com",
     "x.com",
-    "youtube.com",
     "app.slack.com",
   ];
 

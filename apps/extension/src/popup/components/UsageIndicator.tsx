@@ -9,10 +9,8 @@ interface UsageIndicatorProps {
 export function UsageIndicator({ usage }: UsageIndicatorProps) {
   const isSummaryUnlimited = usage.summaries_limit === -1;
   const isSummaryAtLimit = !isSummaryUnlimited && !usage.can_summarize;
-  const isArticleUnlimited = usage.articles_limit === -1;
-  const isArticleAtLimit = !isArticleUnlimited && !usage.can_save_article;
 
-  if (isSummaryUnlimited && isArticleUnlimited) {
+  if (isSummaryUnlimited) {
     return (
       <div className="flex items-center gap-1.5 text-xs t-muted">
         <div className="h-1.5 w-1.5 rounded-full bg-green-400 progress-glow" />
@@ -30,10 +28,6 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
     .replace("{used}", String(usage.summaries_used))
     .replace("{limit}", String(usage.summaries_limit));
 
-  const articleUsageText = t("extArticleUsageInfo")
-    .replace("{used}", String(usage.articles_saved))
-    .replace("{limit}", String(usage.articles_limit));
-
   const barColor = isSummaryAtLimit
     ? "bg-red-500"
     : summaryPercentage >= 80
@@ -47,23 +41,16 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
           {summaryUsageText}
         </span>
       </div>
-      {!isSummaryUnlimited ? (
-        <div className="h-1 overflow-hidden rounded-full" style={{ background: "var(--progress-track)" }}>
-          <div
-            className={`h-1 rounded-full transition-all duration-500 ease-out ${barColor}`}
-            style={{ width: `${summaryPercentage}%` }}
-          />
-        </div>
-      ) : null}
-      <div className="flex items-center justify-between text-xs">
-        <span className={isArticleAtLimit ? "text-red-400" : "t-muted"}>
-          {articleUsageText}
-        </span>
+      <div className="h-1 overflow-hidden rounded-full" style={{ background: "var(--progress-track)" }}>
+        <div
+          className={`h-1 rounded-full transition-all duration-500 ease-out ${barColor}`}
+          style={{ width: `${summaryPercentage}%` }}
+        />
       </div>
-      {(isSummaryAtLimit || isArticleAtLimit) && (
+      {isSummaryAtLimit && (
         <div className="flex items-center justify-between">
           <span className="text-xs text-red-400">
-            {isArticleAtLimit ? t("extArticleLimitReached") : t("extLimitReached")}
+            {t("extLimitReached")}
           </span>
           <a
             href={`${WEB_BASE}/pricing`}

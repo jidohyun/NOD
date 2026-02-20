@@ -32,6 +32,12 @@ export class ExtensionError extends Error {
           message || "Usage limit reached. Upgrade to Pro to continue.",
           true
         );
+      case 422:
+        return new ExtensionError(
+          "EXTRACT_FAILED",
+          message || "Could not extract content from this page.",
+          false
+        );
       case 429:
         return new ExtensionError(
           "RATE_LIMITED",

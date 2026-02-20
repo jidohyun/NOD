@@ -123,10 +123,7 @@ export interface UsageInfo {
   status: string;
   summaries_used: number;
   summaries_limit: number;
-  articles_saved: number;
-  articles_limit: number;
   can_summarize: boolean;
-  can_save_article: boolean;
 }
 
 export async function getUsageInfo(): Promise<UsageInfo> {

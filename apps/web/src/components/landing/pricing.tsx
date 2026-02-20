@@ -18,6 +18,7 @@ export function LandingPricing() {
         ts("features.basicSummaries"),
         ts("features.basicArticles"),
         ts("features.basicSearch"),
+        t("basicAnalyzableTypes"),
       ],
       highlighted: false,
     },
@@ -26,7 +27,12 @@ export function LandingPricing() {
       name: ts("pro"),
       price: ts("proPrice"),
       description: ts("planDescription.pro"),
-      features: [ts("features.proSummaries"), ts("features.proArticles"), ts("features.proSearch")],
+      features: [
+        ts("features.proSummaries"),
+        ts("features.proArticles"),
+        ts("features.proSearch"),
+        t("proAnalyzableTypes"),
+      ],
       highlighted: true,
     },
   ] as const;
