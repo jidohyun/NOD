@@ -1,6 +1,40 @@
 import axios from "axios";
 import { createClient } from "@/lib/supabase/client";
 
+const TOKEN_CACHE_TTL_MS = 5_000;
+
+let cachedAccessToken: string | null = null;
+let cachedAt = 0;
+let inFlightTokenRequest: Promise<string | null> | null = null;
+
+async function getAccessToken(): Promise<string | null> {
+  const now = Date.now();
+  if (cachedAccessToken && now - cachedAt < TOKEN_CACHE_TTL_MS) {
+    return cachedAccessToken;
+  }
+
+  if (inFlightTokenRequest) {
+    return inFlightTokenRequest;
+  }
+
+  inFlightTokenRequest = (async () => {
+    const supabase = createClient();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const token = session?.access_token ?? null;
+    cachedAccessToken = token;
+    cachedAt = Date.now();
+    return token;
+  })();
+
+  try {
+    return await inFlightTokenRequest;
+  } finally {
+    inFlightTokenRequest = null;
+  }
+}
+
 export const apiClient = axios.create({
   baseURL: "/_proxy",
   timeout: 30000,
@@ -10,13 +44,10 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(async (config) => {
-  const supabase = createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const token = await getAccessToken();
 
-  if (session?.access_token && config.headers) {
-    config.headers.Authorization = `Bearer ${session.access_token}`;
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -36,9 +67,14 @@ apiClient.interceptors.response.use(
       } = await supabase.auth.refreshSession();
 
       if (session?.access_token && !refreshError) {
+        cachedAccessToken = session.access_token;
+        cachedAt = Date.now();
         originalRequest.headers.Authorization = `Bearer ${session.access_token}`;
         return apiClient(originalRequest);
       }
+
+      cachedAccessToken = null;
+      cachedAt = 0;
 
       // Refresh failed - sign out and redirect
       await supabase.auth.signOut();
