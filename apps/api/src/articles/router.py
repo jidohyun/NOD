@@ -157,12 +157,16 @@ async def _run_analysis(
         logger.info(
             "Calling summarize_article", article_id=str(article_id), provider=provider
         )
-        result, content_type = await summarize_article(
-            title,
-            content,
-            url=article_url,
-            provider=provider,
-            summary_language=summary_language,
+        analysis_timeout_seconds = 120
+        result, content_type = await asyncio.wait_for(
+            summarize_article(
+                title,
+                content,
+                url=article_url,
+                provider=provider,
+                summary_language=summary_language,
+            ),
+            timeout=analysis_timeout_seconds,
         )
         logger.info(
             "summarize_article completed successfully",
@@ -333,6 +337,13 @@ async def _run_analysis_async(
             article_id=str(article_id),
             error=str(exc),
         )
+        try:
+            await service.update_article_status(article_id, "failed")
+        except Exception:
+            logger.exception(
+                "Failed to mark article as failed from wrapper",
+                article_id=str(article_id),
+            )
 
 
 @router.post("", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED)

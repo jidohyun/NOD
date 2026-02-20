@@ -42,6 +42,11 @@ async def summarize_article(
     resolved_provider = provider or settings.AI_PROVIDER
     logger.info("Resolved AI provider", provider=resolved_provider)
 
+    if not settings.GEMINI_API_KEY and not settings.OPENAI_API_KEY:
+        raise ValueError(
+            "No AI API key configured. Set GEMINI_API_KEY or OPENAI_API_KEY."
+        )
+
     if resolved_provider == "openai" and not settings.OPENAI_API_KEY:
         logger.warning("OpenAI key not set, falling back to Gemini")
         resolved_provider = "gemini"
