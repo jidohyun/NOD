@@ -2,6 +2,7 @@ import uuid as uuid_lib
 from datetime import datetime
 
 from sqlalchemy import (
+    CheckConstraint,
     DateTime,
     ForeignKey,
     Integer,
@@ -17,7 +18,14 @@ from src.lib.database import Base
 
 
 class Subscription(UUIDMixin, TimestampMixin, Base):
-    __tablename__ = "subscriptions"
+    __tablename__: str = "subscriptions"
+    __table_args__: tuple[CheckConstraint, CheckConstraint] = (
+        CheckConstraint("plan IN ('basic', 'pro')", name="plan_valid"),
+        CheckConstraint(
+            "status IN ('active', 'canceled', 'past_due', 'paused')",
+            name="status_valid",
+        ),
+    )
 
     user_id: Mapped[uuid_lib.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -48,8 +56,14 @@ class Subscription(UUIDMixin, TimestampMixin, Base):
 
 
 class UsageRecord(UUIDMixin, TimestampMixin, Base):
-    __tablename__ = "usage_records"
-    __table_args__ = (UniqueConstraint("user_id", "month", name="uq_user_month"),)
+    __tablename__: str = "usage_records"
+    __table_args__: tuple[UniqueConstraint, CheckConstraint] = (
+        UniqueConstraint("user_id", "month", name="uq_user_month"),
+        CheckConstraint(
+            r"month ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'",
+            name="month_format",
+        ),
+    )
 
     user_id: Mapped[uuid_lib.UUID] = mapped_column(
         UUID(as_uuid=True),
