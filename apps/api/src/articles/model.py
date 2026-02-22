@@ -1,3 +1,5 @@
+# pyright: reportMissingTypeStubs=false
+
 import uuid as uuid_lib
 
 from pgvector.sqlalchemy import Vector
@@ -10,7 +12,7 @@ from src.lib.database import Base
 
 
 class Article(UUIDMixin, TimestampMixin, Base):
-    __tablename__ = "articles"
+    __tablename__: str = "articles"
 
     user_id: Mapped[uuid_lib.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -30,7 +32,7 @@ class Article(UUIDMixin, TimestampMixin, Base):
         nullable=True,
     )
     status: Mapped[str] = mapped_column(
-        String(20), nullable=False, server_default=text("'pending'")
+        String(20), nullable=False, server_default=text("'pending'"), index=True
     )
 
     # Relationships
@@ -43,7 +45,7 @@ class Article(UUIDMixin, TimestampMixin, Base):
 
 
 class ArticleSummary(UUIDMixin, TimestampMixin, Base):
-    __tablename__ = "article_summaries"
+    __tablename__: str = "article_summaries"
 
     article_id: Mapped[uuid_lib.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -64,7 +66,7 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
     reading_time_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
     language: Mapped[str | None] = mapped_column(String(10), nullable=True)
     content_type: Mapped[str] = mapped_column(
-        String(30), nullable=False, server_default=text("'general_news'")
+        String(30), nullable=False, server_default=text("'general_news'"), index=True
     )
     type_metadata: Mapped[dict[str, object]] = mapped_column(
         JSON, nullable=False, server_default=text("'{}'")
@@ -77,7 +79,7 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
 
 
 class ArticleEmbedding(UUIDMixin, TimestampMixin, Base):
-    __tablename__ = "article_embeddings"
+    __tablename__: str = "article_embeddings"
 
     article_id: Mapped[uuid_lib.UUID] = mapped_column(
         UUID(as_uuid=True),
