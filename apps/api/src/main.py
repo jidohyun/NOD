@@ -1,3 +1,5 @@
+# pyright: reportUnknownMemberType=false
+
 import inspect
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -10,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from opentelemetry import trace
 from pydantic import BaseModel
-from sqlalchemy import text
+from sqlalchemy import select
 
 from src.lib.config import settings
 from src.lib.database import async_session_factory
@@ -53,7 +55,7 @@ async def request_id_middleware(
 
     # Bind request ID to structlog context
     structlog.contextvars.clear_contextvars()
-    structlog.contextvars.bind_contextvars(request_id=request_id)
+    _ = structlog.contextvars.bind_contextvars(request_id=request_id)
 
     # Add to current span
     span = trace.get_current_span()
@@ -146,7 +148,7 @@ async def check_database() -> ServiceStatus:
     start = time.perf_counter()
     try:
         async with async_session_factory() as session:
-            await session.execute(text("SELECT 1"))
+            _ = await session.execute(select(1))
         latency = (time.perf_counter() - start) * 1000
         return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
     except Exception as e:
