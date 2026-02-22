@@ -1,14 +1,21 @@
 import json
 import uuid
-from datetime import datetime
+from typing import cast
 
-import httpx
-import structlog
 from fastapi import APIRouter, HTTPException, Request, status
 
 from src.lib.config import settings
 from src.lib.dependencies import CurrentUser, DBSession
+from src.lib.logging import get_logger
 from src.subscriptions import service
+from src.subscriptions.paddle_utils import (
+    PaddleAPIError,
+    extract_cancel_at,
+    extract_management_urls,
+    extract_period_dates,
+    fetch_paddle_subscription,
+    map_paddle_status,
+)
 from src.subscriptions.paddle_verify import verify_paddle_signature
 from src.subscriptions.schemas import (
     CheckoutResponse,
@@ -17,14 +24,9 @@ from src.subscriptions.schemas import (
     UsageResponse,
 )
 
-logger = structlog.get_logger(__name__)
+logger = get_logger(__name__)
 
 router = APIRouter()
-
-PADDLE_API_BASE = {
-    "sandbox": "https://sandbox-api.paddle.com",
-    "production": "https://api.paddle.com",
-}
 
 
 @router.get("/usage", response_model=UsageResponse)
@@ -93,38 +95,24 @@ async def get_portal_url(
             detail="Paddle API not configured",
         )
 
-    base_url = PADDLE_API_BASE.get(
-        settings.PADDLE_ENVIRONMENT, PADDLE_API_BASE["sandbox"]
-    )
-    url = f"{base_url}/subscriptions/{subscription.paddle_subscription_id}"
-
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(
-            url,
-            headers={
-                "Authorization": f"Bearer {settings.PADDLE_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            timeout=10,
+    try:
+        paddle_data = await fetch_paddle_subscription(
+            paddle_subscription_id=subscription.paddle_subscription_id,
+            paddle_api_key=settings.PADDLE_API_KEY,
+            paddle_environment=settings.PADDLE_ENVIRONMENT,
         )
-
-    if resp.status_code != 200:
-        logger.error(
-            "Paddle API error",
-            status_code=resp.status_code,
-            body=resp.text,
-        )
+    except PaddleAPIError as exc:
+        logger.error("Paddle API error", error=str(exc))
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="Failed to fetch subscription from Paddle",
-        )
+        ) from exc
 
-    data = resp.json().get("data", {})
-    mgmt = data.get("management_urls", {})
+    cancel_url, update_payment_method_url = extract_management_urls(paddle_data)
 
     return PortalUrlResponse(
-        cancel_url=mgmt.get("cancel"),
-        update_payment_method_url=mgmt.get("update_payment_method"),
+        cancel_url=cancel_url,
+        update_payment_method_url=update_payment_method_url,
     )
 
 
@@ -146,15 +134,24 @@ async def paddle_webhook(
         raw_body = await verify_paddle_signature(
             request, settings.PADDLE_WEBHOOK_SECRET
         )
-        body = json.loads(raw_body)
+        body_payload = cast(object, json.loads(raw_body))
     else:
         logger.warning(
             "PADDLE_WEBHOOK_SECRET not set — skipping signature verification"
         )
-        body = await request.json()
+        body_payload = cast(object, await request.json())
 
-    event_type = body.get("event_type", "")
-    data = body.get("data", {})
+    body = (
+        cast(dict[str, object], body_payload) if isinstance(body_payload, dict) else {}
+    )
+
+    event_type_raw = body.get("event_type")
+    event_type = event_type_raw if isinstance(event_type_raw, str) else ""
+
+    data_raw = body.get("data")
+    data: dict[str, object] = (
+        cast(dict[str, object], data_raw) if isinstance(data_raw, dict) else {}
+    )
 
     logger.info("Paddle webhook received", event_type=event_type)
 
@@ -164,52 +161,52 @@ async def paddle_webhook(
         "subscription.canceled",
         "subscription.past_due",
     ):
-        custom_data = data.get("custom_data", {})
-        user_id = custom_data.get("user_id")
+        custom_data_raw = data.get("custom_data")
+        custom_data: dict[str, object] = (
+            cast(dict[str, object], custom_data_raw)
+            if isinstance(custom_data_raw, dict)
+            else {}
+        )
+        user_id_raw = custom_data.get("user_id")
 
-        if not user_id:
+        if not isinstance(user_id_raw, str) or not user_id_raw:
             logger.warning("Paddle webhook missing user_id", event_type=event_type)
             return {"status": "ignored", "reason": "missing user_id"}
 
-        paddle_sub_id = data.get("id", "")
-        paddle_customer_id = data.get("customer_id", "")
+        paddle_sub_id_raw = data.get("id")
+        paddle_sub_id = paddle_sub_id_raw if isinstance(paddle_sub_id_raw, str) else ""
 
-        # Map Paddle status to our status
-        paddle_status = data.get("status", "active")
-        status_map = {
-            "active": "active",
-            "canceled": "canceled",
-            "past_due": "past_due",
-            "paused": "paused",
-            "trialing": "active",
-        }
-        mapped_status = status_map.get(paddle_status, "active")
+        paddle_customer_id_raw = data.get("customer_id")
+        paddle_customer_id = (
+            paddle_customer_id_raw if isinstance(paddle_customer_id_raw, str) else ""
+        )
+
+        paddle_status = data.get("status")
+        mapped_status = map_paddle_status(
+            paddle_status if isinstance(paddle_status, str) else None
+        )
 
         # Determine plan from Paddle price
         plan = "pro"  # Only pro subscriptions go through Paddle
         if mapped_status == "canceled":
             plan = "basic"  # Downgrade on cancellation
 
-        # Parse period dates
-        period_start = None
-        period_end = None
-        cancel_at = None
+        period_start, period_end = extract_period_dates(data)
+        cancel_at = extract_cancel_at(data)
 
-        if data.get("current_billing_period"):
-            period = data["current_billing_period"]
-            if period.get("starts_at"):
-                period_start = datetime.fromisoformat(period["starts_at"])
-            if period.get("ends_at"):
-                period_end = datetime.fromisoformat(period["ends_at"])
+        try:
+            user_uuid = uuid.UUID(user_id_raw)
+        except ValueError:
+            logger.warning(
+                "Paddle webhook has invalid user_id",
+                event_type=event_type,
+                user_id=user_id_raw,
+            )
+            return {"status": "ignored", "reason": "invalid user_id"}
 
-        if data.get("scheduled_change") and data["scheduled_change"].get(
-            "effective_at"
-        ):
-            cancel_at = datetime.fromisoformat(data["scheduled_change"]["effective_at"])
-
-        await service.update_subscription_from_paddle(
+        _ = await service.update_subscription_from_paddle(
             db=db,
-            user_id=uuid.UUID(user_id),
+            user_id=user_uuid,
             paddle_subscription_id=paddle_sub_id,
             paddle_customer_id=paddle_customer_id,
             plan=plan,
@@ -221,7 +218,7 @@ async def paddle_webhook(
 
         logger.info(
             "Subscription updated from Paddle",
-            user_id=user_id,
+            user_id=user_id_raw,
             plan=plan,
             status=mapped_status,
         )
