@@ -21,6 +21,9 @@ from src.articles.schemas import (
 )
 from src.common.models.pagination import PaginatedResponse
 
+ContentTypeStats = dict[str, int]
+
+
 VALID_ARTICLE_STATUSES = {
     "pending",
     "processing",
@@ -987,3 +990,23 @@ async def _get_global_graph(
             max_nodes=max_nodes,
         ),
     )
+
+
+async def get_content_type_stats(
+    db: AsyncSession,
+    user_id: str,
+) -> dict[str, int]:
+    """Return article counts grouped by content_type for a user."""
+    rows = await db.execute(
+        select(
+            func.coalesce(ArticleSummary.content_type, "general_news"),
+            func.count(),
+        )
+        .join(Article, ArticleSummary.article_id == Article.id)
+        .where(
+            Article.user_id == uuid.UUID(user_id),
+            Article.status.in_(["analyzed", "completed"]),
+        )
+        .group_by(func.coalesce(ArticleSummary.content_type, "general_news"))
+    )
+    return {content_type: count for content_type, count in rows.all()}
