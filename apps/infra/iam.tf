@@ -104,6 +104,13 @@ resource "google_secret_manager_secret_iam_member" "api_google_ai_api_key" {
   member    = "serviceAccount:${google_service_account.api.email}"
 }
 
+resource "google_secret_manager_secret_iam_member" "api_langfuse_secret_key" {
+  count     = var.LANGFUSE_SECRET_KEY != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.langfuse_secret_key[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
 # Worker Service Account Permissions
 resource "google_project_iam_member" "worker_storage" {
   project = var.project_id

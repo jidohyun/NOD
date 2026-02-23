@@ -177,6 +177,35 @@ resource "google_cloud_run_v2_service" "api" {
         value = var.PADDLE_ENVIRONMENT
       }
 
+      dynamic "env" {
+        for_each = var.LANGFUSE_PUBLIC_KEY != "" ? [1] : []
+        content {
+          name  = "LANGFUSE_PUBLIC_KEY"
+          value = var.LANGFUSE_PUBLIC_KEY
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.LANGFUSE_SECRET_KEY != "" ? [1] : []
+        content {
+          name = "LANGFUSE_SECRET_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.langfuse_secret_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.LANGFUSE_PUBLIC_KEY != "" ? [1] : []
+        content {
+          name  = "LANGFUSE_HOST"
+          value = "https://cloud.langfuse.com"
+        }
+      }
+
       startup_probe {
         http_get {
           path = "/health"
