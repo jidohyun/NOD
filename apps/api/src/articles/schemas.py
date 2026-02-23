@@ -116,5 +116,10 @@ class ConceptGraphResponse(BaseModel):
     meta: ConceptGraphMeta
 
 
+class ContentTypeStatsResponse(BaseModel):
+    counts: dict[str, int]
+    total: int
+
+
 class ArticleUpdate(BaseModel):
     title: str | None = Field(None, min_length=1, max_length=500)
