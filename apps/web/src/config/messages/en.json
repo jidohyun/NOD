@@ -26,7 +26,8 @@
       "howItWorks": "How It Works",
       "pricing": "Pricing",
       "login": "Log In",
-      "getStarted": "Get Started"
+      "getStarted": "Get Started",
+      "changeLanguage": "Change language"
     },
     "pricing": {
       "label": "Pricing",
@@ -94,6 +95,50 @@
       "button": "Get Started Free",
       "note": "No credit card required"
     },
+    "typewriterFeed": {
+      "label": "Live Feed",
+      "line1": "[09:12:11] Captured 4 new articles from your browser queue.",
+      "line2": "[09:12:16] AI summarized 'React 19 Compiler' in 9 seconds.",
+      "line3": "[09:12:23] Concept links updated: RSC, streaming, edge runtime.",
+      "line4": "[09:12:28] Recall score jumped to 92% for this week's reading set."
+    },
+    "stackingCards": {
+      "label": "Cinematic Scroll",
+      "headline": "Follow your reading pipeline as cards stack in motion",
+      "pinLabel": "ScrollTrigger pinned",
+      "items": {
+        "card1": {
+          "kicker": "Capture",
+          "title": "Collect signal from every surface",
+          "description": "Clip docs, videos, repositories, and threads into one stream while NOD keeps source context intact.",
+          "metrics": {
+            "first": "13 feeds synced",
+            "second": "47 new clips",
+            "third": "Latency 210ms"
+          }
+        },
+        "card2": {
+          "kicker": "Analyze",
+          "title": "Summaries build themselves in real-time",
+          "description": "Each card triggers AI extraction for key insights, patterns, and actionable snippets you can revisit in seconds.",
+          "metrics": {
+            "first": "Model: Gemini 3.1 Pro Preview",
+            "second": "Quality 97",
+            "third": "3 semantic clusters"
+          }
+        },
+        "card3": {
+          "kicker": "Recall",
+          "title": "Retrieve context exactly when needed",
+          "description": "Semantic memory links every note so your next search surfaces the right answer with connected evidence.",
+          "metrics": {
+            "first": "Recall speed 0.8s",
+            "second": "112 concept edges",
+            "third": "Confidence 94%"
+          }
+        }
+      }
+    },
     "footer": {
       "product": "Product",
       "dashboard": "Dashboard",
@@ -111,7 +156,48 @@
       "refund": "Refund Policy",
       "tagline": "AI-powered content saving and knowledge management.",
       "copyright": "© 2025 NOD. All rights reserved."
+    },
+    "dashboardPreview": {
+      "savedReads": "Saved reads",
+      "itemCount": "{count} items",
+      "searchPlaceholder": "Search: RSC",
+      "statusCompleted": "completed",
+      "statusAnalyzing": "analyzing",
+      "similarReads": "Similar reads",
+      "articles": {
+        "0": {
+          "title": "Understanding React Server Components",
+          "summary": "RSC enables streaming UI with server-rendered components while keeping interactivity where it matters."
+        },
+        "1": {
+          "title": "Vector Databases Explained",
+          "summary": "Embeddings turn text into vectors; similarity search retrieves related notes beyond exact keywords."
+        },
+        "2": {
+          "title": "Building with FastAPI",
+          "summary": "Learn ASGI fundamentals, dependency injection patterns, and how to ship typed APIs quickly."
+        }
+      },
+      "similar": {
+        "0": "React Patterns Deep Dive",
+        "1": "Next.js 16 Migration Guide",
+        "2": "TypeScript 5.9 Features",
+        "3": "Edge Computing Primer"
+      }
     }
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "goHome": "Go Home",
+    "somethingWrong": "Something went wrong!",
+    "tryAgain": "Try again"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Tips, guides, and insights on knowledge management and productivity.",
+    "readArticle": "Read article →",
+    "home": "Home",
+    "readTime": "{minutes} min read"
   },
   "legal": {
     "terms": {

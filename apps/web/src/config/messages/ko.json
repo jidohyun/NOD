@@ -26,7 +26,8 @@
       "howItWorks": "사용 방법",
       "pricing": "요금제",
       "login": "로그인",
-      "getStarted": "시작하기"
+      "getStarted": "시작하기",
+      "changeLanguage": "언어 변경"
     },
     "pricing": {
       "label": "요금제",
@@ -94,6 +95,50 @@
       "button": "무료로 시작하기",
       "note": "신용카드 불필요"
     },
+    "typewriterFeed": {
+      "label": "라이브 피드",
+      "line1": "[09:12:11] 브라우저 큐에서 새 아티클 4개를 수집했습니다.",
+      "line2": "[09:12:16] AI가 'React 19 Compiler'를 9초 만에 요약했습니다.",
+      "line3": "[09:12:23] 개념 링크를 업데이트했습니다: RSC, 스트리밍, 엣지 런타임.",
+      "line4": "[09:12:28] 이번 주 읽기 세트의 리콜 점수가 92%로 상승했습니다."
+    },
+    "stackingCards": {
+      "label": "시네마틱 스크롤",
+      "headline": "카드가 쌓이며 흐르는 읽기 파이프라인을 따라가세요",
+      "pinLabel": "ScrollTrigger 고정",
+      "items": {
+        "card1": {
+          "kicker": "수집",
+          "title": "모든 채널의 신호를 한 번에 확보",
+          "description": "문서, 영상, 저장소, 스레드를 하나의 스트림으로 모으고 NOD가 출처 맥락을 보존합니다.",
+          "metrics": {
+            "first": "13개 피드 동기화",
+            "second": "신규 클립 47개",
+            "third": "지연 210ms"
+          }
+        },
+        "card2": {
+          "kicker": "분석",
+          "title": "요약이 실시간으로 자동 생성",
+          "description": "각 카드가 핵심 인사이트, 패턴, 실행 가능한 스니펫을 추출해 빠르게 다시 볼 수 있게 만듭니다.",
+          "metrics": {
+            "first": "모델: Gemini 3.1 Pro Preview",
+            "second": "품질 97",
+            "third": "시맨틱 클러스터 3개"
+          }
+        },
+        "card3": {
+          "kicker": "회상",
+          "title": "필요한 순간에 정확한 맥락 복원",
+          "description": "시맨틱 메모리가 모든 노트를 연결해 다음 검색에서 근거와 함께 정답을 올려줍니다.",
+          "metrics": {
+            "first": "리콜 속도 0.8초",
+            "second": "개념 엣지 112개",
+            "third": "신뢰도 94%"
+          }
+        }
+      }
+    },
     "footer": {
       "product": "제품",
       "dashboard": "대시보드",
@@ -111,7 +156,48 @@
       "refund": "환불 정책",
       "tagline": "AI 기반 콘텐츠 저장 및 지식 관리.",
       "copyright": "© 2025 NOD. All rights reserved."
+    },
+    "dashboardPreview": {
+      "savedReads": "저장한 읽기",
+      "itemCount": "{count}개 항목",
+      "searchPlaceholder": "검색: RSC",
+      "statusCompleted": "완료",
+      "statusAnalyzing": "분석 중",
+      "similarReads": "유사한 읽기",
+      "articles": {
+        "0": {
+          "title": "React 서버 컴포넌트 이해하기",
+          "summary": "RSC는 인터랙티비티가 필요한 곳에 유지하면서 서버 렌더링 컴포넌트로 스트리밍 UI를 가능하게 합니다."
+        },
+        "1": {
+          "title": "벡터 데이터베이스 설명",
+          "summary": "임베딩은 텍스트를 벡터로 변환합니다. 유사도 검색은 정확한 키워드를 넘어 관련 노트를 검색합니다."
+        },
+        "2": {
+          "title": "FastAPI로 구축하기",
+          "summary": "ASGI 기초, 의존성 주입 패턴, 타입이 있는 API를 빠르게 배포하는 방법을 배웁니다."
+        }
+      },
+      "similar": {
+        "0": "React 패턴 심층 분석",
+        "1": "Next.js 16 마이그레이션 가이드",
+        "2": "TypeScript 5.9 기능",
+        "3": "엣지 컴퓨팅 입문"
+      }
     }
+  },
+  "errors": {
+    "notFound": "페이지를 찾을 수 없습니다",
+    "goHome": "홈으로 이동",
+    "somethingWrong": "문제가 발생했습니다!",
+    "tryAgain": "다시 시도"
+  },
+  "blog": {
+    "title": "블로그",
+    "subtitle": "지식 관리와 생산성에 관한 팁, 가이드, 인사이트를 공유합니다.",
+    "readArticle": "읽어보기 →",
+    "home": "홈",
+    "readTime": "{minutes}분 분량"
   },
   "legal": {
     "terms": {

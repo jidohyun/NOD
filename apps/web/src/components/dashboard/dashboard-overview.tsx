@@ -32,7 +32,17 @@ export function DashboardOverview() {
   const summariesLimit = usage?.summaries_limit ?? 0;
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 
-  const dateLocale = locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : "en-US";
+  const DATE_LOCALE_MAP: Record<string, string> = {
+    ko: "ko-KR",
+    en: "en-US",
+    ja: "ja-JP",
+    es: "es-ES",
+    "pt-BR": "pt-BR",
+    "zh-CN": "zh-CN",
+    de: "de-DE",
+    fr: "fr-FR",
+  };
+  const dateLocale = DATE_LOCALE_MAP[locale] ?? "en-US";
 
   return (
     <div className="space-y-8">

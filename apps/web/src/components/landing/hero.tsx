@@ -1,22 +1,60 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useRef } from "react";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
 import { NeuralGraph } from "./neural-graph";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export function LandingHero() {
   const locale = useLocale();
   const t = useTranslations("landing.hero");
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const graphRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const timeline = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+      // Cinematic fade up sequence
+      timeline
+        .from("[data-hero-badge]", { y: 30, opacity: 0, duration: 1.2 })
+        .from("[data-hero-headline]", { y: 40, opacity: 0, duration: 1.4 }, "-=0.9")
+        .from("[data-hero-description]", { y: 30, opacity: 0, duration: 1.2 }, "-=1.0")
+        .from("[data-hero-actions]", { y: 25, opacity: 0, duration: 1.0 }, "-=0.9");
+
+      // Parallax scrolling
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.65,
+        animation: gsap
+          .timeline()
+          .to(contentRef.current, { y: -120, opacity: 0.15, ease: "none" })
+          .to(graphRef.current, { scale: 1.25, y: 80, ease: "none" }, 0),
+      });
+    },
+    { scope: sectionRef }
+  );
 
   const scrollToFeatures = () => {
     document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section className="landing-surface relative flex min-h-[100dvh] items-center overflow-hidden ko-keep">
+    <section
+      ref={sectionRef}
+      className="landing-surface relative flex min-h-[100dvh] items-center overflow-hidden ko-keep"
+    >
       {/* Background layers */}
       <div className="landing-surface absolute inset-0" />
 
@@ -30,7 +68,10 @@ export function LandingHero() {
       />
 
       {/* Neural graph canvas */}
-      <div className="absolute inset-0 opacity-70 dark:opacity-80 dark:mix-blend-screen">
+      <div
+        ref={graphRef}
+        className="absolute inset-0 opacity-70 transition-transform will-change-transform dark:opacity-80 dark:mix-blend-screen"
+      >
         <NeuralGraph />
       </div>
 
@@ -45,12 +86,16 @@ export function LandingHero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 lg:px-8 pt-32 pb-20">
+      <div
+        ref={contentRef}
+        className="relative z-10 mx-auto max-w-7xl w-full px-6 lg:px-8 pt-32 pb-20 will-change-transform"
+      >
         <div className="max-w-3xl">
           {/* Badge */}
           <div
             className="animate-fade-up mb-8 inline-flex cursor-default items-center gap-2.5 rounded-full border px-4 py-1.5 backdrop-blur-sm transition-colors landing-border-soft landing-card-muted"
             style={{ animationDelay: "0.1s" }}
+            data-hero-badge
           >
             <div className="w-1.5 h-1.5 rounded-full bg-nod-gold animate-glow-pulse shadow-[0_0_8px_rgba(232,185,49,0.5)]" />
             <span className="font-mono text-[11px] text-nod-gold/90 tracking-wider uppercase font-medium">
@@ -62,6 +107,7 @@ export function LandingHero() {
           <h1
             className="animate-fade-up font-display text-[clamp(2.75rem,6vw,5rem)] font-bold leading-[1.05] tracking-[-0.03em] whitespace-pre-line drop-shadow-2xl landing-text"
             style={{ animationDelay: "0.2s" }}
+            data-hero-headline
           >
             {t("headline")}
           </h1>
@@ -70,6 +116,7 @@ export function LandingHero() {
           <p
             className="animate-fade-up mt-8 max-w-xl text-[1.125rem] leading-relaxed font-light tracking-wide landing-text-muted"
             style={{ animationDelay: "0.35s" }}
+            data-hero-description
           >
             {t("description")}
           </p>
@@ -78,6 +125,7 @@ export function LandingHero() {
           <div
             className="animate-fade-up mt-10 flex flex-wrap items-center gap-5"
             style={{ animationDelay: "0.5s" }}
+            data-hero-actions
           >
             <Link
               href="/login"

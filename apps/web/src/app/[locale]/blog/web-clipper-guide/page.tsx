@@ -2,37 +2,56 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { locales } from "@/lib/i18n/config";
 import { resolveWebClipperSlugForLocale } from "../web-clipper-slug-routing";
-
-// 한국어 SEO 메타데이터
-export const metadata: Metadata = {
-  title: "웹 클리퍼 크롬 확장 프로그램 추천 — 아티클 저장 완벽 가이드 (2026)",
-  description:
-    "웹 클리퍼로 아티클을 저장하고 핵심을 정리하세요. 노션 웹 클리퍼, 에버노트, Pocket 비교 분석과 나만의 지식 관리 워크플로우 구축 가이드.",
-  alternates: {
-    canonical: "/ko/blog/web-clipper-guide",
-    languages: {
-      en: "/en/blog/chrome-web-clipper",
-      ko: "/ko/blog/web-clipper-guide",
-    },
-  },
-  openGraph: {
-    title: "웹 클리퍼 크롬 확장 프로그램 추천 — 아티클 저장 완벽 가이드",
-    description:
-      "북마크 대신 웹 클리퍼로 아티클을 저장하고, AI 요약으로 핵심만 빠르게 파악하세요. 2026년 최신 비교 가이드.",
-    type: "article",
-    publishedTime: "2026-02-10T00:00:00Z",
-    locale: "ko_KR",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
 
 interface BlogPostProps {
   params: Promise<{ locale: string }>;
+}
+
+const titles: Record<string, string> = {
+  en: "Web Clipper Chrome Extension Guide — Best Tools for Saving Articles",
+  ko: "웹 클리퍼 크롬 확장 프로그램 추천 — 아티클 저장 완벽 가이드",
+  ja: "ウェブクリッパーChrome拡張ガイド — 記事保存に最適なツール",
+  es: "Guía de extensiones Web Clipper para Chrome — Mejores herramientas para guardar artículos",
+  "pt-BR": "Guia de extensões Web Clipper para Chrome — Melhores ferramentas para salvar artigos",
+  "zh-CN": "网页剪藏Chrome扩展指南 — 保存文章的最佳工具",
+  de: "Web Clipper Chrome-Erweiterung Guide — Beste Tools zum Speichern von Artikeln",
+  fr: "Guide des extensions Web Clipper Chrome — Meilleurs outils pour sauvegarder des articles",
+};
+
+const descriptions: Record<string, string> = {
+  en: "Compare the best web clipper extensions for Chrome and learn how to build a knowledge management workflow in 5 minutes.",
+  ko: "인기 웹 클리퍼를 비교 분석하고, 5분 만에 나만의 지식 관리 워크플로우를 구축하는 방법을 알아보세요.",
+  ja: "人気のウェブクリッパーを比較分析し、5分で自分だけのナレッジ管理ワークフローを構築する方法を紹介します。",
+  es: "Compare las mejores extensiones web clipper para Chrome y aprenda a construir un flujo de gestión del conocimiento en 5 minutos.",
+  "pt-BR":
+    "Compare as melhores extensões web clipper para Chrome e aprenda a construir um fluxo de gestão do conhecimento em 5 minutos.",
+  "zh-CN": "比较最佳Chrome网页剪藏扩展，5分钟内建立您的知识管理工作流。",
+  de: "Vergleichen Sie die besten Web-Clipper-Erweiterungen für Chrome und lernen Sie in 5 Minuten einen Wissensmanagement-Workflow aufzubauen.",
+  fr: "Comparez les meilleures extensions web clipper pour Chrome et apprenez à créer un workflow de gestion des connaissances en 5 minutes.",
+};
+
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = titles[locale] || titles.en;
+  const description = descriptions[locale] || descriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog/web-clipper-guide",
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog/web-clipper-guide`])),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: "2026-02-10T00:00:00Z",
+    },
+    robots: { index: true, follow: true },
+  };
 }
 
 export default async function WebClipperGuideKo({ params }: BlogPostProps) {
@@ -45,19 +64,8 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
 
   setRequestLocale(locale as Locale);
 
-  const i18n = {
-    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
-    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
-    breadcrumb:
-      locale === "ko"
-        ? "웹 클리퍼 가이드"
-        : locale === "ja"
-          ? "ウェブクリッパーガイド"
-          : "Web Clipper Guide",
-    date:
-      locale === "ko" ? "2026년 2월 10일" : locale === "ja" ? "2026年2月10日" : "February 10, 2026",
-    readTime: locale === "ko" ? "8분 읽기" : locale === "ja" ? "8分で読める" : "8 min read",
-  };
+  const t = await getTranslations({ locale: locale as Locale, namespace: "blog" });
+  const format = await getFormatter({ locale: locale as Locale });
 
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
@@ -82,7 +90,7 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.home}</span>
+              <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -93,14 +101,18 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.blog}</span>
+              <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {i18n.breadcrumb}
+              {locale === "ko"
+                ? "웹 클리퍼 가이드"
+                : locale === "ja"
+                  ? "ウェブクリッパーガイド"
+                  : "Web Clipper Guide"}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -110,9 +122,15 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
       {/* 헤더 */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-10">{i18n.date}</time>
+          <time dateTime="2026-02-10">
+            {format.dateTime(new Date("2026-02-10"), {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           <span className="text-neutral-700">·</span>
-          <span>{i18n.readTime}</span>
+          <span>{t("readTime", { minutes: 8 })}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           웹 클리퍼 크롬 확장 프로그램 추천 — 아티클 저장 완벽 가이드

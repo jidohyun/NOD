@@ -1,6 +1,7 @@
 "use client";
 
 import { Globe, Menu } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -10,12 +11,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { locales } from "@/lib/i18n/config";
 import { usePathname } from "@/lib/i18n/routing";
 import { UserMenu } from "./user-menu";
 
 const LOCALE_PREFIX_RE = /^\/[a-z]{2}(?=\/|$)/;
 
+const LOCALE_LABELS: Record<string, { name: string; code: string }> = {
+  ko: { name: "한국어", code: "KO" },
+  en: { name: "English", code: "EN" },
+  ja: { name: "日本語", code: "JA" },
+  es: { name: "Español", code: "ES" },
+  "pt-BR": { name: "Português", code: "PT" },
+  "zh-CN": { name: "中文", code: "ZH" },
+  de: { name: "Deutsch", code: "DE" },
+  fr: { name: "Français", code: "FR" },
+};
+
 export function DashboardHeader() {
+  const t = useTranslations("landing.nav");
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
@@ -25,7 +39,7 @@ export function DashboardHeader() {
 
   const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";
 
-  const hrefForLocale = (nextLocale: "ko" | "en" | "ja") =>
+  const hrefForLocale = (nextLocale: string) =>
     basePath === "/" ? `/${nextLocale}` : `/${nextLocale}${basePath}`;
 
   return (
@@ -48,37 +62,28 @@ export function DashboardHeader() {
               type="button"
               variant="ghost"
               size="icon-sm"
-              aria-label="Change language"
-              title="Change language"
+              aria-label={t("changeLanguage")}
+              title={t("changeLanguage")}
             >
               <Globe className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem
-              onSelect={() => {
-                window.location.assign(hrefForLocale("ko"));
-              }}
-            >
-              <span className="flex-1">한국어</span>
-              <span className="text-xs text-muted-foreground">KO</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => {
-                window.location.assign(hrefForLocale("en"));
-              }}
-            >
-              <span className="flex-1">English</span>
-              <span className="text-xs text-muted-foreground">EN</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => {
-                window.location.assign(hrefForLocale("ja"));
-              }}
-            >
-              <span className="flex-1">日本語</span>
-              <span className="text-xs text-muted-foreground">JA</span>
-            </DropdownMenuItem>
+            {locales.map((loc) => {
+              const label = LOCALE_LABELS[loc];
+              if (!label) return null;
+              return (
+                <DropdownMenuItem
+                  key={loc}
+                  onSelect={() => {
+                    window.location.assign(hrefForLocale(loc));
+                  }}
+                >
+                  <span className="flex-1">{label.name}</span>
+                  <span className="text-xs text-muted-foreground">{label.code}</span>
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
@@ -86,8 +91,8 @@ export function DashboardHeader() {
           type="button"
           variant="ghost"
           size="icon-sm"
-          aria-label="Change language"
-          title="Change language"
+          aria-label={t("changeLanguage")}
+          title={t("changeLanguage")}
           disabled
         >
           <Globe className="h-5 w-5" />
