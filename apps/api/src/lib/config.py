@@ -67,6 +67,11 @@ class Settings(BaseSettings):
     MINIO_ACCESS_KEY: str = "minioadmin"
     MINIO_SECRET_KEY: str = "minioadmin"  # noqa: S105
 
+    # Langfuse (optional - AI observability)
+    LANGFUSE_PUBLIC_KEY: str | None = None
+    LANGFUSE_SECRET_KEY: str | None = None
+    LANGFUSE_HOST: str = "https://cloud.langfuse.com"
+
     # Paddle Billing
     PADDLE_API_KEY: str | None = None
     PADDLE_WEBHOOK_SECRET: str | None = None
