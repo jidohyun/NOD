@@ -96,7 +96,22 @@ export async function GET(request: NextRequest) {
     if (!error) {
       // Clear one-time redirect cookie.
       cookieStore.set("nod_auth_next", "", { path: "/", maxAge: 0 });
-      return NextResponse.redirect(`${origin}${next}`);
+
+      // Check if user needs onboarding (only when no explicit redirect)
+      if (next === "/articles" || next === "/dashboard") {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        const onboardingCompleted = user?.user_metadata?.onboarding_completed === true;
+
+        if (!onboardingCompleted) {
+          return NextResponse.redirect(`${origin}/onboarding`);
+        }
+      }
+
+      // Existing users or explicit redirects go to their destination
+      const destination = next === "/articles" ? "/dashboard" : next;
+      return NextResponse.redirect(`${origin}${destination}`);
     }
   }
 
