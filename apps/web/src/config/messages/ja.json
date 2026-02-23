@@ -26,7 +26,8 @@
       "howItWorks": "使い方",
       "pricing": "料金プラン",
       "login": "ログイン",
-      "getStarted": "始める"
+      "getStarted": "始める",
+      "changeLanguage": "言語を変更"
     },
     "pricing": {
       "label": "料金プラン",
@@ -94,6 +95,50 @@
       "button": "無料で始める",
       "note": "クレジットカード不要"
     },
+    "typewriterFeed": {
+      "label": "ライブフィード",
+      "line1": "[09:12:11] ブラウザキューから新規記事を4件取り込みました。",
+      "line2": "[09:12:16] AIが'React 19 Compiler'を9秒で要約しました。",
+      "line3": "[09:12:23] 概念リンクを更新: RSC、ストリーミング、エッジランタイム。",
+      "line4": "[09:12:28] 今週の読書セットの想起スコアが92%まで上がりました。"
+    },
+    "stackingCards": {
+      "label": "シネマティックスクロール",
+      "headline": "積み重なるカードで読書パイプラインを追跡",
+      "pinLabel": "ScrollTrigger 固定",
+      "items": {
+        "card1": {
+          "kicker": "収集",
+          "title": "あらゆる面からシグナルを取得",
+          "description": "ドキュメント、動画、リポジトリ、スレッドを一つのストリームに統合し、出典コンテキストを保ちます。",
+          "metrics": {
+            "first": "13フィード同期",
+            "second": "新規クリップ47件",
+            "third": "遅延210ms"
+          }
+        },
+        "card2": {
+          "kicker": "分析",
+          "title": "要約はリアルタイムで生成",
+          "description": "各カードが主要インサイト・パターン・実行可能な断片を抽出し、数秒で再確認できます。",
+          "metrics": {
+            "first": "モデル: Gemini 3.1 Pro Preview",
+            "second": "品質 97",
+            "third": "セマンティッククラスタ 3"
+          }
+        },
+        "card3": {
+          "kicker": "想起",
+          "title": "必要な瞬間に正確な文脈を取得",
+          "description": "セマンティックメモリが全ノートを接続し、次の検索で根拠付きの答えを返します。",
+          "metrics": {
+            "first": "想起速度 0.8秒",
+            "second": "概念エッジ 112",
+            "third": "信頼度 94%"
+          }
+        }
+      }
+    },
     "footer": {
       "product": "製品",
       "dashboard": "ダッシュボード",
@@ -111,7 +156,48 @@
       "refund": "返金ポリシー",
       "tagline": "AI搭載のコンテンツ保存とナレッジ管理。",
       "copyright": "© 2025 NOD. All rights reserved."
+    },
+    "dashboardPreview": {
+      "savedReads": "保存した記事",
+      "itemCount": "{count}件",
+      "searchPlaceholder": "検索: RSC",
+      "statusCompleted": "完了",
+      "statusAnalyzing": "分析中",
+      "similarReads": "類似記事",
+      "articles": {
+        "0": {
+          "title": "React Server Componentsを理解する",
+          "summary": "RSCはインタラクティブ性を維持しながら、サーバーレンダリングコンポーネントでストリーミングUIを実現します。"
+        },
+        "1": {
+          "title": "ベクトルデータベース解説",
+          "summary": "エンベディングはテキストをベクトルに変換し、類似検索はキーワードを超えて関連ノートを取得します。"
+        },
+        "2": {
+          "title": "FastAPIで構築する",
+          "summary": "ASGIの基礎、依存性注入パターン、型付きAPIを素早くデプロイする方法を学びます。"
+        }
+      },
+      "similar": {
+        "0": "Reactパターン深掘り",
+        "1": "Next.js 16移行ガイド",
+        "2": "TypeScript 5.9の新機能",
+        "3": "エッジコンピューティング入門"
+      }
     }
+  },
+  "errors": {
+    "notFound": "ページが見つかりません",
+    "goHome": "ホームへ戻る",
+    "somethingWrong": "エラーが発生しました！",
+    "tryAgain": "再試行"
+  },
+  "blog": {
+    "title": "ブログ",
+    "subtitle": "ナレッジ管理と生産性に関するヒント、ガイド、インサイトを共有します。",
+    "readArticle": "記事を読む →",
+    "home": "ホーム",
+    "readTime": "{minutes}分で読める"
   },
   "legal": {
     "terms": {

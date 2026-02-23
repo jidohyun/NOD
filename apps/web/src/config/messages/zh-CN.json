@@ -1,0 +1,565 @@
+{
+  "title": "NOD",
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "retry": "重试",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "restoreOriginal": "恢复原始版本"
+  },
+  "landing": {
+    "hero": {
+      "badge": "AI 驱动的知识管理",
+      "headline": "保存内容，发现洞察",
+      "description": "NOD 利用 AI 分析和总结内容，构建您可以随时搜索和参考的个人知识库。",
+      "cta": "免费开始",
+      "ctaExtension": "添加到 Chrome",
+      "ctaSecondary": "了解更多",
+      "trustedBy": "受到全球知识工作者的信赖"
+    },
+    "nav": {
+      "features": "功能",
+      "howItWorks": "工作原理",
+      "pricing": "定价",
+      "login": "登录",
+      "getStarted": "开始使用",
+      "changeLanguage": "切换语言"
+    },
+    "pricing": {
+      "label": "定价",
+      "headline": "选择适合您阅读习惯的方案",
+      "description": "从 Basic 开始，当您需要无限摘要和更高质量模型时升级到 Pro。",
+      "cta": "查看定价",
+      "note": "随时可更改",
+      "basicAnalyzableTypes": "可分析类型：新闻 · 技术博客 · 文档",
+      "proAnalyzableTypes": "可分析类型：全部（含 GitHub、论文、视频）"
+    },
+    "features": {
+      "label": "功能",
+      "headline": "知识管理所需的一切",
+      "items": {
+        "aiSummary": {
+          "title": "AI 摘要",
+          "description": "即时获取任何内容的 AI 生成摘要，突出关键要点和洞察。"
+        },
+        "vectorSearch": {
+          "title": "语义搜索",
+          "description": "按含义而非关键词查找内容。我们的向量搜索理解您在寻找什么。"
+        },
+        "chromeExtension": {
+          "title": "Chrome 扩展",
+          "description": "从浏览器一键保存内容。无需复制粘贴。"
+        },
+        "multiPlatform": {
+          "title": "多平台",
+          "description": "从网页、移动端或浏览器扩展访问您的知识库。"
+        },
+        "concepts": {
+          "title": "概念提取",
+          "description": "自动识别和标记内容中的关键概念、主题和话题。"
+        },
+        "multilingual": {
+          "title": "多语言",
+          "description": "保存和分析任何语言的内容。AI 摘要支持您偏好的语言。"
+        }
+      }
+    },
+    "howItWorks": {
+      "label": "工作原理",
+      "headline": "三个简单步骤实现更智能的阅读",
+      "steps": {
+        "save": {
+          "number": "01",
+          "title": "保存",
+          "description": "使用我们的 Chrome 扩展保存任何网页内容，或粘贴 URL。"
+        },
+        "analyze": {
+          "number": "02",
+          "title": "分析",
+          "description": "AI 自动总结内容、提取关键概念并整理到您的知识库中。"
+        },
+        "recall": {
+          "number": "03",
+          "title": "回忆",
+          "description": "通过语义搜索在您的知识库中精确找到所需内容。"
+        }
+      }
+    },
+    "cta": {
+      "headline": "开始构建您的知识库",
+      "description": "加入数千名使用 NOD 通过 AI 保存、分析和回忆内容的读者。",
+      "button": "免费开始",
+      "note": "无需信用卡"
+    },
+    "typewriterFeed": {
+      "label": "实时动态",
+      "line1": "[09:12:11] 从浏览器队列中捕获了 4 篇新文章。",
+      "line2": "[09:12:16] AI 在 9 秒内总结了 'React 19 Compiler'。",
+      "line3": "[09:12:23] 概念链接已更新：RSC、流式渲染、边缘运行时。",
+      "line4": "[09:12:28] 本周阅读集的回忆得分升至 92%。"
+    },
+    "stackingCards": {
+      "label": "电影级滚动",
+      "headline": "跟随您的阅读管道，卡片层叠运动",
+      "pinLabel": "ScrollTrigger 固定",
+      "items": {
+        "card1": {
+          "kicker": "捕获",
+          "title": "从各个渠道收集信号",
+          "description": "将文档、视频、仓库和讨论串汇入一个流中，NOD 保留来源上下文。",
+          "metrics": {
+            "first": "13 个订阅源已同步",
+            "second": "47 个新剪辑",
+            "third": "延迟 210ms"
+          }
+        },
+        "card2": {
+          "kicker": "分析",
+          "title": "摘要实时自动生成",
+          "description": "每张卡片触发 AI 提取关键洞察、模式和可操作片段。",
+          "metrics": {
+            "first": "模型：Gemini 3.1 Pro Preview",
+            "second": "质量 97",
+            "third": "3 个语义聚类"
+          }
+        },
+        "card3": {
+          "kicker": "回忆",
+          "title": "在需要时精确检索上下文",
+          "description": "语义记忆连接每条笔记，让您的下一次搜索带着证据找到答案。",
+          "metrics": {
+            "first": "回忆速度 0.8 秒",
+            "second": "112 条概念边",
+            "third": "置信度 94%"
+          }
+        }
+      }
+    },
+    "footer": {
+      "product": "产品",
+      "dashboard": "仪表盘",
+      "extension": "Chrome 扩展",
+      "mobile": "移动应用",
+      "api": "API",
+      "pricing": "定价",
+      "resources": "资源",
+      "docs": "文档",
+      "github": "GitHub",
+      "changelog": "更新日志",
+      "legal": "法律",
+      "privacy": "隐私政策",
+      "terms": "服务条款",
+      "refund": "退款政策",
+      "tagline": "AI 驱动的内容保存和知识管理。",
+      "copyright": "© 2025 NOD. 保留所有权利。"
+    },
+    "dashboardPreview": {
+      "savedReads": "已保存阅读",
+      "itemCount": "{count} 个项目",
+      "searchPlaceholder": "搜索：RSC",
+      "statusCompleted": "已完成",
+      "statusAnalyzing": "分析中",
+      "similarReads": "相似阅读",
+      "articles": {
+        "0": {
+          "title": "理解 React Server Components",
+          "summary": "RSC 通过服务端渲染组件实现流式 UI，同时在需要的地方保持交互性。"
+        },
+        "1": {
+          "title": "向量数据库详解",
+          "summary": "嵌入将文本转换为向量；相似度搜索超越精确关键词检索相关笔记。"
+        },
+        "2": {
+          "title": "使用 FastAPI 构建",
+          "summary": "学习 ASGI 基础、依赖注入模式以及如何快速发布类型化 API。"
+        }
+      },
+      "similar": {
+        "0": "React 模式深度剖析",
+        "1": "Next.js 16 迁移指南",
+        "2": "TypeScript 5.9 新特性",
+        "3": "边缘计算入门"
+      }
+    }
+  },
+  "errors": {
+    "notFound": "页面未找到",
+    "goHome": "返回首页",
+    "somethingWrong": "出了点问题！",
+    "tryAgain": "重试"
+  },
+  "blog": {
+    "title": "博客",
+    "subtitle": "关于知识管理和生产力的技巧、指南和洞察。",
+    "readArticle": "阅读文章 →",
+    "home": "首页",
+    "readTime": "{minutes} 分钟阅读"
+  },
+  "legal": {
+    "terms": {
+      "title": "服务条款",
+      "effectiveDate": "生效日期：2026-02-19",
+      "sections": {
+        "intro": {
+          "title": "1. 目的",
+          "content": "本服务条款（「条款」）规定 NOD（「我们」）与用户（「您」）之间的法律关系。本条款定义双方的权利和义务。访问或使用 NOD 服务即表示您同意本条款。如不同意，请停止使用本服务。"
+        },
+        "account": {
+          "title": "2. 账户",
+          "content": "您可以使用电子邮件地址或支持的社交登录提供商（如 Google）创建账户。您有责任提供准确、最新的信息并维护账户凭证的机密性和安全性。如怀疑账户遭到未授权访问，请立即通过 shickcoong777@gmail.com 通知我们。每人只能维护一个账户。"
+        },
+        "service": {
+          "title": "3. 服务使用",
+          "content": "NOD 提供 AI 驱动的知识管理服务，包括文章保存、AI 生成摘要、语义搜索和概念提取。我们可能随时合理通知后更新、修改或停止服务功能。服务分两个级别：免费 Basic 计划和付费 Pro 计划（$5/月）。"
+        },
+        "payment": {
+          "title": "4. 支付处理",
+          "content": "付费服务（Pro 计划）的支付通过 Paddle.com 处理。Paddle 作为记录商户，处理支付、税收征收和退款。有关支付问题，请联系 shickcoong777@gmail.com 或 Paddle 客户支持。"
+        },
+        "content": {
+          "title": "5. 内容与版权",
+          "content": "您保留在 NOD 中保存的所有内容的完整所有权和版权。通过在服务中保存内容，您授予 NOD 有限的、非排他性的许可，仅用于向您提供服务而存储、处理和分析该内容。NOD 不主张对您内容的所有权。"
+        },
+        "prohibited": {
+          "title": "6. 禁止行为",
+          "content": "以下活动严格禁止：(a) 对服务进行逆向工程或反编译；(b) 绕过访问控制或安全措施；(c) 超出正常使用范围的自动爬取；(d) 共享账户凭证；(e) 上传恶意代码；(f) 违反适用法律使用服务；(g) 干扰服务的正常运行。"
+        },
+        "termination": {
+          "title": "7. 终止",
+          "content": "您可以随时通过账户设置或联系我们来取消账户。如果您违反本条款，NOD 可能暂停或终止您的账户。终止后，您的数据可能在合理期限内保留，然后永久删除。"
+        },
+        "contact": {
+          "title": "8. 联系方式",
+          "content": "如对本条款有任何疑问，请通过 shickcoong777@gmail.com 联系我们。我们将在 3 个工作日内回复所有咨询。"
+        }
+      }
+    },
+    "refund": {
+      "title": "退款与取消政策",
+      "effectiveDate": "生效日期：2026-02-18",
+      "intro": "关于 NOD 付费计划（Pro）的退款和取消政策。所有支付通过 Paddle.com 处理。",
+      "sections": {
+        "cancellation": {
+          "title": "1. 取消订阅",
+          "content": "您可以随时取消订阅。取消后，您将保留 Pro 功能的访问权限直到当前计费周期结束。"
+        },
+        "refunds": {
+          "title": "2. 退款政策",
+          "content": "您可以在订阅续费日或首次购买日起 14 天内申请全额退款。14 天后不提供退款；但您可以随时取消订阅。"
+        },
+        "process": {
+          "title": "3. 退款处理",
+          "content": "退款获批后，将在 5-10 个工作日内退回您的原始支付方式。您可以通过 shickcoong777@gmail.com 或 Paddle 客户支持提交退款申请。"
+        },
+        "exceptions": {
+          "title": "4. 例外",
+          "content": "如果因严重缺陷导致服务无法使用，无论自购买之日起经过多长时间，均将提供全额退款。"
+        }
+      }
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "effectiveDate": "生效日期：2026-02-19",
+      "intro": "NOD 尊重您的隐私。本政策说明我们收集哪些个人信息、如何使用以及您对数据的权利。",
+      "sections": {
+        "collection": {
+          "title": "1. 我们收集的信息",
+          "content": "我们收集以下类别的信息：",
+          "items": {
+            "account": "账户信息：电子邮件地址、姓名和个人资料图片（由社交登录提供商提供）、身份验证令牌。",
+            "content": "内容信息：保存的文章 URL、标题、提取的文本、AI 生成的摘要、笔记及相关元数据。",
+            "usage": "使用信息：功能使用记录（如保存/摘要计数）、错误和诊断数据。",
+            "payment": "支付信息：付费计划的账单数据，由我们的支付提供商（Paddle）处理。",
+            "analytics": "网络分析：网站使用统计（如通过 Google Analytics 的页面浏览和事件）。"
+          },
+          "note": "使用 Chrome 扩展时，我们可能会收集您选择保存的页面的 URL 和正文文本。"
+        },
+        "purpose": {
+          "title": "2. 信息使用方式",
+          "items": {
+            "auth": "用户识别、登录和会话管理",
+            "core": "提供核心功能，包括文章保存、AI 摘要、语义搜索和概念提取",
+            "billing": "订阅和支付管理",
+            "improve": "服务质量改进、错误分析、安全和防欺诈"
+          }
+        },
+        "sharing": {
+          "title": "3. 信息共享",
+          "content": "我们不出售您的个人数据。我们使用可信赖的第三方服务提供商来运营和改进服务。",
+          "items": {
+            "cloud": "云基础设施和托管：服务运营、数据存储和处理",
+            "auth": "身份验证：社交登录（OAuth）提供商和身份验证服务",
+            "ai": "AI 处理：文章内容（标题、文本）可能会发送给 AI 提供商（如 OpenAI、Google Gemini）用于摘要和嵌入生成",
+            "payment": "支付处理：Paddle 及相关支付服务",
+            "analytics": "分析和监控：Google Analytics 及类似工具"
+          }
+        },
+        "retention": {
+          "title": "4. 数据保留",
+          "items": {
+            "principle": "当个人数据不再需要用于其原始目的时，我们会予以删除。",
+            "deletion": "当您删除账户或申请删除时，您的数据将在合理期限内被移除。",
+            "legal": "在适用法律要求的情况下，我们可能会保留数据更长时间。"
+          }
+        },
+        "rights": {
+          "title": "5. 您的权利",
+          "content": "您有权访问、更正、删除或限制处理您的个人数据。要行使这些权利，请使用以下信息联系我们。"
+        },
+        "cookies": {
+          "title": "6. Cookie",
+          "content": "我们使用 Cookie 和类似技术进行身份验证、会话管理、用户偏好和分析。您可以配置浏览器拒绝 Cookie，但某些功能可能受到限制。"
+        },
+        "security": {
+          "title": "7. 安全",
+          "content": "我们实施合理的安全措施来保护您的个人数据，包括访问控制、传输加密和安全的数据存储实践。"
+        },
+        "contact": {
+          "title": "8. 联系方式",
+          "content": "如对我们的隐私做法有疑问，请联系我们：\n电子邮件：shickcoong777@gmail.com"
+        },
+        "changes": {
+          "title": "9. 变更",
+          "content": "我们可能会不时更新本隐私政策。我们将通过服务内公告或直接沟通通知您重大变更。"
+        }
+      }
+    }
+  },
+  "loginWelcome": "欢迎回来",
+  "loginSubtitle": "登录您的 NOD 账户",
+  "login": {
+    "signingIn": "登录中...",
+    "or": "或",
+    "backToHome": "返回首页"
+  },
+  "continueWithGoogle": "使用 Google 继续",
+  "dashboard": {
+    "sidebar": {
+      "nav": {
+        "dashboard": "仪表盘",
+        "articles": "内容",
+        "graph": "图谱视图",
+        "settings": "设置",
+        "billing": "管理账单",
+        "pricing": "定价"
+      },
+      "user": {
+        "profile": "个人资料",
+        "settings": "设置",
+        "billing": "管理账单",
+        "help": "帮助",
+        "feedback": "反馈",
+        "logout": "退出登录"
+      }
+    },
+    "overview": {
+      "title": "仪表盘",
+      "description": "您的知识库概览。",
+      "savedArticles": "已保存内容",
+      "aiSummaries": "AI 摘要",
+      "currentPlan": "当前方案",
+      "viewArticlesTitle": "查看内容",
+      "viewArticlesDescription": "浏览和搜索您保存的内容。",
+      "manageBillingTitle": "管理账单",
+      "manageBillingDescription": "查看您的方案和使用详情。",
+      "installExtensionTitle": "安装 Chrome 扩展",
+      "installExtensionDescription": "浏览时一键保存内容。",
+      "recentArticlesTitle": "最近内容",
+      "recentArticlesDescription": "您最近保存的内容。",
+      "noRecentArticles": "还没有保存的内容。",
+      "viewAll": "查看全部",
+      "contentTypes": "内容类型"
+    },
+    "graph": {
+      "sectionLabel": "知识图谱",
+      "pageTitle": "图谱视图",
+      "pageDescription": "可视化您总结内容中的核心概念。",
+      "previewTitle": "图谱视图预览",
+      "previewDescription": "概念图的只读预览。",
+      "openFull": "打开完整图谱",
+      "lockedTitle": "图谱视图是 Pro 功能",
+      "lockedDescription": "升级到 Pro 以解锁概念图谱可视化。",
+      "upgrade": "升级到 Pro",
+      "loadError": "加载图谱数据失败。",
+      "empty": "还没有概念图谱。保存并总结更多内容。",
+      "statsArticles": "内容",
+      "statsConcepts": "唯一概念",
+      "statsNodes": "节点",
+      "statsEdges": "连接",
+      "modeGlobal": "全局",
+      "modeLocal": "局部",
+      "depthLabel": "深度",
+      "panelSearch": "搜索",
+      "panelFilters": "筛选",
+      "panelSelection": "选择",
+      "searchPlaceholder": "搜索概念...",
+      "filterMinConnections": "最少连接数",
+      "selectionCount": "已选择 {count} 个",
+      "selectionEmpty": "未选择节点",
+      "selectionPinned": "已固定",
+      "yes": "是",
+      "no": "否",
+      "actionPinSelected": "固定选中",
+      "actionUnpinSelected": "取消固定选中",
+      "actionUnpinAll": "全部取消固定",
+      "actionClearSelection": "清除选择",
+      "menuPin": "固定",
+      "menuUnpin": "取消固定",
+      "menuUnpinAll": "全部取消固定",
+      "menuPinSelected": "固定选中",
+      "localCenterFilteredMessage": "当前筛选排除了您的本地中心节点。",
+      "localReselectBase": "重新选择基准节点",
+      "localSwitchGlobal": "切换到全局"
+    },
+    "searchPlaceholder": "搜索...",
+    "statusLabel": "状态",
+    "markdownNote": "笔记",
+    "downloadMarkdown": "下载 .md",
+    "myArticles": "我的内容",
+    "searchArticles": "搜索内容...",
+    "semanticSearch": "AI 搜索",
+    "searchMinChars": "请输入至少 2 个字符进行搜索",
+    "allStatus": "所有状态",
+    "statusPending": "待处理",
+    "statusProcessing": "处理中",
+    "statusAnalyzing": "分析中",
+    "statusCompleted": "已完成",
+    "statusFailed": "失败",
+    "checkStatus": "检查状态",
+    "refreshing": "刷新中...",
+    "retryAnalysis": "重试",
+    "loadingArticles": "加载内容中...",
+    "loadError": "加载内容失败。",
+    "noArticles": "还没有内容。使用 Chrome 扩展保存内容。",
+    "installExtensionCta": "添加到 Chrome",
+    "loadMore": "加载更多",
+    "noSummary": "暂无摘要",
+    "articleNotFound": "未找到内容。",
+    "deleteConfirm": "删除此内容？",
+    "original": "原文",
+    "pendingAnalysis": "等待分析开始...",
+    "analyzingArticle": "AI 正在分析此内容...",
+    "analysisStepReading": "读取内容",
+    "analysisStepAnalyzing": "AI 分析中",
+    "analysisStepSummary": "生成摘要",
+    "analysisDescription": "AI 读取您的内容、提取关键概念并生成结构化摘要。通常需要 30 秒到 1 分钟。",
+    "summary": "摘要",
+    "readTime": "约 {minutes} 分钟阅读",
+    "concepts": "概念",
+    "keyPoints": "关键要点",
+    "analyzedBy": "由 {provider}/{model} 分析",
+    "similarArticles": "相似内容",
+    "loadingSimilar": "加载相似内容...",
+    "similarity": "{percent}% 匹配",
+    "articleInfo": "内容信息",
+    "savedDate": "保存日期",
+    "readingTime": "阅读时间",
+    "minuteRead": "{minutes} 分钟",
+    "sourceLabel": "来源",
+    "viewOriginal": "查看原文",
+    "language": "语言",
+    "allContentTypes": "所有类型",
+    "typeTechBlog": "技术博客",
+    "typePaper": "学术论文",
+    "typeNews": "新闻",
+    "typeGitHub": "GitHub",
+    "typeDocs": "文档",
+    "typeVideo": "视频/播客"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理您的账户设置。",
+    "sections": {
+      "profile": "个人资料",
+      "account": "账户",
+      "quickLinks": "快捷链接",
+      "legal": "法律"
+    },
+    "fields": {
+      "email": "电子邮件",
+      "authProvider": "身份验证提供商",
+      "subscription": "订阅"
+    },
+    "links": {
+      "manageBilling": "管理账单和订阅",
+      "viewPricing": "查看定价方案",
+      "installExtension": "安装 Chrome 扩展",
+      "feedback": "发送反馈",
+      "terms": "服务条款",
+      "privacy": "隐私政策",
+      "refund": "退款政策"
+    }
+  },
+  "subscription": {
+    "pricing": "定价",
+    "currentPlan": "当前方案",
+    "basic": "Free",
+    "pro": "Pro",
+    "basicPrice": "$0",
+    "proPrice": "$5/月（含税）",
+    "upgrade": "升级到 Pro",
+    "manageBilling": "管理账单",
+    "cancel": "取消订阅",
+    "cancelConfirm": "确定要取消订阅吗？",
+    "usage": "使用量",
+    "summariesUsed": "本月已使用 {used}/{limit} 次摘要",
+    "summariesRemaining": "剩余 {remaining} 次摘要",
+    "unlimited": "无限",
+    "limitReached": "已达月度上限",
+    "upgradePrompt": "升级到 Pro 获取更多摘要",
+    "features": {
+      "basicSummaries": "每月 20 次 AI 分析",
+      "proSummaries": "无限 AI 分析",
+      "basicArticles": "保存时自动 AI 分析",
+      "proArticles": "无限保存和分析",
+      "basicSearch": "无限语义搜索",
+      "proSearch": "无限语义搜索"
+    },
+    "processing": "处理中...",
+    "managePayment": "管理支付方式",
+    "cancelDescription": "取消后，您的 Pro 功能将保持活跃直到当前计费周期结束。",
+    "checkoutSuccess": "支付成功！您的 Pro 订阅已激活。",
+    "billingHistory": "账单历史",
+    "nextBilling": "下次计费日期：{date}",
+    "activeSince": "自 {date} 起激活",
+    "planDescription": {
+      "basic": "适合想要体验 AI 驱动内容管理的休闲读者。",
+      "pro": "适合每天保存和分析内容的高级用户。"
+    },
+    "faq": "常见问题",
+    "faqItems": {
+      "q1": "Pro 包含什么？",
+      "a1": "无限 AI 分析和无限内容存储。",
+      "q2": "可以随时取消吗？",
+      "a2": "是的，您可以随时取消。取消后 Pro 功能将保留至当前计费周期结束。",
+      "q3": "支持哪些支付方式？",
+      "a3": "我们支持信用卡、借记卡等。支付通过 Paddle 安全处理。"
+    },
+    "comparisonTitle": "方案对比",
+    "featureComparison": {
+      "aiSummaries": "AI 分析",
+      "savedArticles": "可分析内容类型",
+      "semanticSearch": "语义搜索",
+      "markdownExport": "Markdown 导出",
+      "conceptExtraction": "概念提取"
+    },
+    "basicValue": {
+      "aiSummaries": "20 次/月",
+      "savedArticles": "新闻 · 技术博客 · 文档",
+      "semanticSearch": "无限",
+      "markdownExport": "包含",
+      "conceptExtraction": "包含"
+    },
+    "proValue": {
+      "aiSummaries": "无限",
+      "savedArticles": "所有类型（含 GitHub、论文、视频）",
+      "semanticSearch": "无限",
+      "markdownExport": "包含",
+      "conceptExtraction": "包含"
+    }
+  }
+}

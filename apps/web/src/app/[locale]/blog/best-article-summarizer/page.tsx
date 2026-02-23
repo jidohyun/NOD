@@ -1,54 +1,66 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-
-// SEO Metadata
-export const metadata: Metadata = {
-  title: "Best Article Summarizer Tools in 2026 — AI-Powered Comparison",
-  description:
-    "Compare the best article summarizer tools for 2026. Find out which AI summarizer saves you the most time with side-by-side feature comparisons and honest reviews.",
-  alternates: {
-    canonical: "/blog/best-article-summarizer",
-    languages: {
-      en: "/en/blog/best-article-summarizer",
-      ko: "/ko/blog/best-article-summarizer",
-    },
-  },
-  openGraph: {
-    title: "Best Article Summarizer Tools in 2026 — AI-Powered Comparison",
-    description:
-      "Compare the best article summarizer tools for 2026. Find out which AI summarizer saves you the most time with side-by-side feature comparisons and honest reviews.",
-    type: "article",
-    publishedTime: "2026-02-16T00:00:00Z",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { locales } from "@/lib/i18n/config";
 
 interface BlogPostProps {
   params: Promise<{ locale: string }>;
+}
+
+const titles: Record<string, string> = {
+  en: "Best Article Summarizer Tools in 2026 — AI-Powered Comparison",
+  ko: "2026년 최고의 아티클 요약 도구 — AI 기반 비교 분석",
+  ja: "2026年ベスト記事要約ツール — AI搭載比較ガイド",
+  es: "Mejores herramientas de resumen de artículos en 2026 — Comparación con IA",
+  "pt-BR": "Melhores ferramentas de resumo de artigos em 2026 — Comparação com IA",
+  "zh-CN": "2026年最佳文章摘要工具 — AI驱动对比指南",
+  de: "Beste Artikelzusammenfassungs-Tools 2026 — KI-gestützter Vergleich",
+  fr: "Meilleurs outils de résumé d'articles en 2026 — Comparaison IA",
+};
+
+const descriptions: Record<string, string> = {
+  en: "Compare the best article summarizer tools for 2026. Find out which AI summarizer saves you the most time with side-by-side feature comparisons and honest reviews.",
+  ko: "2026년 최고의 아티클 요약 도구를 비교합니다. AI 요약기 기능을 나란히 비교하여 시간을 가장 절약해주는 도구를 찾아보세요.",
+  ja: "2026年のベスト記事要約ツールを比較。AI要約ツールの機能を並べて比較し、最も時間を節約できるツールを見つけましょう。",
+  es: "Compare las mejores herramientas de resumen de artículos para 2026. Descubra cuál le ahorra más tiempo.",
+  "pt-BR":
+    "Compare as melhores ferramentas de resumo de artigos para 2026. Descubra qual economiza mais tempo.",
+  "zh-CN": "比较2026年最佳文章摘要工具。了解哪款AI摘要工具最能为您节省时间。",
+  de: "Vergleichen Sie die besten Artikelzusammenfassungs-Tools für 2026. Finden Sie heraus, welches Ihnen am meisten Zeit spart.",
+  fr: "Comparez les meilleurs outils de résumé d'articles pour 2026. Découvrez lequel vous fait gagner le plus de temps.",
+};
+
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = titles[locale] || titles.en;
+  const description = descriptions[locale] || descriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog/best-article-summarizer",
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog/best-article-summarizer`])),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: "2026-02-16T00:00:00Z",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
 }
 
 export default async function BestArticleSummarizerPost({ params }: BlogPostProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  const i18n = {
-    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
-    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
-    breadcrumb:
-      locale === "ko"
-        ? "아티클 요약 도구 비교"
-        : locale === "ja"
-          ? "記事要約ツール比較"
-          : "Best Article Summarizer",
-    date:
-      locale === "ko" ? "2026년 2월 16일" : locale === "ja" ? "2026年2月16日" : "February 16, 2026",
-    readTime: locale === "ko" ? "10분 분량" : locale === "ja" ? "10分で読める" : "10 min read",
-  };
+  const t = await getTranslations({ locale: locale as Locale, namespace: "blog" });
+  const format = await getFormatter({ locale: locale as Locale });
 
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
@@ -72,7 +84,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.home}</span>
+              <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -83,14 +95,18 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.blog}</span>
+              <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {i18n.breadcrumb}
+              {locale === "ko"
+                ? "아티클 요약 도구 비교"
+                : locale === "ja"
+                  ? "記事要約ツール比較"
+                  : "Best Article Summarizer"}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -100,9 +116,15 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
       {/* Article Header */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-16">{i18n.date}</time>
+          <time dateTime="2026-02-16">
+            {format.dateTime(new Date("2026-02-16"), {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           <span className="text-neutral-700">·</span>
-          <span>{i18n.readTime}</span>
+          <span>{t("readTime", { minutes: 10 })}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           Best Article Summarizer Tools in 2026: A Side-by-Side Comparison

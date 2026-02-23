@@ -17,6 +17,11 @@ const DATE_LOCALE_MAP: Record<string, string> = {
   ko: "ko-KR",
   en: "en-US",
   ja: "ja-JP",
+  es: "es-ES",
+  "pt-BR": "pt-BR",
+  "zh-CN": "zh-CN",
+  de: "de-DE",
+  fr: "fr-FR",
 };
 
 export function BillingContent() {

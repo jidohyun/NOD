@@ -1,0 +1,565 @@
+{
+  "title": "NOD",
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "restoreOriginal": "Restaurer l'original"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Gestion des connaissances propulsée par l'IA",
+      "headline": "Sauvegardez du contenu, découvrez des insights",
+      "description": "NOD utilise l'IA pour analyser et résumer le contenu, construisant votre bibliothèque de connaissances personnelle que vous pouvez rechercher et consulter à tout moment.",
+      "cta": "Commencer gratuitement",
+      "ctaExtension": "Ajouter à Chrome",
+      "ctaSecondary": "En savoir plus",
+      "trustedBy": "Utilisé par des travailleurs du savoir dans le monde entier"
+    },
+    "nav": {
+      "features": "Fonctionnalités",
+      "howItWorks": "Comment ça marche",
+      "pricing": "Tarifs",
+      "login": "Connexion",
+      "getStarted": "Commencer",
+      "changeLanguage": "Changer de langue"
+    },
+    "pricing": {
+      "label": "Tarifs",
+      "headline": "Choisissez un plan adapté à votre flux de lecture",
+      "description": "Commencez avec Basic, puis passez à Pro pour des résumés illimités et des modèles de meilleure qualité.",
+      "cta": "Voir les tarifs",
+      "note": "Modifiable à tout moment",
+      "basicAnalyzableTypes": "Types analysables : Actualités · Blog Tech · Documentation",
+      "proAnalyzableTypes": "Types analysables : Tous (dont GitHub, Articles, Vidéos)"
+    },
+    "features": {
+      "label": "Fonctionnalités",
+      "headline": "Tout ce dont vous avez besoin pour gérer vos connaissances",
+      "items": {
+        "aiSummary": {
+          "title": "Résumés IA",
+          "description": "Obtenez des résumés instantanés générés par l'IA pour n'importe quel contenu, mettant en évidence les points clés et les insights."
+        },
+        "vectorSearch": {
+          "title": "Recherche sémantique",
+          "description": "Trouvez du contenu par sens, pas seulement par mots-clés. Notre recherche vectorielle comprend ce que vous cherchez."
+        },
+        "chromeExtension": {
+          "title": "Extension Chrome",
+          "description": "Sauvegardez du contenu en un clic depuis votre navigateur. Sans copier-coller."
+        },
+        "multiPlatform": {
+          "title": "Multi-plateforme",
+          "description": "Accédez à votre bibliothèque de connaissances depuis le web, le mobile ou l'extension de navigateur."
+        },
+        "concepts": {
+          "title": "Extraction de concepts",
+          "description": "Identifiez et étiquetez automatiquement les concepts clés, les thèmes et les sujets de votre contenu."
+        },
+        "multilingual": {
+          "title": "Multilingue",
+          "description": "Sauvegardez et analysez du contenu dans n'importe quelle langue. Résumés IA disponibles dans votre langue préférée."
+        }
+      }
+    },
+    "howItWorks": {
+      "label": "Comment ça marche",
+      "headline": "Trois étapes simples pour une lecture plus intelligente",
+      "steps": {
+        "save": {
+          "number": "01",
+          "title": "Sauvegarder",
+          "description": "Sauvegardez n'importe quel contenu du web avec notre extension Chrome ou en collant une URL."
+        },
+        "analyze": {
+          "number": "02",
+          "title": "Analyser",
+          "description": "L'IA résume automatiquement le contenu, extrait les concepts clés et l'organise dans votre bibliothèque."
+        },
+        "recall": {
+          "number": "03",
+          "title": "Retrouver",
+          "description": "Recherchez votre bibliothèque de manière sémantique pour trouver exactement ce dont vous avez besoin, quand vous en avez besoin."
+        }
+      }
+    },
+    "cta": {
+      "headline": "Commencez à construire votre bibliothèque de connaissances",
+      "description": "Rejoignez des milliers de lecteurs qui utilisent NOD pour sauvegarder, analyser et retrouver du contenu avec l'IA.",
+      "button": "Commencer gratuitement",
+      "note": "Aucune carte de crédit requise"
+    },
+    "typewriterFeed": {
+      "label": "Flux en direct",
+      "line1": "[09:12:11] 4 nouveaux articles capturés depuis votre file de navigateur.",
+      "line2": "[09:12:16] L'IA a résumé 'React 19 Compiler' en 9 secondes.",
+      "line3": "[09:12:23] Liens conceptuels mis à jour : RSC, streaming, edge runtime.",
+      "line4": "[09:12:28] Score de rappel passé à 92% pour les lectures de cette semaine."
+    },
+    "stackingCards": {
+      "label": "Défilement cinématique",
+      "headline": "Suivez votre pipeline de lecture au fil des cartes empilées en mouvement",
+      "pinLabel": "ScrollTrigger épinglé",
+      "items": {
+        "card1": {
+          "kicker": "Capturer",
+          "title": "Collectez des signaux depuis chaque surface",
+          "description": "Extrayez des docs, vidéos, dépôts et fils de discussion dans un seul flux pendant que NOD conserve le contexte source intact.",
+          "metrics": {
+            "first": "13 flux synchronisés",
+            "second": "47 nouveaux extraits",
+            "third": "Latence 210ms"
+          }
+        },
+        "card2": {
+          "kicker": "Analyser",
+          "title": "Les résumés se construisent en temps réel",
+          "description": "Chaque carte déclenche une extraction IA pour les insights clés, les schémas et les extraits actionnables que vous pouvez revoir en quelques secondes.",
+          "metrics": {
+            "first": "Modèle : Gemini 3.1 Pro Preview",
+            "second": "Qualité 97",
+            "third": "3 clusters sémantiques"
+          }
+        },
+        "card3": {
+          "kicker": "Retrouver",
+          "title": "Récupérez le contexte exactement quand vous en avez besoin",
+          "description": "La mémoire sémantique relie chaque note pour que votre prochaine recherche fasse remonter la bonne réponse avec les preuves associées.",
+          "metrics": {
+            "first": "Vitesse de rappel 0,8s",
+            "second": "112 arêtes conceptuelles",
+            "third": "Confiance 94%"
+          }
+        }
+      }
+    },
+    "footer": {
+      "product": "Produit",
+      "dashboard": "Tableau de bord",
+      "extension": "Extension Chrome",
+      "mobile": "Application mobile",
+      "api": "API",
+      "pricing": "Tarifs",
+      "resources": "Ressources",
+      "docs": "Documentation",
+      "github": "GitHub",
+      "changelog": "Journal des modifications",
+      "legal": "Mentions légales",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation",
+      "refund": "Politique de remboursement",
+      "tagline": "Sauvegarde de contenu et gestion des connaissances propulsées par l'IA.",
+      "copyright": "© 2025 NOD. Tous droits réservés."
+    },
+    "dashboardPreview": {
+      "savedReads": "Lectures sauvegardées",
+      "itemCount": "{count} éléments",
+      "searchPlaceholder": "Rechercher : RSC",
+      "statusCompleted": "terminé",
+      "statusAnalyzing": "en cours d'analyse",
+      "similarReads": "Lectures similaires",
+      "articles": {
+        "0": {
+          "title": "Comprendre les React Server Components",
+          "summary": "RSC permet une interface utilisateur en streaming avec des composants rendus côté serveur tout en conservant l'interactivité là où c'est important."
+        },
+        "1": {
+          "title": "Les bases de données vectorielles expliquées",
+          "summary": "Les embeddings transforment le texte en vecteurs ; la recherche par similarité récupère des notes connexes au-delà des mots-clés exacts."
+        },
+        "2": {
+          "title": "Construire avec FastAPI",
+          "summary": "Apprenez les bases d'ASGI, les modèles d'injection de dépendances et comment livrer rapidement des API typées."
+        }
+      },
+      "similar": {
+        "0": "React Patterns en profondeur",
+        "1": "Guide de migration Next.js 16",
+        "2": "Fonctionnalités TypeScript 5.9",
+        "3": "Introduction au Edge Computing"
+      }
+    }
+  },
+  "errors": {
+    "notFound": "Page introuvable",
+    "goHome": "Retour à l'accueil",
+    "somethingWrong": "Quelque chose s'est mal passé !",
+    "tryAgain": "Réessayer"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Conseils, guides et insights sur la gestion des connaissances et la productivité.",
+    "readArticle": "Lire l'article →",
+    "home": "Accueil",
+    "readTime": "{minutes} min de lecture"
+  },
+  "legal": {
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "effectiveDate": "Date d'entrée en vigueur : 2026-02-19",
+      "sections": {
+        "intro": {
+          "title": "1. Objet",
+          "content": "Les présentes Conditions d'utilisation (\"Conditions\") régissent la relation juridique entre NOD (\"nous\", \"notre\" ou \"nos\") et les utilisateurs (\"vous\") du service NOD. Ces Conditions définissent les droits et obligations des deux parties. En accédant au service NOD ou en l'utilisant, vous acceptez d'être lié par ces Conditions. Si vous n'acceptez pas, veuillez cesser d'utiliser le service."
+        },
+        "account": {
+          "title": "2. Compte",
+          "content": "Vous pouvez créer un compte en utilisant votre adresse e-mail ou un fournisseur de connexion sociale pris en charge (par exemple, Google). Vous êtes responsable de fournir des informations exactes et à jour, ainsi que de maintenir la confidentialité et la sécurité de vos identifiants de compte. Vous devez nous notifier rapidement à shickcoong777@gmail.com si vous suspectez un accès non autorisé à votre compte. Chaque individu ne peut maintenir qu'un seul compte. Le partage de compte ou le transfert d'accès à des tiers n'est pas autorisé."
+        },
+        "service": {
+          "title": "3. Utilisation du service",
+          "content": "NOD fournit un service de gestion des connaissances propulsé par l'IA, incluant la sauvegarde d'articles, la synthèse générée par l'IA, la recherche sémantique et l'extraction de concepts. Nous pouvons mettre à jour, modifier ou interrompre des fonctionnalités du service à tout moment avec un préavis raisonnable. Le service est proposé en deux niveaux : un plan Basic gratuit et un plan Pro payant (5 $/mois). Toute utilisation du service est soumise aux directives d'utilisation équitable ; une utilisation automatisée excessive qui dégrade les performances du service pour d'autres utilisateurs n'est pas autorisée."
+        },
+        "payment": {
+          "title": "4. Traitement des paiements",
+          "content": "Les paiements pour les services payants (plan Pro) sont traités via Paddle.com. Paddle agit en tant que Marchand de référence, gérant le traitement des paiements, la collecte des taxes et les remboursements. Pour toute demande relative aux paiements, veuillez contacter shickcoong777@gmail.com ou le support client de Paddle."
+        },
+        "content": {
+          "title": "5. Contenu et droits d'auteur",
+          "content": "Vous conservez la pleine propriété et les droits d'auteur de tout le contenu que vous sauvegardez sur NOD. En sauvegardant du contenu sur le service, vous accordez à NOD une licence limitée, non exclusive pour stocker, traiter et analyser ce contenu uniquement dans le but de vous fournir le service. NOD ne revendique pas la propriété de votre contenu et ne l'utilisera à aucune fin au-delà de la fourniture du service. Vous êtes responsable de vous assurer que vous disposez des droits nécessaires pour sauvegarder et traiter tout contenu via NOD. NOD se réserve le droit de supprimer le contenu qui enfreint ces Conditions ou la loi applicable."
+        },
+        "prohibited": {
+          "title": "6. Actes interdits",
+          "content": "Les activités suivantes sont strictement interdites : (a) l'ingénierie inverse, la décompilation ou la tentative d'extraction du code source du service ; (b) le contournement ou la tentative de contournement de tout contrôle d'accès ou mesure de sécurité ; (c) le scraping ou le crawling automatisé du service au-delà d'une utilisation normale via l'interface officielle ou l'API ; (d) le partage des identifiants de compte ou le fait de permettre à d'autres d'utiliser votre compte ; (e) le téléchargement ou la transmission de code malveillant, de virus ou de tout contenu nuisible ; (f) l'utilisation du service en violation de toute loi locale, nationale ou internationale applicable ; (g) toute action qui interfère avec ou perturbe le fonctionnement normal du service ou de son infrastructure."
+        },
+        "termination": {
+          "title": "7. Résiliation",
+          "content": "Vous pouvez annuler votre compte à tout moment via les paramètres du compte ou en nous contactant. NOD peut suspendre ou résilier votre compte si vous enfreignez ces Conditions, vous livrez à des activités frauduleuses ou utilisez le service de manière abusive. À la résiliation, vos données peuvent être conservées pendant une période raisonnable avant suppression définitive, sauf si vous demandez une suppression immédiate. Les dispositions des présentes Conditions qui, de par leur nature, devraient survivre à la résiliation (y compris, sans s'y limiter, les dispositions relatives à la propriété, les avertissements de garantie et les limitations de responsabilité) survivront à la résiliation."
+        },
+        "contact": {
+          "title": "8. Contact",
+          "content": "Si vous avez des questions ou des préoccupations concernant ces Conditions, veuillez nous contacter à shickcoong777@gmail.com. Nous nous efforçons de répondre à toutes les demandes dans un délai de 3 jours ouvrables."
+        }
+      }
+    },
+    "refund": {
+      "title": "Politique de remboursement et d'annulation",
+      "effectiveDate": "Date d'entrée en vigueur : 2026-02-18",
+      "intro": "Notre politique concernant les remboursements et les annulations pour le plan payant de NOD (Pro). Tous les paiements sont traités via Paddle.com.",
+      "sections": {
+        "cancellation": {
+          "title": "1. Annulation d'abonnement",
+          "content": "Vous pouvez annuler votre abonnement à tout moment. Après annulation, vous conserverez l'accès aux fonctionnalités Pro jusqu'à la fin de votre période de facturation en cours. Aucun frais supplémentaire ne sera prélevé."
+        },
+        "refunds": {
+          "title": "2. Politique de remboursement",
+          "content": "Vous pouvez demander un remboursement intégral dans les 14 jours suivant la date de renouvellement de votre abonnement ou la date d'achat initiale. Après 14 jours, les remboursements ne sont pas disponibles ; cependant, vous pouvez annuler votre abonnement à tout moment. Les paiements sont traités via Paddle, et la politique de remboursement de Paddle s'applique."
+        },
+        "process": {
+          "title": "3. Traitement des remboursements",
+          "content": "Une fois approuvés, les remboursements seront traités sur votre mode de paiement d'origine dans un délai de 5 à 10 jours ouvrables. Vous pouvez soumettre des demandes de remboursement via shickcoong777@gmail.com ou via le support client de Paddle."
+        },
+        "exceptions": {
+          "title": "4. Exceptions",
+          "content": "Si le service est inutilisable en raison d'un défaut critique, un remboursement intégral sera accordé quel que soit le délai écoulé depuis l'achat."
+        }
+      }
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "effectiveDate": "Date d'entrée en vigueur : 2026-02-19",
+      "intro": "NOD respecte votre vie privée. Cette politique explique quelles informations personnelles nous collectons, comment nous les utilisons et vos droits concernant vos données.",
+      "sections": {
+        "collection": {
+          "title": "1. Informations que nous collectons",
+          "content": "Nous collectons les catégories d'informations suivantes :",
+          "items": {
+            "account": "Informations de compte : Adresse e-mail, nom et image de profil (tels que fournis par le fournisseur de connexion sociale), jetons d'authentification.",
+            "content": "Informations de contenu : URLs d'articles sauvegardés, titres, texte extrait, résumés générés par l'IA, notes et métadonnées associées.",
+            "usage": "Informations d'utilisation : Journaux d'utilisation des fonctionnalités (par ex., compteurs de sauvegarde/résumé), données d'erreur et de diagnostic.",
+            "payment": "Informations de paiement : Données de facturation pour les plans payants, traitées par notre prestataire de paiement (Paddle).",
+            "analytics": "Analytique web : Statistiques d'utilisation du site web (par ex., pages vues et événements via Google Analytics)."
+          },
+          "note": "Lors de l'utilisation de l'extension Chrome, nous pouvons collecter l'URL et le texte des pages que vous choisissez de sauvegarder."
+        },
+        "purpose": {
+          "title": "2. Comment nous utilisons les informations",
+          "items": {
+            "auth": "Identification de l'utilisateur, connexion et gestion de session",
+            "core": "Fourniture des fonctionnalités principales incluant la sauvegarde d'articles, la synthèse IA, la recherche sémantique et l'extraction de concepts",
+            "billing": "Gestion des abonnements et des paiements",
+            "improve": "Amélioration de la qualité du service, analyse des erreurs, sécurité et prévention de la fraude"
+          }
+        },
+        "sharing": {
+          "title": "3. Partage",
+          "content": "Nous ne vendons pas vos données personnelles. Nous faisons appel à des prestataires de services tiers de confiance pour exploiter et améliorer le service.",
+          "items": {
+            "cloud": "Infrastructure cloud et hébergement : Exploitation du service, stockage et traitement des données",
+            "auth": "Authentification : Fournisseurs de connexion sociale (OAuth) et services d'authentification",
+            "ai": "Traitement IA : Le contenu des articles (titres, texte) peut être envoyé à des fournisseurs d'IA (par ex., OpenAI, Google Gemini) pour la génération de résumés et d'embeddings",
+            "payment": "Traitement des paiements : Paddle et services de paiement associés",
+            "analytics": "Analytique et surveillance : Google Analytics et outils similaires"
+          }
+        },
+        "retention": {
+          "title": "4. Conservation",
+          "items": {
+            "principle": "Nous supprimons les données personnelles lorsqu'elles ne sont plus nécessaires à leur finalité d'origine.",
+            "deletion": "Lorsque vous supprimez votre compte ou demandez la suppression, vos données seront retirées dans un délai raisonnable.",
+            "legal": "Nous pouvons conserver des données plus longtemps lorsque la loi applicable l'exige."
+          }
+        },
+        "rights": {
+          "title": "5. Vos droits",
+          "content": "Vous avez le droit d'accéder à vos données personnelles, de les rectifier, de les supprimer ou d'en restreindre le traitement. Pour exercer ces droits, veuillez nous contacter en utilisant les informations ci-dessous."
+        },
+        "cookies": {
+          "title": "6. Cookies",
+          "content": "Nous utilisons des cookies et des technologies similaires pour l'authentification, la gestion des sessions, les préférences utilisateur et l'analytique. Vous pouvez configurer votre navigateur pour refuser les cookies, mais certaines fonctionnalités peuvent être limitées."
+        },
+        "security": {
+          "title": "7. Sécurité",
+          "content": "Nous mettons en oeuvre des mesures de sécurité raisonnables pour protéger vos données personnelles, notamment des contrôles d'accès, le chiffrement en transit et des pratiques de stockage sécurisé des données."
+        },
+        "contact": {
+          "title": "8. Contact",
+          "content": "Pour toute question concernant nos pratiques en matière de confidentialité, veuillez nous contacter à :\nE-mail : shickcoong777@gmail.com"
+        },
+        "changes": {
+          "title": "9. Modifications",
+          "content": "Nous pouvons mettre à jour cette Politique de confidentialité de temps à autre. Nous vous informerons des modifications importantes via des annonces dans le service ou une communication directe."
+        }
+      }
+    }
+  },
+  "loginWelcome": "Bon retour",
+  "loginSubtitle": "Connectez-vous à votre compte NOD",
+  "login": {
+    "signingIn": "Connexion en cours...",
+    "or": "ou",
+    "backToHome": "Retour à l'accueil"
+  },
+  "continueWithGoogle": "Continuer avec Google",
+  "dashboard": {
+    "sidebar": {
+      "nav": {
+        "dashboard": "Tableau de bord",
+        "articles": "Contenu",
+        "graph": "Vue graphique",
+        "settings": "Paramètres",
+        "billing": "Gérer la facturation",
+        "pricing": "Tarifs"
+      },
+      "user": {
+        "profile": "Profil",
+        "settings": "Paramètres",
+        "billing": "Gérer la facturation",
+        "help": "Aide",
+        "feedback": "Retour d'expérience",
+        "logout": "Déconnexion"
+      }
+    },
+    "overview": {
+      "title": "Tableau de bord",
+      "description": "Aperçu de votre bibliothèque de connaissances.",
+      "savedArticles": "Contenu sauvegardé",
+      "aiSummaries": "Résumés IA",
+      "currentPlan": "Plan actuel",
+      "viewArticlesTitle": "Voir le contenu",
+      "viewArticlesDescription": "Parcourez et recherchez votre contenu sauvegardé.",
+      "manageBillingTitle": "Gérer la facturation",
+      "manageBillingDescription": "Consultez votre plan et les détails d'utilisation.",
+      "installExtensionTitle": "Installer l'extension Chrome",
+      "installExtensionDescription": "Sauvegardez du contenu en un clic pendant votre navigation.",
+      "recentArticlesTitle": "Contenu récent",
+      "recentArticlesDescription": "Votre contenu récemment sauvegardé.",
+      "noRecentArticles": "Aucun contenu sauvegardé pour l'instant.",
+      "viewAll": "Voir tout",
+      "contentTypes": "Types de contenu"
+    },
+    "graph": {
+      "sectionLabel": "Graphe de connaissances",
+      "pageTitle": "Vue graphique",
+      "pageDescription": "Visualisez les concepts clés de votre contenu résumé.",
+      "previewTitle": "Aperçu de la vue graphique",
+      "previewDescription": "Aperçu en lecture seule de votre carte de concepts.",
+      "openFull": "Ouvrir le graphe complet",
+      "lockedTitle": "La vue graphique est une fonctionnalité Pro",
+      "lockedDescription": "Passez à Pro pour débloquer la visualisation du graphe de concepts.",
+      "upgrade": "Passer à Pro",
+      "loadError": "Échec du chargement des données du graphe.",
+      "empty": "Pas encore de graphe de concepts. Sauvegardez et résumez davantage de contenu.",
+      "statsArticles": "Contenu",
+      "statsConcepts": "Concepts uniques",
+      "statsNodes": "Noeuds",
+      "statsEdges": "Connexions",
+      "modeGlobal": "Global",
+      "modeLocal": "Local",
+      "depthLabel": "Profondeur",
+      "panelSearch": "Rechercher",
+      "panelFilters": "Filtres",
+      "panelSelection": "Sélection",
+      "searchPlaceholder": "Rechercher des concepts...",
+      "filterMinConnections": "Connexions minimum",
+      "selectionCount": "{count} sélectionné(s)",
+      "selectionEmpty": "Aucun noeud sélectionné",
+      "selectionPinned": "Épinglé",
+      "yes": "Oui",
+      "no": "Non",
+      "actionPinSelected": "Épingler la sélection",
+      "actionUnpinSelected": "Désépingler la sélection",
+      "actionUnpinAll": "Désépingler tout",
+      "actionClearSelection": "Effacer la sélection",
+      "menuPin": "Épingler",
+      "menuUnpin": "Désépingler",
+      "menuUnpinAll": "Désépingler tout",
+      "menuPinSelected": "Épingler la sélection",
+      "localCenterFilteredMessage": "Les filtres actuels excluent votre noeud central local.",
+      "localReselectBase": "Resélectionner le noeud de base",
+      "localSwitchGlobal": "Passer en mode Global"
+    },
+    "searchPlaceholder": "Rechercher...",
+    "statusLabel": "Statut",
+    "markdownNote": "Note",
+    "downloadMarkdown": "Télécharger .md",
+    "myArticles": "Mon contenu",
+    "searchArticles": "Rechercher du contenu...",
+    "semanticSearch": "Recherche IA",
+    "searchMinChars": "Saisissez au moins 2 caractères pour rechercher",
+    "allStatus": "Tous les statuts",
+    "statusPending": "En attente",
+    "statusProcessing": "En traitement",
+    "statusAnalyzing": "En cours d'analyse",
+    "statusCompleted": "Terminé",
+    "statusFailed": "Échoué",
+    "checkStatus": "Vérifier le statut",
+    "refreshing": "Actualisation...",
+    "retryAnalysis": "Réessayer",
+    "loadingArticles": "Chargement du contenu...",
+    "loadError": "Échec du chargement du contenu.",
+    "noArticles": "Aucun contenu pour l'instant. Sauvegardez du contenu à l'aide de l'extension Chrome.",
+    "installExtensionCta": "Ajouter à Chrome",
+    "loadMore": "Charger plus",
+    "noSummary": "Aucun résumé disponible",
+    "articleNotFound": "Contenu introuvable.",
+    "deleteConfirm": "Supprimer ce contenu ?",
+    "original": "Original",
+    "pendingAnalysis": "En attente du début de l'analyse...",
+    "analyzingArticle": "L'IA analyse ce contenu...",
+    "analysisStepReading": "Lecture du contenu",
+    "analysisStepAnalyzing": "Analyse IA",
+    "analysisStepSummary": "Génération du résumé",
+    "analysisDescription": "L'IA lit votre contenu, extrait les concepts clés et génère un résumé structuré. Cela prend généralement entre 30 secondes et 1 minute.",
+    "summary": "Résumé",
+    "readTime": "~{minutes} min de lecture",
+    "concepts": "Concepts",
+    "keyPoints": "Points clés",
+    "analyzedBy": "Analysé par {provider}/{model}",
+    "similarArticles": "Contenu similaire",
+    "loadingSimilar": "Chargement du contenu similaire...",
+    "similarity": "{percent}% de correspondance",
+    "articleInfo": "Informations sur le contenu",
+    "savedDate": "Date de sauvegarde",
+    "readingTime": "Temps de lecture",
+    "minuteRead": "{minutes} min",
+    "sourceLabel": "Source",
+    "viewOriginal": "Voir l'original",
+    "language": "Langue",
+    "allContentTypes": "Tous les types",
+    "typeTechBlog": "Blog Tech",
+    "typePaper": "Article",
+    "typeNews": "Actualités",
+    "typeGitHub": "GitHub",
+    "typeDocs": "Documentation",
+    "typeVideo": "Vidéo/Podcast"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez les paramètres de votre compte.",
+    "sections": {
+      "profile": "Profil",
+      "account": "Compte",
+      "quickLinks": "Liens rapides",
+      "legal": "Mentions légales"
+    },
+    "fields": {
+      "email": "E-mail",
+      "authProvider": "Fournisseur d'authentification",
+      "subscription": "Abonnement"
+    },
+    "links": {
+      "manageBilling": "Gérer la facturation et l'abonnement",
+      "viewPricing": "Voir les plans tarifaires",
+      "installExtension": "Installer l'extension Chrome",
+      "feedback": "Envoyer un retour d'expérience",
+      "terms": "Conditions d'utilisation",
+      "privacy": "Politique de confidentialité",
+      "refund": "Politique de remboursement"
+    }
+  },
+  "subscription": {
+    "pricing": "Tarifs",
+    "currentPlan": "Plan actuel",
+    "basic": "Gratuit",
+    "pro": "Pro",
+    "basicPrice": "0 $",
+    "proPrice": "5 $/mois (taxes incluses)",
+    "upgrade": "Passer à Pro",
+    "manageBilling": "Gérer la facturation",
+    "cancel": "Annuler l'abonnement",
+    "cancelConfirm": "Êtes-vous sûr de vouloir annuler votre abonnement ?",
+    "usage": "Utilisation",
+    "summariesUsed": "{used}/{limit} résumés utilisés ce mois-ci",
+    "summariesRemaining": "{remaining} résumés restants",
+    "unlimited": "Illimité",
+    "limitReached": "Limite mensuelle atteinte",
+    "upgradePrompt": "Passez à Pro pour plus de résumés",
+    "features": {
+      "basicSummaries": "20 analyses IA/mois",
+      "proSummaries": "Analyses IA illimitées",
+      "basicArticles": "Analyse IA automatique à la sauvegarde",
+      "proArticles": "Sauvegarde et analyse illimitées",
+      "basicSearch": "Recherches sémantiques illimitées",
+      "proSearch": "Recherches sémantiques illimitées"
+    },
+    "processing": "Traitement en cours...",
+    "managePayment": "Gérer le mode de paiement",
+    "cancelDescription": "Si vous annulez, vos fonctionnalités Pro resteront actives jusqu'à la fin de votre période de facturation en cours.",
+    "checkoutSuccess": "Paiement réussi ! Votre abonnement Pro est maintenant actif.",
+    "billingHistory": "Historique de facturation",
+    "nextBilling": "Prochaine date de facturation : {date}",
+    "activeSince": "Actif depuis le {date}",
+    "planDescription": {
+      "basic": "Parfait pour les lecteurs occasionnels qui souhaitent essayer la gestion de contenu propulsée par l'IA.",
+      "pro": "Pour les utilisateurs intensifs qui sauvegardent et analysent du contenu quotidiennement."
+    },
+    "faq": "Questions fréquemment posées",
+    "faqItems": {
+      "q1": "Qu'est-ce que j'obtiens avec Pro ?",
+      "a1": "Des analyses IA illimitées et un stockage de contenu illimité.",
+      "q2": "Puis-je annuler à tout moment ?",
+      "a2": "Oui, vous pouvez annuler à tout moment. Vous conserverez les fonctionnalités Pro jusqu'à la fin de votre période de facturation.",
+      "q3": "Quels moyens de paiement sont acceptés ?",
+      "a3": "Nous acceptons les cartes de crédit, les cartes de débit et bien plus encore. Les paiements sont traités de manière sécurisée via Paddle."
+    },
+    "comparisonTitle": "Comparer les plans",
+    "featureComparison": {
+      "aiSummaries": "Analyses IA",
+      "savedArticles": "Types de contenu analysables",
+      "semanticSearch": "Recherche sémantique",
+      "markdownExport": "Export Markdown",
+      "conceptExtraction": "Extraction de concepts"
+    },
+    "basicValue": {
+      "aiSummaries": "20/mois",
+      "savedArticles": "Actualités · Blog Tech · Documentation",
+      "semanticSearch": "Illimité",
+      "markdownExport": "Inclus",
+      "conceptExtraction": "Inclus"
+    },
+    "proValue": {
+      "aiSummaries": "Illimité",
+      "savedArticles": "Tous types (dont GitHub, Articles, Vidéos)",
+      "semanticSearch": "Illimité",
+      "markdownExport": "Inclus",
+      "conceptExtraction": "Inclus"
+    }
+  }
+}

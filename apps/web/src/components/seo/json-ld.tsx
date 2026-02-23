@@ -91,7 +91,17 @@ export function BlogPostingJsonLd({
             "@type": "WebPage",
             "@id": `https://nod.ing/${locale}/blog/${slug}`,
           },
-          inLanguage: locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : "en-US",
+          inLanguage:
+            {
+              ko: "ko-KR",
+              en: "en-US",
+              ja: "ja-JP",
+              es: "es-ES",
+              "pt-BR": "pt-BR",
+              "zh-CN": "zh-CN",
+              de: "de-DE",
+              fr: "fr-FR",
+            }[locale] ?? "en-US",
         }),
       }}
     />

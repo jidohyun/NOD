@@ -9,11 +9,11 @@ type CookiesToSet = Parameters<
 
 const intlMiddleware = createMiddleware(routing);
 
-const locales = ["ko", "en", "ja"];
-const defaultLocale = "ko";
+const localeList = routing.locales as readonly string[];
+const defaultLocale = routing.defaultLocale;
 
 function getPathWithoutLocale(pathname: string): string {
-  for (const locale of locales) {
+  for (const locale of localeList) {
     if (pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`) {
       return pathname.slice(`/${locale}`.length) || "/";
     }
@@ -22,7 +22,7 @@ function getPathWithoutLocale(pathname: string): string {
 }
 
 function getLocaleFromPath(pathname: string): string {
-  for (const locale of locales) {
+  for (const locale of localeList) {
     if (pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`) {
       return locale;
     }
@@ -89,7 +89,9 @@ export async function proxy(request: NextRequest) {
       !redirectParam.startsWith("//");
 
     const target = isSafeRedirect ? redirectParam : "/dashboard";
-    const hasLocalePrefix = locales.some((l) => target === `/${l}` || target.startsWith(`/${l}/`));
+    const hasLocalePrefix = localeList.some(
+      (l) => target === `/${l}` || target.startsWith(`/${l}/`)
+    );
     const targetWithLocale =
       hasLocalePrefix || locale === defaultLocale ? target : `/${locale}${target}`;
 

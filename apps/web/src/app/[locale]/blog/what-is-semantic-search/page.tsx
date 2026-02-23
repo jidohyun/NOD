@@ -1,54 +1,64 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-
-// SEO Metadata
-export const metadata: Metadata = {
-  title: "What Is Semantic Search? How AI Understands Meaning (2026 Guide)",
-  description:
-    "Learn what semantic search is, how it works, and why it's replacing keyword search. Understand vector embeddings, NLP, and real-world applications.",
-  alternates: {
-    canonical: "/blog/what-is-semantic-search",
-    languages: {
-      en: "/en/blog/what-is-semantic-search",
-      ko: "/ko/blog/what-is-semantic-search",
-    },
-  },
-  openGraph: {
-    title: "What Is Semantic Search? How AI Understands Meaning (2026 Guide)",
-    description:
-      "Learn what semantic search is, how it works, and why it's replacing keyword search. Understand vector embeddings, NLP, and real-world applications.",
-    type: "article",
-    publishedTime: "2026-02-16T00:00:00Z",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { locales } from "@/lib/i18n/config";
 
 interface BlogPostProps {
   params: Promise<{ locale: string }>;
+}
+
+const titles: Record<string, string> = {
+  en: "What Is Semantic Search? How AI Understands Meaning (2026 Guide)",
+  ko: "시맨틱 검색이란? AI가 의미를 이해하는 방법 (2026 가이드)",
+  ja: "セマンティック検索とは？AIが意味を理解する仕組み（2026年ガイド）",
+  es: "¿Qué es la búsqueda semántica? Cómo la IA entiende el significado (Guía 2026)",
+  "pt-BR": "O que é busca semântica? Como a IA entende o significado (Guia 2026)",
+  "zh-CN": "什么是语义搜索？AI如何理解含义（2026指南）",
+  de: "Was ist semantische Suche? Wie KI Bedeutung versteht (Leitfaden 2026)",
+  fr: "Qu'est-ce que la recherche sémantique ? Comment l'IA comprend le sens (Guide 2026)",
+};
+
+const descriptions: Record<string, string> = {
+  en: "Learn what semantic search is, how it works, and why it's replacing keyword search. Understand vector embeddings, NLP, and real-world applications.",
+  ko: "시맨틱 검색이 무엇인지, 어떻게 작동하는지, 왜 키워드 검색을 대체하고 있는지 알아보세요. 벡터 임베딩과 NLP의 원리를 쉽게 설명합니다.",
+  ja: "セマンティック検索とは何か、どのように機能するか、なぜキーワード検索に取って代わりつつあるかを学びましょう。",
+  es: "Aprenda qué es la búsqueda semántica, cómo funciona y por qué está reemplazando la búsqueda por palabras clave.",
+  "pt-BR":
+    "Saiba o que é busca semântica, como funciona e por que está substituindo a busca por palavras-chave.",
+  "zh-CN": "了解语义搜索是什么、如何工作，以及为什么它正在取代关键词搜索。",
+  de: "Erfahren Sie, was semantische Suche ist, wie sie funktioniert und warum sie die Stichwortsuche ersetzt.",
+  fr: "Découvrez ce qu'est la recherche sémantique, comment elle fonctionne et pourquoi elle remplace la recherche par mots-clés.",
+};
+
+// SEO Metadata
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = titles[locale] || titles.en;
+  const description = descriptions[locale] || descriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog/what-is-semantic-search",
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog/what-is-semantic-search`])),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: "2026-02-16T00:00:00Z",
+    },
+    robots: { index: true, follow: true },
+  };
 }
 
 export default async function SemanticSearchPost({ params }: BlogPostProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  const i18n = {
-    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
-    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
-    breadcrumb:
-      locale === "ko"
-        ? "시맨틱 검색이란"
-        : locale === "ja"
-          ? "セマンティック検索とは"
-          : "What Is Semantic Search",
-    date:
-      locale === "ko" ? "2026년 2월 16일" : locale === "ja" ? "2026年2月16日" : "February 16, 2026",
-    readTime: locale === "ko" ? "12분 분량" : locale === "ja" ? "12分で読める" : "12 min read",
-  };
+  const t = await getTranslations({ locale: locale as Locale, namespace: "blog" });
+  const format = await getFormatter({ locale: locale as Locale });
 
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
@@ -72,7 +82,7 @@ export default async function SemanticSearchPost({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.home}</span>
+              <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -83,14 +93,18 @@ export default async function SemanticSearchPost({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.blog}</span>
+              <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {i18n.breadcrumb}
+              {locale === "ko"
+                ? "시맨틱 검색이란"
+                : locale === "ja"
+                  ? "セマンティック検索とは"
+                  : "What Is Semantic Search"}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -100,9 +114,15 @@ export default async function SemanticSearchPost({ params }: BlogPostProps) {
       {/* Article Header */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-16">{i18n.date}</time>
+          <time dateTime="2026-02-16">
+            {format.dateTime(new Date("2026-02-16"), {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           <span className="text-neutral-700">·</span>
-          <span>{i18n.readTime}</span>
+          <span>{t("readTime", { minutes: 12 })}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           What Is Semantic Search? A Complete Guide to How AI Understands Meaning

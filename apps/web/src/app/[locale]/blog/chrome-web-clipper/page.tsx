@@ -2,36 +2,57 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { locales } from "@/lib/i18n/config";
 import { resolveWebClipperSlugForLocale } from "../web-clipper-slug-routing";
-
-// SEO Metadata
-export const metadata: Metadata = {
-  title: "Chrome Web Clipper: Save & Organize Web Content (2026 Guide)",
-  description:
-    "Learn how to use a Chrome web clipper to save articles, highlight key passages, and organize research. Compare top tools and build a better workflow.",
-  alternates: {
-    canonical: "/blog/chrome-web-clipper",
-    languages: {
-      en: "/en/blog/chrome-web-clipper",
-      ko: "/ko/blog/web-clipper-guide",
-    },
-  },
-  openGraph: {
-    title: "Chrome Web Clipper: Save & Organize Web Content (2026 Guide)",
-    description:
-      "Learn how to use a Chrome web clipper to save articles, highlight key passages, and organize research. Compare top tools and build a better workflow.",
-    type: "article",
-    publishedTime: "2026-02-10T00:00:00Z",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
 
 interface BlogPostProps {
   params: Promise<{ locale: string }>;
+}
+
+const titles: Record<string, string> = {
+  en: "Chrome Web Clipper: The Complete Guide to Saving and Organizing Web Content (2026)",
+  ko: "Chrome Web Clipper: 웹 콘텐츠 저장 및 정리 완벽 가이드 (2026)",
+  ja: "Chrome Web Clipper: ウェブコンテンツの保存と整理の完全ガイド（2026年）",
+  es: "Chrome Web Clipper: Guía completa para guardar y organizar contenido web (2026)",
+  "pt-BR": "Chrome Web Clipper: Guia completo para salvar e organizar conteúdo web (2026)",
+  "zh-CN": "Chrome Web Clipper：保存和整理网页内容完全指南（2026）",
+  de: "Chrome Web Clipper: Der vollständige Leitfaden zum Speichern und Organisieren von Webinhalten (2026)",
+  fr: "Chrome Web Clipper : Guide complet pour sauvegarder et organiser le contenu web (2026)",
+};
+
+const descriptions: Record<string, string> = {
+  en: "Every day, you find amazing articles, research papers, and tutorials — only to lose them in a sea of browser bookmarks. A Chrome web clipper solves this problem completely.",
+  ko: "매일 훌륭한 아티클과 연구 자료, 튜토리얼을 발견하지만 북마크 속에서 잃어버리고 있진 않나요? Chrome 웹 클리퍼가 이 문제를 해결합니다.",
+  ja: "毎日素晴らしい記事や研究資料を見つけても、ブックマークの中で埋もれていませんか？Chrome ウェブクリッパーがこの問題を解決します。",
+  es: "Cada día encuentras artículos increíbles y los pierdes entre marcadores. Un web clipper de Chrome resuelve este problema.",
+  "pt-BR":
+    "Todo dia você encontra artigos incríveis e os perde entre os favoritos. Um web clipper do Chrome resolve este problema.",
+  "zh-CN":
+    "每天你都会发现精彩的文章，却在浏览器书签中找不到它们。Chrome网页剪藏工具完美解决这个问题。",
+  de: "Jeden Tag finden Sie großartige Artikel und verlieren sie in Lesezeichen. Ein Chrome Web Clipper löst dieses Problem.",
+  fr: "Chaque jour, vous trouvez des articles formidables et les perdez dans vos favoris. Un web clipper Chrome résout ce problème.",
+};
+
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = titles[locale] || titles.en;
+  const description = descriptions[locale] || descriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog/chrome-web-clipper",
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog/chrome-web-clipper`])),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: "2026-02-10T00:00:00Z",
+    },
+    robots: { index: true, follow: true },
+  };
 }
 
 export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
@@ -44,19 +65,8 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
   setRequestLocale(locale as Locale);
 
-  const i18n = {
-    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
-    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
-    breadcrumb:
-      locale === "ko"
-        ? "Chrome 웹 클리퍼"
-        : locale === "ja"
-          ? "Chrome ウェブクリッパー"
-          : "Chrome Web Clipper",
-    date:
-      locale === "ko" ? "2026년 2월 10일" : locale === "ja" ? "2026年2月10日" : "February 10, 2026",
-    readTime: locale === "ko" ? "8분 분량" : locale === "ja" ? "8分で読める" : "8 min read",
-  };
+  const t = await getTranslations({ locale: locale as Locale, namespace: "blog" });
+  const format = await getFormatter({ locale: locale as Locale });
 
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
@@ -80,7 +90,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.home}</span>
+              <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -91,14 +101,18 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.blog}</span>
+              <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {i18n.breadcrumb}
+              {locale === "ko"
+                ? "Chrome 웹 클리퍼"
+                : locale === "ja"
+                  ? "Chrome ウェブクリッパー"
+                  : "Chrome Web Clipper"}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -108,9 +122,15 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
       {/* Article Header */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-10">{i18n.date}</time>
+          <time dateTime="2026-02-10">
+            {format.dateTime(new Date("2026-02-10"), {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           <span className="text-neutral-700">·</span>
-          <span>{i18n.readTime}</span>
+          <span>{t("readTime", { minutes: 10 })}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           Chrome Web Clipper: The Complete Guide to Saving and Organizing Web Content

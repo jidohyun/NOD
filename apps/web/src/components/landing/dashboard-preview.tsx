@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
 export function DashboardPreview() {
   const sectionRef = useRef<HTMLElement>(null);
+  const t = useTranslations("landing.dashboardPreview");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -66,10 +68,10 @@ export function DashboardPreview() {
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[12px] font-medium leading-none text-black/82 dark:text-white/80">
-                    Saved reads
+                    {t("savedReads")}
                   </span>
                   <span className="font-mono text-[10px] leading-none text-black/40 dark:text-white/35">
-                    42 items
+                    {t("itemCount", { count: 42 })}
                   </span>
                 </div>
               </div>
@@ -77,7 +79,7 @@ export function DashboardPreview() {
                 <div className="flex h-9 w-44 items-center gap-2 rounded-lg border border-black/10 bg-black/[0.03] px-3 dark:border-white/[0.06] dark:bg-white/[0.03]">
                   <div className="h-1.5 w-1.5 rounded-full bg-black/35 dark:bg-white/30" />
                   <span className="font-mono text-[11px] text-black/42 dark:text-white/35">
-                    Search: RSC
+                    {t("searchPlaceholder")}
                   </span>
                 </div>
                 <div className="h-9 w-9 rounded-full bg-nod-gold/15 border border-nod-gold/25 flex items-center justify-center">
@@ -91,29 +93,23 @@ export function DashboardPreview() {
               {/* Article cards */}
               {[
                 {
-                  title: "Understanding React Server Components",
+                  titleKey: "0" as const,
                   status: "completed",
-                  summary:
-                    "RSC enables streaming UI with server-rendered components while keeping interactivity where it matters.",
                   concepts: ["React", "RSC", "Streaming"],
                 },
                 {
-                  title: "Vector Databases Explained",
+                  titleKey: "1" as const,
                   status: "completed",
-                  summary:
-                    "Embeddings turn text into vectors; similarity search retrieves related notes beyond exact keywords.",
                   concepts: ["pgvector", "Embeddings", "Cosine"],
                 },
                 {
-                  title: "Building with FastAPI",
+                  titleKey: "2" as const,
                   status: "analyzing",
-                  summary:
-                    "Learn ASGI fundamentals, dependency injection patterns, and how to ship typed APIs quickly.",
                   concepts: ["Python", "ASGI"],
                 },
-              ].map((article, _i) => (
+              ].map((article) => (
                 <div
-                  key={article.title}
+                  key={article.titleKey}
                   className="rounded-2xl border border-black/10 bg-black/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-nod-gold/20 hover:bg-black/[0.04] hover:shadow-lg dark:border-white/[0.05] dark:bg-white/[0.02] dark:hover:bg-white/[0.04]"
                 >
                   <div className="flex items-center gap-2 mb-4">
@@ -125,14 +121,14 @@ export function DashboardPreview() {
                       }`}
                     />
                     <span className="font-mono text-[10px] font-medium tracking-wider text-black/42 uppercase dark:text-white/40">
-                      {article.status}
+                      {article.status === "completed" ? t("statusCompleted") : t("statusAnalyzing")}
                     </span>
                   </div>
                   <h4 className="mb-3 text-[15px] leading-snug font-medium text-black/90 dark:text-white/90">
-                    {article.title}
+                    {t(`articles.${article.titleKey}.title`)}
                   </h4>
                   <p className="mb-5 line-clamp-3 text-[13px] leading-relaxed text-black/45 dark:text-white/40">
-                    {article.summary}
+                    {t(`articles.${article.titleKey}.summary`)}
                   </p>
                   {/* Concept tags */}
                   <div className="flex flex-wrap gap-1.5">
@@ -156,23 +152,18 @@ export function DashboardPreview() {
                   <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
                 </div>
                 <span className="font-mono text-[11px] font-medium tracking-wider text-black/42 uppercase dark:text-white/40">
-                  Similar reads
+                  {t("similarReads")}
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  "React Patterns Deep Dive",
-                  "Next.js 16 Migration Guide",
-                  "TypeScript 5.9 Features",
-                  "Edge Computing Primer",
-                ].map((title) => (
+                {[0, 1, 2, 3].map((i) => (
                   <div
-                    key={title}
+                    key={i}
                     className="group/item flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 bg-black/[0.06] px-4 py-3 transition-colors hover:border-black/16 hover:bg-black/[0.08] dark:border-white/[0.04] dark:bg-black/20 dark:hover:border-white/[0.1] dark:hover:bg-white/[0.03]"
                   >
                     <div className="w-1 h-8 rounded-full bg-violet-500/30 group-hover/item:bg-violet-500/50 transition-colors" />
                     <span className="text-[12px] font-medium text-black/52 transition-colors group-hover/item:text-black/78 dark:text-white/50 dark:group-hover/item:text-white/80">
-                      {title}
+                      {t(`similar.${i}`)}
                     </span>
                   </div>
                 ))}

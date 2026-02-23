@@ -1,50 +1,65 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-
-// SEO Metadata
-export const metadata: Metadata = {
-  title: "Research Article Summarizer — AI Tools for Academic Papers (2026)",
-  description:
-    "Summarize research articles and academic papers with AI. Compare the best research summarizer tools for students, academics, and professionals.",
-  alternates: {
-    canonical: "/blog/research-article-summarizer",
-  },
-  openGraph: {
-    title: "Research Article Summarizer — AI Tools for Academic Papers (2026)",
-    description:
-      "Summarize research articles and academic papers with AI. Compare the best tools for students and academics.",
-    type: "article",
-    publishedTime: "2026-02-16T00:00:00Z",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { locales } from "@/lib/i18n/config";
 
 interface BlogPostProps {
   params: Promise<{ locale: string }>;
+}
+
+const titles: Record<string, string> = {
+  en: "Research Article Summarizer — AI Tools for Academic Papers (2026)",
+  ko: "연구 논문 요약 도구 — 학술 논문을 위한 AI 도구 (2026)",
+  ja: "研究論文要約ツール — 学術論文向けAIツール（2026年）",
+  es: "Resumidor de artículos de investigación — Herramientas IA para trabajos académicos (2026)",
+  "pt-BR": "Resumidor de artigos de pesquisa — Ferramentas IA para trabalhos acadêmicos (2026)",
+  "zh-CN": "研究论文摘要工具 — 学术论文AI工具（2026）",
+  de: "Forschungsartikel-Zusammenfasser — KI-Tools für wissenschaftliche Arbeiten (2026)",
+  fr: "Résumeur d'articles de recherche — Outils IA pour articles académiques (2026)",
+};
+
+const descriptions: Record<string, string> = {
+  en: "Summarize research articles and academic papers with AI. Compare the best research summarizer tools for students, academics, and professionals.",
+  ko: "AI로 연구 논문과 학술 아티클을 요약하세요. 학생, 연구자, 전문가를 위한 최고의 연구 논문 요약 도구를 비교합니다.",
+  ja: "AIで研究論文や学術記事を要約。学生・研究者・専門家向けのベスト要約ツールを比較します。",
+  es: "Resuma artículos de investigación con IA. Compare las mejores herramientas para estudiantes, académicos y profesionales.",
+  "pt-BR":
+    "Resuma artigos de pesquisa com IA. Compare as melhores ferramentas para estudantes, acadêmicos e profissionais.",
+  "zh-CN": "使用AI摘要研究文章和学术论文。比较最适合学生、学者和专业人士的摘要工具。",
+  de: "Fassen Sie Forschungsartikel mit KI zusammen. Vergleichen Sie die besten Tools für Studenten, Akademiker und Fachleute.",
+  fr: "Résumez des articles de recherche avec l'IA. Comparez les meilleurs outils pour étudiants, chercheurs et professionnels.",
+};
+
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = titles[locale] || titles.en;
+  const description = descriptions[locale] || descriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog/research-article-summarizer",
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `/${l}/blog/research-article-summarizer`])
+      ),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: "2026-02-16T00:00:00Z",
+    },
+    robots: { index: true, follow: true },
+  };
 }
 
 export default async function ResearchArticleSummarizerPost({ params }: BlogPostProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  const i18n = {
-    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
-    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
-    breadcrumb:
-      locale === "ko"
-        ? "연구 논문 요약 도구"
-        : locale === "ja"
-          ? "研究論文要約ツール"
-          : "Research Article Summarizer",
-    date:
-      locale === "ko" ? "2026년 2월 16일" : locale === "ja" ? "2026年2月16日" : "February 16, 2026",
-    readTime: locale === "ko" ? "9분 분량" : locale === "ja" ? "9分で読める" : "9 min read",
-  };
+  const t = await getTranslations({ locale: locale as Locale, namespace: "blog" });
+  const format = await getFormatter({ locale: locale as Locale });
 
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
@@ -68,7 +83,7 @@ export default async function ResearchArticleSummarizerPost({ params }: BlogPost
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.home}</span>
+              <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -79,14 +94,18 @@ export default async function ResearchArticleSummarizerPost({ params }: BlogPost
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.blog}</span>
+              <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {i18n.breadcrumb}
+              {locale === "ko"
+                ? "연구 논문 요약 도구"
+                : locale === "ja"
+                  ? "研究論文要約ツール"
+                  : "Research Article Summarizer"}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -96,9 +115,15 @@ export default async function ResearchArticleSummarizerPost({ params }: BlogPost
       {/* Article Header */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-16">{i18n.date}</time>
+          <time dateTime="2026-02-16">
+            {format.dateTime(new Date("2026-02-16"), {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           <span className="text-neutral-700">·</span>
-          <span>{i18n.readTime}</span>
+          <span>{t("readTime", { minutes: 9 })}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           Research Article Summarizer: AI Tools That Make Academic Reading Faster

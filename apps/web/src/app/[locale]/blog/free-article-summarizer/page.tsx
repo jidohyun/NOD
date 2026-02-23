@@ -1,50 +1,63 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-
-// SEO Metadata
-export const metadata: Metadata = {
-  title: "Free Article Summarizer Tools — No Sign-Up Required (2026)",
-  description:
-    "Looking for a free article summarizer? Compare the best free AI tools that summarize articles instantly — no sign-up, no word limits, and no hidden costs.",
-  alternates: {
-    canonical: "/blog/free-article-summarizer",
-  },
-  openGraph: {
-    title: "Free Article Summarizer Tools — No Sign-Up Required (2026)",
-    description:
-      "Compare the best free AI tools that summarize articles instantly with no sign-up required.",
-    type: "article",
-    publishedTime: "2026-02-16T00:00:00Z",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { locales } from "@/lib/i18n/config";
 
 interface BlogPostProps {
   params: Promise<{ locale: string }>;
+}
+
+const titles: Record<string, string> = {
+  en: "Free Article Summarizer Tools — No Sign-Up Required (2026)",
+  ko: "무료 아티클 요약 도구 — 회원가입 없이 사용 (2026)",
+  ja: "無料記事要約ツール — 登録不要で使える（2026年）",
+  es: "Herramientas gratuitas de resumen — Sin registro (2026)",
+  "pt-BR": "Ferramentas gratuitas de resumo — Sem cadastro (2026)",
+  "zh-CN": "免费文章摘要工具 — 无需注册（2026）",
+  de: "Kostenlose Zusammenfassungs-Tools — Ohne Anmeldung (2026)",
+  fr: "Outils de résumé gratuits — Sans inscription (2026)",
+};
+
+const descriptions: Record<string, string> = {
+  en: "Looking for a free article summarizer? Compare the best free AI tools that summarize articles instantly — no sign-up, no word limits, and no hidden costs.",
+  ko: "무료 아티클 요약기를 찾고 계신가요? 회원가입 없이 바로 사용할 수 있는 최고의 무료 AI 요약 도구를 비교합니다.",
+  ja: "無料の記事要約ツールをお探しですか？登録不要で即座に記事を要約できる最高の無料AIツールを比較します。",
+  es: "¿Busca un resumidor gratuito? Compare las mejores herramientas de IA gratuitas que resumen artículos al instante.",
+  "pt-BR":
+    "Procurando um resumidor gratuito? Compare as melhores ferramentas de IA que resumem artigos instantaneamente.",
+  "zh-CN": "正在寻找免费的文章摘要工具？比较最佳免费AI工具，即时生成文章摘要。",
+  de: "Suchen Sie einen kostenlosen Zusammenfasser? Vergleichen Sie die besten kostenlosen KI-Tools.",
+  fr: "Vous cherchez un outil de résumé gratuit ? Comparez les meilleurs outils IA gratuits.",
+};
+
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = titles[locale] || titles.en;
+  const description = descriptions[locale] || descriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog/free-article-summarizer",
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog/free-article-summarizer`])),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: "2026-02-16T00:00:00Z",
+    },
+    robots: { index: true, follow: true },
+  };
 }
 
 export default async function FreeArticleSummarizerPost({ params }: BlogPostProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  const i18n = {
-    home: locale === "ko" ? "홈" : locale === "ja" ? "ホーム" : "Home",
-    blog: locale === "ko" ? "블로그" : locale === "ja" ? "ブログ" : "Blog",
-    breadcrumb:
-      locale === "ko"
-        ? "무료 아티클 요약 도구"
-        : locale === "ja"
-          ? "無料記事要約ツール"
-          : "Free Article Summarizer",
-    date:
-      locale === "ko" ? "2026년 2월 16일" : locale === "ja" ? "2026年2月16日" : "February 16, 2026",
-    readTime: locale === "ko" ? "8분 분량" : locale === "ja" ? "8分で読める" : "8 min read",
-  };
+  const t = await getTranslations({ locale: locale as Locale, namespace: "blog" });
+  const format = await getFormatter({ locale: locale as Locale });
 
   return (
     <article className="prose-invert" itemScope itemType="https://schema.org/Article">
@@ -68,7 +81,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.home}</span>
+              <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
@@ -79,14 +92,18 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
               itemProp="item"
               className="hover:text-white transition-colors"
             >
-              <span itemProp="name">{i18n.blog}</span>
+              <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {i18n.breadcrumb}
+              {locale === "ko"
+                ? "무료 아티클 요약 도구"
+                : locale === "ja"
+                  ? "無料記事要約ツール"
+                  : "Free Article Summarizer"}
             </span>
             <meta itemProp="position" content="3" />
           </li>
@@ -96,9 +113,15 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
       {/* Article Header */}
       <header className="mb-12">
         <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
-          <time dateTime="2026-02-16">{i18n.date}</time>
+          <time dateTime="2026-02-16">
+            {format.dateTime(new Date("2026-02-16"), {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           <span className="text-neutral-700">·</span>
-          <span>{i18n.readTime}</span>
+          <span>{t("readTime", { minutes: 8 })}</span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
           Free Article Summarizer: The Best No-Cost Tools to Summarize Any Article
