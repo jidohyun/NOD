@@ -3,6 +3,10 @@
 from enum import StrEnum
 from urllib.parse import urlparse
 
+import structlog
+
+logger = structlog.get_logger(__name__)
+
 
 class ContentType(StrEnum):
     TECH_BLOG = "tech_blog"
@@ -60,6 +64,18 @@ _DOMAIN_RULES: list[tuple[list[str], ContentType]] = [
             "infoq.com",
             "dzone.com",
             "techcrunch.com",
+            # Company engineering / tech blogs
+            "netflixtechblog.com",
+            "engineering.fb.com",
+            "engineering.atspotify.com",
+            "blog.google",
+            "aws.amazon.com/blogs",
+            "uber.com/blog",
+            "eng.lyft.com",
+            "engineering.linkedin.com",
+            "stripe.com/blog",
+            "dropbox.tech",
+            "airbnb.io",
         ],
         ContentType.TECH_BLOG,
     ),
@@ -153,4 +169,15 @@ def classify_url(url: str) -> ContentType:
     if host.startswith("blog.") or "/blog/" in path or "/posts/" in path:
         return ContentType.TECH_BLOG
 
+    # Hostname-based heuristics for company tech/engineering blogs
+    _tech_blog_keywords = ("techblog", "engineering", "engblog", "devblog")
+    if any(kw in host for kw in _tech_blog_keywords):
+        return ContentType.TECH_BLOG
+
+    logger.warning(
+        "Content type classification fell back to general_news",
+        url=url,
+        host=host,
+        path=path,
+    )
     return ContentType.GENERAL_NEWS
