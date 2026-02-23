@@ -561,5 +561,36 @@
       "markdownExport": "지원",
       "conceptExtraction": "지원"
     }
+  },
+  "onboarding": {
+    "skip": "건너뛰기",
+    "progress": "{step}/3",
+    "welcome": {
+      "title": "NOD에 오신 것을 환영합니다",
+      "subtitle": "AI가 분석하는 나만의 지식 라이브러리",
+      "featureSave": "웹 아티클을 한 클릭으로 저장",
+      "featureAnalyze": "AI가 자동으로 핵심 내용 분석",
+      "featureSearch": "시맨틱 검색으로 언제든 찾기",
+      "cta": "시작하기"
+    },
+    "install": {
+      "title": "Chrome 익스텐션을 설치하세요",
+      "subtitle": "아티클을 한 클릭으로 저장할 수 있습니다",
+      "installButton": "Chrome Web Store에서 설치",
+      "confirmButton": "설치했어요",
+      "skipLink": "나중에 할게요"
+    },
+    "firstArticle": {
+      "title": "첫 아티클을 저장해보세요",
+      "subtitle": "아래 세 단계로 시작할 수 있습니다",
+      "step1": "아무 기사나 열어보세요",
+      "step2": "브라우저 우측 상단 NOD 아이콘 클릭",
+      "step3": "Save & Analyze 버튼 클릭",
+      "cta": "대시보드로 이동"
+    },
+    "resumeBanner": {
+      "message": "온보딩을 완료하고 NOD를 시작하세요",
+      "cta": "계속하기"
+    }
   }
 }

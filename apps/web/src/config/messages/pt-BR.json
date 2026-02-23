@@ -561,5 +561,36 @@
       "markdownExport": "Incluído",
       "conceptExtraction": "Incluído"
     }
+  },
+  "onboarding": {
+    "skip": "Pular",
+    "progress": "{step}/3",
+    "welcome": {
+      "title": "Bem-vindo ao NOD",
+      "subtitle": "Sua biblioteca de conhecimento com IA",
+      "featureSave": "Salve artigos da web com um clique",
+      "featureAnalyze": "A IA analisa automaticamente os principais insights",
+      "featureSearch": "Encontre tudo com busca semântica",
+      "cta": "Começar"
+    },
+    "install": {
+      "title": "Instale a extensão do Chrome",
+      "subtitle": "Salve artigos com um clique em qualquer página",
+      "installButton": "Instalar pela Chrome Web Store",
+      "confirmButton": "Já instalei",
+      "skipLink": "Farei isso depois"
+    },
+    "firstArticle": {
+      "title": "Salve seu primeiro artigo",
+      "subtitle": "Siga estes três passos simples",
+      "step1": "Abra qualquer artigo ou post de blog",
+      "step2": "Clique no ícone do NOD na barra do navegador",
+      "step3": "Clique em Save & Analyze",
+      "cta": "Ir para o painel"
+    },
+    "resumeBanner": {
+      "message": "Complete a configuração para começar com o NOD",
+      "cta": "Continuar"
+    }
   }
 }

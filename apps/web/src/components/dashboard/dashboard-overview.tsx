@@ -2,9 +2,12 @@
 
 import { ArrowRight, BarChart3, Brain, CreditCard, FileText } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { OnboardingResumeBanner } from "@/components/onboarding/onboarding-resume-banner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useArticles, useContentTypeStats } from "@/lib/api/articles";
 import { useUsage } from "@/lib/api/subscriptions";
+import { getSupabase } from "@/lib/auth/auth-client";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
 
@@ -44,8 +47,20 @@ export function DashboardOverview() {
   };
   const dateLocale = DATE_LOCALE_MAP[locale] ?? "en-US";
 
+  const [showOnboardingBanner, setShowOnboardingBanner] = useState(false);
+
+  useEffect(() => {
+    const supabase = getSupabase();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user && !user.user_metadata?.onboarding_completed) {
+        setShowOnboardingBanner(true);
+      }
+    });
+  }, []);
+
   return (
     <div className="space-y-8">
+      {showOnboardingBanner ? <OnboardingResumeBanner /> : null}
       <div>
         <h1 className="text-2xl font-bold tracking-tight">{t("overview.title")}</h1>
         <p className="text-muted-foreground">{t("overview.description")}</p>

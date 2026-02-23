@@ -561,5 +561,36 @@
       "markdownExport": "Enthalten",
       "conceptExtraction": "Enthalten"
     }
+  },
+  "onboarding": {
+    "skip": "Überspringen",
+    "progress": "{step}/3",
+    "welcome": {
+      "title": "Willkommen bei NOD",
+      "subtitle": "Deine KI-gestützte Wissensbibliothek",
+      "featureSave": "Webartikel mit einem Klick speichern",
+      "featureAnalyze": "KI analysiert automatisch die wichtigsten Erkenntnisse",
+      "featureSearch": "Alles mit semantischer Suche finden",
+      "cta": "Loslegen"
+    },
+    "install": {
+      "title": "Chrome-Erweiterung installieren",
+      "subtitle": "Artikel mit einem Klick von jeder Seite speichern",
+      "installButton": "Aus dem Chrome Web Store installieren",
+      "confirmButton": "Ich habe es installiert",
+      "skipLink": "Später erledigen"
+    },
+    "firstArticle": {
+      "title": "Speichere deinen ersten Artikel",
+      "subtitle": "Folge diesen drei einfachen Schritten",
+      "step1": "Öffne einen beliebigen Artikel oder Blogbeitrag",
+      "step2": "Klicke auf das NOD-Symbol in der Browser-Leiste",
+      "step3": "Klicke auf Save & Analyze",
+      "cta": "Zum Dashboard"
+    },
+    "resumeBanner": {
+      "message": "Schließe die Einrichtung ab, um mit NOD zu starten",
+      "cta": "Weiter"
+    }
   }
 }
