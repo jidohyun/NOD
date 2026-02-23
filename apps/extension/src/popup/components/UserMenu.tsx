@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { WEB_BASE } from "../../lib/constants";
-import { t, SUPPORTED_LOCALES, type Locale } from "../../lib/i18n";
+import { t, type Locale } from "../../lib/i18n";
 import type { UserInfo } from "../../lib/auth";
 
 interface UserMenuProps {
@@ -10,14 +10,22 @@ interface UserMenuProps {
   onLocaleChange: (locale: Locale) => void;
 }
 
+const LOCALE_OPTIONS: { code: Locale; label: string; flag: string }[] = [
+  { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "ko", label: "한국어", flag: "🇰🇷" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt-BR", label: "Português", flag: "🇧🇷" },
+  { code: "zh-CN", label: "中文", flag: "🇨🇳" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+];
+
 export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuProps) {
-  const localeLabels: Record<Locale, string> = {
-    en: "EN",
-    ko: "KO",
-    ja: "JA",
-  };
   const [isOpen, setIsOpen] = useState(false);
+  const [localeDropdownOpen, setLocaleDropdownOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const localeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -66,29 +74,66 @@ export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuPro
       </button>
 
       {isOpen && (
-        <div className="glass-menu absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-xl shadow-2xl animate-slide-up">
+        <div className="glass-menu absolute right-0 top-full z-50 mt-2 w-52 rounded-xl shadow-2xl animate-slide-up">
           <div className="px-3.5 py-3" style={{ borderBottom: "1px solid var(--border-subtle)" }}>
             <p className="truncate text-sm font-medium t-primary">{user.name}</p>
             <p className="truncate text-xs t-muted">{user.email}</p>
           </div>
 
-          <div className="px-3.5 py-2.5" style={{ borderBottom: "1px solid var(--border-subtle)" }}>
-            <p className="mb-1.5 text-xs font-medium t-muted">{t("extLanguage")}</p>
-            <div className="flex gap-1">
-              {SUPPORTED_LOCALES.map((loc) => (
-                <button
-                  key={loc}
-                  onClick={() => onLocaleChange(loc)}
-                  className="flex-1 rounded-lg px-2 py-1 text-xs font-medium transition-all duration-150"
-                  style={{
-                    background: locale === loc ? "var(--locale-active-bg)" : "var(--locale-bg)",
-                    color: locale === loc ? "var(--locale-active-text)" : "var(--locale-text)",
-                  }}
+          <div className="px-3.5 py-2.5 relative" style={{ borderBottom: "1px solid var(--border-subtle)" }} ref={localeRef}>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium t-muted">{t("extLanguage")}</p>
+              <button
+                onClick={() => setLocaleDropdownOpen((v) => !v)}
+                className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium transition-all duration-150"
+                style={{
+                  background: "var(--locale-active-bg)",
+                  color: "var(--locale-active-text)",
+                }}
+              >
+                <span>{LOCALE_OPTIONS.find((o) => o.code === locale)?.flag}</span>
+                <span>{LOCALE_OPTIONS.find((o) => o.code === locale)?.label}</span>
+                <svg
+                  className={`h-3 w-3 transition-transform duration-200 ${localeDropdownOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
                 >
-                  {localeLabels[loc]}
-                </button>
-              ))}
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
             </div>
+            {localeDropdownOpen && (
+              <div
+                className="absolute right-3.5 z-50 mt-1 w-40 max-h-36 overflow-y-auto rounded-xl shadow-2xl"
+                style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)" }}
+              >
+                {LOCALE_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.code}
+                    onClick={() => {
+                      onLocaleChange(opt.code);
+                      setLocaleDropdownOpen(false);
+                    }}
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs transition-colors"
+                    style={{
+                      background: locale === opt.code ? "var(--locale-active-bg)" : "transparent",
+                      color: locale === opt.code ? "var(--locale-active-text)" : "var(--locale-text)",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (locale !== opt.code) e.currentTarget.style.background = "var(--bg-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (locale !== opt.code) e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    <span>{opt.flag}</span>
+                    <span>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="py-1">
