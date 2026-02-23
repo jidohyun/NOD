@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useSimilarArticles } from "@/lib/api/articles";
 
 export function SimilarArticles({ articleId }: { articleId: string }) {
@@ -9,7 +10,26 @@ export function SimilarArticles({ articleId }: { articleId: string }) {
   const { data: similar, isLoading } = useSimilarArticles(articleId);
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("loadingSimilar")}</div>;
+    return (
+      <div className="rounded-lg border bg-card p-4">
+        <Skeleton className="h-5 w-32 mb-3" />
+        <div className="space-y-3">
+          {[1, 2].map((i) => (
+            <div key={i} className="rounded-md border p-3 space-y-2">
+              <div className="flex items-start justify-between gap-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-12" />
+              </div>
+              <Skeleton className="h-3 w-full" />
+              <div className="flex gap-1">
+                <Skeleton className="h-5 w-14 rounded" />
+                <Skeleton className="h-5 w-14 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (!similar || similar.length === 0) {
