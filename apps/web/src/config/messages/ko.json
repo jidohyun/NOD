@@ -285,7 +285,8 @@
       "recentArticlesTitle": "최근 저장한 콘텐츠",
       "recentArticlesDescription": "최근에 저장한 콘텐츠입니다.",
       "noRecentArticles": "아직 저장한 콘텐츠가 없습니다.",
-      "viewAll": "전체 보기"
+      "viewAll": "전체 보기",
+      "contentTypes": "콘텐츠 유형"
     },
     "graph": {
       "sectionLabel": "지식 그래프",

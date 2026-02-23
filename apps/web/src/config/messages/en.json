@@ -285,7 +285,8 @@
       "recentArticlesTitle": "Recent Content",
       "recentArticlesDescription": "Your recently saved content.",
       "noRecentArticles": "No content saved yet.",
-      "viewAll": "View All"
+      "viewAll": "View All",
+      "contentTypes": "Content Types"
     },
     "graph": {
       "sectionLabel": "Knowledge Graph",
