@@ -285,7 +285,8 @@
       "recentArticlesTitle": "最近のコンテンツ",
       "recentArticlesDescription": "最近保存したコンテンツです。",
       "noRecentArticles": "まだコンテンツがありません。",
-      "viewAll": "すべて見る"
+      "viewAll": "すべて見る",
+      "contentTypes": "コンテンツタイプ"
     },
     "graph": {
       "sectionLabel": "ナレッジグラフ",
