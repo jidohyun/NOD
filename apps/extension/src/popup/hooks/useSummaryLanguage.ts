@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { STORAGE_KEYS } from "../../lib/constants";
 
-export type SummaryLanguage = "ko" | "en" | "ja";
+export type SummaryLanguage = "ko" | "en" | "ja" | "es" | "pt-BR" | "zh-CN" | "de" | "fr";
 
-const VALID_LANGUAGES: SummaryLanguage[] = ["ko", "en", "ja"];
+const VALID_LANGUAGES: SummaryLanguage[] = ["ko", "en", "ja", "es", "pt-BR", "zh-CN", "de", "fr"];
 
 export function useSummaryLanguage() {
   const [language, setLangState] = useState<SummaryLanguage>("en");

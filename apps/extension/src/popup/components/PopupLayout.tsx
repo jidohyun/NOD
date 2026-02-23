@@ -4,6 +4,11 @@ import { t, type Locale } from "../../lib/i18n";
 import type { UserInfo } from "../../lib/auth";
 import type { Theme } from "../hooks/useTheme";
 
+const LOGO_SRC: Record<Theme, string> = {
+  dark: "/icons/logo.png",
+  light: "/icons/nod-logo-light.png",
+};
+
 interface PopupLayoutProps {
   children: ReactNode;
   user?: UserInfo | null;
@@ -33,7 +38,7 @@ export function PopupLayout({
         }}
       >
         <div className="flex items-center gap-2">
-          <img src="/icons/logo.png" alt="NOD" className="h-5 w-auto opacity-95" />
+          <img src={LOGO_SRC[theme]} alt="NOD" className="h-5 w-auto opacity-95" />
           {__DEV__ && (
             <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
               DEV
