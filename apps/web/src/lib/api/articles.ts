@@ -129,7 +129,7 @@ export function useArticle(id: string) {
       if (article && (article.status === "pending" || article.status === "processing" || article.status === "analyzing")) {
         return 3000;
       }
-      return false;
+      return 30000;
     },
   });
 }
@@ -164,6 +164,23 @@ export function useSemanticSearch(params: {
       return data;
     },
     enabled: params.enabled !== false && params.q.length >= 2,
+  });
+}
+
+export interface ContentTypeStats {
+  counts: Record<string, number>;
+  total: number;
+}
+
+export function useContentTypeStats() {
+  return useQuery({
+    queryKey: ["articles", "stats", "content-types"],
+    queryFn: async () => {
+      const { data } = await apiClient.get<ContentTypeStats>(
+        "/api/articles/stats/content-types"
+      );
+      return data;
+    },
   });
 }
 
