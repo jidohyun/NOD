@@ -165,6 +165,24 @@ resource "google_secret_manager_secret_version" "google_ai_api_key" {
   secret_data = var.GOOGLE_AI_API_KEY
 }
 
+# Langfuse Secret Key
+resource "google_secret_manager_secret" "langfuse_secret_key" {
+  count     = var.LANGFUSE_SECRET_KEY != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-langfuse-secret-key"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "langfuse_secret_key" {
+  count       = var.LANGFUSE_SECRET_KEY != "" ? 1 : 0
+  secret      = google_secret_manager_secret.langfuse_secret_key[0].id
+  secret_data = var.LANGFUSE_SECRET_KEY
+}
+
 # Redis (Memorystore)
 resource "google_redis_instance" "main" {
   name           = "${local.name_prefix}-redis"
