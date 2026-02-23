@@ -79,7 +79,8 @@ Code handling:
 - key_points: 3-5 key points (one sentence each)
 - language: the article's language (ISO 639-1 code)
 - reading_time_minutes: estimated reading time (~200 words/min)
-- markdown_note: a {lang_name} markdown note following the template
+- markdown_note: a {lang_name} markdown note following the template. \
+Use ACTUAL newline characters (not literal \\n) to separate lines.
 - tech_stack: list of technologies/frameworks mentioned
 - difficulty_level: one of "beginner", "intermediate", "advanced"
 """
