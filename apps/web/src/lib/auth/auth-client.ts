@@ -28,6 +28,7 @@ export async function signInWithGoogle(redirectTo?: string) {
   // Persist next path in a cookie so Supabase redirect URL allowlisting doesn't
   // need to account for arbitrary query params.
   if (redirectTo) {
+    // biome-ignore lint/suspicious/noDocumentCookie: Used for auth redirect persistence
     document.cookie = `nod_auth_next=${encodeURIComponent(redirectTo)}; path=/; max-age=600; samesite=lax`;
   }
 
