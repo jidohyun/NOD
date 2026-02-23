@@ -1,11 +1,21 @@
 "use client";
 
-import { ArrowRight, Brain, CreditCard, FileText } from "lucide-react";
+import { ArrowRight, BarChart3, Brain, CreditCard, FileText } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useArticles } from "@/lib/api/articles";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useArticles, useContentTypeStats } from "@/lib/api/articles";
 import { useUsage } from "@/lib/api/subscriptions";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
+
+const CONTENT_TYPE_LABEL_KEYS: Record<string, string> = {
+  tech_blog: "typeTechBlog",
+  academic_paper: "typePaper",
+  general_news: "typeNews",
+  github_repo: "typeGitHub",
+  official_docs: "typeDocs",
+  video_podcast: "typeVideo",
+};
 
 export function DashboardOverview() {
   const locale = useLocale();
@@ -14,13 +24,12 @@ export function DashboardOverview() {
   const { data: usage, isLoading: usageLoading } = useUsage();
   const { data: articlesData, isLoading: articlesLoading } = useArticles({ page: 1, limit: 5 });
 
+  const { data: contentTypeStats } = useContentTypeStats();
   const totalArticles = articlesData?.meta?.total ?? 0;
   const recentArticles = articlesData?.data ?? [];
   const plan = usage?.plan ?? "basic";
   const summariesUsed = usage?.summaries_used ?? 0;
   const summariesLimit = usage?.summaries_limit ?? 0;
-  const articleUsageLabel = articlesLoading ? "—" : totalArticles.toLocaleString();
-  const planLabel = usageLoading ? "—" : plan === "pro" ? ts("pro") : ts("basic");
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 
   const dateLocale = locale === "ko" ? "ko-KR" : locale === "ja" ? "ja-JP" : "en-US";
@@ -42,7 +51,13 @@ export function DashboardOverview() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">{t("overview.savedArticles")}</p>
-              <p className="text-2xl font-bold">{articleUsageLabel}</p>
+              <div className="text-2xl font-bold">
+                {articlesLoading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : (
+                  totalArticles.toLocaleString()
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -55,11 +70,13 @@ export function DashboardOverview() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">{t("overview.aiSummaries")}</p>
-              <p className="text-2xl font-bold">
-                {usageLoading
-                  ? "—"
-                  : `${summariesUsed}/${summariesLimit === -1 ? "∞" : summariesLimit}`}
-              </p>
+              <div className="text-2xl font-bold">
+                {usageLoading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : (
+                  `${summariesUsed}/${summariesLimit === -1 ? "∞" : summariesLimit}`
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -72,11 +89,61 @@ export function DashboardOverview() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">{t("overview.currentPlan")}</p>
-              <p className="text-2xl font-bold capitalize">{planLabel}</p>
+              <div className="text-2xl font-bold capitalize">
+                {usageLoading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : plan === "pro" ? (
+                  ts("pro")
+                ) : (
+                  ts("basic")
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Content Type Distribution */}
+      {contentTypeStats && contentTypeStats.total > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">{t("overview.contentTypes")}</h2>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(contentTypeStats.counts)
+              .sort(([, a], [, b]) => b - a)
+              .map(([type, count]) => {
+                const percentage = Math.round((count / contentTypeStats.total) * 100);
+                return (
+                  <div key={type} className="rounded-lg border bg-card p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">
+                        {t(
+                          (CONTENT_TYPE_LABEL_KEYS[type] || "typeNews") as
+                            | "typeTechBlog"
+                            | "typePaper"
+                            | "typeNews"
+                            | "typeGitHub"
+                            | "typeDocs"
+                            | "typeVideo"
+                        )}
+                      </span>
+                      <span className="text-sm text-muted-foreground">{count}</span>
+                    </div>
+                    <div className="mt-2 h-2 rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full bg-primary transition-all"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">{percentage}%</p>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
 
       {/* Quick Links */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -139,10 +206,10 @@ export function DashboardOverview() {
         {articlesLoading ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse rounded-xl border bg-card p-5">
-                <div className="h-4 w-3/4 rounded bg-muted" />
-                <div className="mt-3 h-3 w-full rounded bg-muted" />
-                <div className="mt-2 h-3 w-2/3 rounded bg-muted" />
+              <div key={i} className="rounded-xl border bg-card p-5 space-y-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-2/3" />
               </div>
             ))}
           </div>

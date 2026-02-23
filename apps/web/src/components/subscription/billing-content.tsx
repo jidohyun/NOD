@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   useInvalidateSubscription,
   usePortalUrl,
@@ -20,7 +21,6 @@ const DATE_LOCALE_MAP: Record<string, string> = {
 
 export function BillingContent() {
   const t = useTranslations("subscription");
-  const tc = useTranslations("common");
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { data: subscription, isLoading: subLoading } = useSubscription();
@@ -42,7 +42,42 @@ export function BillingContent() {
   }, [searchParams, invalidate]);
 
   if (subLoading || usageLoading) {
-    return <div className="py-12 text-center text-muted-foreground">{tc("loading")}</div>;
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+          <div className="space-y-6">
+            <div className="rounded-lg border bg-card p-6 space-y-3">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-3 w-32" />
+            </div>
+            <div className="rounded-lg border bg-card p-6 space-y-3">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-2 w-full rounded-full" />
+            </div>
+            <div className="rounded-lg border bg-card p-6 space-y-3">
+              <Skeleton className="h-4 w-20" />
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-3 w-28" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+              <Skeleton className="h-1.5 w-full rounded-full" />
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div className="rounded-lg border bg-card p-6 space-y-4">
+              <Skeleton className="h-4 w-16" />
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-4/5" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const isPro = subscription?.plan === "pro";
