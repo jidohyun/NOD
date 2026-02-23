@@ -183,6 +183,9 @@ export function ArticleList() {
               : "space-y-3"
           }
         >
+          <output className="sr-only" aria-live="polite">
+            {t("loadingArticles")}
+          </output>
           {SKELETON_KEYS.slice(0, viewMode === "grid" ? 6 : 4).map((key) => (
             <div key={key} className="rounded-xl border bg-card p-5 space-y-3">
               <Skeleton className="h-5 w-3/4" />
