@@ -6,7 +6,10 @@ import { ArticleCard } from "@/components/articles/article-card";
 import { useArticleListModel } from "@/components/articles/hooks/use-article-list-model";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
+
+const SKELETON_KEYS = Array.from({ length: 6 }, (_, i) => `skeleton-${i}`);
 
 export function ArticleList() {
   const locale = useLocale();
@@ -173,7 +176,26 @@ export function ArticleList() {
       ) : null}
 
       {isLoading ? (
-        <div className="py-12 text-center text-muted-foreground">{t("loadingArticles")}</div>
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+              : "space-y-3"
+          }
+        >
+          {SKELETON_KEYS.slice(0, viewMode === "grid" ? 6 : 4).map((key) => (
+            <div key={key} className="rounded-xl border bg-card p-5 space-y-3">
+              <Skeleton className="h-5 w-3/4" />
+              <div className="flex gap-2">
+                <Skeleton className="h-4 w-16 rounded-full" />
+                <Skeleton className="h-4 w-16 rounded-full" />
+              </div>
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-3 w-2/3" />
+              <Skeleton className="h-3 w-20" />
+            </div>
+          ))}
+        </div>
       ) : null}
       {isError ? <div className="py-12 text-center text-destructive">{t("loadError")}</div> : null}
       {!isLoading && !isError && articles.length === 0 ? (
