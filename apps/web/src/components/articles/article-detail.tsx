@@ -282,6 +282,22 @@ export function ArticleDetail({ id }: { id: string }) {
       {/* Summary — only after analysis completes */}
       {article.summary ? (
         <div className="space-y-4">
+          {article.summary.concepts.length > 0 && (
+            <section className="rounded-lg border bg-card p-4">
+              <h2 className="text-lg font-semibold mb-2">{t("concepts")}</h2>
+              <div className="flex flex-wrap gap-2">
+                {article.summary.concepts.map((concept) => (
+                  <span
+                    key={concept}
+                    className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
+                  >
+                    {concept}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="rounded-lg border bg-card p-4">
             <h2 className="text-lg font-semibold mb-2">{t("summary")}</h2>
             <p className="text-sm leading-relaxed">{article.summary.summary}</p>
@@ -308,22 +324,6 @@ export function ArticleDetail({ id }: { id: string }) {
               <ArticleMarkdownNote markdownNote={article.summary.markdown_note} />
             </section>
           ) : null}
-
-          {article.summary.concepts.length > 0 && (
-            <section className="rounded-lg border bg-card p-4">
-              <h2 className="text-lg font-semibold mb-2">{t("concepts")}</h2>
-              <div className="flex flex-wrap gap-2">
-                {article.summary.concepts.map((concept) => (
-                  <span
-                    key={concept}
-                    className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
-                  >
-                    {concept}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
 
           {article.summary.key_points.length > 0 && (
             <section className="rounded-lg border bg-card p-4">
