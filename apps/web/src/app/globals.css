@@ -231,6 +231,17 @@ html[lang="ko"] .ko-keep {
   }
 }
 
+@keyframes caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    opacity: 0;
+  }
+}
+
 .animate-fade-up {
   animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -245,6 +256,10 @@ html[lang="ko"] .ko-keep {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+.animate-caret-blink {
+  animation: caret-blink 1s steps(1, end) infinite;
 }
 
 /* Scroll-triggered animation classes */
