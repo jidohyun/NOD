@@ -13,6 +13,7 @@ from src.articles.schemas import (
     ArticleResponse,
     ArticleSaveResponse,
     ArticleUpdate,
+    ContentTypeStatsResponse,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
@@ -440,6 +441,16 @@ async def search_articles(
             status_filter=status_filter,
             content_type_filter=content_type_filter,
         )
+
+
+@router.get("/stats/content-types", response_model=ContentTypeStatsResponse)
+async def get_content_type_stats(
+    db: DBSession,
+    user: CurrentUser,
+) -> ContentTypeStatsResponse:
+    """Return article counts grouped by content type."""
+    counts = await service.get_content_type_stats(db, user.id)
+    return ContentTypeStatsResponse(counts=counts, total=sum(counts.values()))
 
 
 @router.get("/{article_id}", response_model=ArticleResponse)
