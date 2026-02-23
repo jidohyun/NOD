@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal, Protocol
 
 import structlog
 
@@ -15,6 +15,25 @@ from src.lib.langfuse_client import get_langfuse
 
 if TYPE_CHECKING:
     from langfuse import Langfuse
+
+
+class LangfuseGeneration(Protocol):
+    """Protocol for Langfuse Generation objects."""
+
+    def update(self, **kwargs: Any) -> Any: ...
+
+    def end(self, **kwargs: Any) -> Any: ...
+
+
+class LangfuseSpan(Protocol):
+    """Protocol for Langfuse Span objects."""
+
+    def start_generation(self, **kwargs: Any) -> LangfuseGeneration: ...
+
+    def update(self, **kwargs: Any) -> Any: ...
+
+    def end(self, **kwargs: Any) -> Any: ...
+
 
 logger = structlog.get_logger(__name__)
 
@@ -64,7 +83,7 @@ async def summarize_article(
 
     # --- Langfuse tracing ---
     langfuse = get_langfuse()
-    span = None
+    span: Any | None = None
     if langfuse:
         span = langfuse.start_span(
             name="article-summarization",
@@ -90,8 +109,11 @@ async def summarize_article(
         else:
             logger.info("Using OpenAI for summarization")
             result = await _summarize_with_openai(
-                prompt, system_prompt, result_schema,
-                langfuse=langfuse, parent_span=span,
+                prompt,
+                system_prompt,
+                result_schema,
+                langfuse=langfuse,
+                parent_span=span,
             )
 
         # Normalize markdown_note: AI sometimes returns literal \n instead of
@@ -106,9 +128,7 @@ async def summarize_article(
                     "key_points_count": (
                         len(result.key_points) if result.key_points else 0
                     ),
-                    "concepts_count": (
-                        len(result.concepts) if result.concepts else 0
-                    ),
+                    "concepts_count": (len(result.concepts) if result.concepts else 0),
                     "has_markdown_note": result.markdown_note is not None,
                 },
             )
@@ -135,15 +155,15 @@ async def _summarize_with_gemini(
     result_schema: type[BaseSummaryResult],
     *,
     langfuse: Langfuse | None = None,
-    parent_span: object | None = None,
+    parent_span: LangfuseSpan | None = None,
 ) -> BaseSummaryResult:
     """Summarize using Google Gemini with structured output."""
     from google import genai
     from google.genai import types
 
-    generation = None
+    generation: LangfuseGeneration | None = None
     if langfuse and parent_span:
-        generation = parent_span.start_generation(  # type: ignore[union-attr]
+        generation = parent_span.start_generation(
             name="gemini-generation",
             model=settings.GEMINI_MODEL,
             input=prompt[:2000],
@@ -200,14 +220,14 @@ async def _summarize_with_openai(
     result_schema: type[BaseSummaryResult],
     *,
     langfuse: Langfuse | None = None,
-    parent_span: object | None = None,
+    parent_span: LangfuseSpan | None = None,
 ) -> BaseSummaryResult:
     """Summarize using OpenAI with structured output."""
     from openai import AsyncOpenAI
 
-    generation = None
+    generation: LangfuseGeneration | None = None
     if langfuse and parent_span:
-        generation = parent_span.start_generation(  # type: ignore[union-attr]
+        generation = parent_span.start_generation(
             name="openai-generation",
             model="gpt-4o-mini",
             input=[
