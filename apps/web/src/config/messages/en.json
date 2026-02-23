@@ -561,5 +561,36 @@
       "markdownExport": "Included",
       "conceptExtraction": "Included"
     }
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "progress": "{step}/3",
+    "welcome": {
+      "title": "Welcome to NOD",
+      "subtitle": "Your AI-powered knowledge library",
+      "featureSave": "Save web articles with one click",
+      "featureAnalyze": "AI automatically analyzes key insights",
+      "featureSearch": "Find anything with semantic search",
+      "cta": "Get Started"
+    },
+    "install": {
+      "title": "Install the Chrome Extension",
+      "subtitle": "Save articles with a single click from any page",
+      "installButton": "Install from Chrome Web Store",
+      "confirmButton": "I've installed it",
+      "skipLink": "I'll do this later"
+    },
+    "firstArticle": {
+      "title": "Save your first article",
+      "subtitle": "Follow these three simple steps",
+      "step1": "Open any article or blog post",
+      "step2": "Click the NOD icon in your browser toolbar",
+      "step3": "Click Save & Analyze",
+      "cta": "Go to Dashboard"
+    },
+    "resumeBanner": {
+      "message": "Complete onboarding to get started with NOD",
+      "cta": "Continue"
+    }
   }
 }

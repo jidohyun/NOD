@@ -561,5 +561,36 @@
       "markdownExport": "包含",
       "conceptExtraction": "包含"
     }
+  },
+  "onboarding": {
+    "skip": "跳过",
+    "progress": "{step}/3",
+    "welcome": {
+      "title": "欢迎使用 NOD",
+      "subtitle": "AI 驱动的个人知识库",
+      "featureSave": "一键保存网页文章",
+      "featureAnalyze": "AI 自动分析核心内容",
+      "featureSearch": "语义搜索随时查找",
+      "cta": "开始使用"
+    },
+    "install": {
+      "title": "安装 Chrome 扩展程序",
+      "subtitle": "在任何页面一键保存文章",
+      "installButton": "从 Chrome 网上应用店安装",
+      "confirmButton": "我已安装",
+      "skipLink": "稍后再说"
+    },
+    "firstArticle": {
+      "title": "保存你的第一篇文章",
+      "subtitle": "按照以下三个步骤开始",
+      "step1": "打开任意文章或博客",
+      "step2": "点击浏览器工具栏中的 NOD 图标",
+      "step3": "点击 Save & Analyze",
+      "cta": "前往仪表盘"
+    },
+    "resumeBanner": {
+      "message": "完成设置以开始使用 NOD",
+      "cta": "继续"
+    }
   }
 }

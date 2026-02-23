@@ -561,5 +561,36 @@
       "markdownExport": "対応",
       "conceptExtraction": "対応"
     }
+  },
+  "onboarding": {
+    "skip": "スキップ",
+    "progress": "{step}/3",
+    "welcome": {
+      "title": "NODへようこそ",
+      "subtitle": "AIが分析するあなただけのナレッジライブラリ",
+      "featureSave": "ワンクリックでウェブ記事を保存",
+      "featureAnalyze": "AIが自動で重要なインサイトを分析",
+      "featureSearch": "セマンティック検索でいつでも検索",
+      "cta": "始める"
+    },
+    "install": {
+      "title": "Chrome拡張機能をインストール",
+      "subtitle": "どのページからもワンクリックで記事を保存できます",
+      "installButton": "Chrome Web Storeからインストール",
+      "confirmButton": "インストールしました",
+      "skipLink": "後でやります"
+    },
+    "firstArticle": {
+      "title": "最初の記事を保存しましょう",
+      "subtitle": "以下の3つのステップで始められます",
+      "step1": "任意の記事やブログを開く",
+      "step2": "ブラウザのツールバーでNODアイコンをクリック",
+      "step3": "Save & Analyzeをクリック",
+      "cta": "ダッシュボードへ"
+    },
+    "resumeBanner": {
+      "message": "オンボーディングを完了してNODを始めましょう",
+      "cta": "続ける"
+    }
   }
 }
