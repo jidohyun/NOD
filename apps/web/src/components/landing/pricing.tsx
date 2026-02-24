@@ -1,12 +1,27 @@
 "use client";
 
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Sparkles, Sprout } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";
+import { FloatingCircle } from "./decorations";
+
+const PRICE_WITH_SUBTEXT_RE = /^(.*)\((.*)\)$/;
 
 export function LandingPricing() {
   const t = useTranslations("landing.pricing");
   const ts = useTranslations("subscription");
+
+  const splitPrice = (price: string) => {
+    const match = price.match(PRICE_WITH_SUBTEXT_RE);
+    if (!match) {
+      return { main: price, sub: null as string | null };
+    }
+
+    return {
+      main: match[1]?.trim() ?? price,
+      sub: match[2]?.trim() ?? null,
+    };
+  };
 
   const plans = [
     {
@@ -21,6 +36,9 @@ export function LandingPricing() {
         t("basicAnalyzableTypes"),
       ],
       highlighted: false,
+      icon: Sprout,
+      cardColor: "bg-cm-mint/40",
+      rotation: "cm-askew-left",
     },
     {
       id: "pro",
@@ -34,93 +52,129 @@ export function LandingPricing() {
         t("proAnalyzableTypes"),
       ],
       highlighted: true,
+      icon: Sparkles,
+      cardColor: "bg-nod-gold/10",
+      rotation: "cm-askew-right",
     },
   ] as const;
 
   return (
-    <section id="pricing" className="landing-surface relative py-32 lg:py-40 ko-keep">
+    <section id="pricing" className="relative bg-white py-32 lg:py-40 ko-keep overflow-hidden">
+      {/* Decorations */}
+      <FloatingCircle
+        color="bg-cm-lavender/40"
+        size="w-8 h-8"
+        className="absolute top-20 right-[8%]"
+      />
+      <FloatingCircle
+        color="bg-cm-mint/30"
+        size="w-6 h-6"
+        className="absolute bottom-24 left-[6%]"
+        reverse
+      />
+
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="max-w-2xl mb-24">
-          <span className="inline-block rounded border border-black/10 bg-black/[0.03] px-2 py-1 font-mono text-[11px] font-medium text-nod-gold tracking-wider uppercase dark:border-white/[0.06] dark:bg-white/[0.03]">
+        {/* Header */}
+        <div className="max-w-2xl mb-20 text-center mx-auto">
+          <span className="inline-block cm-doodle-border bg-nod-gold/10 px-4 py-1.5 font-creative-body text-xs font-bold text-nod-gold tracking-wider uppercase">
             {t("label")}
           </span>
-          <h2 className="landing-text mt-6 font-display text-[clamp(2.25rem,4vw,4rem)] font-bold leading-[1.08] tracking-[-0.03em] whitespace-pre-line">
+          <h2 className="mt-6 font-creative-display text-[clamp(2.25rem,4vw,3.5rem)] font-black leading-[1.1] tracking-tight text-cm-text">
             {t("headline")}
           </h2>
-          <p className="landing-text-muted mt-6 max-w-xl text-[1.125rem] leading-relaxed font-light">
+          <p className="mt-6 mx-auto max-w-xl font-creative-body text-lg leading-relaxed text-cm-text-light">
             {t("description")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={
-                plan.highlighted
-                  ? "relative rounded-3xl border border-nod-gold/30 bg-[#fcfcfd] p-10 shadow-[0_0_80px_rgba(232,185,49,0.08)] ring-1 ring-nod-gold/10 transition-transform duration-300 hover:-translate-y-5 dark:bg-[#0F0F11] lg:-translate-y-4"
-                  : "landing-card-muted landing-border-soft relative rounded-3xl border p-10 transition-all duration-300 hover:border-black/15 hover:bg-black/[0.04] dark:hover:border-white/[0.1] dark:hover:bg-white/[0.03]"
-              }
-            >
-              {plan.highlighted ? (
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-nod-gold/[0.08] via-transparent to-transparent pointer-events-none" />
-              ) : null}
-              <div className="relative z-10">
-                <div className="flex items-start justify-between gap-6 mb-10">
-                  <div>
-                    <h3 className="landing-text font-display text-2xl font-bold tracking-tight">
-                      {plan.name}
-                    </h3>
-                    <p className="landing-text-subtle mt-2 text-[14px] font-medium">
-                      {plan.description}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="landing-text font-display text-4xl font-bold tracking-tight">
-                      {plan.price}
+        {/* Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-4xl mx-auto">
+          {plans.map((plan) => {
+            const PlanIcon = plan.icon;
+            const price = splitPrice(plan.price);
+            return (
+              <div
+                key={plan.id}
+                className={`${plan.rotation} transition-transform duration-500 hover:rotate-0`}
+              >
+                <div
+                  className={`cm-doodle-border cm-sketch-shadow ${plan.cardColor} p-8 lg:p-10 ${
+                    plan.highlighted ? "border-2 border-nod-gold/40 ring-2 ring-nod-gold/10" : ""
+                  }`}
+                >
+                  {/* Plan header */}
+                  <div className="mb-8 flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`cm-organic-shape flex h-12 w-12 items-center justify-center ${plan.highlighted ? "bg-nod-gold" : "bg-cm-text/10"}`}
+                      >
+                        <PlanIcon
+                          className={`h-6 w-6 ${plan.highlighted ? "text-white" : "text-cm-text/70"}`}
+                          strokeWidth={1.5}
+                        />
+                      </div>
+                      <div>
+                        <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                          {plan.name}
+                        </h3>
+                        <p className="font-creative-body text-sm text-cm-text-light">
+                          {plan.description}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="ml-3 shrink-0 text-right">
+                      <div className="font-creative-display text-3xl font-black leading-none text-cm-text">
+                        {price.main}
+                      </div>
+                      {price.sub ? (
+                        <div className="mt-1 font-creative-body text-xs font-semibold text-cm-text/55">
+                          ({price.sub})
+                        </div>
+                      ) : null}
                     </div>
                   </div>
-                </div>
 
-                <div className="mb-8 h-px w-full bg-black/8 dark:bg-white/[0.06]" />
+                  {/* Divider */}
+                  <div className="mb-6 border-t-2 border-dashed border-cm-text/10" />
 
-                <ul className="space-y-5">
-                  {plan.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="landing-text-muted flex items-start gap-4 text-[15px]"
-                    >
-                      <span
-                        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full ${plan.highlighted ? "bg-nod-gold text-[#0A0A0B]" : "bg-black/10 text-black/80 dark:bg-white/10 dark:text-white/80"}`}
+                  {/* Features */}
+                  <ul className="space-y-4 mb-8">
+                    {plan.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-start gap-3 font-creative-body text-[15px] text-cm-text"
                       >
-                        <Check className="h-3 w-3" strokeWidth={3} />
-                      </span>
-                      <span className="leading-relaxed font-medium">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                        <span
+                          className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center cm-organic-shape ${plan.highlighted ? "bg-nod-gold text-white" : "bg-cm-mint text-cm-text/70"}`}
+                        >
+                          <Check className="h-3 w-3" strokeWidth={3} />
+                        </span>
+                        <span className="leading-relaxed font-semibold">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                <div className="mt-12 flex flex-wrap items-center gap-5">
+                  {/* CTA */}
                   <Link
                     href="/pricing"
-                    className={
+                    className={`group flex w-full items-center justify-center gap-2 cm-doodle-border py-4 font-creative-display text-base font-black transition-all ${
                       plan.highlighted
-                        ? "w-full justify-center group inline-flex items-center gap-2 rounded-full bg-nod-gold px-6 py-4 text-[15px] font-bold text-[#0A0A0B] hover:bg-nod-gold/90 transition-all shadow-lg shadow-nod-gold/20 hover:shadow-xl hover:shadow-nod-gold/30"
-                        : "landing-border-soft landing-card-muted w-full justify-center group inline-flex items-center gap-2 rounded-full border px-6 py-4 text-[15px] font-bold text-black/80 transition-all hover:border-black/15 hover:bg-black/[0.06] hover:text-black dark:text-white/80 dark:hover:border-white/15 dark:hover:bg-white/[0.06] dark:hover:text-white"
-                    }
+                        ? "bg-nod-gold text-white hover:bg-nod-gold/90 hover:cm-sketch-shadow"
+                        : "bg-white text-cm-text border-2 border-cm-text/10 hover:border-cm-text/20 hover:bg-cm-bg"
+                    }`}
                   >
                     {t("cta")}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </Link>
+                  {plan.highlighted ? (
+                    <p className="mt-3 text-center font-creative-body text-xs font-semibold text-cm-text/40 uppercase tracking-wide">
+                      {t("note")}
+                    </p>
+                  ) : null}
                 </div>
-                {plan.highlighted ? (
-                  <p className="mt-4 text-center font-mono text-[11px] text-black/35 uppercase tracking-wide dark:text-white/30">
-                    {t("note")}
-                  </p>
-                ) : null}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

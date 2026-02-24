@@ -3,6 +3,7 @@
 import { BookmarkPlus, Cpu, Lightbulb } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
+import { DoodleConnector, FloatingCircle } from "./decorations";
 
 const stepKeys = ["save", "analyze", "recall"] as const;
 
@@ -10,6 +11,12 @@ const stepIcons = {
   save: BookmarkPlus,
   analyze: Cpu,
   recall: Lightbulb,
+};
+
+const stepColors = {
+  save: "bg-cm-mint",
+  analyze: "bg-cm-lavender",
+  recall: "bg-nod-gold/20",
 };
 
 export function LandingHowItWorks() {
@@ -40,22 +47,30 @@ export function LandingHowItWorks() {
     <section
       ref={sectionRef}
       id="how-it-works"
-      className="landing-surface relative py-32 lg:py-48 ko-keep"
+      className="relative bg-white py-32 lg:py-48 ko-keep overflow-hidden"
     >
-      {/* Subtle top/bottom borders */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-black/15 to-transparent dark:via-white/10" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-black/15 to-transparent dark:via-white/10" />
+      {/* Top dashed border */}
+      <div className="absolute top-0 left-[10%] right-[10%] h-px border-t-2 border-dashed border-cm-text/10" />
+
+      {/* Decorations */}
+      <FloatingCircle color="bg-nod-gold/20" size="w-8 h-8" className="absolute top-24 left-[8%]" />
+      <FloatingCircle
+        color="bg-cm-lavender/50"
+        size="w-5 h-5"
+        className="absolute bottom-20 right-[12%]"
+        reverse
+      />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section header */}
-        <div className="max-w-2xl mb-24">
+        <div className="max-w-2xl mb-20 text-center mx-auto">
           <div className="reveal">
-            <span className="inline-block rounded border border-black/10 bg-black/[0.03] px-2 py-1 font-mono text-[11px] font-medium text-nod-gold tracking-wider uppercase dark:border-white/[0.06] dark:bg-white/[0.03]">
+            <span className="inline-block cm-doodle-border bg-nod-gold/10 px-4 py-1.5 font-creative-body text-xs font-bold text-nod-gold tracking-wider uppercase">
               {t("label")}
             </span>
           </div>
           <h2
-            className="reveal landing-text mt-6 font-display text-[clamp(2.25rem,4vw,4rem)] font-bold leading-[1.08] tracking-[-0.03em] whitespace-pre-line"
+            className="reveal mt-6 font-creative-display text-[clamp(2.25rem,4vw,3.5rem)] font-black leading-[1.1] tracking-tight text-cm-text"
             style={{ transitionDelay: "0.1s" }}
           >
             {t("headline")}
@@ -63,7 +78,7 @@ export function LandingHowItWorks() {
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-6 items-start">
           {stepKeys.map((key, i) => {
             const Icon = stepIcons[key];
             return (
@@ -72,33 +87,36 @@ export function LandingHowItWorks() {
                 className="reveal relative group"
                 style={{ transitionDelay: `${0.1 * i}s` }}
               >
-                {/* Connector line (desktop only) */}
+                {/* Doodle connector (desktop only) */}
                 {i < stepKeys.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-full w-8 h-px opacity-50 pointer-events-none">
-                    <div className="h-full w-full bg-gradient-to-r from-black/8 via-nod-gold/20 to-black/8 dark:from-white/5 dark:to-white/5" />
+                  <div className="hidden lg:block absolute top-12 -right-3 w-6 z-10">
+                    <DoodleConnector className="w-full h-5" />
                   </div>
                 )}
 
-                {/* Step number */}
-                <div className="flex items-center gap-6 mb-10">
-                  <span className="font-display text-[48px] font-bold text-black/6 transition-colors leading-none tracking-tighter group-hover:text-nod-gold/15 dark:text-white/5 dark:group-hover:text-nod-gold/10">
-                    {t(`steps.${key}.number`)}
-                  </span>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-black/10 bg-black/[0.03] shadow-xl shadow-black/10 transition-all duration-300 group-hover:border-nod-gold/20 group-hover:bg-nod-gold/[0.05] dark:border-white/[0.08] dark:bg-white/[0.03] dark:shadow-black/20">
-                    <Icon
-                      className="h-5 w-5 text-black/80 transition-colors group-hover:text-nod-gold dark:text-white/80"
-                      strokeWidth={1.5}
-                    />
+                {/* Step number badge */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="cm-organic-shape bg-nod-gold flex h-14 w-14 items-center justify-center shadow-md">
+                    <span className="font-creative-display text-2xl font-black text-white">
+                      {t(`steps.${key}.number`)}
+                    </span>
+                  </div>
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center cm-organic-shape ${stepColors[key]} transition-all duration-300 group-hover:scale-110`}
+                  >
+                    <Icon className="h-5 w-5 text-cm-text/70" strokeWidth={1.5} />
                   </div>
                 </div>
 
-                {/* Content */}
-                <h3 className="landing-text mb-4 font-display text-2xl font-bold tracking-tight">
-                  {t(`steps.${key}.title`)}
-                </h3>
-                <p className="landing-text-subtle max-w-sm text-[1.0625rem] leading-relaxed transition-colors group-hover:text-black/72 dark:group-hover:text-white/70">
-                  {t(`steps.${key}.description`)}
-                </p>
+                {/* Card content */}
+                <div className="cm-doodle-border cm-sketch-shadow bg-white p-6 transition-all duration-300 group-hover:-translate-y-1">
+                  <h3 className="mb-3 font-creative-display text-xl font-bold tracking-tight text-cm-text">
+                    {t(`steps.${key}.title`)}
+                  </h3>
+                  <p className="font-creative-body text-[15px] leading-relaxed text-cm-text-light">
+                    {t(`steps.${key}.description`)}
+                  </p>
+                </div>
               </div>
             );
           })}
