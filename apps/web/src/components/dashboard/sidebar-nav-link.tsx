@@ -17,10 +17,10 @@ export function SidebarNavLink({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors ${
         isActive
-          ? "bg-primary/10 text-primary font-semibold"
-          : "text-muted-foreground hover:bg-primary/5 hover:text-foreground"
+          ? "cm-doodle-border rounded-xl bg-nod-gold/10 text-nod-gold font-creative-body font-bold"
+          : "rounded-xl text-cm-text-light font-creative-body font-semibold hover:bg-nod-gold/5 hover:text-cm-text"
       }`}
     >
       <Icon className="h-4 w-4" />

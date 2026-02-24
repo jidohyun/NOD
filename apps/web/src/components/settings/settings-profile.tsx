@@ -1,8 +1,11 @@
 "use client";
 
 import {
+  BarChart3,
+  Bolt,
   CreditCard,
-  FileText,
+  Gavel,
+  LogOut,
   Mail,
   MessageSquare,
   Puzzle,
@@ -10,15 +13,24 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSubscription, useUsage } from "@/lib/api/subscriptions";
+import { signOut } from "@/lib/auth/auth-client";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
-import { Link } from "@/lib/i18n/routing";
+import { Link, useRouter } from "@/lib/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
+
+const SETTINGS_BG_STYLE: CSSProperties = {
+  backgroundImage:
+    "radial-gradient(rgba(232, 185, 49, 0.45) 1.1px, transparent 1.1px), radial-gradient(rgba(74, 74, 74, 0.22) 1px, transparent 1px)",
+  backgroundSize: "22px 22px",
+  backgroundPosition: "0 0, 11px 11px",
+};
 
 export function SettingsProfile() {
   const locale = useLocale();
+  const router = useRouter();
   const t = useTranslations("settings");
   const ts = useTranslations("subscription");
   const [userName, setUserName] = useState("");
@@ -58,162 +70,260 @@ export function SettingsProfile() {
       ? Math.min((summariesUsed / summariesLimit) * 100, 100)
       : 0;
 
+  const planName = subscription?.plan === "pro" ? ts("pro") : ts("basic");
+  const providerLabel = provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : "Email";
+
+  const usageLabel = isUnlimited
+    ? locale === "ko"
+      ? "무제한"
+      : "Unlimited"
+    : `${summariesUsed} / ${summariesLimit}`;
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("description")}</p>
-      </div>
+    <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
+      <div className="pointer-events-none absolute inset-0 opacity-70" style={SETTINGS_BG_STYLE} />
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        {/* Left Column */}
-        <div className="space-y-6">
-          {/* Profile Card */}
-          <div className="rounded-xl border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t("sections.profile")}</h2>
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                {avatarUrl ? (
-                  <AvatarImage src={avatarUrl} alt={userName} referrerPolicy="no-referrer" />
-                ) : null}
-                <AvatarFallback className="text-lg">{initials || "U"}</AvatarFallback>
-              </Avatar>
-              <div className="space-y-1">
-                <p className="text-lg font-medium">{userName}</p>
-                <p className="text-sm text-muted-foreground">{userEmail}</p>
-              </div>
-            </div>
-          </div>
+      <div className="relative space-y-8">
+        <header>
+          <h1 className="font-creative-display text-[clamp(2rem,3.2vw,3.4rem)] font-black text-cm-text">
+            {t("title")}
+          </h1>
+          <div className="mt-3 h-1.5 w-32 -rotate-1 rounded-full bg-nod-gold/45" />
+          <p className="mt-4 font-creative-body text-base italic text-cm-text/65">
+            {locale === "ko"
+              ? "내 작업실 설정을 세밀하게 관리해보세요."
+              : "Manage your creative cockpit with precision."}
+          </p>
+        </header>
 
-          {/* Account Info */}
-          <div className="rounded-xl border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t("sections.account")}</h2>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-muted-foreground" />
+        <div className="grid gap-8 lg:grid-cols-12">
+          <div className="space-y-6 lg:col-span-7">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.5deg] bg-white/95 p-7">
+              <div className="flex flex-col items-center gap-6 sm:flex-row">
                 <div>
-                  <p className="text-sm font-medium">{t("fields.email")}</p>
-                  <p className="text-sm text-muted-foreground">{userEmail}</p>
+                  <Avatar className="h-28 w-28 border-4 border-cm-text bg-white">
+                    {avatarUrl ? (
+                      <AvatarImage src={avatarUrl} alt={userName} referrerPolicy="no-referrer" />
+                    ) : null}
+                    <AvatarFallback className="text-2xl">{initials || "U"}</AvatarFallback>
+                  </Avatar>
+                </div>
+
+                <div className="text-center sm:text-left">
+                  <h2 className="font-creative-display text-3xl font-black text-cm-text">
+                    {userName || "-"}
+                  </h2>
+                  <p className="mt-1 font-creative-body text-cm-text/55">{userEmail || "-"}</p>
                 </div>
               </div>
+            </section>
 
-              <div className="flex items-center gap-3">
-                <Shield className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="text-sm font-medium">{t("fields.authProvider")}</p>
-                  <p className="text-sm capitalize text-muted-foreground">{provider}</p>
-                </div>
+            <section className="cm-doodle-border cm-sketch-shadow rotate-[0.5deg] bg-white/95 p-7">
+              <div className="mb-5 flex items-center gap-2">
+                <UserIcon className="h-5 w-5 text-nod-gold" />
+                <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                  {t("sections.account")}
+                </h3>
               </div>
 
-              <div className="flex items-center gap-3">
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="text-sm font-medium">{t("fields.subscription")}</p>
-                  <p className="text-sm capitalize text-muted-foreground">
-                    {subscription?.plan ?? "basic"} — {subscription?.status ?? "active"}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-dashed border-cm-text/10 pb-3">
+                  <div>
+                    <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/40">
+                      {t("fields.email")}
+                    </p>
+                    <p className="mt-1 font-creative-body font-bold text-cm-text">
+                      {userEmail || "-"}
+                    </p>
+                  </div>
+                  <Mail className="h-4 w-4 text-cm-text/30" />
+                </div>
+
+                <div className="flex items-center justify-between border-b border-dashed border-cm-text/10 pb-3">
+                  <div>
+                    <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/40">
+                      {t("fields.authProvider")}
+                    </p>
+                    <p className="mt-1 font-creative-body font-bold text-cm-text">
+                      {providerLabel}
+                    </p>
+                  </div>
+                  <Shield className="h-4 w-4 text-cm-text/30" />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/40">
+                      {t("fields.subscription")}
+                    </p>
+                    <p className="mt-1 flex items-center gap-2 font-creative-body font-bold text-nod-gold">
+                      {planName}
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                      <span className="text-xs text-cm-text/45">
+                        ({subscription?.status ? subscription.status : "active"})
+                      </span>
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/pricing"
+                    className="text-xs font-creative-body font-black text-nod-gold underline decoration-dotted"
+                  >
+                    {locale === "ko" ? "플랜 변경" : "Change Plan"}
+                  </Link>
+                </div>
+              </div>
+            </section>
+
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.4deg] bg-white/95 p-7">
+              <div className="mb-5 flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-[#8BA888]" />
+                <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                  {locale === "ko" ? "AI 분석 사용량" : "AI Analysis Usage"}
+                </h3>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-end justify-between">
+                  <p className="font-creative-body text-sm font-bold text-cm-text/60">
+                    {locale === "ko" ? "이번 달 사용량" : "Current monthly usage"}
+                  </p>
+                  <p className="font-creative-display text-3xl font-black text-cm-text">
+                    {usageLabel}
                   </p>
                 </div>
+
+                {!isUnlimited ? (
+                  <div className="h-5 overflow-hidden rounded-2xl border border-cm-text/15 bg-cm-bg">
+                    <div
+                      className="h-full bg-nod-gold transition-all duration-500"
+                      style={{ width: `${Math.max(6, percentage)}%` }}
+                    />
+                  </div>
+                ) : null}
+
+                <p className="font-creative-body text-xs font-bold italic text-cm-text/45">
+                  {locale === "ko"
+                    ? "월별 사용량은 매월 1일에 초기화됩니다."
+                    : "Usage resets monthly at the beginning of each month."}
+                </p>
               </div>
-            </div>
+            </section>
           </div>
 
-          {/* Usage Overview */}
-          <div className="rounded-xl border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{ts("usage")}</h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">{ts("usage")}</span>
-                <span className="font-medium">
-                  {isUnlimited ? ts("unlimited") : `${summariesUsed}/${summariesLimit}`}
-                </span>
+          <div className="space-y-6 lg:col-span-5">
+            <section className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Bolt className="h-5 w-5 text-cm-coral" />
+                <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                  {t("sections.quickLinks")}
+                </h3>
               </div>
-              {!isUnlimited ? (
-                <div className="h-2 rounded-full bg-secondary">
-                  <div
-                    className={`h-2 rounded-full transition-all ${
-                      percentage >= 100
-                        ? "bg-destructive"
-                        : percentage >= 80
-                          ? "bg-yellow-500"
-                          : "bg-primary"
-                    }`}
-                    style={{ width: `${percentage}%` }}
-                  />
-                </div>
-              ) : null}
-            </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Link
+                  href="/settings/billing"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                >
+                  <CreditCard className="mx-auto h-8 w-8 text-nod-gold" />
+                  <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
+                    {t("links.manageBilling")}
+                  </span>
+                </Link>
+
+                <Link
+                  href="/pricing"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                >
+                  <UserIcon className="mx-auto h-8 w-8 text-[#8BA888]" />
+                  <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
+                    {t("links.viewPricing")}
+                  </span>
+                </Link>
+
+                <a
+                  href={extensionInstallUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                >
+                  <Puzzle className="mx-auto h-8 w-8 text-cm-coral" />
+                  <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
+                    {t("links.installExtension")}
+                  </span>
+                </a>
+
+                <a
+                  href="https://nodarchive.featurebase.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                >
+                  <MessageSquare className="mx-auto h-8 w-8 text-cm-text/45" />
+                  <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
+                    {t("links.feedback")}
+                  </span>
+                </a>
+              </div>
+            </section>
+
+            <section className="cm-doodle-border border-dashed border-cm-text/20 bg-white/75 p-6">
+              <div className="mb-5 flex items-center gap-2">
+                <Gavel className="h-5 w-5 text-cm-text/50" />
+                <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                  {t("sections.legal")}
+                </h3>
+              </div>
+
+              <ul className="space-y-3">
+                <li>
+                  <Link href="/terms" className="group flex items-center gap-3">
+                    <span className="h-2 w-2 cm-organic-shape bg-nod-gold transition-transform group-hover:scale-125" />
+                    <span className="font-creative-body font-bold text-cm-text transition-colors group-hover:text-nod-gold">
+                      {t("links.terms")}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="group flex items-center gap-3">
+                    <span className="h-2 w-2 cm-organic-shape bg-[#8BA888] transition-transform group-hover:scale-125" />
+                    <span className="font-creative-body font-bold text-cm-text transition-colors group-hover:text-[#8BA888]">
+                      {t("links.privacy")}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/refund" className="group flex items-center gap-3">
+                    <span className="h-2 w-2 cm-organic-shape bg-cm-coral transition-transform group-hover:scale-125" />
+                    <span className="font-creative-body font-bold text-cm-text transition-colors group-hover:text-cm-coral">
+                      {t("links.refund")}
+                    </span>
+                  </Link>
+                </li>
+              </ul>
+            </section>
+
+            <button
+              type="button"
+              onClick={async () => {
+                await signOut();
+                router.push("/login");
+              }}
+              className="flex w-full items-center justify-center gap-2 cm-doodle-border border-red-200 bg-white px-6 py-4 font-creative-body text-sm font-black text-red-400 transition-colors hover:bg-red-50"
+            >
+              <LogOut className="h-4 w-4" />
+              {locale === "ko" ? "로그아웃" : "Sign Out"}
+            </button>
           </div>
         </div>
 
-        {/* Right Column */}
-        <div className="space-y-6">
-          {/* Quick Links */}
-          <div className="rounded-xl border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t("sections.quickLinks")}</h2>
-            <div className="space-y-2">
-              <Link
-                href="/settings/billing"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-                {t("links.manageBilling")}
-              </Link>
-              <Link
-                href="/pricing"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <UserIcon className="h-4 w-4 text-muted-foreground" />
-                {t("links.viewPricing")}
-              </Link>
-              <a
-                href={extensionInstallUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <Puzzle className="h-4 w-4 text-muted-foreground" />
-                {t("links.installExtension")}
-              </a>
-              <a
-                href="https://nodarchive.featurebase.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                {t("links.feedback")}
-              </a>
-            </div>
-          </div>
-
-          {/* Legal */}
-          <div className="rounded-xl border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t("sections.legal")}</h2>
-            <div className="space-y-2">
-              <Link
-                href="/terms"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <FileText className="h-4 w-4 text-muted-foreground" />
-                {t("links.terms")}
-              </Link>
-              <Link
-                href="/privacy"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <Shield className="h-4 w-4 text-muted-foreground" />
-                {t("links.privacy")}
-              </Link>
-              <Link
-                href="/refund"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-accent"
-              >
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-                {t("links.refund")}
-              </Link>
-            </div>
-          </div>
-        </div>
+        <footer className="pt-4 text-center">
+          <p className="font-creative-body text-[11px] font-black uppercase tracking-[0.18em] text-cm-text/30">
+            {locale === "ko"
+              ? "NOD Labs · Creators를 위한 워크스페이스"
+              : "NOD Labs · Handcrafted for Creatives"}
+          </p>
+        </footer>
       </div>
     </div>
   );

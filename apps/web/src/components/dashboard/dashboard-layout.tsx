@@ -4,7 +4,7 @@ import { DashboardSidebar } from "./dashboard-sidebar";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-cm-bg font-creative-body text-cm-text">
       {/* Sidebar - Hidden on mobile */}
       <div className="hidden md:block">
         <DashboardSidebar />
@@ -14,7 +14,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <DashboardHeader />
 
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 bg-cm-bg">{children}</main>
       </div>
     </div>
   );
