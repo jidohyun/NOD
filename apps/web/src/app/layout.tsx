@@ -1,10 +1,41 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
+import { Fredoka, Inter, JetBrains_Mono, Quicksand, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import { getLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { GaPageView } from "@/components/analytics/ga-page-view";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  variable: "--font-fredoka",
+  display: "swap",
+});
+
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  variable: "--font-quicksand",
+  display: "swap",
+});
 
 const themeInitScript = `(function(){try{var key='nod_web_theme';var stored=localStorage.getItem(key);var theme=stored==='light'||stored==='dark'?stored:'dark';var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(theme);}catch(_e){document.documentElement.classList.add('dark');}})();`;
 
@@ -38,7 +69,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang={locale} className="dark" suppressHydrationWarning>
-      <body>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} ${fredoka.variable} ${quicksand.variable}`}
+      >
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
         </Script>

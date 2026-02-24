@@ -2,46 +2,47 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRef } from "react";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
-import { NeuralGraph } from "./neural-graph";
+import { FloatingCircle, OrganicBlob } from "./decorations";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(useGSAP);
 
 export function LandingHero() {
   const locale = useLocale();
   const t = useTranslations("landing.hero");
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
   const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const graphRef = useRef<HTMLDivElement>(null);
+  const headline = t("headline");
+
+  const renderHeadline = () => {
+    if (locale === "ko" && headline.includes(",")) {
+      const [firstLine, ...rest] = headline.split(",");
+      const secondLine = rest.join(",").trim();
+      return (
+        <>
+          <span className="block">{`${firstLine},`}</span>
+          <span className="block">{secondLine}</span>
+        </>
+      );
+    }
+
+    return headline;
+  };
 
   useGSAP(
     () => {
       const timeline = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-      // Cinematic fade up sequence
       timeline
         .from("[data-hero-badge]", { y: 30, opacity: 0, duration: 1.2 })
         .from("[data-hero-headline]", { y: 40, opacity: 0, duration: 1.4 }, "-=0.9")
         .from("[data-hero-description]", { y: 30, opacity: 0, duration: 1.2 }, "-=1.0")
-        .from("[data-hero-actions]", { y: 25, opacity: 0, duration: 1.0 }, "-=0.9");
-
-      // Parallax scrolling
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 0.65,
-        animation: gsap
-          .timeline()
-          .to(contentRef.current, { y: -120, opacity: 0.15, ease: "none" })
-          .to(graphRef.current, { scale: 1.25, y: 80, ease: "none" }, 0),
-      });
+        .from("[data-hero-actions]", { y: 25, opacity: 0, duration: 1.0 }, "-=0.9")
+        .from("[data-hero-decor]", { scale: 0, opacity: 0, duration: 1.0, stagger: 0.15 }, "-=1.2");
     },
     { scope: sectionRef }
   );
@@ -53,102 +54,104 @@ export function LandingHero() {
   return (
     <section
       ref={sectionRef}
-      className="landing-surface relative flex min-h-[100dvh] items-center overflow-hidden ko-keep"
+      className="relative flex min-h-[100dvh] items-center overflow-hidden bg-cm-bg ko-keep"
     >
-      {/* Background layers */}
-      <div className="landing-surface absolute inset-0" />
-
-      {/* Radial gradient glow behind hero */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full animate-glow-pulse"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(232,185,49,0.08) 0%, rgba(232,185,49,0.02) 40%, transparent 70%)",
-        }}
+      {/* Organic blob decorations */}
+      <OrganicBlob color="bg-cm-mint" size="w-96 h-96" className="absolute -top-20 -left-32" />
+      <OrganicBlob color="bg-nod-gold/20" size="w-80 h-80" className="absolute top-1/3 -right-24" />
+      <OrganicBlob
+        color="bg-cm-lavender"
+        size="w-72 h-72"
+        className="absolute -bottom-16 left-1/4"
       />
 
-      {/* Neural graph canvas */}
-      <div
-        ref={graphRef}
-        className="absolute inset-0 opacity-70 transition-transform will-change-transform dark:opacity-80 dark:mix-blend-screen"
-      >
-        <NeuralGraph />
+      {/* Floating decorations */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <FloatingCircle
+          color="bg-nod-gold/25"
+          size="w-6 h-6"
+          className="absolute top-[15%] right-[12%]"
+          data-hero-decor
+        />
+        <FloatingCircle
+          color="bg-cm-coral/30"
+          size="w-4 h-4"
+          className="absolute top-[35%] right-[25%]"
+          reverse
+          data-hero-decor
+        />
+        <FloatingCircle
+          color="bg-cm-mint/50"
+          size="w-5 h-5"
+          className="absolute bottom-[25%] left-[8%]"
+          data-hero-decor
+        />
       </div>
 
-      {/* Grid lines - subtle */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(var(--landing-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--landing-grid-line) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
       {/* Content */}
-      <div
-        ref={contentRef}
-        className="relative z-10 mx-auto max-w-7xl w-full px-6 lg:px-8 pt-32 pb-20 will-change-transform"
-      >
-        <div className="max-w-3xl">
-          {/* Badge */}
-          <div
-            className="animate-fade-up mb-8 inline-flex cursor-default items-center gap-2.5 rounded-full border px-4 py-1.5 backdrop-blur-sm transition-colors landing-border-soft landing-card-muted"
-            style={{ animationDelay: "0.1s" }}
-            data-hero-badge
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-nod-gold animate-glow-pulse shadow-[0_0_8px_rgba(232,185,49,0.5)]" />
-            <span className="font-mono text-[11px] text-nod-gold/90 tracking-wider uppercase font-medium">
-              {t("badge")}
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="animate-fade-up font-display text-[clamp(2.75rem,6vw,5rem)] font-bold leading-[1.05] tracking-[-0.03em] whitespace-pre-line drop-shadow-2xl landing-text"
-            style={{ animationDelay: "0.2s" }}
-            data-hero-headline
-          >
-            {t("headline")}
-          </h1>
-
-          {/* Description */}
-          <p
-            className="animate-fade-up mt-8 max-w-xl text-[1.125rem] leading-relaxed font-light tracking-wide landing-text-muted"
-            style={{ animationDelay: "0.35s" }}
-            data-hero-description
-          >
-            {t("description")}
-          </p>
-
-          {/* CTAs */}
-          <div
-            className="animate-fade-up mt-10 flex flex-wrap items-center gap-5"
-            style={{ animationDelay: "0.5s" }}
-            data-hero-actions
-          >
-            <Link
-              href="/login"
-              className="group inline-flex items-center gap-2 rounded-full bg-nod-gold px-7 py-3.5 text-[15px] font-semibold text-[#0A0A0B] hover:bg-nod-gold/90 transition-all hover:shadow-[0_0_24px_rgba(232,185,49,0.3)] hover:-translate-y-0.5"
+      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 lg:px-8 pt-32 pb-20">
+        <div className="grid grid-cols-1 items-center">
+          {/* Text content */}
+          <div className="max-w-4xl">
+            {/* Badge */}
+            <div
+              className="mb-8 inline-flex items-center gap-2.5 cm-doodle-border bg-white/80 px-4 py-2 backdrop-blur-sm"
+              data-hero-badge
             >
-              {t("cta")}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-            <a
-              href={extensionInstallUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="landing-border-soft landing-card-muted landing-text-muted inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-[15px] font-medium transition-all backdrop-blur-sm hover:-translate-y-0.5 hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
+              <div className="w-2 h-2 cm-organic-shape bg-nod-gold animate-cm-wiggle" />
+              <span className="font-creative-body text-xs font-bold text-nod-gold tracking-wider uppercase">
+                {t("badge")}
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="font-creative-display text-[clamp(3rem,7vw,5.5rem)] font-black leading-[1.05] tracking-tight text-cm-text"
+              data-hero-headline
             >
-              {t("ctaExtension")}
-            </a>
-            <button
-              type="button"
-              onClick={scrollToFeatures}
-              className="landing-border-soft landing-card-muted landing-text-muted inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-[15px] font-medium transition-all backdrop-blur-sm hover:-translate-y-0.5 hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
+              <span className="relative inline-block">{renderHeadline()}</span>
+            </h1>
+
+            {/* Description */}
+            <p
+              className="mt-8 max-w-xl font-creative-body text-lg leading-relaxed text-cm-text-light"
+              data-hero-description
             >
-              {t("ctaSecondary")}
-            </button>
+              {t("description")}
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-10 flex flex-wrap items-center gap-4" data-hero-actions>
+              <Link
+                href="/login"
+                className="group inline-flex items-center gap-2 cm-doodle-border bg-nod-gold px-8 py-4 font-creative-display text-base font-black text-white transition-all hover:cm-sketch-shadow hover:-translate-y-1"
+              >
+                {t("cta")}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <a
+                href={extensionInstallUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-[2rem] border-2 border-cm-text/10 bg-white px-6 py-4 font-creative-body text-base font-bold text-cm-text transition-all hover:border-cm-text/20 hover:-translate-y-0.5"
+              >
+                {t("ctaExtension")}
+              </a>
+              <button
+                type="button"
+                onClick={scrollToFeatures}
+                className="inline-flex items-center gap-2 rounded-[2rem] border-2 border-transparent px-2 py-3 font-creative-body text-sm font-semibold text-cm-text/60 transition-colors hover:text-cm-text"
+              >
+                {t("ctaSecondary")}
+              </button>
+            </div>
+
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 backdrop-blur-sm">
+              <span className="h-2 w-2 cm-organic-shape bg-emerald-500" />
+              <span className="font-creative-body text-xs font-semibold text-cm-text/60">
+                {t("trustedBy")}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -157,7 +160,7 @@ export function LandingHero() {
       <button
         type="button"
         onClick={scrollToFeatures}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float text-black/45 transition-colors hover:text-black/70 dark:text-white/35 dark:hover:text-white/55"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-cm-float text-cm-text/40 transition-colors hover:text-cm-text/70"
       >
         <ChevronDown className="w-5 h-5" />
       </button>

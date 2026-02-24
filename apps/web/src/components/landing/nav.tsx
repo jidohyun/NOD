@@ -33,11 +33,30 @@ export function LandingNav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<"features" | "how-it-works" | "pricing">(
+    "features"
+  );
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
+    const sectionIds = ["features", "how-it-works", "pricing"] as const;
+
+    const onScroll = () => {
+      setScrolled(window.scrollY > 32);
+
+      const offsetY = window.scrollY + 160;
+      let current: (typeof sectionIds)[number] = "features";
+      for (const id of sectionIds) {
+        const section = document.getElementById(id);
+        if (section && section.offsetTop <= offsetY) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -50,6 +69,14 @@ export function LandingNav() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
+  const navButtonClass = (id: "features" | "how-it-works" | "pricing") =>
+    cn(
+      "font-creative-body text-sm font-semibold transition-colors",
+      activeSection === id
+        ? "text-cm-text underline decoration-nod-gold decoration-2 underline-offset-8"
+        : "text-cm-text/70 hover:text-cm-text"
+    );
+
   const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";
   const hrefForLocale = (nextLocale: string) =>
     basePath === "/" ? `/${nextLocale}` : `/${nextLocale}${basePath}`;
@@ -57,21 +84,26 @@ export function LandingNav() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-        scrolled
-          ? "border-b border-black/10 bg-white/85 backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#0A0A0B]/60"
-          : "bg-transparent border-b border-transparent"
+        "fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-5xl transition-all duration-500",
+        scrolled ? "top-3" : "top-6"
       )}
     >
-      <nav className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+      <nav
+        className={cn(
+          "cm-doodle-border bg-white/80 backdrop-blur-md px-6 py-3 transition-shadow duration-500",
+          scrolled ? "cm-sketch-shadow" : ""
+        )}
+      >
+        <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <NodWordmark
-              size="sm"
-              priority
-              className="opacity-90 transition-opacity group-hover:opacity-100"
-            />
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="cm-organic-shape bg-nod-gold/15 p-1.5 transition-colors group-hover:bg-nod-gold/25">
+              <NodWordmark
+                size="sm"
+                priority
+                className="opacity-90 transition-opacity group-hover:opacity-100"
+              />
+            </div>
           </Link>
 
           {/* Desktop links */}
@@ -79,28 +111,28 @@ export function LandingNav() {
             <button
               type="button"
               onClick={() => scrollTo("features")}
-              className="font-mono text-[13px] tracking-wide text-black/55 uppercase transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
+              className={navButtonClass("features")}
             >
               {t("features")}
             </button>
             <button
               type="button"
               onClick={() => scrollTo("how-it-works")}
-              className="font-mono text-[13px] tracking-wide text-black/55 uppercase transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
+              className={navButtonClass("how-it-works")}
             >
               {t("howItWorks")}
             </button>
             <button
               type="button"
               onClick={() => scrollTo("pricing")}
-              className="font-mono text-[13px] tracking-wide text-black/55 uppercase transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
+              className={navButtonClass("pricing")}
             >
               {t("pricing")}
             </button>
           </div>
 
           {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
             {mounted ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -110,7 +142,7 @@ export function LandingNav() {
                     size="icon-sm"
                     aria-label={t("changeLanguage")}
                     title={t("changeLanguage")}
-                    className="text-black/60 hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
+                    className="text-cm-text/60 hover:text-cm-text hover:bg-cm-mint/50"
                   >
                     <Globe className="h-5 w-5" />
                   </Button>
@@ -136,13 +168,13 @@ export function LandingNav() {
             ) : null}
             <Link
               href="/login"
-              className="text-[13px] text-black/55 transition-colors hover:text-black/90 dark:text-white/50 dark:hover:text-white/90"
+              className="font-creative-body text-sm font-semibold text-cm-text/60 transition-colors hover:text-cm-text"
             >
               {t("login")}
             </Link>
             <Link
               href="/login"
-              className="group inline-flex items-center gap-1.5 rounded-full bg-nod-gold px-4 py-1.5 text-[13px] font-medium text-[#0A0A0B] hover:bg-nod-gold/90 transition-colors"
+              className="group inline-flex items-center gap-1.5 cm-doodle-border bg-cm-mint px-5 py-2 font-creative-body text-sm font-bold text-cm-text transition-all hover:bg-nod-gold hover:text-white"
             >
               {t("getStarted")}
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -152,7 +184,7 @@ export function LandingNav() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="text-black/60 transition-colors hover:text-black/90 dark:text-white/60 dark:hover:text-white/90 md:hidden"
+            className="text-cm-text/60 transition-colors hover:text-cm-text md:hidden"
             onClick={() => setMobileOpen((v) => !v)}
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -161,35 +193,35 @@ export function LandingNav() {
 
         {/* Mobile menu */}
         {mobileOpen ? (
-          <div className="border-t border-black/8 pb-6 pt-2 animate-fade-in dark:border-white/[0.06] md:hidden">
+          <div className="border-t border-cm-text/10 pb-6 pt-4 animate-fade-in md:hidden">
             <div className="flex flex-col gap-4">
               <button
                 type="button"
                 onClick={() => scrollTo("features")}
-                className="text-left text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+                className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
               >
                 {t("features")}
               </button>
               <button
                 type="button"
                 onClick={() => scrollTo("how-it-works")}
-                className="text-left text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+                className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
               >
                 {t("howItWorks")}
               </button>
               <button
                 type="button"
                 onClick={() => scrollTo("pricing")}
-                className="text-left text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+                className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
               >
                 {t("pricing")}
               </button>
-              <hr className="border-black/10 dark:border-white/[0.06]" />
+              <hr className="border-cm-text/10" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center gap-2 text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+                    className="flex items-center gap-2 font-creative-body text-sm text-cm-text/60 hover:text-cm-text"
                   >
                     <Globe className="h-4 w-4" />
                     {t("changeLanguage")}
@@ -215,13 +247,13 @@ export function LandingNav() {
               </DropdownMenu>
               <Link
                 href="/login"
-                className="text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+                className="font-creative-body text-sm text-cm-text/60 hover:text-cm-text"
               >
                 {t("login")}
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-1.5 rounded-full bg-nod-gold px-4 py-2 text-sm font-medium text-[#0A0A0B]"
+                className="inline-flex items-center justify-center gap-1.5 cm-doodle-border bg-cm-mint px-5 py-2.5 font-creative-body text-sm font-bold text-cm-text"
               >
                 {t("getStarted")}
                 <ArrowRight className="w-3.5 h-3.5" />

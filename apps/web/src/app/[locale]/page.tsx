@@ -8,7 +8,6 @@ import { LandingHero } from "@/components/landing/hero";
 import { LandingHowItWorks } from "@/components/landing/how-it-works";
 import { LandingNav } from "@/components/landing/nav";
 import { LandingPricing } from "@/components/landing/pricing";
-import { LandingSvgAutoCursor } from "@/components/landing/svg-auto-cursor";
 import { SoftwareApplicationJsonLd } from "@/components/seo/json-ld";
 
 interface HomePageProps {
@@ -20,9 +19,8 @@ export default async function HomePage({ params }: HomePageProps) {
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="dark grain-overlay">
+    <div className="bg-cm-bg font-creative-body text-cm-text selection:bg-nod-gold selection:text-white overflow-x-hidden">
       <SoftwareApplicationJsonLd />
-      <LandingSvgAutoCursor />
       <LandingNav />
       <main>
         <LandingHero />
