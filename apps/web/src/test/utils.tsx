@@ -4,6 +4,11 @@ import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
 
 const TEST_MESSAGES = {
+  landing: {
+    nav: {
+      changeLanguage: "Change language",
+    },
+  },
   dashboard: {
     sidebar: {
       nav: {
