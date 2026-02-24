@@ -62,9 +62,9 @@ export function DashboardSidebar() {
   }
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r bg-background">
+    <aside className="flex h-full w-64 flex-col bg-white/90 backdrop-blur-sm">
       {/* Brand/Logo */}
-      <div className="flex h-16 items-center border-b px-6">
+      <div className="flex h-16 items-center px-6 mb-2">
         <Link href="/dashboard" className="inline-flex items-center">
           <NodWordmark size="sm" priority />
           <span className="sr-only">NOD</span>
@@ -72,7 +72,7 @@ export function DashboardSidebar() {
       </div>
 
       {/* Main Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-1 px-3 py-4">
         {navItems.map(({ href, icon: Icon, label }) => (
           <SidebarNavLink
             key={href}
@@ -83,7 +83,7 @@ export function DashboardSidebar() {
           />
         ))}
 
-        <div className="my-3 border-t" />
+        <div className="my-3 border-t border-dashed border-cm-text/10" />
 
         {bottomNavItems.map(({ href, icon: Icon, label }) => (
           <SidebarNavLink
@@ -97,13 +97,13 @@ export function DashboardSidebar() {
       </nav>
 
       {/* User Section - rendered client-only to avoid Radix ID hydration mismatch */}
-      <div data-testid="user-section" className="border-t p-4">
+      <div data-testid="user-section" className="border-t border-dashed border-cm-text/10 p-4">
         {mounted ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-accent"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-nod-gold/5"
               >
                 <Avatar size="sm">
                   {avatarUrl ? (
@@ -140,7 +140,7 @@ export function DashboardSidebar() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push("/blog/web-clipper-guide")}>
+              <DropdownMenuItem onClick={() => router.push("/help")}>
                 <HelpCircle />
                 <span>{t("sidebar.user.help")}</span>
               </DropdownMenuItem>

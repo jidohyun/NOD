@@ -1,9 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  ChevronLeft,
+  CircleDollarSign,
+  CreditCard,
+  Sparkles,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { type CSSProperties, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useInvalidateSubscription,
@@ -11,7 +18,14 @@ import {
   useSubscription,
   useUsage,
 } from "@/lib/api/subscriptions";
-import { UsageBar } from "./usage-bar";
+import { Link } from "@/lib/i18n/routing";
+
+const BILLING_BG_STYLE: CSSProperties = {
+  backgroundImage:
+    "radial-gradient(rgba(232, 185, 49, 0.45) 1.1px, transparent 1.1px), radial-gradient(rgba(74, 74, 74, 0.2) 1px, transparent 1px)",
+  backgroundSize: "22px 22px",
+  backgroundPosition: "0 0, 11px 11px",
+};
 
 const DATE_LOCALE_MAP: Record<string, string> = {
   ko: "ko-KR",
@@ -35,11 +49,9 @@ export function BillingContent() {
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
 
-  // Refresh subscription data after successful checkout
   useEffect(() => {
     if (searchParams.get("checkout") === "success") {
       invalidate();
-      // Clean up URL param
       const url = new URL(window.location.href);
       url.searchParams.delete("checkout");
       window.history.replaceState({}, "", url.pathname);
@@ -48,35 +60,31 @@ export function BillingContent() {
 
   if (subLoading || usageLoading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-8 w-48" />
-        <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <div className="space-y-6">
-            <div className="rounded-lg border bg-card p-6 space-y-3">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-6 w-40" />
-              <Skeleton className="h-3 w-32" />
-            </div>
-            <div className="rounded-lg border bg-card p-6 space-y-3">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-2 w-full rounded-full" />
-            </div>
-            <div className="rounded-lg border bg-card p-6 space-y-3">
-              <Skeleton className="h-4 w-20" />
-              <div className="flex items-center justify-between">
-                <Skeleton className="h-3 w-28" />
-                <Skeleton className="h-3 w-16" />
+      <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
+        <div className="pointer-events-none absolute inset-0 opacity-65" style={BILLING_BG_STYLE} />
+        <div className="relative space-y-6">
+          <Skeleton className="h-9 w-64 bg-cm-text/10" />
+          <div className="grid gap-6 lg:grid-cols-12">
+            <div className="space-y-6 lg:col-span-7">
+              <div className="cm-doodle-border bg-white/90 p-6">
+                <Skeleton className="h-4 w-28 bg-cm-text/10" />
+                <Skeleton className="mt-4 h-8 w-44 bg-cm-text/10" />
+                <Skeleton className="mt-2 h-4 w-56 bg-cm-text/10" />
               </div>
-              <Skeleton className="h-1.5 w-full rounded-full" />
+              <div className="cm-doodle-border bg-white/90 p-6">
+                <Skeleton className="h-4 w-24 bg-cm-text/10" />
+                <Skeleton className="mt-5 h-5 w-full rounded-full bg-cm-text/10" />
+                <Skeleton className="mt-3 h-4 w-40 bg-cm-text/10" />
+              </div>
             </div>
-          </div>
-          <div className="space-y-6">
-            <div className="rounded-lg border bg-card p-6 space-y-4">
-              <Skeleton className="h-4 w-16" />
-              <div className="space-y-3">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/5" />
+            <div className="space-y-6 lg:col-span-5">
+              <div className="cm-doodle-border bg-white/90 p-6">
+                <Skeleton className="h-4 w-32 bg-cm-text/10" />
+                <div className="mt-4 space-y-3">
+                  <Skeleton className="h-4 w-full bg-cm-text/10" />
+                  <Skeleton className="h-4 w-5/6 bg-cm-text/10" />
+                  <Skeleton className="h-4 w-4/5 bg-cm-text/10" />
+                </div>
               </div>
             </div>
           </div>
@@ -86,6 +94,28 @@ export function BillingContent() {
   }
 
   const isPro = subscription?.plan === "pro";
+  const isCheckoutSuccess = searchParams.get("checkout") === "success";
+  const summariesUsed = usage?.summaries_used ?? 0;
+  const summariesLimit = usage?.summaries_limit ?? 0;
+  const isUnlimited = summariesLimit === -1;
+  const percentage = isUnlimited
+    ? 0
+    : summariesLimit > 0
+      ? Math.min((summariesUsed / summariesLimit) * 100, 100)
+      : 0;
+
+  const usageLabel = isUnlimited
+    ? t("unlimited")
+    : t("summariesUsed", {
+        used: summariesUsed,
+        limit: summariesLimit,
+      });
+
+  const planName = isPro ? t("pro") : t("basic");
+  const planPrice = isPro ? t("proPrice") : t("basicPrice");
+  const planFeatures = isPro
+    ? [t("features.proSummaries"), t("features.proArticles"), t("features.proSearch")]
+    : [t("features.basicSummaries"), t("features.basicArticles"), t("features.basicSearch")];
 
   function handleManagePayment() {
     fetchPortalUrl().then(({ data }) => {
@@ -104,145 +134,222 @@ export function BillingContent() {
     });
   }
 
-  const summariesUsed = usage?.summaries_used ?? 0;
-  const summariesLimit = usage?.summaries_limit ?? 0;
-  const isUnlimited = summariesLimit === -1;
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">{t("manageBilling")}</h1>
+    <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
+      <div className="pointer-events-none absolute inset-0 opacity-65" style={BILLING_BG_STYLE} />
 
-      {/* Checkout Success Banner */}
-      {searchParams.get("checkout") === "success" && (
-        <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-          <p className="text-sm font-medium text-green-800">{t("checkoutSuccess")}</p>
-        </div>
-      )}
+      <div className="relative space-y-8">
+        <Link
+          href="/settings"
+          className="inline-flex items-center gap-1 text-sm font-creative-body font-bold text-cm-text/55 transition-colors hover:text-cm-text"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          {locale === "ko" ? "설정으로 돌아가기" : "Back to settings"}
+        </Link>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        {/* Left Column */}
-        <div className="space-y-6">
-          {/* Current Plan */}
-          <div className="rounded-lg border bg-card p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{t("currentPlan")}</p>
-                <p className="text-xl font-bold">
-                  {isPro ? t("pro") : t("basic")} — {isPro ? t("proPrice") : t("basicPrice")}
-                </p>
-                {subscription?.current_period_end ? (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {t("nextBilling", {
-                      date: new Date(subscription.current_period_end).toLocaleDateString(
-                        dateLocale
-                      ),
-                    })}
+        <header>
+          <h1 className="font-creative-display text-[clamp(2rem,3.2vw,3.3rem)] font-black text-cm-text">
+            {t("manageBilling")}
+          </h1>
+          <div className="mt-3 h-1.5 w-32 -rotate-1 rounded-full bg-nod-gold/45" />
+          <p className="mt-4 font-creative-body text-base italic text-cm-text/65">
+            {locale === "ko"
+              ? "구독, 결제 수단, 사용량을 한 화면에서 관리해보세요."
+              : "Manage your subscription, payment method, and usage in one place."}
+          </p>
+        </header>
+
+        {isCheckoutSuccess ? (
+          <div className="cm-doodle-border border-2 border-emerald-200 bg-emerald-50/90 p-4">
+            <p className="font-creative-body text-sm font-black text-emerald-700">
+              {t("checkoutSuccess")}
+            </p>
+          </div>
+        ) : null}
+
+        <div className="grid gap-8 lg:grid-cols-12">
+          <div className="space-y-6 lg:col-span-7">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.5deg] bg-white/95 p-7">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
+                    {t("currentPlan")}
                   </p>
-                ) : null}
+                  <h2 className="mt-2 font-creative-display text-4xl font-black text-cm-text">
+                    {planName}
+                  </h2>
+                  <p className="mt-2 font-creative-body text-sm font-bold text-cm-text/70">
+                    {planPrice}
+                  </p>
+                  {subscription?.current_period_end ? (
+                    <p className="mt-2 font-creative-body text-xs font-semibold text-cm-text/55">
+                      {t("nextBilling", {
+                        date: new Date(subscription.current_period_end).toLocaleDateString(
+                          dateLocale
+                        ),
+                      })}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div
+                  className={`flex h-12 w-12 items-center justify-center rounded-full border-2 border-cm-text ${
+                    isPro ? "bg-nod-gold/20" : "bg-cm-mint"
+                  }`}
+                >
+                  {isPro ? (
+                    <CreditCard className="h-6 w-6 text-nod-gold" />
+                  ) : (
+                    <Sparkles className="h-6 w-6 text-cm-text" />
+                  )}
+                </div>
               </div>
-              {!isPro && (
+
+              {!isPro ? (
                 <Link
                   href="/pricing"
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                  className="mt-6 inline-flex items-center cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold"
                 >
                   {t("upgrade")}
                 </Link>
-              )}
-            </div>
-          </div>
+              ) : null}
+            </section>
 
-          {/* Usage */}
-          <UsageBar />
+            <section className="cm-doodle-border cm-sketch-shadow rotate-[0.5deg] bg-white/95 p-7">
+              <div className="mb-5 flex items-center gap-2">
+                <CircleDollarSign className="h-5 w-5 text-[#8BA888]" />
+                <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                  {t("usage")}
+                </h3>
+              </div>
 
-          {/* Usage Details */}
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-sm font-semibold">{t("usage")}</h2>
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {t("featureComparison.aiSummaries")}
-                  </span>
-                  <span className="font-medium">
+              <div className="space-y-4">
+                <div className="flex items-end justify-between">
+                  <p className="font-creative-body text-sm font-bold text-cm-text/60">
+                    {locale === "ko" ? "이번 달 AI 요약 사용량" : "Current monthly AI summaries"}
+                  </p>
+                  <p className="font-creative-display text-3xl font-black text-cm-text">
                     {isUnlimited ? t("unlimited") : `${summariesUsed}/${summariesLimit}`}
-                  </span>
+                  </p>
                 </div>
+
                 {!isUnlimited ? (
-                  <div className="mt-1.5 h-1.5 rounded-full bg-secondary">
+                  <div className="h-5 overflow-hidden rounded-2xl border border-cm-text/15 bg-cm-bg">
                     <div
-                      className="h-1.5 rounded-full bg-primary transition-all"
-                      style={{
-                        width: `${Math.min((summariesUsed / summariesLimit) * 100, 100)}%`,
-                      }}
+                      className="h-full bg-nod-gold transition-all duration-500"
+                      style={{ width: `${Math.max(6, percentage)}%` }}
                     />
                   </div>
                 ) : null}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Right Column */}
-        <div className="space-y-6">
-          {/* Plan Features */}
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-sm font-semibold">{isPro ? t("pro") : t("basic")}</h2>
-            <ul className="space-y-3">
-              {(isPro
-                ? [t("features.proSummaries"), t("features.proArticles"), t("features.proSearch")]
-                : [
-                    t("features.basicSummaries"),
-                    t("features.basicArticles"),
-                    t("features.basicSearch"),
-                  ]
-              ).map((feature) => (
-                <li key={feature} className="flex items-center gap-2 text-sm">
-                  <svg
-                    className="h-4 w-4 shrink-0 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    aria-hidden="true"
+                <p className="font-creative-body text-xs font-bold italic text-cm-text/50">
+                  {usageLabel}
+                </p>
+
+                {!isUnlimited && summariesUsed >= summariesLimit ? (
+                  <p className="font-creative-body text-xs font-bold text-red-500">
+                    {t("limitReached")}
+                  </p>
+                ) : null}
+              </div>
+            </section>
+
+            <section className="cm-doodle-border border-dashed border-cm-text/25 bg-white/80 p-6">
+              <h3 className="mb-4 font-creative-display text-2xl font-black text-cm-text">
+                {locale === "ko" ? "현재 플랜 포함 기능" : "Included in your plan"}
+              </h3>
+              <ul className="space-y-3">
+                {planFeatures.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-start gap-2 font-creative-body text-sm font-semibold text-cm-text"
                   >
-                    <title>Check</title>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            {!isPro ? (
-              <Link
-                href="/pricing"
-                className="mt-4 block w-full rounded-lg bg-primary py-2.5 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                {t("upgrade")}
-              </Link>
-            ) : null}
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-nod-gold" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
 
-          {/* Pro Management */}
-          {isPro && subscription?.status === "active" ? (
-            <div className="space-y-3">
-              <button
-                type="button"
-                onClick={handleManagePayment}
-                className="w-full rounded-lg border bg-card p-4 text-left text-sm font-medium hover:bg-muted/50"
-              >
-                {t("managePayment")}
-              </button>
-              <div className="rounded-lg border border-destructive/20 p-4">
-                <p className="text-sm text-muted-foreground">{t("cancelDescription")}</p>
-                <button
-                  type="button"
-                  onClick={handleCancelSubscription}
-                  className="mt-2 rounded-md border border-destructive px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10"
-                >
-                  {t("cancel")}
-                </button>
+          <div className="space-y-6 lg:col-span-5">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.4deg] bg-white/95 p-7">
+              <div className="mb-4 flex items-center gap-2">
+                <CreditCard className="h-5 w-5 text-cm-coral" />
+                <h3 className="font-creative-display text-2xl font-black text-cm-text">
+                  {locale === "ko" ? "결제 컨트롤" : "Billing Controls"}
+                </h3>
               </div>
-            </div>
-          ) : null}
+
+              {isPro && subscription?.status === "active" ? (
+                <div className="space-y-4">
+                  <button
+                    type="button"
+                    onClick={handleManagePayment}
+                    className="w-full cm-doodle-border border-cm-text bg-white px-4 py-3 text-left font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-cm-bg"
+                  >
+                    {t("managePayment")}
+                  </button>
+
+                  <div className="cm-doodle-border border-2 border-red-200 bg-red-50/70 p-4">
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                      <p className="font-creative-body text-xs font-bold text-cm-text/65">
+                        {t("cancelDescription")}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCancelSubscription}
+                      className="mt-3 inline-flex cm-doodle-border border-red-200 bg-white px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50"
+                    >
+                      {t("cancel")}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="font-creative-body text-sm font-semibold text-cm-text/65">
+                    {locale === "ko"
+                      ? "더 많은 월간 사용량과 고급 기능을 위해 Pro로 업그레이드해보세요."
+                      : "Upgrade to Pro for higher monthly limits and advanced features."}
+                  </p>
+                  <Link
+                    href="/pricing"
+                    className="inline-flex cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold"
+                  >
+                    {t("upgrade")}
+                  </Link>
+                </div>
+              )}
+            </section>
+
+            <section className="cm-doodle-border border-2 border-cm-text/20 bg-white/85 p-6">
+              <h3 className="mb-4 font-creative-display text-2xl font-black text-cm-text">
+                {locale === "ko" ? "결제 상태" : "Billing Status"}
+              </h3>
+
+              <div className="space-y-3 font-creative-body text-sm">
+                <div className="flex items-center justify-between border-b border-dashed border-cm-text/15 pb-3">
+                  <span className="font-bold text-cm-text/60">
+                    {locale === "ko" ? "플랜 상태" : "Plan status"}
+                  </span>
+                  <span className="font-black text-cm-text">{subscription?.status ?? "-"}</span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-cm-text/60">
+                    {locale === "ko" ? "다음 결제" : "Next billing"}
+                  </span>
+                  <span className="font-black text-cm-text">
+                    {subscription?.current_period_end
+                      ? new Date(subscription.current_period_end).toLocaleDateString(dateLocale)
+                      : "-"}
+                  </span>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     </div>
