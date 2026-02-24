@@ -8,6 +8,7 @@ const RE_DATE_2026_FEB_02 = /feb|2026|02/i;
 const RE_DATE_2025_DEC_12_25 = /dec|2025|12|25/i;
 const RE_STATUS_PENDING = /pending/i;
 const RE_STATUS_COMPLETED = /completed/i;
+const RE_OPEN_ONLY = /^Open$/i;
 
 // Mock next/link
 vi.mock("next/link", () => ({
@@ -38,9 +39,10 @@ describe("ArticleCard", () => {
       const article = createTestArticle();
       renderWithProviders(<ArticleCard article={article} />);
 
-      const titleLink = screen.getByRole("link", { name: article.title });
+      const titleLink = screen.getByRole("link");
       expect(titleLink).toBeInTheDocument();
-      expect(titleLink).toHaveAttribute("href", `/articles/${article.id}`);
+      expect(titleLink).toHaveAttribute("href", expect.stringContaining(`/articles/${article.id}`));
+      expect(screen.getByRole("heading", { name: article.title })).toBeInTheDocument();
     });
 
     it("renders long titles without truncation issues", () => {
@@ -49,7 +51,8 @@ describe("ArticleCard", () => {
       const article = createTestArticle({ title: longTitle });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByRole("link", { name: longTitle })).toBeInTheDocument();
+      expect(screen.getByRole("link")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: longTitle })).toBeInTheDocument();
     });
   });
 
@@ -199,8 +202,7 @@ describe("ArticleCard", () => {
       const article = createTestArticle();
       const { container } = renderWithProviders(<ArticleCard article={article} />);
 
-      // Check for card structure (adjust based on actual implementation)
-      expect(container.querySelector('[role="article"]')).toBeInTheDocument();
+      expect(container.querySelector("article")).toBeInTheDocument();
     });
 
     it("renders all elements within the card", () => {
@@ -209,13 +211,20 @@ describe("ArticleCard", () => {
       });
       renderWithProviders(<ArticleCard article={article} />);
 
-      // Verify all key elements are present
-      expect(screen.getByRole("link", { name: article.title })).toBeInTheDocument();
+      expect(screen.getByRole("link")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: article.title })).toBeInTheDocument();
       expect(screen.getByText(RE_STATUS_COMPLETED)).toBeInTheDocument();
       expect(screen.getByText("News")).toBeInTheDocument();
       expect(screen.getByText(article.summary_preview!)).toBeInTheDocument();
       expect(screen.getByText("React")).toBeInTheDocument();
       expect(screen.getByText("Testing")).toBeInTheDocument();
+    });
+
+    it("does not render footer open text", () => {
+      const article = createTestArticle();
+      renderWithProviders(<ArticleCard article={article} />);
+
+      expect(screen.queryByText(RE_OPEN_ONLY)).not.toBeInTheDocument();
     });
   });
 
@@ -224,7 +233,8 @@ describe("ArticleCard", () => {
       const article = createTestArticle({ url: null });
       renderWithProviders(<ArticleCard article={article} />);
 
-      expect(screen.getByRole("link", { name: article.title })).toBeInTheDocument();
+      expect(screen.getByRole("link")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: article.title })).toBeInTheDocument();
     });
 
     it("handles unknown status values", () => {

@@ -155,7 +155,7 @@
       "terms": "利用規約",
       "refund": "返金ポリシー",
       "tagline": "AI搭載のコンテンツ保存とナレッジ管理。",
-      "copyright": "© 2025 NOD. All rights reserved."
+      "copyright": "All rights reserved."
     },
     "dashboardPreview": {
       "savedReads": "保存した記事",
@@ -443,6 +443,7 @@
     "original": "原文を見る",
     "pendingAnalysis": "分析待機中...",
     "analyzingArticle": "AIがコンテンツを分析しています...",
+    "summaryInProgress": "要約中...",
     "analysisStepReading": "コンテンツ読み取り",
     "analysisStepAnalyzing": "AI分析中",
     "analysisStepSummary": "要約生成",

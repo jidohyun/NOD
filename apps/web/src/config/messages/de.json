@@ -155,7 +155,7 @@
       "terms": "Nutzungsbedingungen",
       "refund": "Rückerstattungsrichtlinie",
       "tagline": "KI-gestützte Inhaltsspeicherung und Wissensverwaltung.",
-      "copyright": "© 2025 NOD. Alle Rechte vorbehalten."
+      "copyright": "Alle Rechte vorbehalten."
     },
     "dashboardPreview": {
       "savedReads": "Gespeicherte Inhalte",
@@ -443,6 +443,7 @@
     "original": "Original",
     "pendingAnalysis": "Warten auf Analysestart...",
     "analyzingArticle": "KI analysiert diesen Inhalt...",
+    "summaryInProgress": "Zusammenfassung wird erstellt...",
     "analysisStepReading": "Inhalt wird gelesen",
     "analysisStepAnalyzing": "KI analysiert",
     "analysisStepSummary": "Zusammenfassung wird erstellt",

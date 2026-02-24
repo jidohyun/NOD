@@ -155,7 +155,7 @@
       "terms": "Terms of Service",
       "refund": "Refund Policy",
       "tagline": "AI-powered content saving and knowledge management.",
-      "copyright": "© 2025 NOD. All rights reserved."
+      "copyright": "All rights reserved."
     },
     "dashboardPreview": {
       "savedReads": "Saved reads",
@@ -443,6 +443,7 @@
     "original": "Original",
     "pendingAnalysis": "Waiting for analysis to start...",
     "analyzingArticle": "AI is analyzing this content...",
+    "summaryInProgress": "Summarizing...",
     "analysisStepReading": "Reading content",
     "analysisStepAnalyzing": "AI analyzing",
     "analysisStepSummary": "Generating summary",

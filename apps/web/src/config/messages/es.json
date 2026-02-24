@@ -155,7 +155,7 @@
       "terms": "Términos de servicio",
       "refund": "Política de reembolso",
       "tagline": "Guardado de contenido y gestión del conocimiento con IA.",
-      "copyright": "© 2025 NOD. Todos los derechos reservados."
+      "copyright": "Todos los derechos reservados."
     },
     "dashboardPreview": {
       "savedReads": "Lecturas guardadas",
@@ -443,6 +443,7 @@
     "original": "Original",
     "pendingAnalysis": "Esperando que comience el análisis...",
     "analyzingArticle": "La IA está analizando este contenido...",
+    "summaryInProgress": "Resumiendo...",
     "analysisStepReading": "Leyendo contenido",
     "analysisStepAnalyzing": "IA analizando",
     "analysisStepSummary": "Generando resumen",

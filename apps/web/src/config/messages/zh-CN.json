@@ -155,7 +155,7 @@
       "terms": "服务条款",
       "refund": "退款政策",
       "tagline": "AI 驱动的内容保存和知识管理。",
-      "copyright": "© 2025 NOD. 保留所有权利。"
+      "copyright": "保留所有权利。"
     },
     "dashboardPreview": {
       "savedReads": "已保存阅读",
@@ -443,6 +443,7 @@
     "original": "原文",
     "pendingAnalysis": "等待分析开始...",
     "analyzingArticle": "AI 正在分析此内容...",
+    "summaryInProgress": "正在总结...",
     "analysisStepReading": "读取内容",
     "analysisStepAnalyzing": "AI 分析中",
     "analysisStepSummary": "生成摘要",

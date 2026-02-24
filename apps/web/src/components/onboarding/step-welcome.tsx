@@ -17,36 +17,36 @@ export function StepWelcome({ onNext }: StepWelcomeProps) {
   ] as const;
 
   return (
-    <div className="text-center">
-      {/* Icon */}
-      <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#E8B931]/10">
-        <BookmarkCheck className="h-8 w-8 text-[#E8B931]" />
+    <div>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-black tracking-[0.16em] text-cm-text/45">STEP 1</p>
+          <h1 className="mt-2 font-creative-display text-4xl leading-tight font-black text-cm-text">
+            {t("title")}
+          </h1>
+          <p className="mt-2 ko-keep text-base leading-relaxed text-cm-text/62">{t("subtitle")}</p>
+        </div>
+
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-nod-gold/35 bg-[#fff2c7]">
+          <BookmarkCheck className="h-7 w-7 text-nod-gold-muted" />
+        </div>
       </div>
 
-      {/* Title */}
-      <h1 className="font-display text-3xl font-bold text-white">{t("title")}</h1>
-      <p className="mt-2 text-white/50">{t("subtitle")}</p>
-
-      {/* Features */}
-      <div className="mt-8 space-y-3">
+      <div className="space-y-3">
         {features.map(({ icon: Icon, text }) => (
-          <div
-            key={text}
-            className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 text-left"
-          >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#E8B931]/10">
-              <Icon className="h-4.5 w-4.5 text-[#E8B931]" />
+          <div key={text} className="cm-doodle-border flex items-center gap-3 bg-white px-5 py-4">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-nod-gold/30 bg-[#fff7dd]">
+              <Icon className="h-4.5 w-4.5 text-nod-gold-muted" />
             </div>
-            <span className="text-sm text-white/80">{text}</span>
+            <span className="ko-keep text-sm font-semibold text-cm-text/78">{text}</span>
           </div>
         ))}
       </div>
 
-      {/* CTA */}
       <button
         type="button"
         onClick={onNext}
-        className="mt-8 w-full rounded-xl bg-[#E8B931] px-6 py-3.5 text-sm font-semibold text-[#0A0A0B] transition-all hover:bg-[#E8B931]/90 active:scale-[0.98]"
+        className="cm-doodle-border mt-8 w-full bg-nod-gold px-6 py-3.5 text-sm font-black text-black transition-colors hover:bg-[#f0c958]"
       >
         {t("cta")}
       </button>

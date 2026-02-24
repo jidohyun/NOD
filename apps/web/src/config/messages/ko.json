@@ -155,7 +155,7 @@
       "terms": "이용약관",
       "refund": "환불 정책",
       "tagline": "AI 기반 콘텐츠 저장 및 지식 관리.",
-      "copyright": "© 2025 NOD. All rights reserved."
+      "copyright": "All rights reserved."
     },
     "dashboardPreview": {
       "savedReads": "저장한 읽기",
@@ -443,6 +443,7 @@
     "original": "원문 보기",
     "pendingAnalysis": "분석 대기 중...",
     "analyzingArticle": "AI가 콘텐츠를 분석하고 있습니다...",
+    "summaryInProgress": "요약중..",
     "analysisStepReading": "콘텐츠 읽기",
     "analysisStepAnalyzing": "AI 분석 중",
     "analysisStepSummary": "요약 생성",

@@ -55,6 +55,7 @@ const TEST_MESSAGES = {
     original: "Original",
     pendingAnalysis: "Waiting for analysis to start...",
     analyzingArticle: "AI is analyzing this article...",
+    summaryInProgress: "Summarizing...",
     summary: "Summary",
     readTime: "~{minutes} min read",
     concepts: "Concepts",

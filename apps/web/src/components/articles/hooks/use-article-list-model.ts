@@ -7,6 +7,8 @@ import { AnalyticsEvents } from "@/lib/analytics";
 import { useInfiniteArticles, useRetryArticle, useSemanticSearch } from "@/lib/api/articles";
 
 type ViewMode = "grid" | "list";
+const IN_PROGRESS_STATUSES = new Set(["pending", "processing", "analyzing"]);
+const PROCESSING_POLL_INTERVAL_MS = 1000;
 
 export function useArticleListModel() {
   const [search, setSearch] = useState("");
@@ -29,10 +31,6 @@ export function useArticleListModel() {
 
   const retryMutation = useRetryArticle();
 
-  const handleRefresh = (_id: string) => {
-    infiniteQuery.refetch();
-  };
-
   const handleRetry = (id: string) => {
     retryMutation.mutate(id);
   };
@@ -47,6 +45,8 @@ export function useArticleListModel() {
 
   const usesSemantic = isSemanticMode && !semanticQuery.isError;
   const activeQuery = usesSemantic ? semanticQuery : infiniteQuery;
+  const refetchInfiniteArticles = infiniteQuery.refetch;
+  const refetchSemanticArticles = semanticQuery.refetch;
 
   const lastTrackedQuery = useRef("");
   useEffect(() => {
@@ -59,6 +59,33 @@ export function useArticleListModel() {
   const articles = usesSemantic
     ? (semanticQuery.data?.data ?? [])
     : (infiniteQuery.data?.pages.flatMap((page) => page.data) ?? []);
+
+  const hasInProgressArticles = articles.some((article) =>
+    IN_PROGRESS_STATUSES.has(article.status)
+  );
+
+  useEffect(() => {
+    if (!hasInProgressArticles) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      if (document.visibilityState !== "visible") {
+        return;
+      }
+
+      if (usesSemantic) {
+        refetchSemanticArticles();
+        return;
+      }
+
+      refetchInfiniteArticles();
+    }, PROCESSING_POLL_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [hasInProgressArticles, usesSemantic, refetchSemanticArticles, refetchInfiniteArticles]);
 
   const suggestions = usesSemantic ? (semanticQuery.data?.data ?? []).slice(0, 5) : [];
   const showSuggestions = isFocused && suggestions.length > 0;
@@ -132,7 +159,6 @@ export function useArticleListModel() {
     activeQuery,
     articles,
     infiniteQuery,
-    onRefresh: handleRefresh,
     onRetry: handleRetry,
     isRetrying: retryMutation.isPending,
   };
