@@ -60,7 +60,7 @@ def get_article_analysis_timeout_seconds(
     *,
     retry: bool = False,
 ) -> int:
-    configured_timeout = int(getattr(settings, "ARTICLE_ANALYSIS_TIMEOUT_SECONDS", 90))
+    configured_timeout = int(getattr(settings, "ARTICLE_ANALYSIS_TIMEOUT_SECONDS", 45))
     timeout = max(configured_timeout, 1)
 
     # Academic papers get full timeout for large content processing.
@@ -83,15 +83,15 @@ def get_article_analysis_content_limit_chars(
     retry: bool = False,
 ) -> int:
     if content_type in LARGE_CONTENT_TYPES:
-        return 30000 if retry else 60000
+        return 18000 if retry else 30000
 
     if content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
-        return 30000
-
-    if retry:
         return 12000
 
-    return 20000
+    if retry:
+        return 6500
+
+    return 9000
 
 
 def resolve_content_type_for_retry(article: object) -> ContentType:
