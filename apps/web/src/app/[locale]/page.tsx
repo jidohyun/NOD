@@ -8,9 +8,7 @@ import { LandingHero } from "@/components/landing/hero";
 import { LandingHowItWorks } from "@/components/landing/how-it-works";
 import { LandingNav } from "@/components/landing/nav";
 import { LandingPricing } from "@/components/landing/pricing";
-import { LandingStackingCards } from "@/components/landing/stacking-cards";
 import { LandingSvgAutoCursor } from "@/components/landing/svg-auto-cursor";
-import { LandingTypewriterFeed } from "@/components/landing/typewriter-feed";
 import { SoftwareApplicationJsonLd } from "@/components/seo/json-ld";
 
 interface HomePageProps {
@@ -28,9 +26,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <LandingNav />
       <main>
         <LandingHero />
-        <LandingTypewriterFeed />
         <LandingFeatures />
-        <LandingStackingCards />
         <LandingHowItWorks />
         <DashboardPreview />
         <LandingPricing />
