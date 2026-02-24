@@ -140,6 +140,8 @@ export default defineConfig(({ mode }) => {
       viteStaticCopy({
         targets: [
           { src: "icons/*.png", dest: "icons" },
+          { src: "../web/public/brand/nod-logo.png", dest: "brand" },
+          { src: "../web/public/brand/nod-logo-light.png", dest: "brand" },
           { src: "src/popup/theme-init.js", dest: "src/popup" },
         ],
       }),

@@ -12,9 +12,13 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
 
   if (isSummaryUnlimited) {
     return (
-      <div className="flex items-center gap-1.5 text-xs t-muted">
-        <div className="h-1.5 w-1.5 rounded-full bg-green-400 progress-glow" />
-        <span>{t("extUsageUnlimited")}</span>
+      <div className="glass-card mt-3 animate-slide-up p-2.5">
+        <div className="flex items-center gap-2 text-xs">
+          <div className="cm-icon-badge h-5 w-5">
+            <div className="h-2 w-2 rounded-full bg-emerald-400 progress-glow" />
+          </div>
+          <span className="font-semibold t-secondary">{t("extUsageUnlimited")}</span>
+        </div>
       </div>
     );
   }
@@ -35,33 +39,33 @@ export function UsageIndicator({ usage }: UsageIndicatorProps) {
       : "bg-emerald-400";
 
   return (
-    <div className="mt-3 space-y-2">
+    <div className="glass-card mt-3 animate-slide-up space-y-2.5 p-2.5">
       <div className="flex items-center justify-between text-xs">
-        <span className={isSummaryAtLimit ? "text-red-400" : "t-muted"}>
+        <span className={isSummaryAtLimit ? "font-semibold text-red-400" : "t-muted"}>
           {summaryUsageText}
         </span>
       </div>
-      <div className="h-1 overflow-hidden rounded-full" style={{ background: "var(--progress-track)" }}>
+      <div className="cm-doodle-border h-2 overflow-hidden" style={{ background: "var(--progress-track)" }}>
         <div
-          className={`h-1 rounded-full transition-all duration-500 ease-out ${barColor}`}
+          className={`h-full rounded-full transition-all duration-500 ease-out ${barColor}`}
           style={{ width: `${summaryPercentage}%` }}
         />
       </div>
-      {isSummaryAtLimit && (
+      {isSummaryAtLimit ? (
         <div className="flex items-center justify-between">
-          <span className="text-xs text-red-400">
+          <span className="text-xs font-semibold text-red-400">
             {t("extLimitReached")}
           </span>
           <a
             href={`${WEB_BASE}/pricing`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-medium text-[#E8B931] hover:opacity-80 transition-opacity"
+            className="cm-action-btn w-auto px-2.5 py-1.5 text-xs t-accent"
           >
             {t("extUpgradePrompt")}
           </a>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -47,23 +47,26 @@ export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuPro
   return (
     <div className="relative" ref={menuRef}>
       <button
+        type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-1.5 rounded-full p-0.5 transition-all hover:bg-white/10"
+        className="cm-pill-toggle flex items-center gap-1.5 p-0.5 pr-2"
+        aria-label="Open user menu"
       >
         {user.avatarUrl ? (
           <img
             src={user.avatarUrl}
-            alt=""
-            className="h-6 w-6 rounded-full ring-1 ring-white/10"
+            alt={user.name}
+            className="h-6 w-6 rounded-full border border-themed"
             referrerPolicy="no-referrer"
           />
         ) : (
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E8B931] text-xs font-bold text-black">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full border border-themed bg-[#E8B931] text-xs font-bold text-black">
             {user.name.charAt(0).toUpperCase()}
           </div>
         )}
         <svg
-          className={`h-3 w-3 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          aria-hidden="true"
+          className={`h-3 w-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -73,19 +76,20 @@ export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuPro
         </svg>
       </button>
 
-      {isOpen && (
-        <div className="glass-menu absolute right-0 top-full z-50 mt-2 w-52 rounded-xl shadow-2xl animate-slide-up">
-          <div className="px-3.5 py-3" style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+      {isOpen ? (
+        <div className="glass-menu absolute right-0 top-full z-50 mt-2 w-56 p-1.5 animate-slide-up">
+          <div className="px-2.5 py-2.5" style={{ borderBottom: "1px solid var(--border-subtle)" }}>
             <p className="truncate text-sm font-medium t-primary">{user.name}</p>
             <p className="truncate text-xs t-muted">{user.email}</p>
           </div>
 
-          <div className="px-3.5 py-2.5 relative" style={{ borderBottom: "1px solid var(--border-subtle)" }} ref={localeRef}>
+          <div className="relative px-2.5 py-2.5" style={{ borderBottom: "1px solid var(--border-subtle)" }} ref={localeRef}>
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium t-muted">{t("extLanguage")}</p>
               <button
+                type="button"
                 onClick={() => setLocaleDropdownOpen((v) => !v)}
-                className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium transition-all duration-150"
+                className="cm-pill-toggle flex items-center gap-1.5 px-2 py-1"
                 style={{
                   background: "var(--locale-active-bg)",
                   color: "var(--locale-active-text)",
@@ -94,6 +98,7 @@ export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuPro
                 <span>{LOCALE_OPTIONS.find((o) => o.code === locale)?.flag}</span>
                 <span>{LOCALE_OPTIONS.find((o) => o.code === locale)?.label}</span>
                 <svg
+                  aria-hidden="true"
                   className={`h-3 w-3 transition-transform duration-200 ${localeDropdownOpen ? "rotate-180" : ""}`}
                   fill="none"
                   viewBox="0 0 24 24"
@@ -104,70 +109,58 @@ export function UserMenu({ user, onLogout, locale, onLocaleChange }: UserMenuPro
                 </svg>
               </button>
             </div>
-            {localeDropdownOpen && (
+            {localeDropdownOpen ? (
               <div
-                className="absolute right-3.5 z-50 mt-1 w-40 max-h-36 overflow-y-auto rounded-xl shadow-2xl"
-                style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)" }}
+                className="cm-dropdown-panel absolute right-2.5 z-50 mt-1 w-44 max-h-36 overflow-y-auto p-1"
               >
                 {LOCALE_OPTIONS.map((opt) => (
                   <button
+                    type="button"
                     key={opt.code}
                     onClick={() => {
                       onLocaleChange(opt.code);
                       setLocaleDropdownOpen(false);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs transition-colors"
-                    style={{
-                      background: locale === opt.code ? "var(--locale-active-bg)" : "transparent",
-                      color: locale === opt.code ? "var(--locale-active-text)" : "var(--locale-text)",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (locale !== opt.code) e.currentTarget.style.background = "var(--bg-hover)";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (locale !== opt.code) e.currentTarget.style.background = "transparent";
-                    }}
+                    className="cm-dropdown-option"
+                    data-active={locale === opt.code}
                   >
                     <span>{opt.flag}</span>
                     <span>{opt.label}</span>
                   </button>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
 
-          <div className="py-1">
+          <div className="space-y-0.5 py-1">
             <button
+              type="button"
               onClick={handleOpenDashboard}
-              className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-sm t-secondary transition-colors"
-              style={{ ["--tw-text-opacity" as string]: 1 }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-hover)"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+              className="cm-menu-item"
             >
-              <svg className="h-4 w-4 t-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <svg aria-hidden="true" className="icon-muted h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
               </svg>
               {t("extViewDashboard")}
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 setIsOpen(false);
                 onLogout();
               }}
-              className="flex w-full items-center gap-2.5 px-3.5 py-2 text-left text-sm transition-colors"
+              className="cm-menu-item"
               style={{ color: "var(--logout-text)" }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "var(--logout-hover)"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
               </svg>
               {t("extLogout")}
             </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
