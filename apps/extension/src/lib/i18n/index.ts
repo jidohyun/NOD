@@ -33,7 +33,11 @@ const translations = {
     "extUpgradePrompt": "Pro로 업그레이드",
     "extUsageUnlimited": "무제한 분석 (Pro)",
     "extLanguage": "언어",
-    "extSummaryLanguage": "요약 언어"
+    "extSummaryLanguage": "요약 언어",
+    "extPdfDocument": "PDF 문서 · 서버에서 분석",
+    "extYoutubeVideo": "YouTube 영상 · 자막 기반 분석",
+    "extGithubRepo": "GitHub 저장소",
+    "extServerProcessed": "서버에서 콘텐츠를 추출하여 분석합니다"
   },
   "ja": {
     "extHeaderTitle": "NOD",
@@ -67,7 +71,11 @@ const translations = {
     "extUpgradePrompt": "Proにアップグレード",
     "extUsageUnlimited": "無制限分析 (Pro)",
     "extLanguage": "言語",
-    "extSummaryLanguage": "要約言語"
+    "extSummaryLanguage": "要約言語",
+    "extPdfDocument": "PDFドキュメント · サーバーで分析",
+    "extYoutubeVideo": "YouTube動画 · 字幕ベースの分析",
+    "extGithubRepo": "GitHubリポジトリ",
+    "extServerProcessed": "サーバーでコンテンツを抽出して分析します"
   },
   "en": {
     "extHeaderTitle": "NOD",
@@ -101,7 +109,11 @@ const translations = {
     "extUpgradePrompt": "Upgrade to Pro for more",
     "extUsageUnlimited": "Unlimited analyses (Pro)",
     "extLanguage": "Language",
-    "extSummaryLanguage": "Summary Language"
+    "extSummaryLanguage": "Summary Language",
+    "extPdfDocument": "PDF Document · Server-side analysis",
+    "extYoutubeVideo": "YouTube Video · Transcript-based analysis",
+    "extGithubRepo": "GitHub Repository",
+    "extServerProcessed": "Content will be extracted and analyzed on the server"
   },
   "es": {
     "extHeaderTitle": "NOD",
@@ -135,7 +147,11 @@ const translations = {
     "extUpgradePrompt": "Actualizar a Pro",
     "extUsageUnlimited": "Análisis ilimitados (Pro)",
     "extLanguage": "Idioma",
-    "extSummaryLanguage": "Idioma del resumen"
+    "extSummaryLanguage": "Idioma del resumen",
+    "extPdfDocument": "Documento PDF · Análisis en servidor",
+    "extYoutubeVideo": "Video de YouTube · Análisis basado en subtítulos",
+    "extGithubRepo": "Repositorio de GitHub",
+    "extServerProcessed": "El contenido se extraerá y analizará en el servidor"
   },
   "pt-BR": {
     "extHeaderTitle": "NOD",
@@ -169,7 +185,11 @@ const translations = {
     "extUpgradePrompt": "Atualizar para Pro",
     "extUsageUnlimited": "Análises ilimitadas (Pro)",
     "extLanguage": "Idioma",
-    "extSummaryLanguage": "Idioma do resumo"
+    "extSummaryLanguage": "Idioma do resumo",
+    "extPdfDocument": "Documento PDF · Análise no servidor",
+    "extYoutubeVideo": "Vídeo do YouTube · Análise baseada em legendas",
+    "extGithubRepo": "Repositório GitHub",
+    "extServerProcessed": "O conteúdo será extraído e analisado no servidor"
   },
   "zh-CN": {
     "extHeaderTitle": "NOD",
@@ -203,7 +223,11 @@ const translations = {
     "extUpgradePrompt": "升级到Pro",
     "extUsageUnlimited": "无限分析 (Pro)",
     "extLanguage": "语言",
-    "extSummaryLanguage": "摘要语言"
+    "extSummaryLanguage": "摘要语言",
+    "extPdfDocument": "PDF文档 · 服务器端分析",
+    "extYoutubeVideo": "YouTube视频 · 基于字幕分析",
+    "extGithubRepo": "GitHub仓库",
+    "extServerProcessed": "内容将在服务器上提取并分析"
   },
   "de": {
     "extHeaderTitle": "NOD",
@@ -237,7 +261,11 @@ const translations = {
     "extUpgradePrompt": "Auf Pro upgraden",
     "extUsageUnlimited": "Unbegrenzte Analysen (Pro)",
     "extLanguage": "Sprache",
-    "extSummaryLanguage": "Zusammenfassungssprache"
+    "extSummaryLanguage": "Zusammenfassungssprache",
+    "extPdfDocument": "PDF-Dokument · Serverseitige Analyse",
+    "extYoutubeVideo": "YouTube-Video · Untertitelbasierte Analyse",
+    "extGithubRepo": "GitHub-Repository",
+    "extServerProcessed": "Inhalt wird auf dem Server extrahiert und analysiert"
   },
   "fr": {
     "extHeaderTitle": "NOD",
@@ -271,7 +299,11 @@ const translations = {
     "extUpgradePrompt": "Passer à Pro",
     "extUsageUnlimited": "Analyses illimitées (Pro)",
     "extLanguage": "Langue",
-    "extSummaryLanguage": "Langue du résumé"
+    "extSummaryLanguage": "Langue du résumé",
+    "extPdfDocument": "Document PDF · Analyse côté serveur",
+    "extYoutubeVideo": "Vidéo YouTube · Analyse basée sur les sous-titres",
+    "extGithubRepo": "Dépôt GitHub",
+    "extServerProcessed": "Le contenu sera extrait et analysé sur le serveur"
   }
 } as const;
 

@@ -84,6 +84,15 @@ export async function saveArticle(
 }
 
 /**
+ * Get article status (for polling after save)
+ */
+export async function getArticleStatus(
+  articleId: string
+): Promise<{ status: string }> {
+  return apiRequest<{ status: string }>(`/api/articles/${articleId}`);
+}
+
+/**
  * Get recent articles
  */
 export async function getRecentArticles(limit = 5) {

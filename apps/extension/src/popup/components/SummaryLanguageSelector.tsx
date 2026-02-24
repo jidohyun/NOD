@@ -39,12 +39,13 @@ export function SummaryLanguageSelector({
   }, [isOpen]);
 
   return (
-    <div className="mt-3 flex items-center justify-between">
-      <span className="text-xs t-muted">{t("extSummaryLanguage")}</span>
+    <div className="cm-doodle-border mt-3 flex items-center justify-between bg-surface px-2.5 py-2">
+      <span className="text-xs font-semibold t-muted">{t("extSummaryLanguage")}</span>
       <div className="relative" ref={dropdownRef}>
         <button
+          type="button"
           onClick={() => setIsOpen((v) => !v)}
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-150"
+          className="cm-pill-toggle flex items-center gap-1.5 px-2.5 py-1"
           style={{
             background: "var(--locale-active-bg)",
             color: "var(--locale-active-text)",
@@ -53,6 +54,7 @@ export function SummaryLanguageSelector({
           <span>{current.flag}</span>
           <span>{current.label}</span>
           <svg
+            aria-hidden="true"
             className={`h-3 w-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
             fill="none"
             viewBox="0 0 24 24"
@@ -63,36 +65,27 @@ export function SummaryLanguageSelector({
           </svg>
         </button>
 
-        {isOpen && (
+        {isOpen ? (
           <div
-            className="absolute right-0 bottom-full z-50 mb-1 w-40 max-h-48 overflow-y-auto rounded-xl shadow-2xl animate-slide-up"
-            style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)" }}
+            className="cm-dropdown-panel absolute bottom-full right-0 z-50 mb-1 w-44 max-h-48 overflow-y-auto p-1 animate-slide-up"
           >
             {LANGUAGES.map((lang) => (
               <button
+                type="button"
                 key={lang.code}
                 onClick={() => {
                   onChange(lang.code);
                   setIsOpen(false);
                 }}
-                className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs transition-colors"
-                style={{
-                  background: value === lang.code ? "var(--locale-active-bg)" : "transparent",
-                  color: value === lang.code ? "var(--locale-active-text)" : "var(--locale-text)",
-                }}
-                onMouseEnter={(e) => {
-                  if (value !== lang.code) e.currentTarget.style.background = "var(--bg-hover)";
-                }}
-                onMouseLeave={(e) => {
-                  if (value !== lang.code) e.currentTarget.style.background = "transparent";
-                }}
+                className="cm-dropdown-option"
+                data-active={value === lang.code}
               >
                 <span>{lang.flag}</span>
                 <span>{lang.label}</span>
               </button>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
