@@ -56,7 +56,7 @@ class Settings(BaseSettings):
     AI_PROVIDER: Literal["gemini", "openai"] = "gemini"
     GOOGLE_CLOUD_PROJECT: str | None = None
     GEMINI_API_KEY: str | None = None
-    GEMINI_MODEL: str = "gemini-3-flash-preview"
+    GEMINI_MODEL: str = "gemini-2.5-flash"
     OPENAI_API_KEY: str | None = None
 
     # Storage (optional)
