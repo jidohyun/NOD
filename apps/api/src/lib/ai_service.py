@@ -37,6 +37,8 @@ class LangfuseSpan(Protocol):
 
 logger = structlog.get_logger(__name__)
 
+DEFAULT_SUMMARY_PROMPT_CONTENT_LIMIT = 60000
+
 
 async def summarize_article(
     title: str,
@@ -60,7 +62,11 @@ async def summarize_article(
 
     result_schema = agent.get_result_schema()
     system_prompt = agent.build_system_prompt(summary_language)
-    user_prompt = agent.build_user_prompt(title, content[:15000], summary_language)
+    user_prompt = agent.build_user_prompt(
+        title,
+        content[:DEFAULT_SUMMARY_PROMPT_CONTENT_LIMIT],
+        summary_language,
+    )
     json_prompt = agent.build_json_prompt(summary_language)
 
     prompt = f"{json_prompt}\n\n{user_prompt}"
@@ -166,7 +172,7 @@ async def _summarize_with_gemini(
         generation = parent_span.start_generation(
             name="gemini-generation",
             model=settings.GEMINI_MODEL,
-            input=prompt[:2000],
+            input=prompt[:8000],
         )
 
     start = time.monotonic()
@@ -205,7 +211,7 @@ async def _summarize_with_gemini(
             else None
         )
         generation.update(
-            output=response.text[:2000],
+            output=response.text[:8000],
             usage_details=usage,
             metadata={"latency_ms": round(latency_ms, 1)},
         )
@@ -231,8 +237,8 @@ async def _summarize_with_openai(
             name="openai-generation",
             model="gpt-4o-mini",
             input=[
-                {"role": "system", "content": system_prompt[:1000]},
-                {"role": "user", "content": prompt[:1000]},
+                {"role": "system", "content": system_prompt[:4000]},
+                {"role": "user", "content": prompt[:8000]},
             ],
         )
 
@@ -262,7 +268,7 @@ async def _summarize_with_openai(
     if generation:
         usage = completion.usage
         generation.update(
-            output=str(parsed.model_dump_json())[:2000],
+            output=str(parsed.model_dump_json())[:8000],
             usage_details=(
                 {
                     "input": usage.prompt_tokens,

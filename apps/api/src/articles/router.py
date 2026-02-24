@@ -40,6 +40,59 @@ VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS = int(
     getattr(settings, "VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS", 100)
 )
 
+SLOW_ANALYSIS_CONTENT_TYPES = frozenset(
+    {
+        ContentType.OFFICIAL_DOCS,
+        ContentType.VIDEO_PODCAST,
+    }
+)
+
+# Academic papers get generous limits since they contain dense, important content.
+LARGE_CONTENT_TYPES = frozenset(
+    {
+        ContentType.ACADEMIC_PAPER,
+    }
+)
+
+
+def get_article_analysis_timeout_seconds(
+    content_type: ContentType = ContentType.GENERAL_NEWS,
+    *,
+    retry: bool = False,
+) -> int:
+    configured_timeout = int(getattr(settings, "ARTICLE_ANALYSIS_TIMEOUT_SECONDS", 90))
+    timeout = max(configured_timeout, 1)
+
+    # Academic papers get full timeout for large content processing.
+    if content_type in LARGE_CONTENT_TYPES:
+        return max(timeout - 15, 30) if retry else timeout
+
+    if content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
+        return timeout
+
+    first_attempt_timeout = max(timeout - 15, 10)
+    if not retry:
+        return first_attempt_timeout
+
+    return max(first_attempt_timeout - 12, 6)
+
+
+def get_article_analysis_content_limit_chars(
+    content_type: ContentType = ContentType.GENERAL_NEWS,
+    *,
+    retry: bool = False,
+) -> int:
+    if content_type in LARGE_CONTENT_TYPES:
+        return 30000 if retry else 60000
+
+    if content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
+        return 30000
+
+    if retry:
+        return 12000
+
+    return 20000
+
 
 def resolve_content_type_for_retry(article: object) -> ContentType:
     summary = getattr(article, "summary", None)
@@ -154,21 +207,71 @@ async def _run_analysis(
         content_length=len(content),
     )
 
+    analysis_content_type = (
+        classify_url(article_url) if article_url else ContentType.GENERAL_NEWS
+    )
+
     try:
+        initial_timeout_seconds = get_article_analysis_timeout_seconds(
+            analysis_content_type
+        )
+        initial_content_limit = get_article_analysis_content_limit_chars(
+            analysis_content_type
+        )
+
         logger.info(
-            "Calling summarize_article", article_id=str(article_id), provider=provider
+            "Calling summarize_article",
+            article_id=str(article_id),
+            provider=provider,
+            timeout_seconds=initial_timeout_seconds,
+            content_limit=initial_content_limit,
+            content_type=str(analysis_content_type),
         )
-        analysis_timeout_seconds = 120
-        result, content_type = await asyncio.wait_for(
-            summarize_article(
-                title,
-                content,
-                url=article_url,
-                provider=provider,
-                summary_language=summary_language,
-            ),
-            timeout=analysis_timeout_seconds,
-        )
+
+        try:
+            result, content_type = await asyncio.wait_for(
+                summarize_article(
+                    title,
+                    content[:initial_content_limit],
+                    url=article_url,
+                    provider=provider,
+                    summary_language=summary_language,
+                ),
+                timeout=initial_timeout_seconds,
+            )
+        except TimeoutError:
+            if analysis_content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
+                raise
+
+            retry_timeout_seconds = get_article_analysis_timeout_seconds(
+                analysis_content_type,
+                retry=True,
+            )
+            retry_content_limit = get_article_analysis_content_limit_chars(
+                analysis_content_type,
+                retry=True,
+            )
+
+            logger.warning(
+                "Article analysis timed out, retrying with compact input",
+                article_id=str(article_id),
+                content_type=str(analysis_content_type),
+                initial_timeout_seconds=initial_timeout_seconds,
+                retry_timeout_seconds=retry_timeout_seconds,
+                retry_content_limit=retry_content_limit,
+            )
+
+            result, content_type = await asyncio.wait_for(
+                summarize_article(
+                    title,
+                    content[:retry_content_limit],
+                    url=article_url,
+                    provider=provider,
+                    summary_language=summary_language,
+                ),
+                timeout=retry_timeout_seconds,
+            )
+
         logger.info(
             "summarize_article completed successfully",
             article_id=str(article_id),
@@ -321,17 +424,6 @@ async def _run_analysis_async(
             summary_language=summary_language,
             article_url=article_url,
         )
-        if ok:
-            logger.info(
-                "Analysis succeeded, incrementing summary usage",
-                article_id=str(article_id),
-                user_id=user_id,
-            )
-            from src.lib.database import async_session_factory
-
-            async with async_session_factory() as session:
-                await sub_service.increment_summary_usage(session, user_id)
-                await session.commit()
     except Exception as exc:
         logger.exception(
             "Analysis wrapper failed for article",
@@ -345,6 +437,29 @@ async def _run_analysis_async(
                 "Failed to mark article as failed from wrapper",
                 article_id=str(article_id),
             )
+        return
+
+    if not ok:
+        return
+
+    logger.info(
+        "Analysis succeeded, incrementing summary usage",
+        article_id=str(article_id),
+        user_id=user_id,
+    )
+
+    from src.lib.database import async_session_factory
+
+    try:
+        async with async_session_factory() as session:
+            await sub_service.increment_summary_usage(session, user_id)
+            await session.commit()
+    except Exception:
+        logger.exception(
+            "Failed to increment summary usage after successful analysis",
+            article_id=str(article_id),
+            user_id=user_id,
+        )
 
 
 @router.post("", response_model=ArticleResponse, status_code=status.HTTP_201_CREATED)
