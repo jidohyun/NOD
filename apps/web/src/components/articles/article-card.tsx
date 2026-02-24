@@ -1,16 +1,14 @@
 "use client";
 
-import { RefreshCw, RotateCcw } from "lucide-react";
-import Link from "next/link";
+import { RotateCcw } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { ArticleListItem } from "@/lib/api/articles";
+import { Link } from "@/lib/i18n/routing";
 
 export interface ArticleCardProps {
   article: ArticleListItem & { concepts?: string[] };
-  onRefresh?: (id: string) => void;
   onRetry?: (id: string) => void;
   isRefreshing?: boolean;
 }
@@ -65,7 +63,7 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string 
   video_podcast: { labelKey: "typeVideo", className: "bg-pink-50 text-pink-700 border-pink-200" },
 };
 
-export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: ArticleCardProps) {
+export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps) {
   const t = useTranslations("dashboard");
   const locale = useLocale();
 
@@ -79,8 +77,10 @@ export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: Artic
   const hasSummary = (article.summary_preview?.trim() ?? "") !== "";
   const hasConcepts = (article.concepts?.length ?? 0) > 0;
 
-  // Derive effective status: if summary exists, analysis succeeded
-  const effectiveStatus = hasSummary && article.status === "failed" ? "analyzed" : article.status;
+  const effectiveStatus =
+    hasSummary && (article.status === "processing" || article.status === "failed")
+      ? "analyzed"
+      : article.status;
 
   const isPending =
     effectiveStatus === "pending" ||
@@ -99,27 +99,35 @@ export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: Artic
     : effectiveStatus;
 
   return (
-    <Card role="article" className="hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <div className="space-y-2">
-          <Link href={`/articles/${article.id}`} className="text-xl font-semibold hover:underline">
+    <article className="group relative cm-doodle-border cm-sketch-shadow h-full cursor-pointer bg-white/95 p-5 transition-all hover:-translate-y-1 hover:border-nod-gold/35">
+      <Link
+        href={`/articles/${article.id}`}
+        aria-label={article.title || (locale === "ko" ? "콘텐츠 열기" : "Open content")}
+        className="absolute inset-0 z-10 block"
+      />
+
+      <div className="space-y-4">
+        <div className="space-y-3">
+          <h3 className="font-creative-display text-lg leading-snug font-black text-cm-text transition-colors group-hover:text-nod-gold">
             {article.title}
-          </Link>
-          <div className="flex gap-2">
+          </h3>
+
+          <div className="flex flex-wrap gap-2">
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${statusStyle?.className ?? "bg-gray-100 text-gray-800 border-gray-200"}`}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-creative-body font-black ${statusStyle?.className ?? "bg-gray-100 text-gray-800 border-gray-200"}`}
             >
               {isPending ? (
                 <span className="h-2 w-2 animate-pulse rounded-full bg-current opacity-60" />
               ) : null}
               {statusLabel}
             </span>
+
             {(() => {
               const ct = article.content_type || "general_news";
               const ctStyle = CONTENT_TYPE_STYLES[ct] || CONTENT_TYPE_STYLES.general_news;
               return (
                 <span
-                  className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${ctStyle.className}`}
+                  className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-creative-body font-black ${ctStyle.className}`}
                 >
                   {t(
                     ctStyle.labelKey as
@@ -135,58 +143,55 @@ export function ArticleCard({ article, onRefresh, onRetry, isRefreshing }: Artic
             })()}
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            {isPending
-              ? t(effectiveStatus === "pending" ? "pendingAnalysis" : "analyzingArticle")
-              : hasSummary
-                ? article.summary_preview
-                : t("noSummary")}
-          </p>
-          <p className="text-xs text-muted-foreground">{formattedDate}</p>
-          {hasConcepts ? (
-            <div data-testid="concepts-section" className="flex flex-wrap gap-2">
-              {article.concepts?.map((concept) => (
-                <Badge key={concept} variant="outline" className="text-xs">
-                  {concept}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
 
-          {effectiveStatus === "processing" && onRefresh && (
-            <div className="flex items-center gap-2 pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onRefresh(article.id)}
-                disabled={isRefreshing}
-                className="text-xs"
-              >
-                <RefreshCw className={`h-3 w-3 mr-1 ${isRefreshing ? "animate-spin" : ""}`} />
-                {isRefreshing ? t("refreshing") : t("checkStatus")}
-              </Button>
-            </div>
-          )}
+        <p className="font-creative-body text-sm leading-relaxed text-cm-text/65">
+          {isPending
+            ? t(effectiveStatus === "pending" ? "pendingAnalysis" : "analyzingArticle")
+            : hasSummary
+              ? article.summary_preview
+              : t("noSummary")}
+        </p>
 
-          {effectiveStatus === "failed" && onRetry && (
-            <div className="flex items-center gap-2 pt-2">
-              <Button
+        {hasConcepts ? (
+          <div data-testid="concepts-section" className="flex flex-wrap gap-2">
+            {article.concepts?.map((concept) => (
+              <Badge
+                key={concept}
                 variant="outline"
-                size="sm"
-                onClick={() => onRetry(article.id)}
-                disabled={isRefreshing}
-                className="text-xs border-red-200 hover:bg-red-50"
+                className="border-cm-text/20 bg-cm-bg/70 font-creative-body text-[11px] font-bold text-cm-text"
               >
-                <RotateCcw className="h-3 w-3 mr-1" />
-                {t("retryAnalysis")}
-              </Button>
-            </div>
-          )}
+                {concept}
+              </Badge>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="flex items-center justify-between border-t border-dashed border-cm-text/15 pt-3">
+          <p className="font-creative-body text-xs font-bold text-cm-text/45">{formattedDate}</p>
         </div>
-      </CardContent>
-    </Card>
+
+        {isPending ? (
+          <div className="flex items-center gap-2 font-creative-body text-xs font-black text-blue-600">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-blue-500" />
+            {t("summaryInProgress")}
+          </div>
+        ) : null}
+
+        {effectiveStatus === "failed" && onRetry ? (
+          <div className="relative z-20 flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onRetry(article.id)}
+              disabled={isRefreshing}
+              className="cm-doodle-border border-red-200 bg-white font-creative-body text-xs font-bold text-red-500 hover:bg-red-50"
+            >
+              <RotateCcw className="mr-1 h-3 w-3" />
+              {t("retryAnalysis")}
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    </article>
   );
 }

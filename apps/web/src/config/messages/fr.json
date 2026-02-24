@@ -155,7 +155,7 @@
       "terms": "Conditions d'utilisation",
       "refund": "Politique de remboursement",
       "tagline": "Sauvegarde de contenu et gestion des connaissances propulsées par l'IA.",
-      "copyright": "© 2025 NOD. Tous droits réservés."
+      "copyright": "Tous droits réservés."
     },
     "dashboardPreview": {
       "savedReads": "Lectures sauvegardées",
@@ -443,6 +443,7 @@
     "original": "Original",
     "pendingAnalysis": "En attente du début de l'analyse...",
     "analyzingArticle": "L'IA analyse ce contenu...",
+    "summaryInProgress": "Résumé en cours...",
     "analysisStepReading": "Lecture du contenu",
     "analysisStepAnalyzing": "Analyse IA",
     "analysisStepSummary": "Génération du résumé",
