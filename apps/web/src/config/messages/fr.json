@@ -334,7 +334,13 @@
   "login": {
     "signingIn": "Connexion en cours...",
     "or": "ou",
-    "backToHome": "Retour à l'accueil"
+    "backToHome": "Retour à l'accueil",
+    "highlightSave": "Enregistrez des articles web en un clic",
+    "highlightAnalyze": "L'IA analyse automatiquement les points clés",
+    "highlightSearch": "Trouvez tout instantanément avec la recherche sémantique",
+    "secureNote": "Connexion sécurisée avec votre compte Google",
+    "signInTitle": "Se connecter",
+    "signInSubtitle": "Connectez-vous pour continuer à enrichir votre bibliothèque de connaissances"
   },
   "continueWithGoogle": "Continuer avec Google",
   "dashboard": {
@@ -372,7 +378,29 @@
       "recentArticlesDescription": "Votre contenu récemment sauvegardé.",
       "noRecentArticles": "Aucun contenu sauvegardé pour l'instant.",
       "viewAll": "Voir tout",
-      "contentTypes": "Types de contenu"
+      "contentTypes": "Types de contenu",
+      "welcomeMessage": "Bon retour sur NOD",
+      "heroTitlePrimary": "Insights de contenu",
+      "heroTitleAccent": "workspace",
+      "heroSubtitle": "Sauvegardez du contenu, résumez-le avec l'IA et connectez les insights plus vite.",
+      "workflowTitle": "Workflow du jour",
+      "workflowStepCapture": "Capturer le contenu",
+      "workflowStepAnalyze": "Analyser les résumés",
+      "workflowStepRefine": "Affiner les insights clés",
+      "keyMetrics": "Indicateurs clés",
+      "storageUnlimited": "Le stockage de contenu est illimité",
+      "usageCalculating": "Calcul de l'utilisation...",
+      "planProActive": "Plan Pro actif",
+      "planFreeActive": "Plan Free actif",
+      "quickActions": "Actions rapides",
+      "getSupport": "Aide",
+      "openUsageGuide": "Ouvrir le guide d'utilisation",
+      "modified": "Modifié",
+      "justNow": "À l'instant",
+      "onboardingTitle": "Terminez votre onboarding !",
+      "onboardingDescription": "Connectez votre extension de navigateur pour commencer à capturer des insights immédiatement.",
+      "onboardingSetupNow": "Configurer maintenant",
+      "closeBanner": "Fermer la bannière"
     },
     "graph": {
       "sectionLabel": "Graphe de connaissances",
@@ -420,6 +448,7 @@
     "markdownNote": "Note",
     "downloadMarkdown": "Télécharger .md",
     "myArticles": "Mon contenu",
+    "articleListSubtitle": "Explorez votre contenu sauvegardé et trouvez rapidement l'insight dont vous avez besoin.",
     "searchArticles": "Rechercher du contenu...",
     "semanticSearch": "Recherche IA",
     "searchMinChars": "Saisissez au moins 2 caractères pour rechercher",
@@ -438,6 +467,7 @@
     "installExtensionCta": "Ajouter à Chrome",
     "loadMore": "Charger plus",
     "noSummary": "Aucun résumé disponible",
+    "openContent": "Ouvrir le contenu",
     "articleNotFound": "Contenu introuvable.",
     "deleteConfirm": "Supprimer ce contenu ?",
     "original": "Original",
@@ -449,6 +479,7 @@
     "analysisStepSummary": "Génération du résumé",
     "analysisDescription": "L'IA lit votre contenu, extrait les concepts clés et génère un résumé structuré. Cela prend généralement entre 30 secondes et 1 minute.",
     "summary": "Résumé",
+    "details": "Détails",
     "readTime": "~{minutes} min de lecture",
     "concepts": "Concepts",
     "keyPoints": "Points clés",
@@ -482,6 +513,7 @@
     },
     "fields": {
       "email": "E-mail",
+      "emailProviderName": "E-mail",
       "authProvider": "Fournisseur d'authentification",
       "subscription": "Abonnement"
     },
@@ -493,7 +525,20 @@
       "terms": "Conditions d'utilisation",
       "privacy": "Politique de confidentialité",
       "refund": "Politique de remboursement"
-    }
+    },
+    "status": {
+      "active": "actif"
+    },
+    "actions": {
+      "changePlan": "Changer de plan",
+      "signOut": "Déconnexion"
+    },
+    "usage": {
+      "title": "Utilisation de l'analyse IA",
+      "currentMonthlyUsage": "Utilisation mensuelle actuelle",
+      "resetHint": "L'utilisation est réinitialisée au début de chaque mois."
+    },
+    "footerTagline": "NOD Labs · Conçu pour les créateurs"
   },
   "subscription": {
     "pricing": "Tarifs",
@@ -504,6 +549,16 @@
     "proPrice": "5 $/mois (taxes incluses)",
     "upgrade": "Passer à Pro",
     "manageBilling": "Gérer la facturation",
+    "backToSettings": "Retour aux paramètres",
+    "billingSubtitle": "Gérez votre abonnement, votre moyen de paiement et votre utilisation au même endroit.",
+    "currentMonthlyAiSummaries": "Résumés IA du mois en cours",
+    "includedInPlan": "Inclus dans votre plan",
+    "billingControls": "Contrôles de facturation",
+    "proUpgradeDescription": "Passez à Pro pour des limites mensuelles plus élevées et des fonctionnalités avancées.",
+    "billingStatus": "Statut de facturation",
+    "planStatus": "Statut du plan",
+    "nextBillingLabel": "Prochaine facturation",
+    "pricingSubtitle": "Choisissez le plan adapté à votre flux créatif.",
     "cancel": "Annuler l'abonnement",
     "cancelConfirm": "Êtes-vous sûr de vouloir annuler votre abonnement ?",
     "usage": "Utilisation",
@@ -563,9 +618,55 @@
       "conceptExtraction": "Inclus"
     }
   },
+  "help": {
+    "centerBadge": "Centre d'aide NOD",
+    "heading": "Démarrer avec NOD",
+    "subtitle": "De la sauvegarde de contenu aux résumés IA et à la gestion du plan, voici les workflows essentiels.",
+    "quickShortcutsTitle": "Raccourcis utiles",
+    "shortcuts": {
+      "articles": "Contenu",
+      "billing": "Facturation",
+      "pricing": "Tarifs",
+      "installExtension": "Installer l'extension"
+    },
+    "faqTitle": "Questions fréquemment posées",
+    "supportTitle": "Support et feedback",
+    "sendFeedback": "Envoyer un feedback",
+    "billingHelp": "Aide à la facturation",
+    "quickStart": {
+      "item1": {
+        "title": "1) Sauvegarder du contenu",
+        "description": "Capturez des articles avec l'extension et gardez tout dans une seule archive."
+      },
+      "item2": {
+        "title": "2) Vérifier les résumés IA",
+        "description": "Chaque élément sauvegardé reçoit un résumé IA avec points clés et notes structurées."
+      },
+      "item3": {
+        "title": "3) Relier les insights",
+        "description": "Regroupez les sujets liés et retrouvez plus vite les connaissances importantes."
+      }
+    },
+    "faq": {
+      "item1": {
+        "q": "Un résumé prend trop de temps.",
+        "a": "Les documents volumineux ou une file d'attente chargée peuvent retarder le traitement. Actualisez après un court instant puis vérifiez le statut du contenu."
+      },
+      "item2": {
+        "q": "L'extension ne fonctionne pas.",
+        "a": "Vérifiez que l'extension Chrome est installée, restez connecté, puis rafraîchissez la page une fois."
+      },
+      "item3": {
+        "q": "Où puis-je gérer la facturation ?",
+        "a": "Ouvrez Paramètres > Facturation pour gérer le paiement et consultez les options du plan sur la page des tarifs."
+      }
+    }
+  },
   "onboarding": {
     "skip": "Passer",
     "progress": "{step}/3",
+    "completionTitle": "Tout est prêt !",
+    "completionSubtitle": "Direction le tableau de bord. Commencez à enrichir votre bibliothèque de connaissances avec NOD.",
     "welcome": {
       "title": "Bienvenue sur NOD",
       "subtitle": "Votre bibliothèque de connaissances propulsée par l'IA",
@@ -577,6 +678,9 @@
     "install": {
       "title": "Installez l'extension Chrome",
       "subtitle": "Enregistrez des articles en un clic depuis n'importe quelle page",
+      "benefitOneClick": "Enregistrez des articles instantanément en un clic",
+      "benefitAutoAnalyze": "L'IA analyse le contenu automatiquement",
+      "benefitAllSites": "Fonctionne sur tous les sites web",
       "installButton": "Installer depuis le Chrome Web Store",
       "confirmButton": "C'est installé",
       "skipLink": "Plus tard"

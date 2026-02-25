@@ -34,27 +34,33 @@ const DETAIL_BG_STYLE: CSSProperties = {
 
 const STATUS_MAP: Record<string, { className: string; labelKey: string }> = {
   pending: {
-    className: "bg-amber-100 text-amber-700 border-amber-300",
+    className:
+      "bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-950/50 dark:text-amber-400 dark:border-amber-700",
     labelKey: "statusPending",
   },
   processing: {
-    className: "bg-blue-100 text-blue-700 border-blue-300",
+    className:
+      "bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-950/50 dark:text-blue-400 dark:border-blue-700",
     labelKey: "statusProcessing",
   },
   analyzing: {
-    className: "bg-blue-100 text-blue-700 border-blue-300",
+    className:
+      "bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-950/50 dark:text-blue-400 dark:border-blue-700",
     labelKey: "statusAnalyzing",
   },
   analyzed: {
-    className: "bg-emerald-100 text-emerald-700 border-emerald-300",
+    className:
+      "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-950/50 dark:text-emerald-400 dark:border-emerald-700",
     labelKey: "statusCompleted",
   },
   completed: {
-    className: "bg-emerald-100 text-emerald-700 border-emerald-300",
+    className:
+      "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-950/50 dark:text-emerald-400 dark:border-emerald-700",
     labelKey: "statusCompleted",
   },
   failed: {
-    className: "bg-red-100 text-red-700 border-red-300",
+    className:
+      "bg-red-100 text-red-700 border-red-300 dark:bg-red-950/50 dark:text-red-400 dark:border-red-700",
     labelKey: "statusFailed",
   },
 };
@@ -73,27 +79,33 @@ const DATE_LOCALE_MAP: Record<string, string> = {
 const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string }> = {
   tech_blog: {
     labelKey: "typeTechBlog",
-    className: "bg-blue-100 text-blue-700 border-blue-300",
+    className:
+      "bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-950/50 dark:text-blue-400 dark:border-blue-700",
   },
   academic_paper: {
     labelKey: "typePaper",
-    className: "bg-purple-100 text-purple-700 border-purple-300",
+    className:
+      "bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-950/50 dark:text-purple-400 dark:border-purple-700",
   },
   general_news: {
     labelKey: "typeNews",
-    className: "bg-gray-100 text-gray-700 border-gray-300",
+    className:
+      "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-950/50 dark:text-gray-400 dark:border-gray-700",
   },
   github_repo: {
     labelKey: "typeGitHub",
-    className: "bg-slate-100 text-slate-700 border-slate-300",
+    className:
+      "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-950/50 dark:text-slate-400 dark:border-slate-700",
   },
   official_docs: {
     labelKey: "typeDocs",
-    className: "bg-teal-100 text-teal-700 border-teal-300",
+    className:
+      "bg-teal-100 text-teal-700 border-teal-300 dark:bg-teal-950/50 dark:text-teal-400 dark:border-teal-700",
   },
   video_podcast: {
     labelKey: "typeVideo",
-    className: "bg-pink-100 text-pink-700 border-pink-300",
+    className:
+      "bg-pink-100 text-pink-700 border-pink-300 dark:bg-pink-950/50 dark:text-pink-400 dark:border-pink-700",
   },
 };
 
@@ -130,11 +142,14 @@ export function ArticleDetail({ id }: { id: string }) {
   if (isLoading) {
     return (
       <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
-        <div className="pointer-events-none absolute inset-0 opacity-65" style={DETAIL_BG_STYLE} />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-65 dark:opacity-30"
+          style={DETAIL_BG_STYLE}
+        />
         <div className="relative space-y-6">
           <Skeleton className="h-8 w-32 bg-cm-text/10" />
 
-          <div className="cm-doodle-border bg-white/92 p-6">
+          <div className="cm-doodle-border bg-white/92 dark:bg-cm-surface/92 p-6">
             <Skeleton className="h-10 w-2/3 bg-cm-text/10" />
             <div className="mt-3 flex gap-2">
               <Skeleton className="h-6 w-20 rounded-full bg-cm-text/10" />
@@ -145,7 +160,7 @@ export function ArticleDetail({ id }: { id: string }) {
             <Skeleton className="mt-2 h-4 w-5/6 bg-cm-text/10" />
           </div>
 
-          <div className="cm-doodle-border bg-white/92 p-6">
+          <div className="cm-doodle-border bg-white/92 dark:bg-cm-surface/92 p-6">
             <Skeleton className="h-6 w-36 bg-cm-text/10" />
             <Skeleton className="mt-4 h-4 w-full bg-cm-text/10" />
             <Skeleton className="mt-2 h-4 w-full bg-cm-text/10" />
@@ -158,7 +173,7 @@ export function ArticleDetail({ id }: { id: string }) {
 
   if (isError || !article) {
     return (
-      <div className="cm-doodle-border border-2 border-red-200 bg-red-50/70 p-8 text-center">
+      <div className="cm-doodle-border border-2 border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-950/30 p-8 text-center">
         <p className="font-creative-body font-black text-red-500">{t("articleNotFound")}</p>
       </div>
     );
@@ -237,7 +252,10 @@ export function ArticleDetail({ id }: { id: string }) {
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
-      <div className="pointer-events-none absolute inset-0 opacity-65" style={DETAIL_BG_STYLE} />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-65 dark:opacity-30"
+        style={DETAIL_BG_STYLE}
+      />
 
       <div className="relative space-y-7">
         <Link
@@ -248,7 +266,7 @@ export function ArticleDetail({ id }: { id: string }) {
           {t("myArticles")}
         </Link>
 
-        <section className="cm-doodle-border cm-sketch-shadow bg-white/95 p-6">
+        <section className="cm-doodle-border cm-sketch-shadow bg-white/95 dark:bg-cm-surface/95 p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
               {isEditingTitle ? (
@@ -280,7 +298,7 @@ export function ArticleDetail({ id }: { id: string }) {
 
               <div className="mt-4 flex flex-wrap items-center gap-2.5 font-creative-body">
                 <span
-                  className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-black ${statusMeta?.className ?? "bg-gray-100 text-gray-700 border-gray-300"}`}
+                  className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-black ${statusMeta?.className ?? "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-950/50 dark:text-gray-400 dark:border-gray-700"}`}
                 >
                   {statusLabel}
                 </span>
@@ -321,7 +339,7 @@ export function ArticleDetail({ id }: { id: string }) {
                   type="button"
                   onClick={restoreOriginalTitle}
                   disabled={updateArticle.isPending}
-                  className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:hover:bg-cm-surface-raised disabled:opacity-50"
                   title={tc("restoreOriginal")}
                 >
                   <RotateCcw className="h-3 w-3" />
@@ -332,7 +350,7 @@ export function ArticleDetail({ id }: { id: string }) {
               <button
                 type="button"
                 onClick={handleDelete}
-                className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-red-200 bg-white px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50"
+                className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-red-200 dark:border-red-800 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 {tc("delete")}
               </button>
@@ -347,7 +365,7 @@ export function ArticleDetail({ id }: { id: string }) {
         {article.summary ? (
           <div className="space-y-5">
             {article.summary.concepts.length > 0 ? (
-              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 p-6">
+              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
                 <h2 className="font-creative-display text-2xl font-black text-cm-text">
                   {t("concepts")}
                 </h2>
@@ -364,7 +382,7 @@ export function ArticleDetail({ id }: { id: string }) {
               </section>
             ) : null}
 
-            <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 p-6">
+            <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
               <h2 className="font-creative-display text-2xl font-black text-cm-text">
                 {t("summary")}
               </h2>
@@ -380,7 +398,7 @@ export function ArticleDetail({ id }: { id: string }) {
             </section>
 
             {article.summary.markdown_note ? (
-              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 p-6">
+              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                   <h2 className="font-creative-display text-2xl font-black text-cm-text">
                     {t("markdownNote")}
@@ -388,7 +406,7 @@ export function ArticleDetail({ id }: { id: string }) {
                   <button
                     type="button"
                     onClick={downloadMarkdown}
-                    className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg"
+                    className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:hover:bg-cm-surface-raised"
                   >
                     {t("downloadMarkdown")}
                   </button>
@@ -398,7 +416,7 @@ export function ArticleDetail({ id }: { id: string }) {
             ) : null}
 
             {article.summary.key_points.length > 0 ? (
-              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 p-6">
+              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
                 <h2 className="font-creative-display text-2xl font-black text-cm-text">
                   {t("keyPoints")}
                 </h2>
@@ -418,7 +436,7 @@ export function ArticleDetail({ id }: { id: string }) {
             {article.summary.content_type &&
             article.summary.type_metadata &&
             Object.keys(article.summary.type_metadata).length > 0 ? (
-              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 p-6">
+              <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
                 <h2 className="font-creative-display text-2xl font-black text-cm-text">
                   {t(
                     (CONTENT_TYPE_STYLES[article.summary.content_type]?.labelKey || "typeNews") as
@@ -429,7 +447,7 @@ export function ArticleDetail({ id }: { id: string }) {
                       | "typeDocs"
                       | "typeVideo"
                   )}{" "}
-                  {locale === "ko" ? "상세" : "Details"}
+                  {t("details")}
                 </h2>
                 <div className="mt-3">
                   <TypeMetadataSection
@@ -468,10 +486,10 @@ function AnalysisProgress({ status }: { status: string }) {
   const activeIndex = status === "pending" ? 0 : status === "processing" ? 1 : 2;
 
   return (
-    <div className="cm-doodle-border border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+    <div className="cm-doodle-border border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 dark:border-blue-800 dark:from-blue-950/30 dark:to-indigo-950/30 p-6">
       <div className="mb-5 flex items-center gap-2">
         <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-        <p className="font-creative-body text-sm font-black text-blue-900">
+        <p className="font-creative-body text-sm font-black text-blue-900 dark:text-blue-300">
           {status === "pending" ? t("pendingAnalysis") : t("analyzingArticle")}
         </p>
       </div>
@@ -490,15 +508,19 @@ function AnalysisProgress({ status }: { status: string }) {
                     isDone
                       ? "bg-blue-600 text-white"
                       : isActive
-                        ? "bg-blue-100 text-blue-700 ring-2 ring-blue-400 ring-offset-2 animate-pulse"
-                        : "bg-gray-100 text-gray-400"
+                        ? "bg-blue-100 text-blue-700 ring-2 ring-blue-400 ring-offset-2 animate-pulse dark:bg-blue-950/50 dark:text-blue-300 dark:ring-blue-500 dark:ring-offset-cm-bg"
+                        : "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
                 <span
                   className={`text-center font-creative-body text-xs font-bold ${
-                    isDone ? "text-blue-700" : isActive ? "text-blue-900" : "text-gray-400"
+                    isDone
+                      ? "text-blue-700 dark:text-blue-400"
+                      : isActive
+                        ? "text-blue-900 dark:text-blue-300"
+                        : "text-gray-400 dark:text-gray-500"
                   }`}
                 >
                   {step.label}
@@ -507,7 +529,7 @@ function AnalysisProgress({ status }: { status: string }) {
               {i < steps.length - 1 ? (
                 <div
                   className={`-mt-5 h-0.5 w-6 shrink-0 rounded-full transition-colors duration-500 ${
-                    isDone ? "bg-blue-400" : "bg-gray-200"
+                    isDone ? "bg-blue-400 dark:bg-blue-600" : "bg-gray-200 dark:bg-gray-700"
                   }`}
                 />
               ) : null}
@@ -516,7 +538,7 @@ function AnalysisProgress({ status }: { status: string }) {
         })}
       </div>
 
-      <p className="mt-5 font-creative-body text-xs font-bold text-blue-700/70">
+      <p className="mt-5 font-creative-body text-xs font-bold text-blue-700/70 dark:text-blue-400/70">
         {t("analysisDescription")}
       </p>
     </div>

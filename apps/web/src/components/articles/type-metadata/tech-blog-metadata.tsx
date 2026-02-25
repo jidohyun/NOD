@@ -16,10 +16,10 @@ export function TechBlogMetadata({ metadata }: Props) {
           <span
             className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
               difficulty === "beginner"
-                ? "bg-green-100 text-green-800"
+                ? "bg-green-100 text-green-800 dark:bg-green-950/50 dark:text-green-400"
                 : difficulty === "advanced"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-yellow-100 text-yellow-800"
+                  ? "bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-400"
+                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-950/50 dark:text-yellow-400"
             }`}
           >
             {difficulty}
@@ -31,7 +31,7 @@ export function TechBlogMetadata({ metadata }: Props) {
           {techStack.map((tech) => (
             <span
               key={tech}
-              className="rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700"
+              className="rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950/50 dark:text-blue-400"
             >
               {tech}
             </span>

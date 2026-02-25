@@ -118,9 +118,7 @@ export function PricingContent() {
           </h1>
           <div className="mx-auto mt-3 h-1.5 w-28 -rotate-1 rounded-full bg-nod-gold/45" />
           <p className="mt-4 font-creative-body text-base italic text-cm-text/65">
-            {locale === "ko"
-              ? "지식 작업 흐름에 맞는 플랜을 선택해보세요."
-              : "Pick the plan that matches your creative workflow."}
+            {t("pricingSubtitle")}
           </p>
         </header>
 
@@ -132,7 +130,7 @@ export function PricingContent() {
             return (
               <article
                 key={plan.name}
-                className={`cm-doodle-border cm-sketch-shadow bg-white/95 p-7 transition-all hover:-translate-y-0.5 ${plan.cardClassName} ${
+                className={`cm-doodle-border cm-sketch-shadow bg-white/95 dark:bg-cm-surface/95 p-7 transition-all hover:-translate-y-0.5 ${plan.cardClassName} ${
                   plan.highlighted ? "border-nod-gold/45" : ""
                 }`}
               >
@@ -198,7 +196,7 @@ export function PricingContent() {
           <h2 className="text-center font-creative-display text-2xl font-black text-cm-text">
             {t("comparisonTitle")}
           </h2>
-          <div className="overflow-hidden cm-doodle-border bg-white/95 p-2">
+          <div className="overflow-hidden cm-doodle-border bg-white/95 dark:bg-cm-surface/95 p-2">
             <table className="w-full rounded-xl overflow-hidden">
               <thead>
                 <tr className="border-b border-dashed border-cm-text/20 bg-cm-bg/70">
@@ -243,7 +241,10 @@ export function PricingContent() {
           </h2>
           <div className="mx-auto max-w-3xl space-y-3">
             {faqItems.map((item) => (
-              <div key={item.q} className="cm-doodle-border bg-white/95 px-5 py-4">
+              <div
+                key={item.q}
+                className="cm-doodle-border bg-white/95 dark:bg-cm-surface/95 px-5 py-4"
+              >
                 <button
                   type="button"
                   onClick={() => setOpenFaqKey(openFaqKey === item.q ? null : item.q)}

@@ -31,6 +31,17 @@ const descriptions: Record<string, string> = {
   fr: "Comparez les meilleurs outils de résumé d'articles pour 2026. Découvrez lequel vous fait gagner le plus de temps.",
 };
 
+const breadcrumbLabels: Record<string, string> = {
+  en: "Best Article Summarizer",
+  ko: "아티클 요약 도구 비교",
+  ja: "記事要約ツール比較",
+  es: "Best Article Summarizer",
+  "pt-BR": "Best Article Summarizer",
+  "zh-CN": "Best Article Summarizer",
+  de: "Best Article Summarizer",
+  fr: "Best Article Summarizer",
+};
+
 export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { locale } = await params;
   const title = titles[locale] || titles.en;
@@ -102,11 +113,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {locale === "ko"
-                ? "아티클 요약 도구 비교"
-                : locale === "ja"
-                  ? "記事要約ツール比較"
-                  : "Best Article Summarizer"}
+              {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
           </li>

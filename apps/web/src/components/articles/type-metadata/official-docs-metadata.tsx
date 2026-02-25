@@ -17,7 +17,7 @@ export function OfficialDocsMetadata({ metadata }: Props) {
       {versionInfo ? (
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground">Version:</span>
-          <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
+          <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
             {versionInfo}
           </span>
         </div>
@@ -29,7 +29,10 @@ export function OfficialDocsMetadata({ metadata }: Props) {
           </h4>
           <div className="flex flex-wrap gap-1.5">
             {apiHighlights.map((api) => (
-              <code key={api} className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono">
+              <code
+                key={api}
+                className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono dark:bg-gray-800 dark:text-gray-300"
+              >
                 {api}
               </code>
             ))}
@@ -57,7 +60,10 @@ export function OfficialDocsMetadata({ metadata }: Props) {
           </h4>
           <div className="flex flex-wrap gap-1.5">
             {relatedTopics.map((topic) => (
-              <span key={topic} className="rounded-full bg-secondary px-2.5 py-0.5 text-xs">
+              <span
+                key={topic}
+                className="rounded-full bg-secondary px-2.5 py-0.5 text-xs dark:bg-gray-800 dark:text-gray-300"
+              >
                 {topic}
               </span>
             ))}

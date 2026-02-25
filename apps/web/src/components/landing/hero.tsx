@@ -146,12 +146,12 @@ export function LandingHero() {
               </button>
             </div>
 
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 backdrop-blur-sm">
+            {/*<div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 backdrop-blur-sm">
               <span className="h-2 w-2 cm-organic-shape bg-emerald-500" />
               <span className="font-creative-body text-xs font-semibold text-cm-text/60">
                 {t("trustedBy")}
               </span>
-            </div>
+            </div>*/}
           </div>
         </div>
       </div>

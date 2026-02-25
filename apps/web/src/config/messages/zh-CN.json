@@ -334,7 +334,13 @@
   "login": {
     "signingIn": "登录中...",
     "or": "或",
-    "backToHome": "返回首页"
+    "backToHome": "返回首页",
+    "highlightSave": "一键保存网页文章",
+    "highlightAnalyze": "AI 自动分析核心内容",
+    "highlightSearch": "语义搜索即刻找到所需内容",
+    "secureNote": "通过 Google 账号安全登录",
+    "signInTitle": "登录",
+    "signInSubtitle": "登录以继续构建你的知识库"
   },
   "continueWithGoogle": "使用 Google 继续",
   "dashboard": {
@@ -372,7 +378,29 @@
       "recentArticlesDescription": "您最近保存的内容。",
       "noRecentArticles": "还没有保存的内容。",
       "viewAll": "查看全部",
-      "contentTypes": "内容类型"
+      "contentTypes": "内容类型",
+      "welcomeMessage": "欢迎回到 NOD",
+      "heroTitlePrimary": "内容洞察",
+      "heroTitleAccent": "工作台",
+      "heroSubtitle": "保存内容，用 AI 总结，并更快连接关键洞察。",
+      "workflowTitle": "今日工作流",
+      "workflowStepCapture": "收集内容",
+      "workflowStepAnalyze": "分析摘要",
+      "workflowStepRefine": "整理关键洞察",
+      "keyMetrics": "关键指标",
+      "storageUnlimited": "内容保存不限量",
+      "usageCalculating": "正在计算使用量...",
+      "planProActive": "Pro 方案已激活",
+      "planFreeActive": "当前使用 Free 方案",
+      "quickActions": "快捷操作",
+      "getSupport": "帮助",
+      "openUsageGuide": "打开使用指南",
+      "modified": "更新于",
+      "justNow": "刚刚",
+      "onboardingTitle": "完成你的新手引导！",
+      "onboardingDescription": "连接浏览器扩展后即可立即开始采集洞察。",
+      "onboardingSetupNow": "立即设置",
+      "closeBanner": "关闭横幅"
     },
     "graph": {
       "sectionLabel": "知识图谱",
@@ -420,6 +448,7 @@
     "markdownNote": "笔记",
     "downloadMarkdown": "下载 .md",
     "myArticles": "我的内容",
+    "articleListSubtitle": "浏览你保存的内容，快速找到所需洞察。",
     "searchArticles": "搜索内容...",
     "semanticSearch": "AI 搜索",
     "searchMinChars": "请输入至少 2 个字符进行搜索",
@@ -438,6 +467,7 @@
     "installExtensionCta": "添加到 Chrome",
     "loadMore": "加载更多",
     "noSummary": "暂无摘要",
+    "openContent": "打开内容",
     "articleNotFound": "未找到内容。",
     "deleteConfirm": "删除此内容？",
     "original": "原文",
@@ -449,6 +479,7 @@
     "analysisStepSummary": "生成摘要",
     "analysisDescription": "AI 读取您的内容、提取关键概念并生成结构化摘要。通常需要 30 秒到 1 分钟。",
     "summary": "摘要",
+    "details": "详情",
     "readTime": "约 {minutes} 分钟阅读",
     "concepts": "概念",
     "keyPoints": "关键要点",
@@ -482,6 +513,7 @@
     },
     "fields": {
       "email": "电子邮件",
+      "emailProviderName": "邮箱",
       "authProvider": "身份验证提供商",
       "subscription": "订阅"
     },
@@ -493,7 +525,20 @@
       "terms": "服务条款",
       "privacy": "隐私政策",
       "refund": "退款政策"
-    }
+    },
+    "status": {
+      "active": "激活"
+    },
+    "actions": {
+      "changePlan": "更改方案",
+      "signOut": "退出登录"
+    },
+    "usage": {
+      "title": "AI 分析使用量",
+      "currentMonthlyUsage": "本月使用量",
+      "resetHint": "使用量会在每月月初重置。"
+    },
+    "footerTagline": "NOD Labs · 为创作者打造"
   },
   "subscription": {
     "pricing": "定价",
@@ -504,6 +549,16 @@
     "proPrice": "$5/月（含税）",
     "upgrade": "升级到 Pro",
     "manageBilling": "管理账单",
+    "backToSettings": "返回设置",
+    "billingSubtitle": "在一个页面中管理你的订阅、支付方式和使用量。",
+    "currentMonthlyAiSummaries": "本月 AI 摘要使用量",
+    "includedInPlan": "当前方案包含功能",
+    "billingControls": "账单控制",
+    "proUpgradeDescription": "升级到 Pro 以获得更高月度额度和高级功能。",
+    "billingStatus": "账单状态",
+    "planStatus": "方案状态",
+    "nextBillingLabel": "下次扣费",
+    "pricingSubtitle": "选择最适合你知识工作流程的方案。",
     "cancel": "取消订阅",
     "cancelConfirm": "确定要取消订阅吗？",
     "usage": "使用量",
@@ -563,9 +618,55 @@
       "conceptExtraction": "包含"
     }
   },
+  "help": {
+    "centerBadge": "NOD 帮助中心",
+    "heading": "快速开始使用 NOD",
+    "subtitle": "从保存内容到查看 AI 摘要和管理方案，这里是最核心的使用流程。",
+    "quickShortcutsTitle": "常用快捷入口",
+    "shortcuts": {
+      "articles": "内容",
+      "billing": "账单",
+      "pricing": "定价",
+      "installExtension": "安装扩展"
+    },
+    "faqTitle": "常见问题",
+    "supportTitle": "支持与反馈",
+    "sendFeedback": "发送反馈",
+    "billingHelp": "账单帮助",
+    "quickStart": {
+      "item1": {
+        "title": "1) 保存内容",
+        "description": "通过扩展保存文章，把所有内容集中到一个归档中。"
+      },
+      "item2": {
+        "title": "2) 查看 AI 摘要",
+        "description": "每条已保存内容都会生成 AI 摘要，并附带关键要点和结构化笔记。"
+      },
+      "item3": {
+        "title": "3) 连接洞察",
+        "description": "将相关主题串联起来，更快找回重要知识。"
+      }
+    },
+    "faq": {
+      "item1": {
+        "q": "摘要生成太慢怎么办？",
+        "a": "较长文档或队列繁忙时会延迟。请稍后刷新，并再次检查内容状态。"
+      },
+      "item2": {
+        "q": "扩展无法使用怎么办？",
+        "a": "请确认已安装 Chrome 扩展、保持登录状态，并刷新页面一次。"
+      },
+      "item3": {
+        "q": "在哪里管理账单？",
+        "a": "打开“设置 > 账单”管理支付信息，并在定价页面查看方案选项。"
+      }
+    }
+  },
   "onboarding": {
     "skip": "跳过",
     "progress": "{step}/3",
+    "completionTitle": "准备就绪！",
+    "completionSubtitle": "正在跳转到仪表盘。开始用 NOD 构建你的知识库吧。",
     "welcome": {
       "title": "欢迎使用 NOD",
       "subtitle": "AI 驱动的个人知识库",
@@ -577,6 +678,9 @@
     "install": {
       "title": "安装 Chrome 扩展程序",
       "subtitle": "在任何页面一键保存文章",
+      "benefitOneClick": "一键即刻保存文章",
+      "benefitAutoAnalyze": "保存时 AI 自动分析内容",
+      "benefitAllSites": "支持所有网站",
       "installButton": "从 Chrome 网上应用店安装",
       "confirmButton": "我已安装",
       "skipLink": "稍后再说"

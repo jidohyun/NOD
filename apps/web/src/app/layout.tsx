@@ -5,6 +5,7 @@ import Script from "next/script";
 import { getLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { GaPageView } from "@/components/analytics/ga-page-view";
+import { ThemeRouteSync } from "@/components/theme/theme-route-sync";
 import "./globals.css";
 
 const inter = Inter({
@@ -37,7 +38,7 @@ const quicksand = Quicksand({
   display: "swap",
 });
 
-const themeInitScript = `(function(){try{var key='nod_web_theme';var stored=localStorage.getItem(key);var theme=stored==='light'||stored==='dark'?stored:'dark';var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(theme);}catch(_e){document.documentElement.classList.add('dark');}})();`;
+const themeInitScript = `(function(){try{var key='nod_web_theme';var path=window.location.pathname||'/';var normalized=(path.replace(/^/[a-z]{2}(?:-[A-Za-z]{2})?(?=/|$)/,'')||'/');var isLanding=normalized==='/'||normalized==='';var stored=localStorage.getItem(key);var system=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var preferred=stored==='light'||stored==='dark'?stored:system;var theme=isLanding?'light':preferred;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(theme);root.style.colorScheme=theme;}catch(_e){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light';}})();`;
 
 export const metadata: Metadata = {
   title: "NOD — Your AI-Powered Second Brain",
@@ -68,13 +69,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang={locale} className="dark" suppressHydrationWarning>
+    <html lang={locale} className="light" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} ${fredoka.variable} ${quicksand.variable}`}
       >
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
         </Script>
+        <ThemeRouteSync />
         {children}
         {gaId ? <GaPageView gaId={gaId} /> : null}
         {gaId ? <GoogleAnalytics gaId={gaId} /> : null}

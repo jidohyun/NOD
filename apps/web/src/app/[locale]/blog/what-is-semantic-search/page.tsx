@@ -31,6 +31,17 @@ const descriptions: Record<string, string> = {
   fr: "Découvrez ce qu'est la recherche sémantique, comment elle fonctionne et pourquoi elle remplace la recherche par mots-clés.",
 };
 
+const breadcrumbLabels: Record<string, string> = {
+  en: "What Is Semantic Search",
+  ko: "시맨틱 검색이란",
+  ja: "セマンティック検索とは",
+  es: "What Is Semantic Search",
+  "pt-BR": "What Is Semantic Search",
+  "zh-CN": "What Is Semantic Search",
+  de: "What Is Semantic Search",
+  fr: "What Is Semantic Search",
+};
+
 // SEO Metadata
 export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { locale } = await params;
@@ -100,11 +111,7 @@ export default async function SemanticSearchPost({ params }: BlogPostProps) {
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {locale === "ko"
-                ? "시맨틱 검색이란"
-                : locale === "ja"
-                  ? "セマンティック検索とは"
-                  : "What Is Semantic Search"}
+              {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
           </li>

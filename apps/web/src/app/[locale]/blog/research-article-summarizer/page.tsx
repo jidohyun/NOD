@@ -31,6 +31,17 @@ const descriptions: Record<string, string> = {
   fr: "Résumez des articles de recherche avec l'IA. Comparez les meilleurs outils pour étudiants, chercheurs et professionnels.",
 };
 
+const breadcrumbLabels: Record<string, string> = {
+  en: "Research Article Summarizer",
+  ko: "연구 논문 요약 도구",
+  ja: "研究論文要約ツール",
+  es: "Research Article Summarizer",
+  "pt-BR": "Research Article Summarizer",
+  "zh-CN": "Research Article Summarizer",
+  de: "Research Article Summarizer",
+  fr: "Research Article Summarizer",
+};
+
 export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { locale } = await params;
   const title = titles[locale] || titles.en;
@@ -101,11 +112,7 @@ export default async function ResearchArticleSummarizerPost({ params }: BlogPost
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {locale === "ko"
-                ? "연구 논문 요약 도구"
-                : locale === "ja"
-                  ? "研究論文要約ツール"
-                  : "Research Article Summarizer"}
+              {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
           </li>

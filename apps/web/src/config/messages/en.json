@@ -334,7 +334,13 @@
   "login": {
     "signingIn": "Signing in...",
     "or": "or",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "highlightSave": "Save web articles with one click",
+    "highlightAnalyze": "AI automatically analyzes key insights",
+    "highlightSearch": "Find anything instantly with semantic search",
+    "secureNote": "Securely signed in with your Google account",
+    "signInTitle": "Sign in",
+    "signInSubtitle": "Sign in to continue building your knowledge library"
   },
   "continueWithGoogle": "Continue with Google",
   "dashboard": {
@@ -372,7 +378,29 @@
       "recentArticlesDescription": "Your recently saved content.",
       "noRecentArticles": "No content saved yet.",
       "viewAll": "View All",
-      "contentTypes": "Content Types"
+      "contentTypes": "Content Types",
+      "welcomeMessage": "Welcome back to NOD",
+      "heroTitlePrimary": "Content Insight",
+      "heroTitleAccent": "Workspace",
+      "heroSubtitle": "Save content, summarize with AI, and connect insights faster.",
+      "workflowTitle": "Today workflow",
+      "workflowStepCapture": "Capture content",
+      "workflowStepAnalyze": "Analyze summaries",
+      "workflowStepRefine": "Refine key insights",
+      "keyMetrics": "Key Metrics",
+      "storageUnlimited": "Content storage is unlimited",
+      "usageCalculating": "Calculating usage...",
+      "planProActive": "Pro plan active",
+      "planFreeActive": "Using Free plan",
+      "quickActions": "Quick Actions",
+      "getSupport": "Get Support",
+      "openUsageGuide": "Open usage guide",
+      "modified": "Modified",
+      "justNow": "Just now",
+      "onboardingTitle": "Finish your onboarding!",
+      "onboardingDescription": "Connect your browser extension to start capturing insights instantly.",
+      "onboardingSetupNow": "Setup now",
+      "closeBanner": "Close banner"
     },
     "graph": {
       "sectionLabel": "Knowledge Graph",
@@ -420,6 +448,7 @@
     "markdownNote": "Note",
     "downloadMarkdown": "Download .md",
     "myArticles": "My Content",
+    "articleListSubtitle": "Explore your saved content and quickly find the insight you need.",
     "searchArticles": "Search content...",
     "semanticSearch": "AI Search",
     "searchMinChars": "Type at least 2 characters to search",
@@ -438,6 +467,7 @@
     "installExtensionCta": "Add to Chrome",
     "loadMore": "Load more",
     "noSummary": "No summary available",
+    "openContent": "Open content",
     "articleNotFound": "Content not found.",
     "deleteConfirm": "Delete this content?",
     "original": "Original",
@@ -449,6 +479,7 @@
     "analysisStepSummary": "Generating summary",
     "analysisDescription": "AI reads your content, extracts key concepts, and generates a structured summary. This usually takes 30 seconds to 1 minute.",
     "summary": "Summary",
+    "details": "Details",
     "readTime": "~{minutes} min read",
     "concepts": "Concepts",
     "keyPoints": "Key Points",
@@ -482,6 +513,7 @@
     },
     "fields": {
       "email": "Email",
+      "emailProviderName": "Email",
       "authProvider": "Auth Provider",
       "subscription": "Subscription"
     },
@@ -493,7 +525,20 @@
       "terms": "Terms of Service",
       "privacy": "Privacy Policy",
       "refund": "Refund Policy"
-    }
+    },
+    "status": {
+      "active": "active"
+    },
+    "actions": {
+      "changePlan": "Change Plan",
+      "signOut": "Sign Out"
+    },
+    "usage": {
+      "title": "AI Analysis Usage",
+      "currentMonthlyUsage": "Current monthly usage",
+      "resetHint": "Usage resets monthly at the beginning of each month."
+    },
+    "footerTagline": "NOD Labs · Handcrafted for Creatives"
   },
   "subscription": {
     "pricing": "Pricing",
@@ -504,6 +549,16 @@
     "proPrice": "$5/mo (tax included)",
     "upgrade": "Upgrade to Pro",
     "manageBilling": "Manage Billing",
+    "backToSettings": "Back to settings",
+    "billingSubtitle": "Manage your subscription, payment method, and usage in one place.",
+    "currentMonthlyAiSummaries": "Current monthly AI summaries",
+    "includedInPlan": "Included in your plan",
+    "billingControls": "Billing Controls",
+    "proUpgradeDescription": "Upgrade to Pro for higher monthly limits and advanced features.",
+    "billingStatus": "Billing Status",
+    "planStatus": "Plan status",
+    "nextBillingLabel": "Next billing",
+    "pricingSubtitle": "Pick the plan that matches your creative workflow.",
     "cancel": "Cancel Subscription",
     "cancelConfirm": "Are you sure you want to cancel your subscription?",
     "usage": "Usage",
@@ -563,9 +618,55 @@
       "conceptExtraction": "Included"
     }
   },
+  "help": {
+    "centerBadge": "NOD Help Center",
+    "heading": "Get Started with NOD",
+    "subtitle": "From saving content to AI summaries and plan management, here are the essential workflows.",
+    "quickShortcutsTitle": "Useful Shortcuts",
+    "shortcuts": {
+      "articles": "Articles",
+      "billing": "Billing",
+      "pricing": "Pricing",
+      "installExtension": "Install Extension"
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "supportTitle": "Support & Feedback",
+    "sendFeedback": "Send Feedback",
+    "billingHelp": "Billing Help",
+    "quickStart": {
+      "item1": {
+        "title": "1) Save content",
+        "description": "Capture articles with the extension and keep everything in one archive."
+      },
+      "item2": {
+        "title": "2) Review AI summaries",
+        "description": "Each saved item gets an AI summary with key points and structured notes."
+      },
+      "item3": {
+        "title": "3) Connect insights",
+        "description": "Group related topics and retrieve important knowledge faster."
+      }
+    },
+    "faq": {
+      "item1": {
+        "q": "A summary is taking too long.",
+        "a": "Large documents or busy queues can delay processing. Refresh after a short wait and check the article status again."
+      },
+      "item2": {
+        "q": "The extension is not working.",
+        "a": "Make sure the Chrome extension is installed, stay logged in, and refresh the page once."
+      },
+      "item3": {
+        "q": "Where can I manage billing?",
+        "a": "Open Settings > Billing to manage payment details, and view plan options on the pricing page."
+      }
+    }
+  },
   "onboarding": {
     "skip": "Skip",
     "progress": "{step}/3",
+    "completionTitle": "You're all set!",
+    "completionSubtitle": "Heading to your dashboard. Start building your knowledge library with NOD.",
     "welcome": {
       "title": "Welcome to NOD",
       "subtitle": "Your AI-powered knowledge library",
@@ -577,6 +678,9 @@
     "install": {
       "title": "Install the Chrome Extension",
       "subtitle": "Save articles with a single click from any page",
+      "benefitOneClick": "Save articles instantly with one click",
+      "benefitAutoAnalyze": "AI analyzes content automatically on save",
+      "benefitAllSites": "Works on any website",
       "installButton": "Install from Chrome Web Store",
       "confirmButton": "I've installed it",
       "skipLink": "I'll do this later"

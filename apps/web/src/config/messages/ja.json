@@ -334,7 +334,13 @@
   "login": {
     "signingIn": "ログイン中...",
     "or": "または",
-    "backToHome": "ホームに戻る"
+    "backToHome": "ホームに戻る",
+    "highlightSave": "ワンクリックでウェブ記事を保存",
+    "highlightAnalyze": "AIが自動で重要なインサイトを分析",
+    "highlightSearch": "セマンティック検索ですぐに見つかる",
+    "secureNote": "Googleアカウントで安全にログイン",
+    "signInTitle": "ログイン",
+    "signInSubtitle": "ログインしてナレッジライブラリを続けましょう"
   },
   "continueWithGoogle": "Googleで続ける",
   "dashboard": {
@@ -372,7 +378,29 @@
       "recentArticlesDescription": "最近保存したコンテンツです。",
       "noRecentArticles": "まだコンテンツがありません。",
       "viewAll": "すべて見る",
-      "contentTypes": "コンテンツタイプ"
+      "contentTypes": "コンテンツタイプ",
+      "welcomeMessage": "NODへようこそ",
+      "heroTitlePrimary": "コンテンツインサイト",
+      "heroTitleAccent": "ワークスペース",
+      "heroSubtitle": "保存したコンテンツをAIで要約し、主要インサイトをすばやくつなげましょう。",
+      "workflowTitle": "今日のワークフロー",
+      "workflowStepCapture": "コンテンツ収集",
+      "workflowStepAnalyze": "要約分析",
+      "workflowStepRefine": "主要インサイト整理",
+      "keyMetrics": "主要指標",
+      "storageUnlimited": "コンテンツ保存は無制限",
+      "usageCalculating": "使用量を計算中...",
+      "planProActive": "Proプラン利用中",
+      "planFreeActive": "Freeプラン利用中",
+      "quickActions": "クイックアクション",
+      "getSupport": "ヘルプ",
+      "openUsageGuide": "利用ガイドを開く",
+      "modified": "更新",
+      "justNow": "たった今",
+      "onboardingTitle": "オンボーディングを完了しましょう！",
+      "onboardingDescription": "ブラウザ拡張機能を接続して、すぐにインサイト収集を始めましょう。",
+      "onboardingSetupNow": "今すぐ設定",
+      "closeBanner": "バナーを閉じる"
     },
     "graph": {
       "sectionLabel": "ナレッジグラフ",
@@ -420,6 +448,7 @@
     "markdownNote": "ノート",
     "downloadMarkdown": ".mdをダウンロード",
     "myArticles": "マイコンテンツ",
+    "articleListSubtitle": "保存したコンテンツを探索し、必要なインサイトを素早く見つけましょう。",
     "searchArticles": "コンテンツを検索...",
     "semanticSearch": "AI検索",
     "searchMinChars": "2文字以上入力してください",
@@ -438,6 +467,7 @@
     "installExtensionCta": "Chromeに追加",
     "loadMore": "もっと見る",
     "noSummary": "要約なし",
+    "openContent": "コンテンツを開く",
     "articleNotFound": "コンテンツが見つかりません。",
     "deleteConfirm": "このコンテンツを削除しますか？",
     "original": "原文を見る",
@@ -449,6 +479,7 @@
     "analysisStepSummary": "要約生成",
     "analysisDescription": "AIがコンテンツを読み、主要な概念を抽出し、構造化された要約を生成します。通常30秒〜1分かかります。",
     "summary": "要約",
+    "details": "詳細",
     "readTime": "約{minutes}分",
     "concepts": "キーコンセプト",
     "keyPoints": "主要ポイント",
@@ -482,6 +513,7 @@
     },
     "fields": {
       "email": "メール",
+      "emailProviderName": "メール",
       "authProvider": "認証プロバイダー",
       "subscription": "サブスクリプション"
     },
@@ -493,7 +525,20 @@
       "terms": "利用規約",
       "privacy": "プライバシーポリシー",
       "refund": "返金ポリシー"
-    }
+    },
+    "status": {
+      "active": "有効"
+    },
+    "actions": {
+      "changePlan": "プラン変更",
+      "signOut": "ログアウト"
+    },
+    "usage": {
+      "title": "AI分析の使用量",
+      "currentMonthlyUsage": "今月の使用量",
+      "resetHint": "月次使用量は毎月1日にリセットされます。"
+    },
+    "footerTagline": "NOD Labs · クリエイターのためのワークスペース"
   },
   "subscription": {
     "pricing": "料金プラン",
@@ -504,6 +549,16 @@
     "proPrice": "$5/月（税込）",
     "upgrade": "Proにアップグレード",
     "manageBilling": "請求管理",
+    "backToSettings": "設定に戻る",
+    "billingSubtitle": "サブスクリプション、支払い方法、使用量を一箇所で管理できます。",
+    "currentMonthlyAiSummaries": "今月のAI要約使用量",
+    "includedInPlan": "現在のプランに含まれる機能",
+    "billingControls": "請求コントロール",
+    "proUpgradeDescription": "より高い月間上限と高度な機能のためにProへアップグレードしましょう。",
+    "billingStatus": "請求ステータス",
+    "planStatus": "プランの状態",
+    "nextBillingLabel": "次回請求",
+    "pricingSubtitle": "あなたの知的ワークフローに合ったプランを選びましょう。",
     "cancel": "サブスクリプションをキャンセル",
     "cancelConfirm": "サブスクリプションをキャンセルしますか？",
     "usage": "使用量",
@@ -563,9 +618,55 @@
       "conceptExtraction": "対応"
     }
   },
+  "help": {
+    "centerBadge": "NOD ヘルプセンター",
+    "heading": "NOD スタートガイド",
+    "subtitle": "コンテンツ保存からAI要約確認、プラン管理まで、主要な流れをまとめました。",
+    "quickShortcutsTitle": "よく使うショートカット",
+    "shortcuts": {
+      "articles": "コンテンツ",
+      "billing": "請求管理",
+      "pricing": "料金プラン",
+      "installExtension": "拡張機能をインストール"
+    },
+    "faqTitle": "よくある質問",
+    "supportTitle": "サポートとフィードバック",
+    "sendFeedback": "フィードバックを送る",
+    "billingHelp": "請求に関するヘルプ",
+    "quickStart": {
+      "item1": {
+        "title": "1) コンテンツを保存",
+        "description": "拡張機能で記事を保存して、すべてを1つのアーカイブにまとめましょう。"
+      },
+      "item2": {
+        "title": "2) AI要約を確認",
+        "description": "保存した各コンテンツに、主要ポイントと構造化ノート付きのAI要約が付きます。"
+      },
+      "item3": {
+        "title": "3) インサイトを接続",
+        "description": "関連トピックをまとめて、必要な知識をより速く取り出せます。"
+      }
+    },
+    "faq": {
+      "item1": {
+        "q": "要約に時間がかかります。",
+        "a": "長い文書や混雑したキューでは処理が遅れることがあります。少し待ってから更新し、記事の状態を再確認してください。"
+      },
+      "item2": {
+        "q": "拡張機能が動作しません。",
+        "a": "Chrome拡張機能がインストールされているか確認し、ログイン状態を維持したままページを一度更新してください。"
+      },
+      "item3": {
+        "q": "請求はどこで管理できますか？",
+        "a": "支払い情報は「設定 > 請求管理」で管理でき、プランの詳細は料金ページで確認できます。"
+      }
+    }
+  },
   "onboarding": {
     "skip": "スキップ",
     "progress": "{step}/3",
+    "completionTitle": "準備完了！",
+    "completionSubtitle": "ダッシュボードへ移動します。NODでナレッジを蓄えましょう。",
     "welcome": {
       "title": "NODへようこそ",
       "subtitle": "AIが分析するあなただけのナレッジライブラリ",
@@ -577,6 +678,9 @@
     "install": {
       "title": "Chrome拡張機能をインストール",
       "subtitle": "どのページからもワンクリックで記事を保存できます",
+      "benefitOneClick": "ワンクリックで記事を即座に保存",
+      "benefitAutoAnalyze": "保存と同時にAIが自動分析",
+      "benefitAllSites": "すべてのウェブサイトで利用可能",
       "installButton": "Chrome Web Storeからインストール",
       "confirmButton": "インストールしました",
       "skipLink": "後でやります"

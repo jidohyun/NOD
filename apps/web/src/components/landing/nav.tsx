@@ -174,7 +174,7 @@ export function LandingNav() {
             </Link>
             <Link
               href="/login"
-              className="group inline-flex items-center gap-1.5 cm-doodle-border bg-cm-mint px-5 py-2 font-creative-body text-sm font-bold text-cm-text transition-all hover:bg-nod-gold hover:text-white"
+              className="group inline-flex items-center gap-1.5 cm-doodle-border text-white bg-nod-gold px-5 py-2 font-creative-body text-sm font-bold transition-all"
             >
               {t("getStarted")}
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -253,7 +253,7 @@ export function LandingNav() {
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-1.5 cm-doodle-border bg-cm-mint px-5 py-2.5 font-creative-body text-sm font-bold text-cm-text"
+                className="inline-flex items-center justify-center gap-1.5 cm-doodle-border border-cm-text/25 bg-[#f4ecd9] px-5 py-2.5 font-creative-body text-sm font-bold text-cm-text transition-colors hover:bg-[#ead9b2]"
               >
                 {t("getStarted")}
                 <ArrowRight className="w-3.5 h-3.5" />

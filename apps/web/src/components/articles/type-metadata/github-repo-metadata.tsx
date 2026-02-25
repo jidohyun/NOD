@@ -19,7 +19,7 @@ export function GitHubRepoMetadata({ metadata }: Props) {
           {techStack.map((tech) => (
             <span
               key={tech}
-              className="rounded bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700"
+              className="rounded bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-950/50 dark:text-purple-400"
             >
               {tech}
             </span>
