@@ -334,7 +334,13 @@
   "login": {
     "signingIn": "Anmeldung läuft...",
     "or": "oder",
-    "backToHome": "Zurück zur Startseite"
+    "backToHome": "Zurück zur Startseite",
+    "highlightSave": "Webartikel mit einem Klick speichern",
+    "highlightAnalyze": "KI analysiert automatisch die wichtigsten Erkenntnisse",
+    "highlightSearch": "Alles sofort mit semantischer Suche finden",
+    "secureNote": "Sicher angemeldet mit deinem Google-Konto",
+    "signInTitle": "Anmelden",
+    "signInSubtitle": "Melde dich an, um deine Wissensbibliothek weiterzubauen"
   },
   "continueWithGoogle": "Mit Google fortfahren",
   "dashboard": {
@@ -372,7 +378,29 @@
       "recentArticlesDescription": "Ihre zuletzt gespeicherten Inhalte.",
       "noRecentArticles": "Noch keine Inhalte gespeichert.",
       "viewAll": "Alle anzeigen",
-      "contentTypes": "Inhaltstypen"
+      "contentTypes": "Inhaltstypen",
+      "welcomeMessage": "Willkommen zurück bei NOD",
+      "heroTitlePrimary": "Content Insights",
+      "heroTitleAccent": "Workspace",
+      "heroSubtitle": "Speichern Sie Inhalte, lassen Sie sie mit KI zusammenfassen und verknüpfen Sie Erkenntnisse schneller.",
+      "workflowTitle": "Heutiger Workflow",
+      "workflowStepCapture": "Inhalte erfassen",
+      "workflowStepAnalyze": "Zusammenfassungen analysieren",
+      "workflowStepRefine": "Schlüsselerkenntnisse schärfen",
+      "keyMetrics": "Wichtige Kennzahlen",
+      "storageUnlimited": "Inhaltsspeicher ist unbegrenzt",
+      "usageCalculating": "Nutzung wird berechnet...",
+      "planProActive": "Pro-Plan aktiv",
+      "planFreeActive": "Free-Plan aktiv",
+      "quickActions": "Schnellaktionen",
+      "getSupport": "Hilfe",
+      "openUsageGuide": "Nutzungsanleitung öffnen",
+      "modified": "Geändert",
+      "justNow": "Gerade eben",
+      "onboardingTitle": "Schließen Sie Ihr Onboarding ab!",
+      "onboardingDescription": "Verbinden Sie Ihre Browser-Erweiterung, um sofort Erkenntnisse zu erfassen.",
+      "onboardingSetupNow": "Jetzt einrichten",
+      "closeBanner": "Banner schließen"
     },
     "graph": {
       "sectionLabel": "Wissensgraph",
@@ -420,6 +448,7 @@
     "markdownNote": "Notiz",
     "downloadMarkdown": "Als .md herunterladen",
     "myArticles": "Meine Inhalte",
+    "articleListSubtitle": "Durchsuchen Sie Ihre gespeicherten Inhalte und finden Sie schnell die benötigten Erkenntnisse.",
     "searchArticles": "Inhalte durchsuchen...",
     "semanticSearch": "KI-Suche",
     "searchMinChars": "Mindestens 2 Zeichen für die Suche eingeben",
@@ -438,6 +467,7 @@
     "installExtensionCta": "Zu Chrome hinzufügen",
     "loadMore": "Mehr laden",
     "noSummary": "Keine Zusammenfassung verfügbar",
+    "openContent": "Inhalt öffnen",
     "articleNotFound": "Inhalt nicht gefunden.",
     "deleteConfirm": "Diesen Inhalt löschen?",
     "original": "Original",
@@ -449,6 +479,7 @@
     "analysisStepSummary": "Zusammenfassung wird erstellt",
     "analysisDescription": "KI liest Ihren Inhalt, extrahiert Schlüsselkonzepte und erstellt eine strukturierte Zusammenfassung. Dies dauert in der Regel 30 Sekunden bis 1 Minute.",
     "summary": "Zusammenfassung",
+    "details": "Details",
     "readTime": "~{minutes} Min. Lesezeit",
     "concepts": "Konzepte",
     "keyPoints": "Kernpunkte",
@@ -482,6 +513,7 @@
     },
     "fields": {
       "email": "E-Mail",
+      "emailProviderName": "E-Mail",
       "authProvider": "Authentifizierungsanbieter",
       "subscription": "Abonnement"
     },
@@ -493,7 +525,20 @@
       "terms": "Nutzungsbedingungen",
       "privacy": "Datenschutzerklärung",
       "refund": "Rückerstattungsrichtlinie"
-    }
+    },
+    "status": {
+      "active": "aktiv"
+    },
+    "actions": {
+      "changePlan": "Plan ändern",
+      "signOut": "Abmelden"
+    },
+    "usage": {
+      "title": "KI-Analyse-Nutzung",
+      "currentMonthlyUsage": "Aktuelle monatliche Nutzung",
+      "resetHint": "Die Nutzung wird monatlich zu Beginn jedes Monats zurückgesetzt."
+    },
+    "footerTagline": "NOD Labs · Entwickelt für Kreative"
   },
   "subscription": {
     "pricing": "Preise",
@@ -504,6 +549,16 @@
     "proPrice": "$5/Monat (inkl. Steuern)",
     "upgrade": "Auf Pro upgraden",
     "manageBilling": "Abrechnung verwalten",
+    "backToSettings": "Zurück zu den Einstellungen",
+    "billingSubtitle": "Verwalten Sie Ihr Abonnement, Ihre Zahlungsmethode und Ihre Nutzung an einem Ort.",
+    "currentMonthlyAiSummaries": "Aktuelle monatliche KI-Zusammenfassungen",
+    "includedInPlan": "In Ihrem Plan enthalten",
+    "billingControls": "Abrechnungssteuerung",
+    "proUpgradeDescription": "Upgrade auf Pro für höhere Monatslimits und erweiterte Funktionen.",
+    "billingStatus": "Abrechnungsstatus",
+    "planStatus": "Planstatus",
+    "nextBillingLabel": "Nächste Abrechnung",
+    "pricingSubtitle": "Wählen Sie den Plan, der zu Ihrem kreativen Workflow passt.",
     "cancel": "Abonnement kündigen",
     "cancelConfirm": "Sind Sie sicher, dass Sie Ihr Abonnement kündigen möchten?",
     "usage": "Nutzung",
@@ -563,9 +618,55 @@
       "conceptExtraction": "Enthalten"
     }
   },
+  "help": {
+    "centerBadge": "NOD Hilfe-Center",
+    "heading": "Schnellstart mit NOD",
+    "subtitle": "Vom Speichern von Inhalten bis zu KI-Zusammenfassungen und Planverwaltung: Hier sind die wichtigsten Workflows.",
+    "quickShortcutsTitle": "Nützliche Kurzbefehle",
+    "shortcuts": {
+      "articles": "Inhalte",
+      "billing": "Abrechnung",
+      "pricing": "Preise",
+      "installExtension": "Erweiterung installieren"
+    },
+    "faqTitle": "Häufig gestellte Fragen",
+    "supportTitle": "Support & Feedback",
+    "sendFeedback": "Feedback senden",
+    "billingHelp": "Hilfe zur Abrechnung",
+    "quickStart": {
+      "item1": {
+        "title": "1) Inhalte speichern",
+        "description": "Erfassen Sie Artikel mit der Erweiterung und halten Sie alles in einem Archiv zusammen."
+      },
+      "item2": {
+        "title": "2) KI-Zusammenfassungen prüfen",
+        "description": "Jeder gespeicherte Eintrag erhält eine KI-Zusammenfassung mit Kernpunkten und strukturierten Notizen."
+      },
+      "item3": {
+        "title": "3) Erkenntnisse verknüpfen",
+        "description": "Gruppieren Sie verwandte Themen und rufen Sie wichtiges Wissen schneller ab."
+      }
+    },
+    "faq": {
+      "item1": {
+        "q": "Eine Zusammenfassung dauert zu lange.",
+        "a": "Große Dokumente oder volle Warteschlangen können die Verarbeitung verzögern. Aktualisieren Sie nach kurzer Zeit und prüfen Sie den Status erneut."
+      },
+      "item2": {
+        "q": "Die Erweiterung funktioniert nicht.",
+        "a": "Stellen Sie sicher, dass die Chrome-Erweiterung installiert ist, Sie angemeldet sind und laden Sie die Seite einmal neu."
+      },
+      "item3": {
+        "q": "Wo kann ich die Abrechnung verwalten?",
+        "a": "Öffnen Sie Einstellungen > Abrechnung, um Zahlungsdaten zu verwalten, und prüfen Sie Planoptionen auf der Preisseite."
+      }
+    }
+  },
   "onboarding": {
     "skip": "Überspringen",
     "progress": "{step}/3",
+    "completionTitle": "Alles bereit!",
+    "completionSubtitle": "Weiterleitung zum Dashboard. Beginne mit NOD deine Wissensbibliothek aufzubauen.",
     "welcome": {
       "title": "Willkommen bei NOD",
       "subtitle": "Deine KI-gestützte Wissensbibliothek",
@@ -577,6 +678,9 @@
     "install": {
       "title": "Chrome-Erweiterung installieren",
       "subtitle": "Artikel mit einem Klick von jeder Seite speichern",
+      "benefitOneClick": "Artikel sofort mit einem Klick speichern",
+      "benefitAutoAnalyze": "KI analysiert Inhalte automatisch beim Speichern",
+      "benefitAllSites": "Funktioniert auf jeder Website",
       "installButton": "Aus dem Chrome Web Store installieren",
       "confirmButton": "Ich habe es installiert",
       "skipLink": "Später erledigen"

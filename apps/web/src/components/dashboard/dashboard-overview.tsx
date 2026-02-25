@@ -48,27 +48,31 @@ function getStatusMeta(status: string): { key: DashboardStatusKey; className: st
   if (status === "analyzed" || status === "completed") {
     return {
       key: "statusCompleted",
-      className: "bg-emerald-100 border-emerald-500 text-emerald-700",
+      className:
+        "bg-emerald-100 border-emerald-500 text-emerald-700 dark:bg-emerald-950/50 dark:border-emerald-700 dark:text-emerald-400",
     };
   }
 
   if (status === "failed") {
     return {
       key: "statusFailed",
-      className: "bg-red-100 border-red-500 text-red-700",
+      className:
+        "bg-red-100 border-red-500 text-red-700 dark:bg-red-950/50 dark:border-red-700 dark:text-red-400",
     };
   }
 
   if (status === "processing" || status === "analyzing") {
     return {
       key: "statusProcessing",
-      className: "bg-amber-100 border-amber-500 text-amber-700",
+      className:
+        "bg-amber-100 border-amber-500 text-amber-700 dark:bg-amber-950/50 dark:border-amber-700 dark:text-amber-400",
     };
   }
 
   return {
     key: "statusPending",
-    className: "bg-yellow-100 border-yellow-500 text-yellow-700",
+    className:
+      "bg-yellow-100 border-yellow-500 text-yellow-700 dark:bg-yellow-950/50 dark:border-yellow-700 dark:text-yellow-400",
   };
 }
 
@@ -98,6 +102,7 @@ export function DashboardOverview() {
   };
 
   const dateLocale = DATE_LOCALE_MAP[locale] ?? "en-US";
+  const relativeTimeFormatter = new Intl.RelativeTimeFormat(dateLocale, { numeric: "auto" });
   const usagePercent =
     summariesLimit > 0 ? Math.min(100, Math.round((summariesUsed / summariesLimit) * 100)) : null;
 
@@ -113,14 +118,6 @@ export function DashboardOverview() {
     });
   }, []);
 
-  const welcomeMessage = locale === "ko" ? "NOD에 다시 오신 걸 환영해요" : "Welcome back to NOD";
-  const heroTitlePrimary = locale === "ko" ? "콘텐츠 인사이트" : "Content Insight";
-  const heroTitleAccent = locale === "ko" ? "워크스페이스" : "Workspace";
-  const heroSubtitle =
-    locale === "ko"
-      ? "저장한 콘텐츠를 AI로 요약해 핵심 인사이트를 빠르게 연결하세요."
-      : "Save content, summarize with AI, and connect insights faster.";
-
   const formatRelativeTime = (dateValue: string) => {
     const date = new Date(dateValue);
     const diffMs = Date.now() - date.getTime();
@@ -130,17 +127,17 @@ export function DashboardOverview() {
     if (Number.isNaN(diffMs)) return "";
 
     if (diffMs < hour) {
-      return locale === "ko" ? "방금 전" : "Just now";
+      return t("overview.justNow");
     }
 
     if (diffMs < day) {
       const hours = Math.max(1, Math.floor(diffMs / hour));
-      return locale === "ko" ? `${hours}시간 전` : `${hours} hrs ago`;
+      return relativeTimeFormatter.format(-hours, "hour");
     }
 
     const days = Math.floor(diffMs / day);
     if (days <= 7) {
-      return locale === "ko" ? `${days}일 전` : `${days} days ago`;
+      return relativeTimeFormatter.format(-days, "day");
     }
 
     return date.toLocaleDateString(dateLocale, {
@@ -157,43 +154,43 @@ export function DashboardOverview() {
         <div className="relative space-y-10">
           <header className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(280px,330px)] lg:items-end">
             <div className="max-w-3xl">
-              <p className="inline-flex items-center rounded-full border border-cm-text/15 bg-white/75 px-3 py-1 font-creative-body text-sm font-semibold text-cm-text-light">
-                {welcomeMessage}
+              <p className="inline-flex items-center rounded-full border border-cm-text/15 bg-white/75 px-3 py-1 font-creative-body text-sm font-semibold text-cm-text-light dark:bg-cm-surface/75 dark:border-cm-text/15">
+                {t("overview.welcomeMessage")}
               </p>
               <h1 className="mt-4 font-creative-display text-[clamp(2.35rem,4.7vw,4rem)] font-black leading-[0.95] tracking-tight text-cm-text">
-                {heroTitlePrimary}{" "}
+                {t("overview.heroTitlePrimary")}{" "}
                 <span className="text-nod-gold underline decoration-wavy decoration-cm-mint/80 underline-offset-8">
-                  {heroTitleAccent}
+                  {t("overview.heroTitleAccent")}
                 </span>
               </h1>
               <p className="mt-3 whitespace-nowrap font-creative-body text-[1.55rem] italic text-cm-text/68">
-                {heroSubtitle}
+                {t("overview.heroSubtitle")}
               </p>
             </div>
 
             <div className="space-y-3 lg:justify-self-end">
-              <div className="cm-doodle-border border-2 border-cm-text/15 bg-white/92 p-4">
+              <div className="cm-doodle-border border-2 border-cm-text/15 bg-white/92 p-4 dark:bg-cm-surface/92">
                 <p className="font-creative-body text-[11px] font-black uppercase tracking-[0.14em] text-cm-text/45">
-                  {locale === "ko" ? "오늘의 워크플로우" : "Today workflow"}
+                  {t("overview.workflowTitle")}
                 </p>
                 <ul className="mt-3 space-y-1.5">
                   <li className="flex items-center gap-2 font-creative-body text-xs font-bold text-cm-text/65">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-cm-bg text-[11px] text-cm-text">
                       1
                     </span>
-                    {locale === "ko" ? "콘텐츠 수집" : "Capture content"}
+                    {t("overview.workflowStepCapture")}
                   </li>
                   <li className="flex items-center gap-2 font-creative-body text-xs font-bold text-cm-text/65">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-cm-bg text-[11px] text-cm-text">
                       2
                     </span>
-                    {locale === "ko" ? "요약 분석" : "Analyze summaries"}
+                    {t("overview.workflowStepAnalyze")}
                   </li>
                   <li className="flex items-center gap-2 font-creative-body text-xs font-bold text-cm-text/65">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-cm-bg text-[11px] text-cm-text">
                       3
                     </span>
-                    {locale === "ko" ? "핵심 인사이트 정리" : "Refine key insights"}
+                    {t("overview.workflowStepRefine")}
                   </li>
                 </ul>
               </div>
@@ -203,7 +200,7 @@ export function DashboardOverview() {
                 className="inline-flex w-full items-center justify-center gap-2 cm-doodle-border border-2 border-cm-text bg-nod-gold px-7 py-3 font-creative-display text-base font-black text-white transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
               >
                 <CirclePlus className="h-5 w-5" />
-                {locale === "ko" ? "콘텐츠 보러가기" : "View Content"}
+                {t("overview.viewArticlesTitle")}
               </Link>
             </div>
           </header>
@@ -212,16 +209,16 @@ export function DashboardOverview() {
             <div className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-nod-gold" />
               <h2 className="font-creative-display text-2xl font-black text-cm-text">
-                {locale === "ko" ? "핵심 지표" : "Key Metrics"}
+                {t("overview.keyMetrics")}
               </h2>
             </div>
 
             <div className="grid gap-4 lg:grid-cols-3">
-              <article className="cm-doodle-border cm-sketch-shadow bg-white p-5 rotate-[-1deg] transition-all hover:-translate-y-1">
+              <article className="cm-doodle-border cm-sketch-shadow bg-white p-5 rotate-[-1deg] transition-all hover:-translate-y-1 dark:bg-cm-surface">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
-                      {locale === "ko" ? "총 콘텐츠" : "Total Content"}
+                      {t("overview.savedArticles")}
                     </p>
                     <h3 className="mt-1 font-creative-display text-3xl font-black text-cm-text">
                       {articlesLoading ? (
@@ -233,24 +230,16 @@ export function DashboardOverview() {
                   </div>
                   <FileText className="h-10 w-10 text-nod-gold/35" />
                 </div>
-                {usageLoading || plan !== "pro" ? (
-                  <div className="mt-3 h-1.5 rounded-full bg-cm-text/10">
-                    <div className="h-full w-3/4 rounded-full bg-nod-gold" />
-                  </div>
-                ) : (
-                  <p className="mt-3 font-creative-body text-xs font-bold text-cm-text/45">
-                    {locale === "ko"
-                      ? "PRO는 콘텐츠 저장 무제한"
-                      : "Unlimited content storage on PRO"}
-                  </p>
-                )}
+                <p className="mt-3 font-creative-body text-xs font-bold text-cm-text/45">
+                  {t("overview.storageUnlimited")}
+                </p>
               </article>
 
-              <article className="cm-doodle-border cm-sketch-shadow bg-white p-5 rotate-[0.8deg] transition-all hover:-translate-y-1">
+              <article className="cm-doodle-border cm-sketch-shadow bg-white p-5 rotate-[0.8deg] transition-all hover:-translate-y-1 dark:bg-cm-surface">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
-                      {locale === "ko" ? "AI 요약" : "AI Summaries"}
+                      {t("overview.aiSummaries")}
                     </p>
                     <h3 className="mt-1 font-creative-display text-3xl font-black text-cm-text">
                       {usageLoading ? (
@@ -266,20 +255,19 @@ export function DashboardOverview() {
                 </div>
                 <p className="mt-3 text-sm font-creative-body font-bold italic text-[#76916f]">
                   {usageLoading
-                    ? locale === "ko"
-                      ? "사용량 계산 중..."
-                      : "Calculating usage..."
-                    : locale === "ko"
-                      ? `사용량: ${summariesUsed} / ${summariesLimit === -1 ? "∞" : summariesLimit}`
-                      : `Usage: ${summariesUsed} / ${summariesLimit === -1 ? "∞" : summariesLimit}`}
+                    ? t("overview.usageCalculating")
+                    : ts("summariesUsed", {
+                        used: summariesUsed,
+                        limit: summariesLimit === -1 ? "∞" : summariesLimit,
+                      })}
                 </p>
               </article>
 
-              <article className="cm-doodle-border cm-sketch-shadow bg-white p-5 rotate-[-0.8deg] transition-all hover:-translate-y-1">
+              <article className="cm-doodle-border cm-sketch-shadow bg-white p-5 rotate-[-0.8deg] transition-all hover:-translate-y-1 dark:bg-cm-surface">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
-                      {locale === "ko" ? "현재 플랜" : "Current Plan"}
+                      {t("overview.currentPlan")}
                     </p>
                     <h3 className="mt-1 font-creative-display text-3xl font-black uppercase text-cm-text">
                       {usageLoading ? (
@@ -294,41 +282,35 @@ export function DashboardOverview() {
                   <CreditCard className="h-10 w-10 text-cm-coral/50" />
                 </div>
                 <p className="mt-3 text-sm font-creative-body font-bold text-cm-coral underline decoration-dotted">
-                  {plan === "pro"
-                    ? locale === "ko"
-                      ? "프로 플랜 활성화"
-                      : "Pro plan active"
-                    : locale === "ko"
-                      ? "Free 플랜 사용 중"
-                      : "Using Free plan"}
+                  {plan === "pro" ? t("overview.planProActive") : t("overview.planFreeActive")}
                 </p>
               </article>
             </div>
           </section>
 
-          <section className="cm-doodle-border border-2 border-cm-text/25 bg-white/60 p-6 space-y-5">
+          <section className="cm-doodle-border border-2 border-cm-text/25 bg-white/60 p-6 space-y-5 dark:bg-cm-surface/60">
             <div className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-[#7f9f7b]" />
               <h2 className="font-creative-display text-2xl font-black text-cm-text">
-                {locale === "ko" ? "빠른 작업" : "Quick Actions"}
+                {t("overview.quickActions")}
               </h2>
             </div>
 
             <div className="grid gap-3 lg:grid-cols-4">
               <Link
                 href="/articles"
-                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white"
+                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white dark:bg-cm-surface/92 dark:hover:bg-cm-surface-raised"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75 dark:bg-cm-surface-raised">
                     <Eye className="h-5 w-5 text-nod-gold" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-creative-display text-[1.45rem] font-black leading-none text-cm-text">
-                      {locale === "ko" ? "콘텐츠 보기" : "View Content"}
+                      {t("overview.viewArticlesTitle")}
                     </p>
                     <p className="mt-1 truncate font-creative-body text-[11px] font-bold text-cm-text/45">
-                      {locale === "ko" ? "저장한 콘텐츠로 이동" : "Open saved content"}
+                      {t("overview.viewArticlesDescription")}
                     </p>
                   </div>
                 </div>
@@ -337,18 +319,18 @@ export function DashboardOverview() {
 
               <Link
                 href="/settings/billing"
-                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white"
+                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white dark:bg-cm-surface/92 dark:hover:bg-cm-surface-raised"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75 dark:bg-cm-surface-raised">
                     <CreditCard className="h-5 w-5 text-[#8BA888]" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-creative-display text-[1.45rem] font-black leading-none text-cm-text">
-                      {locale === "ko" ? "결제 관리" : "Manage Billing"}
+                      {t("overview.manageBillingTitle")}
                     </p>
                     <p className="mt-1 truncate font-creative-body text-[11px] font-bold text-cm-text/45">
-                      {locale === "ko" ? "구독 및 결제 수단" : "Subscription and payment"}
+                      {t("overview.manageBillingDescription")}
                     </p>
                   </div>
                 </div>
@@ -359,18 +341,18 @@ export function DashboardOverview() {
                 href={extensionInstallUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white"
+                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white dark:bg-cm-surface/92 dark:hover:bg-cm-surface-raised"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75 dark:bg-cm-surface-raised">
                     <Download className="h-5 w-5 text-cm-coral" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-creative-display text-[1.45rem] font-black leading-none text-cm-text">
-                      {locale === "ko" ? "익스텐션 설치" : "Install Extension"}
+                      {t("overview.installExtensionTitle")}
                     </p>
                     <p className="mt-1 truncate font-creative-body text-[11px] font-bold text-cm-text/45">
-                      {locale === "ko" ? "브라우저에 바로 추가" : "Add it to your browser"}
+                      {t("overview.installExtensionDescription")}
                     </p>
                   </div>
                 </div>
@@ -379,18 +361,18 @@ export function DashboardOverview() {
 
               <Link
                 href="/help"
-                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white"
+                className="group cm-doodle-border flex items-center justify-between gap-3 border-2 border-cm-text/15 bg-white/92 px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-[#8BA888]/55 hover:bg-white dark:bg-cm-surface/92 dark:hover:bg-cm-surface-raised"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cm-text/15 bg-cm-bg/75 dark:bg-cm-surface-raised">
                     <CircleHelp className="h-5 w-5 text-cm-text/45" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-creative-display text-[1.45rem] font-black leading-none text-cm-text">
-                      {locale === "ko" ? "도움말" : "Get Support"}
+                      {t("overview.getSupport")}
                     </p>
                     <p className="mt-1 truncate font-creative-body text-[11px] font-bold text-cm-text/45">
-                      {locale === "ko" ? "사용 가이드 열기" : "Open usage guide"}
+                      {t("overview.openUsageGuide")}
                     </p>
                   </div>
                 </div>
@@ -404,7 +386,7 @@ export function DashboardOverview() {
               <div className="flex items-center gap-2">
                 <Clock3 className="h-5 w-5 text-nod-gold" />
                 <h2 className="font-creative-display text-2xl font-black text-cm-text">
-                  {locale === "ko" ? "최근 콘텐츠" : "Recent Content"}
+                  {t("overview.recentArticlesTitle")}
                 </h2>
               </div>
               {recentArticles.length > 0 ? (
@@ -420,7 +402,10 @@ export function DashboardOverview() {
             {articlesLoading ? (
               <div className="grid gap-4 xl:grid-cols-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="cm-doodle-border bg-white p-5 space-y-4">
+                  <div
+                    key={i}
+                    className="cm-doodle-border bg-white p-5 space-y-4 dark:bg-cm-surface"
+                  >
                     <Skeleton className="h-8 w-2/3" />
                     <Skeleton className="h-4 w-full" />
                     <Skeleton className="h-4 w-5/6" />
@@ -438,13 +423,13 @@ export function DashboardOverview() {
                     <Link
                       key={article.id}
                       href={`/articles/${article.id}`}
-                      className={`group cm-doodle-border border-2 border-cm-text/20 bg-white/95 p-5 transition-all hover:border-nod-gold/50 hover:-translate-y-0.5 ${
+                      className={`group cm-doodle-border border-2 border-cm-text/20 bg-white/95 p-5 transition-all hover:border-nod-gold/50 hover:-translate-y-0.5 dark:bg-cm-surface/95 ${
                         index % 2 === 0 ? "rotate-[0.2deg]" : "rotate-[-0.2deg]"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex min-w-0 items-start gap-3">
-                          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cm-bg">
+                          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cm-bg dark:bg-cm-surface-raised">
                             <FileText className="h-5 w-5 text-cm-text/35" />
                           </div>
 
@@ -460,7 +445,7 @@ export function DashboardOverview() {
                                 </span>
                               ) : null}
                               <span className="whitespace-nowrap text-cm-text/45">
-                                {locale === "ko" ? "수정" : "Modified"}
+                                {t("overview.modified")}
                               </span>
                             </div>
                           </div>
@@ -488,7 +473,7 @@ export function DashboardOverview() {
                 })}
               </div>
             ) : (
-              <div className="cm-doodle-border border-2 border-cm-text/20 bg-white p-8 text-center">
+              <div className="cm-doodle-border border-2 border-cm-text/20 bg-white p-8 text-center dark:bg-cm-surface">
                 <Sparkles className="mx-auto h-8 w-8 text-cm-text-light/50" />
                 <p className="mt-3 text-sm font-creative-body text-cm-text-light">
                   {t("overview.noRecentArticles")}
@@ -501,31 +486,29 @@ export function DashboardOverview() {
 
       {showOnboardingBanner && !dismissOnboardingBanner ? (
         <div className="fixed bottom-6 left-1/2 z-40 w-full max-w-2xl -translate-x-1/2 px-4">
-          <div className="flex items-center gap-4 cm-doodle-border border-2 border-[#8BA888] bg-white/95 p-4 shadow-xl backdrop-blur-sm">
+          <div className="flex items-center gap-4 cm-doodle-border border-2 border-[#8BA888] bg-white/95 p-4 shadow-xl backdrop-blur-sm dark:bg-cm-surface/95 dark:border-[#8BA888]/50">
             <div className="rounded-full bg-[#8BA888]/20 p-2">
               <TriangleAlert className="h-5 w-5 text-[#8BA888]" />
             </div>
             <div className="flex-1">
               <p className="font-creative-display text-xl font-bold text-cm-text">
-                {locale === "ko" ? "온보딩을 마무리하세요!" : "Finish your onboarding!"}
+                {t("overview.onboardingTitle")}
               </p>
               <p className="font-creative-body text-sm text-cm-text/65">
-                {locale === "ko"
-                  ? "브라우저 익스텐션을 연결하면 인사이트를 바로 수집할 수 있어요."
-                  : "Connect your browser extension to start capturing insights instantly."}
+                {t("overview.onboardingDescription")}
               </p>
             </div>
             <Link
               href="/onboarding"
               className="rounded-full bg-[#8BA888] px-4 py-2 text-xs font-creative-body font-black uppercase tracking-wide text-white transition-colors hover:bg-[#7c9679]"
             >
-              {locale === "ko" ? "설정하기" : "Setup Now"}
+              {t("overview.onboardingSetupNow")}
             </Link>
             <button
               type="button"
               onClick={() => setDismissOnboardingBanner(true)}
               className="rounded-full p-1 text-cm-text/40 transition-colors hover:text-cm-text"
-              aria-label={locale === "ko" ? "배너 닫기" : "Close banner"}
+              aria-label={t("overview.closeBanner")}
             >
               <X className="h-5 w-5" />
             </button>

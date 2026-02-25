@@ -18,7 +18,7 @@ export function VideoPodcastMetadata({ metadata }: Props) {
           {speakers.map((speaker) => (
             <span
               key={speaker}
-              className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700"
+              className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-400"
             >
               {speaker}
             </span>

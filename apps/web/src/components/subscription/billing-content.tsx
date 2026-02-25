@@ -66,19 +66,19 @@ export function BillingContent() {
           <Skeleton className="h-9 w-64 bg-cm-text/10" />
           <div className="grid gap-6 lg:grid-cols-12">
             <div className="space-y-6 lg:col-span-7">
-              <div className="cm-doodle-border bg-white/90 p-6">
+              <div className="cm-doodle-border bg-white/90 dark:bg-cm-surface/90 p-6">
                 <Skeleton className="h-4 w-28 bg-cm-text/10" />
                 <Skeleton className="mt-4 h-8 w-44 bg-cm-text/10" />
                 <Skeleton className="mt-2 h-4 w-56 bg-cm-text/10" />
               </div>
-              <div className="cm-doodle-border bg-white/90 p-6">
+              <div className="cm-doodle-border bg-white/90 dark:bg-cm-surface/90 p-6">
                 <Skeleton className="h-4 w-24 bg-cm-text/10" />
                 <Skeleton className="mt-5 h-5 w-full rounded-full bg-cm-text/10" />
                 <Skeleton className="mt-3 h-4 w-40 bg-cm-text/10" />
               </div>
             </div>
             <div className="space-y-6 lg:col-span-5">
-              <div className="cm-doodle-border bg-white/90 p-6">
+              <div className="cm-doodle-border bg-white/90 dark:bg-cm-surface/90 p-6">
                 <Skeleton className="h-4 w-32 bg-cm-text/10" />
                 <div className="mt-4 space-y-3">
                   <Skeleton className="h-4 w-full bg-cm-text/10" />
@@ -144,7 +144,7 @@ export function BillingContent() {
           className="inline-flex items-center gap-1 text-sm font-creative-body font-bold text-cm-text/55 transition-colors hover:text-cm-text"
         >
           <ChevronLeft className="h-4 w-4" />
-          {locale === "ko" ? "설정으로 돌아가기" : "Back to settings"}
+          {t("backToSettings")}
         </Link>
 
         <header>
@@ -153,14 +153,12 @@ export function BillingContent() {
           </h1>
           <div className="mt-3 h-1.5 w-32 -rotate-1 rounded-full bg-nod-gold/45" />
           <p className="mt-4 font-creative-body text-base italic text-cm-text/65">
-            {locale === "ko"
-              ? "구독, 결제 수단, 사용량을 한 화면에서 관리해보세요."
-              : "Manage your subscription, payment method, and usage in one place."}
+            {t("billingSubtitle")}
           </p>
         </header>
 
         {isCheckoutSuccess ? (
-          <div className="cm-doodle-border border-2 border-emerald-200 bg-emerald-50/90 p-4">
+          <div className="cm-doodle-border border-2 border-emerald-200 bg-emerald-50/90 dark:bg-emerald-950/30 dark:border-emerald-800 p-4">
             <p className="font-creative-body text-sm font-black text-emerald-700">
               {t("checkoutSuccess")}
             </p>
@@ -169,7 +167,7 @@ export function BillingContent() {
 
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-7">
-            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.5deg] bg-white/95 p-7">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.5deg] bg-white/95 dark:bg-cm-surface/95 p-7">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
@@ -215,7 +213,7 @@ export function BillingContent() {
               ) : null}
             </section>
 
-            <section className="cm-doodle-border cm-sketch-shadow rotate-[0.5deg] bg-white/95 p-7">
+            <section className="cm-doodle-border cm-sketch-shadow rotate-[0.5deg] bg-white/95 dark:bg-cm-surface/95 p-7">
               <div className="mb-5 flex items-center gap-2">
                 <CircleDollarSign className="h-5 w-5 text-[#8BA888]" />
                 <h3 className="font-creative-display text-2xl font-black text-cm-text">
@@ -226,7 +224,7 @@ export function BillingContent() {
               <div className="space-y-4">
                 <div className="flex items-end justify-between">
                   <p className="font-creative-body text-sm font-bold text-cm-text/60">
-                    {locale === "ko" ? "이번 달 AI 요약 사용량" : "Current monthly AI summaries"}
+                    {t("currentMonthlyAiSummaries")}
                   </p>
                   <p className="font-creative-display text-3xl font-black text-cm-text">
                     {isUnlimited ? t("unlimited") : `${summariesUsed}/${summariesLimit}`}
@@ -254,9 +252,9 @@ export function BillingContent() {
               </div>
             </section>
 
-            <section className="cm-doodle-border border-dashed border-cm-text/25 bg-white/80 p-6">
+            <section className="cm-doodle-border border-dashed border-cm-text/25 bg-white/80 dark:bg-cm-surface/80 p-6">
               <h3 className="mb-4 font-creative-display text-2xl font-black text-cm-text">
-                {locale === "ko" ? "현재 플랜 포함 기능" : "Included in your plan"}
+                {t("includedInPlan")}
               </h3>
               <ul className="space-y-3">
                 {planFeatures.map((feature) => (
@@ -273,11 +271,11 @@ export function BillingContent() {
           </div>
 
           <div className="space-y-6 lg:col-span-5">
-            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.4deg] bg-white/95 p-7">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.4deg] bg-white/95 dark:bg-cm-surface/95 p-7">
               <div className="mb-4 flex items-center gap-2">
                 <CreditCard className="h-5 w-5 text-cm-coral" />
                 <h3 className="font-creative-display text-2xl font-black text-cm-text">
-                  {locale === "ko" ? "결제 컨트롤" : "Billing Controls"}
+                  {t("billingControls")}
                 </h3>
               </div>
 
@@ -286,12 +284,12 @@ export function BillingContent() {
                   <button
                     type="button"
                     onClick={handleManagePayment}
-                    className="w-full cm-doodle-border border-cm-text bg-white px-4 py-3 text-left font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-cm-bg"
+                    className="w-full cm-doodle-border border-cm-text bg-white dark:bg-cm-surface dark:hover:bg-cm-surface-raised px-4 py-3 text-left font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-cm-bg"
                   >
                     {t("managePayment")}
                   </button>
 
-                  <div className="cm-doodle-border border-2 border-red-200 bg-red-50/70 p-4">
+                  <div className="cm-doodle-border border-2 border-red-200 bg-red-50/70 dark:bg-red-950/30 p-4">
                     <div className="flex items-start gap-2">
                       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
                       <p className="font-creative-body text-xs font-bold text-cm-text/65">
@@ -301,7 +299,7 @@ export function BillingContent() {
                     <button
                       type="button"
                       onClick={handleCancelSubscription}
-                      className="mt-3 inline-flex cm-doodle-border border-red-200 bg-white px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50"
+                      className="mt-3 inline-flex cm-doodle-border border-red-200 bg-white dark:bg-cm-surface dark:hover:bg-red-950/30 px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50"
                     >
                       {t("cancel")}
                     </button>
@@ -310,9 +308,7 @@ export function BillingContent() {
               ) : (
                 <div className="space-y-4">
                   <p className="font-creative-body text-sm font-semibold text-cm-text/65">
-                    {locale === "ko"
-                      ? "더 많은 월간 사용량과 고급 기능을 위해 Pro로 업그레이드해보세요."
-                      : "Upgrade to Pro for higher monthly limits and advanced features."}
+                    {t("proUpgradeDescription")}
                   </p>
                   <Link
                     href="/pricing"
@@ -324,23 +320,19 @@ export function BillingContent() {
               )}
             </section>
 
-            <section className="cm-doodle-border border-2 border-cm-text/20 bg-white/85 p-6">
+            <section className="cm-doodle-border border-2 border-cm-text/20 bg-white/85 dark:bg-cm-surface/85 p-6">
               <h3 className="mb-4 font-creative-display text-2xl font-black text-cm-text">
-                {locale === "ko" ? "결제 상태" : "Billing Status"}
+                {t("billingStatus")}
               </h3>
 
               <div className="space-y-3 font-creative-body text-sm">
                 <div className="flex items-center justify-between border-b border-dashed border-cm-text/15 pb-3">
-                  <span className="font-bold text-cm-text/60">
-                    {locale === "ko" ? "플랜 상태" : "Plan status"}
-                  </span>
+                  <span className="font-bold text-cm-text/60">{t("planStatus")}</span>
                   <span className="font-black text-cm-text">{subscription?.status ?? "-"}</span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-cm-text/60">
-                    {locale === "ko" ? "다음 결제" : "Next billing"}
-                  </span>
+                  <span className="font-bold text-cm-text/60">{t("nextBillingLabel")}</span>
                   <span className="font-black text-cm-text">
                     {subscription?.current_period_end
                       ? new Date(subscription.current_period_end).toLocaleDateString(dateLocale)

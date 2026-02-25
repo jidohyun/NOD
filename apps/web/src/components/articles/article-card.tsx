@@ -26,46 +26,74 @@ const DATE_LOCALE_MAP: Record<string, string> = {
 
 const STATUS_STYLES: Record<string, { className: string; labelKey: string }> = {
   pending: {
-    className: "bg-amber-100 text-amber-800 border-amber-200",
+    className:
+      "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/50 dark:text-amber-400 dark:border-amber-800",
     labelKey: "statusPending",
   },
   processing: {
-    className: "bg-blue-100 text-blue-800 border-blue-200",
+    className:
+      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/50 dark:text-blue-400 dark:border-blue-800",
     labelKey: "statusProcessing",
   },
   analyzing: {
-    className: "bg-blue-100 text-blue-800 border-blue-200",
+    className:
+      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/50 dark:text-blue-400 dark:border-blue-800",
     labelKey: "statusAnalyzing",
   },
   analyzed: {
-    className: "bg-green-100 text-green-800 border-green-200",
+    className:
+      "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/50 dark:text-green-400 dark:border-green-800",
     labelKey: "statusCompleted",
   },
   completed: {
-    className: "bg-green-100 text-green-800 border-green-200",
+    className:
+      "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/50 dark:text-green-400 dark:border-green-800",
     labelKey: "statusCompleted",
   },
   failed: {
-    className: "bg-red-100 text-red-800 border-red-200",
+    className:
+      "bg-red-100 text-red-800 border-red-200 dark:bg-red-950/50 dark:text-red-400 dark:border-red-800",
     labelKey: "statusFailed",
   },
 };
 
 const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string }> = {
-  tech_blog: { labelKey: "typeTechBlog", className: "bg-blue-50 text-blue-700 border-blue-200" },
+  tech_blog: {
+    labelKey: "typeTechBlog",
+    className:
+      "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800",
+  },
   academic_paper: {
     labelKey: "typePaper",
-    className: "bg-purple-50 text-purple-700 border-purple-200",
+    className:
+      "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-800",
   },
-  general_news: { labelKey: "typeNews", className: "bg-gray-50 text-gray-700 border-gray-200" },
-  github_repo: { labelKey: "typeGitHub", className: "bg-slate-50 text-slate-700 border-slate-200" },
-  official_docs: { labelKey: "typeDocs", className: "bg-teal-50 text-teal-700 border-teal-200" },
-  video_podcast: { labelKey: "typeVideo", className: "bg-pink-50 text-pink-700 border-pink-200" },
+  general_news: {
+    labelKey: "typeNews",
+    className:
+      "bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800/40 dark:text-gray-400 dark:border-gray-700",
+  },
+  github_repo: {
+    labelKey: "typeGitHub",
+    className:
+      "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800/40 dark:text-slate-400 dark:border-slate-700",
+  },
+  official_docs: {
+    labelKey: "typeDocs",
+    className:
+      "bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800",
+  },
+  video_podcast: {
+    labelKey: "typeVideo",
+    className:
+      "bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950/40 dark:text-pink-400 dark:border-pink-800",
+  },
 };
 
 export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps) {
   const t = useTranslations("dashboard");
   const locale = useLocale();
+  const openContentLabel = t("openContent");
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
   const formattedDate = new Date(article.created_at).toLocaleDateString(dateLocale, {
@@ -99,10 +127,10 @@ export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps
     : effectiveStatus;
 
   return (
-    <article className="group relative cm-doodle-border cm-sketch-shadow h-full cursor-pointer bg-white/95 p-5 transition-all hover:-translate-y-1 hover:border-nod-gold/35">
+    <article className="group relative cm-doodle-border cm-sketch-shadow h-full cursor-pointer bg-white/95 dark:bg-cm-surface/95 p-5 transition-all hover:-translate-y-1 hover:border-nod-gold/35">
       <Link
         href={`/articles/${article.id}`}
-        aria-label={article.title || (locale === "ko" ? "콘텐츠 열기" : "Open content")}
+        aria-label={article.title || openContentLabel}
         className="absolute inset-0 z-10 block"
       />
 
@@ -184,7 +212,7 @@ export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps
               size="sm"
               onClick={() => onRetry(article.id)}
               disabled={isRefreshing}
-              className="cm-doodle-border border-red-200 bg-white font-creative-body text-xs font-bold text-red-500 hover:bg-red-50"
+              className="cm-doodle-border border-red-200 bg-white dark:bg-cm-surface font-creative-body text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
             >
               <RotateCcw className="mr-1 h-3 w-3" />
               {t("retryAnalysis")}

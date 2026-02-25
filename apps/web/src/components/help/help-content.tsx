@@ -9,6 +9,7 @@ import {
   Search,
   Sparkles,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
 import { getChromeExtensionInstallUrl } from "@/lib/chrome-extension";
 import { Link } from "@/lib/i18n/routing";
@@ -25,74 +26,32 @@ interface HelpContentProps {
 }
 
 export function HelpContent({ locale }: HelpContentProps) {
-  const isKo = locale === "ko";
+  const t = useTranslations("help");
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
 
-  const quickStart = isKo
-    ? [
-        {
-          title: "1) 콘텐츠 저장",
-          description: "웹에서 읽고 싶은 글을 익스텐션으로 저장하면 자동으로 아카이브에 쌓여요.",
-          icon: BookMarked,
-        },
-        {
-          title: "2) AI 요약 확인",
-          description: "저장된 콘텐츠는 자동 요약되고 핵심 개념, 포인트, 메모를 함께 볼 수 있어요.",
-          icon: Sparkles,
-        },
-        {
-          title: "3) 인사이트 연결",
-          description: "관련 주제를 묶어서 탐색하고 필요한 지식을 빠르게 다시 꺼내 쓰세요.",
-          icon: Search,
-        },
-      ]
-    : [
-        {
-          title: "1) Save content",
-          description: "Capture articles with the extension and keep everything in one archive.",
-          icon: BookMarked,
-        },
-        {
-          title: "2) Review AI summaries",
-          description: "Each saved item gets an AI summary with key points and structured notes.",
-          icon: Sparkles,
-        },
-        {
-          title: "3) Connect insights",
-          description: "Group related topics and retrieve important knowledge faster.",
-          icon: Search,
-        },
-      ];
+  const quickStart = [
+    {
+      title: t("quickStart.item1.title"),
+      description: t("quickStart.item1.description"),
+      icon: BookMarked,
+    },
+    {
+      title: t("quickStart.item2.title"),
+      description: t("quickStart.item2.description"),
+      icon: Sparkles,
+    },
+    {
+      title: t("quickStart.item3.title"),
+      description: t("quickStart.item3.description"),
+      icon: Search,
+    },
+  ];
 
-  const faq = isKo
-    ? [
-        {
-          q: "요약이 오래 걸리거나 멈춘 것 같아요.",
-          a: "콘텐츠 길이나 요청량에 따라 지연될 수 있어요. 잠시 뒤 새로고침하거나 상세 페이지에서 상태를 다시 확인해 주세요.",
-        },
-        {
-          q: "익스텐션이 동작하지 않아요.",
-          a: "크롬에 익스텐션이 설치되어 있는지 확인하고, 로그인 상태를 유지한 뒤 페이지를 새로고침해 주세요.",
-        },
-        {
-          q: "플랜은 어디서 관리하나요?",
-          a: "결제 관리는 설정 > 결제 관리에서 변경할 수 있고, 요금제는 요금제 페이지에서 확인할 수 있어요.",
-        },
-      ]
-    : [
-        {
-          q: "A summary is taking too long.",
-          a: "Large documents or busy queues can delay processing. Refresh after a short wait and check the article status again.",
-        },
-        {
-          q: "The extension is not working.",
-          a: "Make sure the Chrome extension is installed, stay logged in, and refresh the page once.",
-        },
-        {
-          q: "Where can I manage billing?",
-          a: "Open Settings > Billing to manage payment details, and view plan options on the pricing page.",
-        },
-      ];
+  const faq = [
+    { q: t("faq.item1.q"), a: t("faq.item1.a") },
+    { q: t("faq.item2.q"), a: t("faq.item2.a") },
+    { q: t("faq.item3.q"), a: t("faq.item3.a") },
+  ];
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
@@ -101,15 +60,13 @@ export function HelpContent({ locale }: HelpContentProps) {
       <div className="relative space-y-7">
         <header className="space-y-4">
           <p className="inline-flex items-center rounded-full border border-cm-text/15 bg-white/75 px-3 py-1 font-creative-body text-sm font-bold text-cm-text/65">
-            {isKo ? "NOD Help Center" : "NOD Help Center"}
+            {t("centerBadge")}
           </p>
           <h1 className="font-creative-display text-[clamp(2rem,3.2vw,3.3rem)] font-black text-cm-text">
-            {isKo ? "빠르게 시작하는 NOD 사용 가이드" : "Get Started with NOD"}
+            {t("heading")}
           </h1>
           <p className="max-w-4xl font-creative-body text-base italic text-cm-text/65">
-            {isKo
-              ? "콘텐츠 저장부터 AI 요약 확인, 플랜 관리까지 꼭 필요한 흐름만 간단하게 정리했어요."
-              : "From saving content to AI summaries and plan management, here are the essential workflows."}
+            {t("subtitle")}
           </p>
         </header>
 
@@ -138,7 +95,7 @@ export function HelpContent({ locale }: HelpContentProps) {
           <div className="mb-4 flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-[#8BA888]" />
             <h2 className="font-creative-display text-2xl font-black text-cm-text">
-              {isKo ? "자주 쓰는 바로가기" : "Useful Shortcuts"}
+              {t("quickShortcutsTitle")}
             </h2>
           </div>
 
@@ -147,19 +104,19 @@ export function HelpContent({ locale }: HelpContentProps) {
               href="/articles"
               className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
             >
-              {isKo ? "콘텐츠 페이지" : "Articles"}
+              {t("shortcuts.articles")}
             </Link>
             <Link
               href="/settings/billing"
               className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
             >
-              {isKo ? "결제 관리" : "Billing"}
+              {t("shortcuts.billing")}
             </Link>
             <Link
               href="/pricing"
               className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
             >
-              {isKo ? "요금제 확인" : "Pricing"}
+              {t("shortcuts.pricing")}
             </Link>
             <a
               href={extensionInstallUrl}
@@ -167,7 +124,7 @@ export function HelpContent({ locale }: HelpContentProps) {
               rel="noopener noreferrer"
               className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
             >
-              {isKo ? "익스텐션 설치" : "Install Extension"}
+              {t("shortcuts.installExtension")}
             </a>
           </div>
         </section>
@@ -176,7 +133,7 @@ export function HelpContent({ locale }: HelpContentProps) {
           <div className="mb-4 flex items-center gap-2">
             <BadgeHelp className="h-5 w-5 text-cm-coral" />
             <h2 className="font-creative-display text-2xl font-black text-cm-text">
-              {isKo ? "자주 묻는 질문" : "Frequently Asked Questions"}
+              {t("faqTitle")}
             </h2>
           </div>
 
@@ -199,7 +156,7 @@ export function HelpContent({ locale }: HelpContentProps) {
           <div className="mb-4 flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-cm-text/60" />
             <h2 className="font-creative-display text-2xl font-black text-cm-text">
-              {isKo ? "문의 및 피드백" : "Support & Feedback"}
+              {t("supportTitle")}
             </h2>
           </div>
 
@@ -212,7 +169,7 @@ export function HelpContent({ locale }: HelpContentProps) {
             >
               <span className="inline-flex items-center gap-1">
                 <Puzzle className="h-4 w-4 text-nod-gold" />
-                {isKo ? "피드백 보내기" : "Send Feedback"}
+                {t("sendFeedback")}
                 <ExternalLink className="h-3.5 w-3.5 text-cm-text/45" />
               </span>
             </a>
@@ -223,7 +180,7 @@ export function HelpContent({ locale }: HelpContentProps) {
             >
               <span className="inline-flex items-center gap-1">
                 <CreditCard className="h-4 w-4 text-[#8BA888]" />
-                {isKo ? "결제 문제 해결" : "Billing Help"}
+                {t("billingHelp")}
               </span>
             </Link>
           </div>

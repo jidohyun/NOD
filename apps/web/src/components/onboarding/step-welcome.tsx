@@ -27,15 +27,19 @@ export function StepWelcome({ onNext }: StepWelcomeProps) {
           <p className="mt-2 ko-keep text-base leading-relaxed text-cm-text/62">{t("subtitle")}</p>
         </div>
 
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-nod-gold/35 bg-[#fff2c7]">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-nod-gold/35 bg-[#fff2c7] dark:bg-nod-gold/15 dark:border-nod-gold/25">
           <BookmarkCheck className="h-7 w-7 text-nod-gold-muted" />
         </div>
       </div>
 
       <div className="space-y-3">
-        {features.map(({ icon: Icon, text }) => (
-          <div key={text} className="cm-doodle-border flex items-center gap-3 bg-white px-5 py-4">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-nod-gold/30 bg-[#fff7dd]">
+        {features.map(({ icon: Icon, text }, i) => (
+          <div
+            key={text}
+            className="cm-doodle-border flex items-center gap-3 bg-white px-5 py-4 transition-all duration-200 hover:scale-[1.01] hover:bg-[#fffdf5] animate-fade-up dark:bg-cm-surface dark:hover:bg-cm-surface-raised"
+            style={{ animationDelay: `${(i + 1) * 120}ms` }}
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-nod-gold/30 bg-[#fff7dd] dark:bg-nod-gold/10 dark:border-nod-gold/20">
               <Icon className="h-4.5 w-4.5 text-nod-gold-muted" />
             </div>
             <span className="ko-keep text-sm font-semibold text-cm-text/78">{text}</span>
@@ -46,7 +50,7 @@ export function StepWelcome({ onNext }: StepWelcomeProps) {
       <button
         type="button"
         onClick={onNext}
-        className="cm-doodle-border mt-8 w-full bg-nod-gold px-6 py-3.5 text-sm font-black text-black transition-colors hover:bg-[#f0c958]"
+        className="cm-doodle-border mt-8 w-full bg-nod-gold px-6 py-3.5 text-sm font-black text-black transition-all hover:bg-[#f0c958] hover:scale-[1.01] animate-fade-up [animation-delay:500ms]"
       >
         {t("cta")}
       </button>

@@ -31,6 +31,17 @@ const descriptions: Record<string, string> = {
   fr: "Vous cherchez un outil de résumé gratuit ? Comparez les meilleurs outils IA gratuits.",
 };
 
+const breadcrumbLabels: Record<string, string> = {
+  en: "Free Article Summarizer",
+  ko: "무료 아티클 요약 도구",
+  ja: "無料記事要約ツール",
+  es: "Free Article Summarizer",
+  "pt-BR": "Free Article Summarizer",
+  "zh-CN": "Free Article Summarizer",
+  de: "Free Article Summarizer",
+  fr: "Free Article Summarizer",
+};
+
 export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { locale } = await params;
   const title = titles[locale] || titles.en;
@@ -99,11 +110,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {locale === "ko"
-                ? "무료 아티클 요약 도구"
-                : locale === "ja"
-                  ? "無料記事要約ツール"
-                  : "Free Article Summarizer"}
+              {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
           </li>

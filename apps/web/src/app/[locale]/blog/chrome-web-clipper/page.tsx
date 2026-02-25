@@ -34,6 +34,17 @@ const descriptions: Record<string, string> = {
   fr: "Chaque jour, vous trouvez des articles formidables et les perdez dans vos favoris. Un web clipper Chrome résout ce problème.",
 };
 
+const breadcrumbLabels: Record<string, string> = {
+  en: "Chrome Web Clipper",
+  ko: "Chrome 웹 클리퍼",
+  ja: "Chrome ウェブクリッパー",
+  es: "Chrome Web Clipper",
+  "pt-BR": "Chrome Web Clipper",
+  "zh-CN": "Chrome Web Clipper",
+  de: "Chrome Web Clipper",
+  fr: "Chrome Web Clipper",
+};
+
 export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { locale } = await params;
   const title = titles[locale] || titles.en;
@@ -108,11 +119,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {locale === "ko"
-                ? "Chrome 웹 클리퍼"
-                : locale === "ja"
-                  ? "Chrome ウェブクリッパー"
-                  : "Chrome Web Clipper"}
+              {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
           </li>

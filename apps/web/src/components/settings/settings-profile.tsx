@@ -71,13 +71,11 @@ export function SettingsProfile() {
       : 0;
 
   const planName = subscription?.plan === "pro" ? ts("pro") : ts("basic");
-  const providerLabel = provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : "Email";
+  const providerLabel = provider
+    ? provider.charAt(0).toUpperCase() + provider.slice(1)
+    : t("fields.emailProviderName");
 
-  const usageLabel = isUnlimited
-    ? locale === "ko"
-      ? "무제한"
-      : "Unlimited"
-    : `${summariesUsed} / ${summariesLimit}`;
+  const usageLabel = isUnlimited ? ts("unlimited") : `${summariesUsed} / ${summariesLimit}`;
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
@@ -90,18 +88,16 @@ export function SettingsProfile() {
           </h1>
           <div className="mt-3 h-1.5 w-32 -rotate-1 rounded-full bg-nod-gold/45" />
           <p className="mt-4 font-creative-body text-base italic text-cm-text/65">
-            {locale === "ko"
-              ? "내 작업실 설정을 세밀하게 관리해보세요."
-              : "Manage your creative cockpit with precision."}
+            {t("description")}
           </p>
         </header>
 
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-7">
-            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.5deg] bg-white/95 p-7">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.5deg] bg-white/95 p-7 dark:bg-cm-surface/95">
               <div className="flex flex-col items-center gap-6 sm:flex-row">
                 <div>
-                  <Avatar className="h-28 w-28 border-4 border-cm-text bg-white">
+                  <Avatar className="h-28 w-28 border-4 border-cm-text bg-white dark:bg-cm-surface">
                     {avatarUrl ? (
                       <AvatarImage src={avatarUrl} alt={userName} referrerPolicy="no-referrer" />
                     ) : null}
@@ -118,7 +114,7 @@ export function SettingsProfile() {
               </div>
             </section>
 
-            <section className="cm-doodle-border cm-sketch-shadow rotate-[0.5deg] bg-white/95 p-7">
+            <section className="cm-doodle-border cm-sketch-shadow rotate-[0.5deg] bg-white/95 p-7 dark:bg-cm-surface/95">
               <div className="mb-5 flex items-center gap-2">
                 <UserIcon className="h-5 w-5 text-nod-gold" />
                 <h3 className="font-creative-display text-2xl font-black text-cm-text">
@@ -160,7 +156,7 @@ export function SettingsProfile() {
                       {planName}
                       <span className="h-2 w-2 rounded-full bg-emerald-500" />
                       <span className="text-xs text-cm-text/45">
-                        ({subscription?.status ? subscription.status : "active"})
+                        ({subscription?.status ? subscription.status : t("status.active")})
                       </span>
                     </p>
                   </div>
@@ -169,24 +165,24 @@ export function SettingsProfile() {
                     href="/pricing"
                     className="text-xs font-creative-body font-black text-nod-gold underline decoration-dotted"
                   >
-                    {locale === "ko" ? "플랜 변경" : "Change Plan"}
+                    {t("actions.changePlan")}
                   </Link>
                 </div>
               </div>
             </section>
 
-            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.4deg] bg-white/95 p-7">
+            <section className="cm-doodle-border cm-sketch-shadow -rotate-[0.4deg] bg-white/95 p-7 dark:bg-cm-surface/95">
               <div className="mb-5 flex items-center gap-2">
                 <BarChart3 className="h-5 w-5 text-[#8BA888]" />
                 <h3 className="font-creative-display text-2xl font-black text-cm-text">
-                  {locale === "ko" ? "AI 분석 사용량" : "AI Analysis Usage"}
+                  {t("usage.title")}
                 </h3>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-end justify-between">
                   <p className="font-creative-body text-sm font-bold text-cm-text/60">
-                    {locale === "ko" ? "이번 달 사용량" : "Current monthly usage"}
+                    {t("usage.currentMonthlyUsage")}
                   </p>
                   <p className="font-creative-display text-3xl font-black text-cm-text">
                     {usageLabel}
@@ -203,9 +199,7 @@ export function SettingsProfile() {
                 ) : null}
 
                 <p className="font-creative-body text-xs font-bold italic text-cm-text/45">
-                  {locale === "ko"
-                    ? "월별 사용량은 매월 1일에 초기화됩니다."
-                    : "Usage resets monthly at the beginning of each month."}
+                  {t("usage.resetHint")}
                 </p>
               </div>
             </section>
@@ -223,7 +217,7 @@ export function SettingsProfile() {
               <div className="grid grid-cols-2 gap-4">
                 <Link
                   href="/settings/billing"
-                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"
                 >
                   <CreditCard className="mx-auto h-8 w-8 text-nod-gold" />
                   <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
@@ -233,7 +227,7 @@ export function SettingsProfile() {
 
                 <Link
                   href="/pricing"
-                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"
                 >
                   <UserIcon className="mx-auto h-8 w-8 text-[#8BA888]" />
                   <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
@@ -245,7 +239,7 @@ export function SettingsProfile() {
                   href={extensionInstallUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"
                 >
                   <Puzzle className="mx-auto h-8 w-8 text-cm-coral" />
                   <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
@@ -257,7 +251,7 @@ export function SettingsProfile() {
                   href="https://nodarchive.featurebase.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow"
+                  className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"
                 >
                   <MessageSquare className="mx-auto h-8 w-8 text-cm-text/45" />
                   <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
@@ -267,7 +261,7 @@ export function SettingsProfile() {
               </div>
             </section>
 
-            <section className="cm-doodle-border border-dashed border-cm-text/20 bg-white/75 p-6">
+            <section className="cm-doodle-border border-dashed border-cm-text/20 bg-white/75 p-6 dark:bg-cm-surface/75">
               <div className="mb-5 flex items-center gap-2">
                 <Gavel className="h-5 w-5 text-cm-text/50" />
                 <h3 className="font-creative-display text-2xl font-black text-cm-text">
@@ -309,19 +303,17 @@ export function SettingsProfile() {
                 await signOut();
                 router.push("/login");
               }}
-              className="flex w-full items-center justify-center gap-2 cm-doodle-border border-red-200 bg-white px-6 py-4 font-creative-body text-sm font-black text-red-400 transition-colors hover:bg-red-50"
+              className="flex w-full items-center justify-center gap-2 cm-doodle-border border-red-200 bg-white px-6 py-4 font-creative-body text-sm font-black text-red-400 transition-colors hover:bg-red-50 dark:bg-cm-surface dark:hover:bg-red-950/30"
             >
               <LogOut className="h-4 w-4" />
-              {locale === "ko" ? "로그아웃" : "Sign Out"}
+              {t("actions.signOut")}
             </button>
           </div>
         </div>
 
         <footer className="pt-4 text-center">
           <p className="font-creative-body text-[11px] font-black uppercase tracking-[0.18em] text-cm-text/30">
-            {locale === "ko"
-              ? "NOD Labs · Creators를 위한 워크스페이스"
-              : "NOD Labs · Handcrafted for Creatives"}
+            {t("footerTagline")}
           </p>
         </footer>
       </div>

@@ -43,7 +43,7 @@ export function DashboardHeader() {
     basePath === "/" ? `/${nextLocale}` : `/${nextLocale}${basePath}`;
 
   return (
-    <header className="flex h-14 items-center gap-4 border-b border-dashed border-cm-text/10 bg-white/80 backdrop-blur-sm px-6">
+    <header className="flex h-14 items-center gap-4 border-b border-dashed border-cm-text/10 bg-white/80 backdrop-blur-sm px-6 dark:bg-cm-surface/80">
       {/* Mobile Sidebar Toggle */}
       <Button variant="ghost" size="icon-sm" data-testid="sidebar-toggle" className="md:hidden">
         <Menu className="h-5 w-5" />

@@ -33,6 +33,17 @@ const descriptions: Record<string, string> = {
   fr: "Comparez les meilleures extensions web clipper pour Chrome et apprenez à créer un workflow de gestion des connaissances en 5 minutes.",
 };
 
+const breadcrumbLabels: Record<string, string> = {
+  en: "Web Clipper Guide",
+  ko: "웹 클리퍼 가이드",
+  ja: "ウェブクリッパーガイド",
+  es: "Web Clipper Guide",
+  "pt-BR": "Web Clipper Guide",
+  "zh-CN": "Web Clipper Guide",
+  de: "Web Clipper Guide",
+  fr: "Web Clipper Guide",
+};
+
 export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { locale } = await params;
   const title = titles[locale] || titles.en;
@@ -108,11 +119,7 @@ export default async function WebClipperGuideKo({ params }: BlogPostProps) {
           <li className="text-neutral-600">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name" className="text-neutral-400">
-              {locale === "ko"
-                ? "웹 클리퍼 가이드"
-                : locale === "ja"
-                  ? "ウェブクリッパーガイド"
-                  : "Web Clipper Guide"}
+              {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
           </li>

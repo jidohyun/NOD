@@ -45,12 +45,14 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   --font-creative-display: var(--font-fredoka), ui-sans-serif, system-ui, sans-serif;
   --font-creative-body: var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
-  --color-cm-bg: #fffdfa;
-  --color-cm-text: #4a4a4a;
-  --color-cm-text-light: #6b6b6b;
-  --color-cm-mint: #e0f2f1;
-  --color-cm-coral: #ff8a80;
-  --color-cm-lavender: #f3e5f5;
+  --color-cm-bg: var(--cm-bg);
+  --color-cm-text: var(--cm-text);
+  --color-cm-text-light: var(--cm-text-light);
+  --color-cm-mint: var(--cm-mint);
+  --color-cm-coral: var(--cm-coral);
+  --color-cm-lavender: var(--cm-lavender);
+  --color-cm-surface: var(--cm-surface);
+  --color-cm-surface-raised: var(--cm-surface-raised);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -90,6 +92,14 @@
 }
 
 :root {
+  --cm-bg: #fffdfa;
+  --cm-text: #4a4a4a;
+  --cm-text-light: #6b6b6b;
+  --cm-mint: #e0f2f1;
+  --cm-coral: #ff8a80;
+  --cm-lavender: #f3e5f5;
+  --cm-surface: #ffffff;
+  --cm-surface-raised: #f8f7f4;
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 3.9%);
   --card: hsl(0 0% 100%);
@@ -138,6 +148,14 @@
 }
 
 .dark {
+  --cm-bg: #111114;
+  --cm-text: #e4e4e7;
+  --cm-text-light: #a1a1aa;
+  --cm-mint: #1a2e2d;
+  --cm-coral: #7f3d38;
+  --cm-lavender: #2d1f33;
+  --cm-surface: #18181b;
+  --cm-surface-raised: #1e1e22;
   --background: hsl(0 0% 3.9%);
   --foreground: hsl(0 0% 98%);
   --card: hsl(0 0% 3.9%);
@@ -435,12 +453,22 @@ html[lang="ko"] .ko-keep {
     border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   }
 
+  :is(.dark *).cm-doodle-border,
+  .dark .cm-doodle-border {
+    border-color: rgb(228 228 231 / 0.15);
+  }
+
   .cm-organic-shape {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
 
   .cm-sketch-shadow {
     box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  :is(.dark *).cm-sketch-shadow,
+  .dark .cm-sketch-shadow {
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
   }
 
   .cm-askew-left {

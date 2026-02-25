@@ -62,7 +62,7 @@ export function DashboardSidebar() {
   }
 
   return (
-    <aside className="flex h-full w-64 flex-col bg-white/90 backdrop-blur-sm">
+    <aside className="flex h-full w-64 flex-col bg-white/90 backdrop-blur-sm dark:bg-cm-surface/90">
       {/* Brand/Logo */}
       <div className="flex h-16 items-center px-6 mb-2">
         <Link href="/dashboard" className="inline-flex items-center">
@@ -83,7 +83,7 @@ export function DashboardSidebar() {
           />
         ))}
 
-        <div className="my-3 border-t border-dashed border-cm-text/10" />
+        <div className="my-3 border-t border-dashed border-cm-text/10 dark:border-cm-text/10" />
 
         {bottomNavItems.map(({ href, icon: Icon, label }) => (
           <SidebarNavLink
@@ -97,13 +97,16 @@ export function DashboardSidebar() {
       </nav>
 
       {/* User Section - rendered client-only to avoid Radix ID hydration mismatch */}
-      <div data-testid="user-section" className="border-t border-dashed border-cm-text/10 p-4">
+      <div
+        data-testid="user-section"
+        className="border-t border-dashed border-cm-text/10 dark:border-cm-text/10 p-4"
+      >
         {mounted ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-nod-gold/5"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-nod-gold/5 dark:hover:bg-nod-gold/10"
               >
                 <Avatar size="sm">
                   {avatarUrl ? (

@@ -52,7 +52,6 @@ export function ArticleList() {
   const isLoading = activeQuery.isLoading;
   const isError = activeQuery.isError;
   const extensionInstallUrl = getChromeExtensionInstallUrl(locale);
-
   return (
     <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
       <div className="pointer-events-none absolute inset-0 opacity-65" style={ARTICLES_BG_STYLE} />
@@ -65,9 +64,7 @@ export function ArticleList() {
             </h1>
             <div className="mt-3 h-1.5 w-32 -rotate-1 rounded-full bg-nod-gold/45" />
             <p className="mt-4 font-creative-body text-base italic text-cm-text/65">
-              {locale === "ko"
-                ? "저장한 콘텐츠를 탐색하고, 필요한 인사이트를 빠르게 찾아보세요."
-                : "Explore your saved content and quickly find the insight you need."}
+              {t("articleListSubtitle")}
             </p>
           </div>
 
@@ -82,7 +79,7 @@ export function ArticleList() {
           </a>
         </header>
 
-        <section className="cm-doodle-border border-2 border-cm-text/15 bg-white/95 p-4 lg:p-5">
+        <section className="cm-doodle-border border-2 border-cm-text/15 bg-white/95 dark:bg-cm-surface/95 p-4 lg:p-5">
           <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_190px_190px_auto] xl:items-center">
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-cm-text/40" />
@@ -91,7 +88,7 @@ export function ArticleList() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={t("searchArticles")}
-                className={`h-11 border-2 border-cm-text/20 bg-white pl-9 pr-32 font-creative-body text-sm text-cm-text placeholder:text-cm-text/40 focus-visible:ring-0 ${
+                className={`h-11 border-2 border-cm-text/20 bg-white dark:bg-cm-surface pl-9 pr-32 font-creative-body text-sm text-cm-text placeholder:text-cm-text/40 focus-visible:ring-0 ${
                   isSemanticMode ? "" : ""
                 }`}
                 onFocus={onFocus}
@@ -119,7 +116,7 @@ export function ArticleList() {
                 <div
                   id={listboxId}
                   role="listbox"
-                  className="absolute z-20 mt-2 w-full overflow-hidden cm-doodle-border border-2 border-cm-text/20 bg-white shadow-lg"
+                  className="absolute z-20 mt-2 w-full overflow-hidden cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface shadow-lg"
                 >
                   {suggestions.map((item, index) => {
                     const isActive = index === activeSuggestionIndex;
@@ -165,7 +162,7 @@ export function ArticleList() {
                 id="status-filter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="h-11 w-full rounded-md border-2 border-cm-text/20 bg-white pl-9 pr-3 font-creative-body text-sm font-bold text-cm-text outline-none"
+                className="h-11 w-full rounded-md border-2 border-cm-text/20 bg-white dark:bg-cm-surface pl-9 pr-3 font-creative-body text-sm font-bold text-cm-text outline-none"
               >
                 <option value="">{t("allStatus")}</option>
                 <option value="pending">{t("statusPending")}</option>
@@ -185,7 +182,7 @@ export function ArticleList() {
                 id="content-type-filter"
                 value={contentTypeFilter}
                 onChange={(e) => setContentTypeFilter(e.target.value)}
-                className="h-11 w-full rounded-md border-2 border-cm-text/20 bg-white pl-9 pr-3 font-creative-body text-sm font-bold text-cm-text outline-none"
+                className="h-11 w-full rounded-md border-2 border-cm-text/20 bg-white dark:bg-cm-surface pl-9 pr-3 font-creative-body text-sm font-bold text-cm-text outline-none"
               >
                 <option value="">{t("allContentTypes")}</option>
                 <option value="tech_blog">{t("typeTechBlog")}</option>
@@ -197,7 +194,7 @@ export function ArticleList() {
               </select>
             </div>
 
-            <div className="inline-flex h-11 items-center gap-1 cm-doodle-border border-2 border-cm-text/20 bg-white p-1">
+            <div className="inline-flex h-11 items-center gap-1 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface p-1">
               <button
                 type="button"
                 data-testid="view-toggle-grid"
@@ -247,7 +244,7 @@ export function ArticleList() {
               {t("loadingArticles")}
             </output>
             {SKELETON_KEYS.slice(0, viewMode === "grid" ? 6 : 4).map((key) => (
-              <div key={key} className="cm-doodle-border bg-white/95 p-5">
+              <div key={key} className="cm-doodle-border bg-white/95 dark:bg-cm-surface/95 p-5">
                 <Skeleton className="h-6 w-3/4 bg-cm-text/10" />
                 <div className="mt-3 flex gap-2">
                   <Skeleton className="h-5 w-20 rounded-full bg-cm-text/10" />
@@ -262,13 +259,13 @@ export function ArticleList() {
         ) : null}
 
         {isError ? (
-          <div className="cm-doodle-border border-2 border-red-200 bg-red-50/70 py-12 text-center font-creative-body font-black text-red-500">
+          <div className="cm-doodle-border border-2 border-red-200 bg-red-50/70 dark:bg-red-950/30 py-12 text-center font-creative-body font-black text-red-500">
             {t("loadError")}
           </div>
         ) : null}
 
         {!isLoading && !isError && articles.length === 0 ? (
-          <div className="cm-doodle-border border-2 border-cm-text/15 bg-white/95 py-14 text-center">
+          <div className="cm-doodle-border border-2 border-cm-text/15 bg-white/95 dark:bg-cm-surface/95 py-14 text-center">
             <p className="font-creative-body text-base font-bold text-cm-text/65">
               {t("noArticles")}
             </p>
@@ -305,7 +302,7 @@ export function ArticleList() {
             <Button
               onClick={() => infiniteQuery.fetchNextPage()}
               variant="outline"
-              className="cm-doodle-border border-cm-text/20 bg-white font-creative-body text-sm font-black text-cm-text hover:bg-cm-bg"
+              className="cm-doodle-border border-cm-text/20 bg-white dark:bg-cm-surface font-creative-body text-sm font-black text-cm-text hover:bg-cm-bg"
             >
               {t("loadMore")}
             </Button>
