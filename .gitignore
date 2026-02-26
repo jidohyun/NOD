@@ -67,6 +67,11 @@ apps/mobile/ios/Flutter/Generated.xcconfig
 
 # Tooling (local state)
 docs/.bkit-memory.json
+.claude/checkpoints.log
+
+# AI agent/context artifacts
+.agent/
+**/CLAUDE.md
 
 # Misc
 *.bak
