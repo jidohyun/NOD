@@ -130,3 +130,25 @@ export function FAQPageJsonLd({ faqs }: FAQPageJsonLdProps) {
     />
   );
 }
+
+export function OrganizationJsonLd() {
+  return (
+    <script
+      type="application/ld+json"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "NOD",
+          url: "https://nod.ing",
+          logo: "https://nod.ing/brand/nod-apple-touch-icon.png",
+          description:
+            "AI-powered article saving and knowledge management platform. Save articles, get AI summaries, and search your knowledge library with semantic search.",
+          foundingDate: "2025",
+          sameAs: [],
+        }),
+      }}
+    />
+  );
+}
