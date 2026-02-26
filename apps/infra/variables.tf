@@ -70,7 +70,7 @@ variable "api_memory" {
 variable "api_min_instances" {
   description = "API minimum instances"
   type        = number
-  default     = 0
+  default     = 1
 }
 
 variable "api_max_instances" {
