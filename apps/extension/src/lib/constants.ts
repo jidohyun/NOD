@@ -12,7 +12,12 @@ export const STORAGE_KEYS = {
   LOCALE: "nod_locale",
   THEME: "nod_theme",
   SUMMARY_LANGUAGE: "nod_summary_language",
+  REFRESH_TOKEN: "nod_refresh_token",
 } as const;
+
+// Token Refresh
+export const ALARM_TOKEN_REFRESH = "nod_token_refresh";
+export const TOKEN_REFRESH_BUFFER_MINUTES = 5;
 
 // Content Extraction
 export const MAX_CONTENT_LENGTH = 50000;

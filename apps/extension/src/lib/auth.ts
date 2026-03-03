@@ -1,6 +1,6 @@
 import { STORAGE_KEYS } from "./constants";
 
-const { AUTH_TOKEN, TOKEN_EXPIRES, USER_INFO } = STORAGE_KEYS;
+const { AUTH_TOKEN, TOKEN_EXPIRES, USER_INFO, REFRESH_TOKEN } = STORAGE_KEYS;
 
 export interface UserInfo {
   email: string;
@@ -61,12 +61,17 @@ export async function getToken(): Promise<string | null> {
  */
 export async function setToken(
   token: string,
-  expiresIn?: number
+  expiresIn?: number,
+  refreshToken?: string
 ): Promise<void> {
   const data: Record<string, unknown> = { [AUTH_TOKEN]: token };
 
   if (expiresIn) {
     data[TOKEN_EXPIRES] = Date.now() + expiresIn * 1000;
+  }
+
+  if (refreshToken) {
+    data[REFRESH_TOKEN] = refreshToken;
   }
 
   const userInfo = extractUserInfo(token);
@@ -75,6 +80,14 @@ export async function setToken(
   }
 
   await chrome.storage.local.set(data);
+}
+
+/**
+ * Get the stored refresh token
+ */
+export async function getRefreshToken(): Promise<string | null> {
+  const result = await chrome.storage.local.get([REFRESH_TOKEN]);
+  return result[REFRESH_TOKEN] || null;
 }
 
 /**
@@ -100,7 +113,7 @@ export async function getUserInfo(): Promise<UserInfo | null> {
  * Clear the auth token and user info
  */
 export async function clearToken(): Promise<void> {
-  await chrome.storage.local.remove([AUTH_TOKEN, TOKEN_EXPIRES, USER_INFO]);
+  await chrome.storage.local.remove([AUTH_TOKEN, TOKEN_EXPIRES, USER_INFO, REFRESH_TOKEN]);
 }
 
 /**
