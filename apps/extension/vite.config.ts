@@ -44,7 +44,7 @@ function generateManifest(mode: string) {
     description: isDev
       ? "[DEV] Save and analyze articles with AI-powered summarization"
       : "Save and analyze articles with AI-powered summarization",
-    permissions: ["activeTab", "storage", "scripting"],
+    permissions: ["activeTab", "storage", "scripting", "alarms"],
     host_permissions: isDev
       ? ["http://localhost:8000/*"]
       : ["https://api.nod-archive.com/*"],
