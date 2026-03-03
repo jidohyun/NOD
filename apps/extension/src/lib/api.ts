@@ -36,6 +36,38 @@ async function apiRequest<T>(
 
     if (!response.ok) {
       if (response.status === 401) {
+        // Attempt silent refresh before giving up
+        const refreshResult = await new Promise<{ success: boolean }>(
+          (resolve) => {
+            chrome.runtime.sendMessage(
+              { type: "REFRESH_TOKEN" },
+              (resp) => {
+                resolve(resp ?? { success: false });
+              }
+            );
+          }
+        );
+
+        if (refreshResult.success) {
+          // Retry the original request with the new token
+          const newToken = await getToken();
+          if (newToken) {
+            const retryHeaders: HeadersInit = {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${newToken}`,
+              ...options.headers,
+            };
+            const retryResponse = await fetch(url, {
+              ...options,
+              headers: retryHeaders,
+            });
+            if (retryResponse.ok) {
+              return retryResponse.json();
+            }
+          }
+        }
+
+        // Refresh failed — clear tokens
         await clearToken();
       }
 
