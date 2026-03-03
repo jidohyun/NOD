@@ -62,6 +62,8 @@ window.addEventListener("message", (event: MessageEvent) => {
       {
         type: "SET_TOKEN",
         token: event.data.token,
+        refreshToken: event.data.refreshToken,
+        expiresIn: event.data.expiresIn,
       },
       () => {
         window.postMessage({ type: "NOD_AUTH_TOKEN_ACK" }, "*");
