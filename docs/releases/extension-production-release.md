@@ -54,9 +54,27 @@ What it does:
 5. Upload artifact
 6. Create GitHub Release and attach zip
 
+## Version Bump Commands
+
+Use the extension package scripts to bump version before release:
+
+```bash
+# Patch release (1.1.0 -> 1.1.1)
+bun run --cwd apps/extension version:patch
+
+# Minor release (1.1.0 -> 1.2.0)
+bun run --cwd apps/extension version:minor
+
+# Major release (1.1.0 -> 2.0.0)
+bun run --cwd apps/extension version:major
+
+# Print the release tag for current version
+bun run --cwd apps/extension release:tag
+```
+
 ## Official Release Procedure
 
-1. Bump extension version in `apps/extension/package.json`.
+1. Bump extension version with one of the version scripts above.
 2. Run local prep command and verify output zip.
 3. Commit version/changelog updates.
 4. Create and push tag:
