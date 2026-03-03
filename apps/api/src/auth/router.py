@@ -1,6 +1,8 @@
 from uuid import UUID
 
+import httpx
 from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy import select
 
 from src.lib.auth import (
@@ -16,10 +18,21 @@ from src.lib.auth import (
     verify_oauth_token,
     verify_password,
 )
+from src.lib.config import settings
 from src.lib.dependencies import DBSession
 from src.users.model import User
 
 router = APIRouter()
+
+
+class ExtensionRefreshRequest(BaseModel):
+    refresh_token: str
+
+
+class ExtensionRefreshResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    expires_in: int
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -154,6 +167,56 @@ async def refresh_token(
     return TokenResponse(
         access_token=access_token,
         refresh_token=request.refresh_token,
+    )
+
+
+@router.post("/extension-refresh", response_model=ExtensionRefreshResponse)
+async def extension_refresh(
+    request: ExtensionRefreshRequest,
+) -> ExtensionRefreshResponse:
+    """Refresh Supabase token for the browser extension.
+
+    Proxies the refresh request to Supabase so the extension does not need
+    the Supabase client library.  The refresh_token itself serves as the
+    authentication credential (same pattern Supabase uses).
+    """
+    if not settings.SUPABASE_URL or not settings.SUPABASE_ANON_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Supabase configuration missing",
+        )
+
+    supabase_url = (
+        f"{settings.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token"
+    )
+
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            resp = await client.post(
+                supabase_url,
+                json={"refresh_token": request.refresh_token},
+                headers={
+                    "apikey": settings.SUPABASE_ANON_KEY,
+                    "Content-Type": "application/json",
+                },
+            )
+        except httpx.RequestError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail="Failed to reach authentication provider",
+            ) from exc
+
+    if resp.status_code != 200:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired refresh token",
+        )
+
+    data = resp.json()
+    return ExtensionRefreshResponse(
+        access_token=data["access_token"],
+        refresh_token=data["refresh_token"],
+        expires_in=data["expires_in"],
     )
 
 
