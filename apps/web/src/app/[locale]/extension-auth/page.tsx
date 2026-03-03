@@ -23,6 +23,8 @@ function ExtensionAuthContent() {
         data: { session },
       } = await supabase.auth.getSession();
       const token = session?.access_token;
+      const refreshToken = session?.refresh_token;
+      const expiresIn = session?.expires_in;
 
       if (!token) {
         setStatus("error");
@@ -38,10 +40,10 @@ function ExtensionAuthContent() {
         try {
           runtime.sendMessage(
             extId,
-            { type: "SET_TOKEN", token },
+            { type: "SET_TOKEN", token, refreshToken, expiresIn },
             (response?: ExtensionTokenResponse) => {
               if (runtime.lastError || !response?.success) {
-                fallbackPostMessage(token);
+                fallbackPostMessage(token, refreshToken, expiresIn);
               } else {
                 setStatus("success");
               }
@@ -53,16 +55,16 @@ function ExtensionAuthContent() {
         }
       }
 
-      fallbackPostMessage(token);
+      fallbackPostMessage(token, refreshToken, expiresIn);
     };
 
-    const fallbackPostMessage = (token: string) => {
+    const fallbackPostMessage = (token: string, refreshToken?: string, expiresIn?: number) => {
       let attempts = 0;
       const maxAttempts = 10;
 
       const trySendToken = () => {
         attempts++;
-        window.postMessage({ type: "NOD_AUTH_TOKEN", token }, "*");
+        window.postMessage({ type: "NOD_AUTH_TOKEN", token, refreshToken, expiresIn }, "*");
 
         if (attempts < maxAttempts) {
           setTimeout(trySendToken, 500);
