@@ -25,6 +25,7 @@
       "features": "기능",
       "howItWorks": "사용 방법",
       "pricing": "요금제",
+      "blog": "블로그",
       "login": "로그인",
       "getStarted": "시작하기",
       "changeLanguage": "언어 변경"
@@ -146,6 +147,7 @@
       "mobile": "모바일 앱",
       "api": "API",
       "pricing": "요금제",
+      "blog": "블로그",
       "resources": "리소스",
       "docs": "문서",
       "github": "GitHub",

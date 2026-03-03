@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LegalHeader } from "@/components/legal/legal-header";
@@ -5,6 +6,11 @@ import { LegalHeader } from "@/components/legal/legal-header";
 interface TermsPageProps {
   params: Promise<{ locale: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Terms of Service — NOD",
+  robots: { index: false, follow: true },
+};
 
 export default async function TermsPage({ params }: TermsPageProps) {
   const { locale } = await params;

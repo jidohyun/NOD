@@ -25,6 +25,7 @@
       "features": "功能",
       "howItWorks": "工作原理",
       "pricing": "定价",
+      "blog": "博客",
       "login": "登录",
       "getStarted": "开始使用",
       "changeLanguage": "切换语言"
@@ -146,6 +147,7 @@
       "mobile": "移动应用",
       "api": "API",
       "pricing": "定价",
+      "blog": "博客",
       "resources": "资源",
       "docs": "文档",
       "github": "GitHub",

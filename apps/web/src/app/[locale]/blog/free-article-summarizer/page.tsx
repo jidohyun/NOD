@@ -71,7 +71,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
   const format = await getFormatter({ locale: locale as Locale });
 
   return (
-    <article className="prose-invert" itemScope itemType="https://schema.org/Article">
+    <article className="prose" itemScope itemType="https://schema.org/Article">
       <meta
         itemProp="headline"
         content="Free Article Summarizer: The Best No-Cost Tools to Summarize Any Article"
@@ -80,7 +80,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
       <meta itemProp="author" content="NOD Team" />
 
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-neutral-500">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-cm-text/50">
         <ol
           className="flex items-center gap-1.5"
           itemScope
@@ -90,26 +90,26 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             <Link
               href={`/${locale}`}
               itemProp="item"
-              className="hover:text-white transition-colors"
+              className="hover:text-cm-text transition-colors"
             >
               <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
-          <li className="text-neutral-600">/</li>
+          <li className="text-cm-text/30">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <Link
               href={`/${locale}/blog`}
               itemProp="item"
-              className="hover:text-white transition-colors"
+              className="hover:text-cm-text transition-colors"
             >
               <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
-          <li className="text-neutral-600">/</li>
+          <li className="text-cm-text/30">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <span itemProp="name" className="text-neutral-400">
+            <span itemProp="name" className="text-cm-text-light">
               {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
@@ -119,7 +119,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
       {/* Article Header */}
       <header className="mb-12">
-        <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
+        <div className="mb-4 flex items-center gap-3 text-sm text-cm-text/50">
           <time dateTime="2026-02-16">
             {format.dateTime(new Date("2026-02-16"), {
               year: "numeric",
@@ -127,13 +127,13 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
               day: "numeric",
             })}
           </time>
-          <span className="text-neutral-700">·</span>
+          <span className="text-cm-text/40">·</span>
           <span>{t("readTime", { minutes: 8 })}</span>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-cm-text md:text-4xl lg:text-[2.75rem] leading-tight">
           Free Article Summarizer: The Best No-Cost Tools to Summarize Any Article
         </h1>
-        <p className="mt-4 text-lg text-neutral-400 leading-relaxed">
+        <p className="mt-4 text-lg text-cm-text-light leading-relaxed">
           Drowning in long-form content? Discover the best free article summarizer tools that
           condense any article into actionable insights — without word limits, sign-ups, or hidden
           paywalls.
@@ -141,7 +141,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
       </header>
 
       {/* Article Body */}
-      <div className="space-y-8 text-[15px] leading-relaxed text-neutral-300">
+      <div className="space-y-8 text-[15px] leading-relaxed text-cm-text/80">
         {/* Introduction */}
         <section>
           <p>
@@ -151,8 +151,8 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             of publications — you need a way to extract key insights faster.
           </p>
           <p className="mt-4">
-            A <strong className="text-white">free article summarizer</strong> solves this problem by
-            using AI to condense articles into their essential points. The best tools require no
+            A <strong className="text-cm-text">free article summarizer</strong> solves this problem
+            by using AI to condense articles into their essential points. The best tools require no
             sign-up, handle unlimited word counts, and maintain the core meaning of the original
             text. In this guide, you&apos;ll discover which free AI summarizers actually deliver on
             their promises, what to watch out for, and how to choose the right tool for your
@@ -162,14 +162,16 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 1 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">Why Use a Free Article Summarizer?</h2>
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
+            Why Use a Free Article Summarizer?
+          </h2>
           <p>
             Information overload is real. A{" "}
             <a
               href="https://www.sciencedirect.com/science/article/pii/S0747563220303630"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               2020 study published in Computers in Human Behavior
             </a>{" "}
@@ -183,20 +185,20 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             actionable conclusions. This means:
           </p>
           <ul className="mt-4 space-y-2 pl-5">
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Students</strong> can process more sources for research
-              papers without sacrificing comprehension.
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Students</strong> can process more sources for
+              research papers without sacrificing comprehension.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Researchers</strong> can quickly evaluate whether a
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Researchers</strong> can quickly evaluate whether a
               paper is worth deep reading.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Professionals</strong> can stay current on industry
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Professionals</strong> can stay current on industry
               trends without drowning in newsletters.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Content creators</strong> can research competitive
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Content creators</strong> can research competitive
               content faster.
             </li>
           </ul>
@@ -208,7 +210,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 2 — Comparison */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             Best Free Article Summarizers Compared
           </h2>
           <p>
@@ -216,48 +218,50 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             quality summaries without hidden limitations. Here&apos;s what we found:
           </p>
 
-          <div className="mt-6 overflow-x-auto rounded-xl border border-white/10">
+          <div className="mt-6 overflow-x-auto rounded-xl border border-cm-text/10">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10 bg-white/[0.03]">
-                  <th className="px-4 py-3 text-left font-semibold text-white">Tool</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Free Tier</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Word Limit</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Sign-Up Required</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Key Feature</th>
+                <tr className="border-b border-cm-text/10 bg-cm-mint/30">
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Tool</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Free Tier</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Word Limit</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">
+                    Sign-Up Required
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Key Feature</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">TLDR This</td>
+              <tbody className="divide-y divide-cm-text/10">
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">TLDR This</td>
                   <td className="px-4 py-2.5">Yes</td>
                   <td className="px-4 py-2.5">10,000 words</td>
                   <td className="px-4 py-2.5">No</td>
                   <td className="px-4 py-2.5">Browser extension</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Resoomer</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Resoomer</td>
                   <td className="px-4 py-2.5">Yes</td>
                   <td className="px-4 py-2.5">500 words</td>
                   <td className="px-4 py-2.5">No</td>
                   <td className="px-4 py-2.5">Educational focus</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">QuillBot Summarizer</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">QuillBot Summarizer</td>
                   <td className="px-4 py-2.5">Yes</td>
                   <td className="px-4 py-2.5">1,200 words</td>
                   <td className="px-4 py-2.5">No</td>
                   <td className="px-4 py-2.5">Adjustable length</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">SummarizeBot</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">SummarizeBot</td>
                   <td className="px-4 py-2.5">Yes</td>
                   <td className="px-4 py-2.5">Limited daily</td>
                   <td className="px-4 py-2.5">No</td>
                   <td className="px-4 py-2.5">Multi-format support</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">NOD</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">NOD</td>
                   <td className="px-4 py-2.5">Yes (20/month)</td>
                   <td className="px-4 py-2.5">Unlimited</td>
                   <td className="px-4 py-2.5">Yes (Google)</td>
@@ -276,7 +280,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 3 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             What to Look for in a Free Summarizer
           </h2>
           <p>
@@ -285,7 +289,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             Here&apos;s what separates good free tools from bad ones:
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             1. Summary quality and accuracy
           </h3>
           <p>
@@ -294,7 +298,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             models (like GPT or Claude) for better comprehension.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             2. Actual word/article limits
           </h3>
           <p>
@@ -303,7 +307,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             check the real limits before committing to a tool.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             3. Privacy and data handling
           </h3>
           <p>
@@ -313,14 +317,14 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             its AI on your inputs.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">4. Additional features</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">4. Additional features</h3>
           <p>
             Can you adjust summary length? Export to notes? Save summaries for later? These extras
             matter if you&apos;re processing dozens of articles per week. A bare-bones summarizer
             works for occasional use, but power users need more.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">5. No hidden upsells</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">5. No hidden upsells</h3>
           <p>
             The worst &ldquo;free&rdquo; tools gate the actual useful features behind paywalls. You
             paste your article, get a teaser summary, then hit a payment screen to see the full
@@ -330,32 +334,32 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 4 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">Free vs Paid: When to Upgrade</h2>
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">Free vs Paid: When to Upgrade</h2>
           <p>
             Free article summarizers work great for occasional use — a few summaries per week, short
             to medium-length articles, and content you don&apos;t need to reference later. But if
             you&apos;re a heavy user, paid tools offer real benefits:
           </p>
           <ul className="mt-4 space-y-2 pl-5">
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Higher word limits</strong> — Summarize entire research
-              papers or technical documentation without hitting caps.
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Higher word limits</strong> — Summarize entire
+              research papers or technical documentation without hitting caps.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Better AI models</strong> — Access to GPT-4, Claude, or
-              other advanced models that produce more accurate, nuanced summaries.
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Better AI models</strong> — Access to GPT-4, Claude,
+              or other advanced models that produce more accurate, nuanced summaries.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Saved history</strong> — Build a searchable library of
-              past summaries instead of losing them after each session.
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Saved history</strong> — Build a searchable library
+              of past summaries instead of losing them after each session.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Integrations</strong> — Export summaries to Notion,
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Integrations</strong> — Export summaries to Notion,
               Obsidian, or other note-taking tools automatically.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Batch processing</strong> — Summarize multiple articles
-              at once instead of pasting them one by one.
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Batch processing</strong> — Summarize multiple
+              articles at once instead of pasting them one by one.
             </li>
           </ul>
           <p className="mt-4">
@@ -363,7 +367,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             that&apos;s when a paid plan makes sense. Tools like{" "}
             <Link
               href={`/${locale}`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               NOD
             </Link>{" "}
@@ -374,7 +378,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 5 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             How to Get the Most Out of Free Summarizers
           </h2>
           <p>
@@ -382,14 +386,16 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             effectively:
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Paste clean, complete text</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
+            Paste clean, complete text
+          </h3>
           <p>
             If you copy-paste from a webpage with ads, navigation menus, or comment sections, the
             summarizer might include that junk. Use reader mode in your browser first, or manually
             select just the article body.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             Use summaries as a starting point
           </h3>
           <p>
@@ -398,7 +404,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             nuanced arguments. Skim the summary, then decide if you need the details.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Combine with note-taking</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">Combine with note-taking</h3>
           <p>
             Copy the summary into your notes with the original URL. Future you will thank you when
             you&apos;re trying to find &ldquo;that article about distributed systems&rdquo; six
@@ -406,7 +412,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             automatically.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Try different tools</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">Try different tools</h3>
           <p>
             Each summarizer has a slightly different style. Some are ultra-concise (3-4 sentences),
             others give you a paragraph-by-paragraph breakdown. Test a few with the same article to
@@ -416,12 +422,14 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 6 — Product Mention (subtle) */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">A Lightweight Option Worth Trying</h2>
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
+            A Lightweight Option Worth Trying
+          </h2>
           <p>
             If you want a free article summarizer that also saves your content for later,{" "}
             <Link
               href={`/${locale}`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               NOD
             </Link>{" "}
@@ -432,7 +440,7 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             long-term organization. You can see pricing details{" "}
             <Link
               href={`/${locale}/pricing`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               here
             </Link>{" "}
@@ -442,20 +450,20 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
 
         {/* FAQ Section */}
         <section>
-          <h2 className="mb-6 text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <h2 className="mb-6 text-2xl font-bold text-cm-text">Frequently Asked Questions</h2>
 
           <div className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
             <div
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Is there a completely free article summarizer?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Yes. Tools like TLDR This, Resoomer, and QuillBot offer free tiers with no account
                   required. However, they have word limits (500-10,000 words). NOD requires a Google
                   sign-in but offers 20 free summaries per month with unlimited word counts per
@@ -468,13 +476,13 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Can free summarizers handle long articles?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   It depends on the tool. Most free summarizers limit inputs to 500-1,200 words,
                   which covers typical blog posts but not research papers or technical
                   documentation. TLDR This handles up to 10,000 words on its free tier, and NOD has
@@ -487,13 +495,13 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Are free AI summarizers safe to use?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Generally yes, but check the privacy policy. Some free tools use your inputs to
                   train their AI models, which could be a problem if you&apos;re summarizing
                   proprietary or confidential content. For sensitive material, use tools with clear
@@ -506,13 +514,13 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Do free summarizers work with academic papers?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Yes, but quality varies. Academic papers have dense jargon and complex arguments
                   that challenge basic summarizers. Tools using advanced AI models (GPT-4, Claude)
                   perform better on technical content. For research papers, look for tools that
@@ -524,8 +532,8 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
         </section>
 
         {/* Conclusion */}
-        <section className="rounded-xl border border-[#E8B931]/20 bg-[#E8B931]/5 p-6">
-          <h2 className="mb-3 text-xl font-bold text-white">Start Summarizing Smarter Today</h2>
+        <section className="rounded-xl border cm-doodle-border border-nod-gold/20 bg-nod-gold/5 p-6">
+          <h2 className="mb-3 text-xl font-bold text-cm-text">Start Summarizing Smarter Today</h2>
           <p>
             A free article summarizer can save you hours every week by condensing long-form content
             into actionable insights. Whether you choose a no-sign-up tool like TLDR This for quick
@@ -539,13 +547,13 @@ export default async function FreeArticleSummarizerPost({ params }: BlogPostProp
             content,{" "}
             <Link
               href={`/${locale}`}
-              className="text-[#E8B931] font-medium underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold font-medium underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               try NOD — it&apos;s free to start
             </Link>
             .
           </p>
-          <p className="mt-3 text-sm text-neutral-400 italic">
+          <p className="mt-3 text-sm text-cm-text-light italic">
             Which summarizer have you tried? Let us know which features matter most to you.
           </p>
         </section>

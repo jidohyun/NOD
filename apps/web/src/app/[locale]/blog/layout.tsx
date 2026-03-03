@@ -14,9 +14,11 @@ export default async function BlogLayout({ children, params }: BlogLayoutProps) 
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="dark grain-overlay min-h-screen flex flex-col bg-[#0A0A0B] text-neutral-300">
+    <div className="min-h-screen flex flex-col bg-white text-cm-text">
       <LandingNav />
-      <main className="flex-1 mx-auto w-full max-w-3xl px-6 py-16 md:py-24">{children}</main>
+      <main className="flex-1 mx-auto w-full max-w-3xl px-6 pt-24 pb-16 md:pt-32 md:pb-24">
+        {children}
+      </main>
       <LandingFooter />
     </div>
   );
