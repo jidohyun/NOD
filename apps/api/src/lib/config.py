@@ -72,6 +72,10 @@ class Settings(BaseSettings):
     LANGFUSE_SECRET_KEY: str | None = None
     LANGFUSE_HOST: str = "https://cloud.langfuse.com"
 
+    # Supabase (extension token refresh)
+    SUPABASE_URL: str | None = None
+    SUPABASE_ANON_KEY: str | None = None
+
     # Paddle Billing
     PADDLE_API_KEY: str | None = None
     PADDLE_WEBHOOK_SECRET: str | None = None
