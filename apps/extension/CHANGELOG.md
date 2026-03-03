@@ -14,5 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial production-ready extension foundation (MV3 popup, service worker, content script).
 - Production packaging and GitHub release workflow support.
 
-[Unreleased]: https://github.com/jidohyun/NOD/compare/extension-v0.1.0...HEAD
+[Unreleased]: https://github.com/jidohyun/NOD/compare/extension-v1.1.0...HEAD
+[1.1.0]: https://github.com/jidohyun/NOD/releases/tag/extension-v1.1.0
 [0.1.0]: https://github.com/jidohyun/NOD/releases/tag/extension-v0.1.0
