@@ -12,6 +12,10 @@
     "build:dev": "rm -rf dist/dev && vite build --mode development && BUILD_TARGET=content-script vite build --mode development",
     "package:prod": "node ./scripts/package-release.mjs",
     "release:prep": "bun run typecheck && bun run build:prod && bun run package:prod",
+    "release:tag": "node -e \"const fs=require('fs');const v=JSON.parse(fs.readFileSync('./package.json','utf8')).version;console.log('extension-v'+v)\"",
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },
