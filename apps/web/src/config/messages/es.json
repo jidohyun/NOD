@@ -25,6 +25,7 @@
       "features": "Funciones",
       "howItWorks": "Cómo funciona",
       "pricing": "Precios",
+      "blog": "Blog",
       "login": "Iniciar sesión",
       "getStarted": "Comenzar",
       "changeLanguage": "Cambiar idioma"
@@ -146,6 +147,7 @@
       "mobile": "App móvil",
       "api": "API",
       "pricing": "Precios",
+      "blog": "Blog",
       "resources": "Recursos",
       "docs": "Documentación",
       "github": "GitHub",

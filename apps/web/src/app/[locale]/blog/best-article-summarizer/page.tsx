@@ -74,7 +74,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
   const format = await getFormatter({ locale: locale as Locale });
 
   return (
-    <article className="prose-invert" itemScope itemType="https://schema.org/Article">
+    <article className="prose" itemScope itemType="https://schema.org/Article">
       <meta
         itemProp="headline"
         content="Best Article Summarizer Tools in 2026: A Side-by-Side Comparison"
@@ -83,7 +83,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
       <meta itemProp="author" content="NOD Team" />
 
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-neutral-500">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-cm-text/50">
         <ol
           className="flex items-center gap-1.5"
           itemScope
@@ -93,26 +93,26 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             <Link
               href={`/${locale}`}
               itemProp="item"
-              className="hover:text-white transition-colors"
+              className="hover:text-cm-text transition-colors"
             >
               <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
-          <li className="text-neutral-600">/</li>
+          <li className="text-cm-text/30">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <Link
               href={`/${locale}/blog`}
               itemProp="item"
-              className="hover:text-white transition-colors"
+              className="hover:text-cm-text transition-colors"
             >
               <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
-          <li className="text-neutral-600">/</li>
+          <li className="text-cm-text/30">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <span itemProp="name" className="text-neutral-400">
+            <span itemProp="name" className="text-cm-text-light">
               {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
@@ -122,7 +122,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
       {/* Article Header */}
       <header className="mb-12">
-        <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
+        <div className="mb-4 flex items-center gap-3 text-sm text-cm-text/50">
           <time dateTime="2026-02-16">
             {format.dateTime(new Date("2026-02-16"), {
               year: "numeric",
@@ -130,13 +130,13 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               day: "numeric",
             })}
           </time>
-          <span className="text-neutral-700">·</span>
+          <span className="text-cm-text/40">·</span>
           <span>{t("readTime", { minutes: 10 })}</span>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-cm-text md:text-4xl lg:text-[2.75rem] leading-tight">
           Best Article Summarizer Tools in 2026: A Side-by-Side Comparison
         </h1>
-        <p className="mt-4 text-lg text-neutral-400 leading-relaxed">
+        <p className="mt-4 text-lg text-cm-text-light leading-relaxed">
           Information overload is real. Discover which AI-powered article summarizer actually saves
           you time, preserves meaning, and fits into your workflow — with honest comparisons and
           real-world use cases.
@@ -144,7 +144,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
       </header>
 
       {/* Article Body */}
-      <div className="space-y-8 text-[15px] leading-relaxed text-neutral-300">
+      <div className="space-y-8 text-[15px] leading-relaxed text-cm-text/80">
         {/* Introduction */}
         <section>
           <p>
@@ -154,7 +154,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               href="https://www.microsoft.com/en-us/worklab/work-trend-index"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               Microsoft&apos;s Work Trend Index
             </a>
@@ -163,7 +163,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             We simply cannot read everything.
           </p>
           <p className="mt-4">
-            That&apos;s where an <strong className="text-white">article summarizer</strong> comes
+            That&apos;s where an <strong className="text-cm-text">article summarizer</strong> comes
             in. A good AI article summarizer doesn&apos;t just shorten text — it extracts the core
             ideas, preserves context, and helps you decide what&apos;s worth reading in full. In
             this guide, you&apos;ll learn exactly what separates a great article summary tool from a
@@ -174,7 +174,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 1 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             What Makes a Good Article Summarizer?
           </h2>
           <p>
@@ -185,7 +185,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
           </p>
           <p className="mt-4">Here are the key criteria that separate the best from the rest:</p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">1. Accuracy of summaries</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">1. Accuracy of summaries</h3>
           <p>
             Does the summary capture the article&apos;s main point, or does it cherry-pick random
             sentences? The best AI article summarizers use transformer models (like GPT, Claude, or
@@ -194,14 +194,14 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             documentation where missing one qualifier changes the entire meaning.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">2. Speed and ease of use</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">2. Speed and ease of use</h3>
           <p>
             If it takes 30 seconds to load and requires you to paste text into a clunky web form,
             you&apos;ll stop using it. The best article summary tools work as browser extensions or
             one-click integrations. You highlight, click, and get a summary in under 3 seconds.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             3. Integration with your workflow
           </h3>
           <p>
@@ -210,7 +210,9 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             will actually get used. Standalone web apps that require manual export rarely stick.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">4. Key concept extraction</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
+            4. Key concept extraction
+          </h3>
           <p>
             Beyond summarizing, the best tools identify and extract key concepts — people,
             companies, technical terms, methodologies. This turns a summary into a structured
@@ -220,7 +222,9 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             prose.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">5. Multi-language support</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
+            5. Multi-language support
+          </h3>
           <p>
             If you read content in multiple languages, check whether the article summarizer handles
             non-English text. Many tools trained primarily on English corpora struggle with accuracy
@@ -230,7 +234,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 2 — Comparison Table */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             Top Article Summarizer Tools Compared
           </h2>
           <p>
@@ -239,55 +243,55 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             on your specific needs.
           </p>
 
-          <div className="mt-6 overflow-x-auto rounded-xl border border-white/10">
+          <div className="mt-6 overflow-x-auto rounded-xl border border-cm-text/10">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10 bg-white/[0.03]">
-                  <th className="px-4 py-3 text-left font-semibold text-white">Tool</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Best For</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">AI Model</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Key Feature</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Free Plan</th>
+                <tr className="border-b border-cm-text/10 bg-cm-mint/30">
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Tool</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Best For</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">AI Model</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Key Feature</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Free Plan</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">TLDR This</td>
+              <tbody className="divide-y divide-cm-text/10">
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">TLDR This</td>
                   <td className="px-4 py-2.5">Quick web summaries</td>
                   <td className="px-4 py-2.5">GPT</td>
                   <td className="px-4 py-2.5">Browser extension</td>
                   <td className="px-4 py-2.5">Yes</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Quillbot</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Quillbot</td>
                   <td className="px-4 py-2.5">Paraphrasing & rewriting</td>
                   <td className="px-4 py-2.5">Custom</td>
                   <td className="px-4 py-2.5">Multiple rewriting modes</td>
                   <td className="px-4 py-2.5">Limited (125 words)</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Scholarcy</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Scholarcy</td>
                   <td className="px-4 py-2.5">Academic papers</td>
                   <td className="px-4 py-2.5">Custom NLP</td>
                   <td className="px-4 py-2.5">Flashcard generation</td>
                   <td className="px-4 py-2.5">Trial only</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Resoomer</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Resoomer</td>
                   <td className="px-4 py-2.5">Students & educators</td>
                   <td className="px-4 py-2.5">Custom extractive</td>
                   <td className="px-4 py-2.5">Educational focus</td>
                   <td className="px-4 py-2.5">Yes</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">SummarizeBot</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">SummarizeBot</td>
                   <td className="px-4 py-2.5">API integrations</td>
                   <td className="px-4 py-2.5">Multi-engine</td>
                   <td className="px-4 py-2.5">File format support</td>
                   <td className="px-4 py-2.5">Trial only</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">NOD</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">NOD</td>
                   <td className="px-4 py-2.5">Knowledge management</td>
                   <td className="px-4 py-2.5">Gemini 2.0</td>
                   <td className="px-4 py-2.5">Save + summarize + search</td>
@@ -308,14 +312,14 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 3 — How AI Summarizers Work */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">How AI Article Summarizers Work</h2>
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">How AI Article Summarizers Work</h2>
           <p>
             Understanding the technology behind article summarizers helps you choose the right tool
             and set realistic expectations. There are two main approaches: extractive and
             abstractive summarization.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Extractive summarization</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">Extractive summarization</h3>
           <p>
             This method selects the most important sentences from the original text and stitches
             them together. It&apos;s fast, reliable, and preserves the original wording — but can
@@ -323,14 +327,16 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             methods.
           </p>
           <p className="mt-3">
-            <strong className="text-white">Pros:</strong> Fast, factually accurate (uses original
+            <strong className="text-cm-text">Pros:</strong> Fast, factually accurate (uses original
             text).
             <br />
-            <strong className="text-white">Cons:</strong> Can be disjointed, doesn&apos;t rephrase
+            <strong className="text-cm-text">Cons:</strong> Can be disjointed, doesn&apos;t rephrase
             or synthesize.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Abstractive summarization</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
+            Abstractive summarization
+          </h3>
           <p>
             This approach uses large language models (LLMs) like GPT-4, Claude, or Gemini to{" "}
             <em>understand</em> the content and generate a new summary in natural language. It reads
@@ -338,14 +344,16 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             introducing small inaccuracies if the model hallucinates.
           </p>
           <p className="mt-3">
-            <strong className="text-white">Pros:</strong> Natural, coherent, synthesizes multiple
+            <strong className="text-cm-text">Pros:</strong> Natural, coherent, synthesizes multiple
             points.
             <br />
-            <strong className="text-white">Cons:</strong> Slightly slower, small risk of
+            <strong className="text-cm-text">Cons:</strong> Slightly slower, small risk of
             hallucination.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Transformer models and NLP</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
+            Transformer models and NLP
+          </h3>
           <p>
             Modern AI article summarizers rely on transformer architectures — the same technology
             behind ChatGPT, Claude, and Gemini. These models use attention mechanisms to identify
@@ -354,7 +362,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               href="https://arxiv.org/abs/2104.08823"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               Stanford University&apos;s NLP Group
             </a>
@@ -372,11 +380,11 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 4 — Detailed Tool Reviews */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             In-Depth Look: What Each Tool Does Best
           </h2>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">TLDR This</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">TLDR This</h3>
           <p>
             TLDR This is a browser extension (Chrome, Firefox, Edge) that summarizes articles with
             one click. It uses GPT-based models to generate concise summaries and extracts key
@@ -384,14 +392,14 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             The premium plan ($4/month) removes ads and adds features like summary history.
           </p>
           <p className="mt-3">
-            <strong className="text-white">Best for:</strong> Casual readers who want quick
+            <strong className="text-cm-text">Best for:</strong> Casual readers who want quick
             summaries without leaving the browser.
             <br />
-            <strong className="text-white">Limitation:</strong> Summaries aren&apos;t saved anywhere
-            by default — you have to copy-paste into notes.
+            <strong className="text-cm-text">Limitation:</strong> Summaries aren&apos;t saved
+            anywhere by default — you have to copy-paste into notes.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Quillbot Summarizer</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">Quillbot Summarizer</h3>
           <p>
             Quillbot is primarily a paraphrasing tool, but it includes a solid summarization
             feature. You can choose between &ldquo;key sentences&rdquo; (extractive) or
@@ -400,14 +408,14 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             removes limits and adds advanced paraphrasing modes.
           </p>
           <p className="mt-3">
-            <strong className="text-white">Best for:</strong> Students who need both summarization
+            <strong className="text-cm-text">Best for:</strong> Students who need both summarization
             and rewriting for essays and assignments.
             <br />
-            <strong className="text-white">Limitation:</strong> Free plan&apos;s 125-word limit
+            <strong className="text-cm-text">Limitation:</strong> Free plan&apos;s 125-word limit
             makes it impractical for articles longer than ~500 words.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Scholarcy</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">Scholarcy</h3>
           <p>
             Scholarcy targets academics and researchers. It summarizes journal articles and
             generates flashcards with key findings, methods, and citations. It also extracts
@@ -415,14 +423,14 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             and Mendeley. Pricing starts at $4.99/month.
           </p>
           <p className="mt-3">
-            <strong className="text-white">Best for:</strong> PhD students, researchers, and anyone
-            reading academic papers regularly.
+            <strong className="text-cm-text">Best for:</strong> PhD students, researchers, and
+            anyone reading academic papers regularly.
             <br />
-            <strong className="text-white">Limitation:</strong> Overkill for general web articles;
+            <strong className="text-cm-text">Limitation:</strong> Overkill for general web articles;
             designed specifically for scientific literature.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">Resoomer</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">Resoomer</h3>
           <p>
             Resoomer uses extractive summarization to condense articles, books, and documents. It
             supports over 60 languages and offers a browser extension. The interface is simple and
@@ -430,17 +438,17 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             plans start at €5/month.
           </p>
           <p className="mt-3">
-            <strong className="text-white">Best for:</strong> Students and educators who need a
+            <strong className="text-cm-text">Best for:</strong> Students and educators who need a
             straightforward, no-nonsense summarizer.
             <br />
-            <strong className="text-white">Limitation:</strong> Extractive approach can feel choppy
-            compared to AI-generated summaries.
+            <strong className="text-cm-text">Limitation:</strong> Extractive approach can feel
+            choppy compared to AI-generated summaries.
           </p>
         </section>
 
         {/* Section 5 — Beyond Summaries */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             Beyond Summaries: Building a Knowledge System
           </h2>
           <p>
@@ -453,14 +461,14 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             A summary is only valuable if you can retrieve it later. That requires three things:
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">1. Persistent storage</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">1. Persistent storage</h3>
           <p>
             Summaries need to live somewhere permanent — not just your browser history. The best
             article summary tools integrate directly with note-taking apps (Notion, Obsidian,
             Evernote) or provide their own searchable library.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">2. Semantic search</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">2. Semantic search</h3>
           <p>
             Traditional keyword search fails when you can&apos;t remember the exact phrase. Semantic
             search understands <em>meaning</em>. For example, searching &ldquo;how to reduce API
@@ -471,7 +479,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             Tools that use vector embeddings (like{" "}
             <Link
               href={`/${locale}`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               NOD
             </Link>
@@ -479,7 +487,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             you&apos;re searching for ideas.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">3. Concept extraction</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">3. Concept extraction</h3>
           <p>
             The most advanced systems don&apos;t just summarize — they extract structured concepts:
             people, companies, technologies, methodologies. This turns your saved articles into a
@@ -498,11 +506,11 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 6 — Use Cases */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             Common Use Cases: Which Tool Fits Your Workflow?
           </h2>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             For students: Resoomer or Quillbot
           </h3>
           <p>
@@ -511,14 +519,16 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             also need paraphrasing (for writing assignments without plagiarism).
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">For researchers: Scholarcy</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
+            For researchers: Scholarcy
+          </h3>
           <p>
             Scholarcy is purpose-built for academic papers. It extracts methodology, results, and
             citations automatically — saving hours when reviewing literature for a thesis or grant
             proposal.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             For knowledge workers: TLDR This or NOD
           </h3>
           <p>
@@ -528,7 +538,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             steps.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             For developers: NOD or custom API tools
           </h3>
           <p>
@@ -541,31 +551,31 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* Section 7 — Choosing a Tool */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             How to Choose the Right Article Summarizer
           </h2>
           <p>Ask yourself these three questions:</p>
 
           <ol className="mt-4 space-y-4 pl-5">
             <li>
-              <strong className="text-white">
+              <strong className="text-cm-text">
                 Do I just need quick summaries, or do I want to build a searchable library?
               </strong>{" "}
               If the former, a browser extension like TLDR This is enough. If the latter, you need a
               knowledge management tool with integrated summarization.
             </li>
             <li>
-              <strong className="text-white">
+              <strong className="text-cm-text">
                 Am I summarizing web articles, PDFs, or academic papers?
               </strong>{" "}
               General-purpose tools work for web articles. Academic papers require specialized tools
               like Scholarcy that understand citations and methodology.
             </li>
             <li>
-              <strong className="text-white">Do I need multi-language support?</strong> If you read
-              content in languages other than English, verify that the tool supports your languages
-              with high accuracy. GPT-4, Claude, and Gemini-based tools generally perform well
-              across major languages.
+              <strong className="text-cm-text">Do I need multi-language support?</strong> If you
+              read content in languages other than English, verify that the tool supports your
+              languages with high accuracy. GPT-4, Claude, and Gemini-based tools generally perform
+              well across major languages.
             </li>
           </ol>
 
@@ -578,20 +588,20 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
 
         {/* FAQ Section */}
         <section>
-          <h2 className="mb-6 text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <h2 className="mb-6 text-2xl font-bold text-cm-text">Frequently Asked Questions</h2>
 
           <div className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
             <div
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Are AI article summarizers accurate?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Modern AI summarizers using transformer models (GPT-4, Claude, Gemini) achieve
                   near-human accuracy on standard benchmarks. They excel at straightforward content
                   like news articles and blog posts. For highly technical or nuanced content,
@@ -606,13 +616,13 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Can I summarize articles in other languages?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Yes, most modern article summarizers support multiple languages. Tools powered by
                   GPT-4, Claude, or Gemini handle 50+ languages with good accuracy. Resoomer
                   explicitly supports 60+ languages. Check the tool&apos;s documentation for
@@ -626,13 +636,13 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 What&apos;s the difference between extractive and abstractive summarization?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Extractive summarization selects the most important sentences from the original
                   text and combines them. It&apos;s fast and preserves original wording but can feel
                   choppy. Abstractive summarization uses AI to understand the content and generate a
@@ -647,13 +657,13 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Is there a free article summarizer with no word limit?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   TLDR This and Resoomer offer free plans with unlimited summaries, though TLDR This
                   shows ads and Resoomer limits advanced features. NOD provides 20 free summaries
                   per month with no word limit per article. Quillbot&apos;s free plan limits
@@ -667,13 +677,13 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 How do article summarizers handle technical content?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   The quality of technical summarization depends heavily on the underlying AI model.
                   Frontier models like GPT-4, Claude Opus, and Gemini 2.0 are trained on extensive
                   technical corpora and handle code, scientific terminology, and domain-specific
@@ -687,8 +697,8 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
         </section>
 
         {/* Conclusion */}
-        <section className="rounded-xl border border-[#E8B931]/20 bg-[#E8B931]/5 p-6">
-          <h2 className="mb-3 text-xl font-bold text-white">
+        <section className="rounded-xl border cm-doodle-border border-nod-gold/20 bg-nod-gold/5 p-6">
+          <h2 className="mb-3 text-xl font-bold text-cm-text">
             Start Summarizing Smarter, Not Harder
           </h2>
           <p>
@@ -708,13 +718,13 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
             search semantically?{" "}
             <Link
               href={`/${locale}/pricing`}
-              className="text-[#E8B931] font-medium underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold font-medium underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               Start with NOD&apos;s free plan
             </Link>{" "}
             — 20 summaries per month, no credit card required.
           </p>
-          <p className="mt-3 text-sm text-neutral-400 italic">
+          <p className="mt-3 text-sm text-cm-text-light italic">
             Which article summarizer are you using right now? What do you wish it did better?
             We&apos;d love to hear your experience.
           </p>

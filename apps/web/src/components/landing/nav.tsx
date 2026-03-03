@@ -129,6 +129,12 @@ export function LandingNav() {
             >
               {t("pricing")}
             </button>
+            <Link
+              href="/blog"
+              className="font-creative-body text-sm font-semibold text-cm-text/70 transition-colors hover:text-cm-text"
+            >
+              {t("blog")}
+            </Link>
           </div>
 
           {/* Desktop CTAs */}
@@ -216,6 +222,13 @@ export function LandingNav() {
               >
                 {t("pricing")}
               </button>
+              <Link
+                href="/blog"
+                className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
+                onClick={() => setMobileOpen(false)}
+              >
+                {t("blog")}
+              </Link>
               <hr className="border-cm-text/10" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

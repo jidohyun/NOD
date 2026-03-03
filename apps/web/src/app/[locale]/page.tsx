@@ -9,7 +9,12 @@ import { LandingHero } from "@/components/landing/hero";
 import { LandingHowItWorks } from "@/components/landing/how-it-works";
 import { LandingNav } from "@/components/landing/nav";
 import { LandingPricing } from "@/components/landing/pricing";
-import { OrganizationJsonLd, SoftwareApplicationJsonLd } from "@/components/seo/json-ld";
+import {
+  BreadcrumbJsonLd,
+  OrganizationJsonLd,
+  SoftwareApplicationJsonLd,
+  WebSiteJsonLd,
+} from "@/components/seo/json-ld";
 import { locales } from "@/lib/i18n/config";
 
 interface HomePageProps {
@@ -75,8 +80,10 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <div className="bg-cm-bg font-creative-body text-cm-text selection:bg-nod-gold selection:text-white overflow-x-hidden">
+      <WebSiteJsonLd />
       <SoftwareApplicationJsonLd />
       <OrganizationJsonLd />
+      <BreadcrumbJsonLd items={[{ name: "Home", url: "https://nod-archive.com" }]} />
       <LandingNav />
       <main>
         <LandingHero />

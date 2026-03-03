@@ -16,6 +16,32 @@ interface FAQPageJsonLdProps {
   faqs: FAQItem[];
 }
 
+export function WebSiteJsonLd() {
+  return (
+    <script
+      type="application/ld+json"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "NOD",
+          alternateName: "NOD — AI-Powered Second Brain",
+          url: "https://nod-archive.com",
+          description:
+            "AI-powered article saving and knowledge management. Save articles, get AI summaries, and search your knowledge library with semantic search.",
+          inLanguage: ["ko-KR", "en-US", "ja-JP", "es-ES", "pt-BR", "zh-CN", "de-DE", "fr-FR"],
+          publisher: {
+            "@type": "Organization",
+            name: "NOD",
+            url: "https://nod-archive.com",
+          },
+        }),
+      }}
+    />
+  );
+}
+
 export function SoftwareApplicationJsonLd() {
   return (
     <script
@@ -46,11 +72,7 @@ export function SoftwareApplicationJsonLd() {
               description: "Unlimited AI summaries and unlimited saved articles",
             },
           ],
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "4.8",
-            ratingCount: "50",
-          },
+          url: "https://nod-archive.com",
         }),
       }}
     />
@@ -80,16 +102,16 @@ export function BlogPostingJsonLd({
           author: {
             "@type": "Organization",
             name: "NOD Team",
-            url: "https://nod.ing",
+            url: "https://nod-archive.com",
           },
           publisher: {
             "@type": "Organization",
             name: "NOD",
-            url: "https://nod.ing",
+            url: "https://nod-archive.com",
           },
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://nod.ing/${locale}/blog/${slug}`,
+            "@id": `https://nod-archive.com/${locale}/blog/${slug}`,
           },
           inLanguage:
             {
@@ -131,6 +153,36 @@ export function FAQPageJsonLd({ faqs }: FAQPageJsonLdProps) {
   );
 }
 
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface BreadcrumbJsonLdProps {
+  items: BreadcrumbItem[];
+}
+
+export function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
+  return (
+    <script
+      type="application/ld+json"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: items.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: item.name,
+            item: item.url,
+          })),
+        }),
+      }}
+    />
+  );
+}
+
 export function OrganizationJsonLd() {
   return (
     <script
@@ -141,12 +193,15 @@ export function OrganizationJsonLd() {
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "NOD",
-          url: "https://nod.ing",
-          logo: "https://nod.ing/brand/nod-apple-touch-icon.png",
+          url: "https://nod-archive.com",
+          logo: "https://nod-archive.com/brand/nod-apple-touch-icon.png",
           description:
             "AI-powered article saving and knowledge management platform. Save articles, get AI summaries, and search your knowledge library with semantic search.",
           foundingDate: "2025",
-          sameAs: [],
+          sameAs: [
+            "https://github.com/jidohyun/NOD",
+            "https://chromewebstore.google.com/detail/nod-article-analyzer/lifmaapjkbpfbdppiaeidcnicidpfknp",
+          ],
         }),
       }}
     />

@@ -25,6 +25,7 @@
       "features": "機能",
       "howItWorks": "使い方",
       "pricing": "料金プラン",
+      "blog": "ブログ",
       "login": "ログイン",
       "getStarted": "始める",
       "changeLanguage": "言語を変更"
@@ -146,6 +147,7 @@
       "mobile": "モバイルアプリ",
       "api": "API",
       "pricing": "料金プラン",
+      "blog": "ブログ",
       "resources": "リソース",
       "docs": "ドキュメント",
       "github": "GitHub",

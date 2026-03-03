@@ -80,7 +80,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
   const format = await getFormatter({ locale: locale as Locale });
 
   return (
-    <article className="prose-invert" itemScope itemType="https://schema.org/Article">
+    <article className="prose" itemScope itemType="https://schema.org/Article">
       <meta
         itemProp="headline"
         content="Chrome Web Clipper: The Complete Guide to Saving and Organizing Web Content (2026)"
@@ -89,7 +89,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
       <meta itemProp="author" content="NOD Team" />
 
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-neutral-500">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-cm-text/50">
         <ol
           className="flex items-center gap-1.5"
           itemScope
@@ -99,26 +99,26 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             <Link
               href={`/${locale}`}
               itemProp="item"
-              className="hover:text-white transition-colors"
+              className="hover:text-cm-text transition-colors"
             >
               <span itemProp="name">{t("home")}</span>
             </Link>
             <meta itemProp="position" content="1" />
           </li>
-          <li className="text-neutral-600">/</li>
+          <li className="text-cm-text/30">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <Link
               href={`/${locale}/blog`}
               itemProp="item"
-              className="hover:text-white transition-colors"
+              className="hover:text-cm-text transition-colors"
             >
               <span itemProp="name">{t("title")}</span>
             </Link>
             <meta itemProp="position" content="2" />
           </li>
-          <li className="text-neutral-600">/</li>
+          <li className="text-cm-text/30">/</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <span itemProp="name" className="text-neutral-400">
+            <span itemProp="name" className="text-cm-text-light">
               {breadcrumbLabels[locale] || breadcrumbLabels.en}
             </span>
             <meta itemProp="position" content="3" />
@@ -128,7 +128,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
       {/* Article Header */}
       <header className="mb-12">
-        <div className="mb-4 flex items-center gap-3 text-sm text-neutral-500">
+        <div className="mb-4 flex items-center gap-3 text-sm text-cm-text/50">
           <time dateTime="2026-02-10">
             {format.dateTime(new Date("2026-02-10"), {
               year: "numeric",
@@ -136,20 +136,20 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               day: "numeric",
             })}
           </time>
-          <span className="text-neutral-700">·</span>
+          <span className="text-cm-text/40">·</span>
           <span>{t("readTime", { minutes: 10 })}</span>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-[2.75rem] leading-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-cm-text md:text-4xl lg:text-[2.75rem] leading-tight">
           Chrome Web Clipper: The Complete Guide to Saving and Organizing Web Content
         </h1>
-        <p className="mt-4 text-lg text-neutral-400 leading-relaxed">
+        <p className="mt-4 text-lg text-cm-text-light leading-relaxed">
           Stop losing valuable articles in a graveyard of bookmarks. Learn how a Chrome web clipper
           can transform the way you save, annotate, and retrieve information from the web.
         </p>
       </header>
 
       {/* Article Body */}
-      <div className="space-y-8 text-[15px] leading-relaxed text-neutral-300">
+      <div className="space-y-8 text-[15px] leading-relaxed text-cm-text/80">
         {/* Introduction */}
         <section>
           <p>
@@ -159,7 +159,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               href="https://dl.acm.org/doi/10.1145/2470654.2481310"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               study from Carnegie Mellon University
             </a>
@@ -168,7 +168,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             newsletters, research papers, docs, and evergreen tutorials we encounter daily.
           </p>
           <p className="mt-4">
-            A <strong className="text-white">Chrome web clipper</strong> offers a smarter
+            A <strong className="text-cm-text">Chrome web clipper</strong> offers a smarter
             alternative. Instead of saving a bare URL, a web clipper captures the page&apos;s
             content — title, text, images, and your own highlights — so you can search, organize,
             and reference it later. In this guide, you&apos;ll learn exactly how a web clipper
@@ -179,14 +179,14 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* Section 1 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">What Is a Chrome Web Clipper?</h2>
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">What Is a Chrome Web Clipper?</h2>
           <p>
             A web clipper is a browser extension that lets you save web pages — or selected parts of
             them — directly into a note-taking app, read-later service, or personal knowledge base.
             Unlike a{" "}
             <Link
               href={`/${locale}/blog`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               simple bookmark
             </Link>
@@ -197,24 +197,24 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             Most web clippers for Chrome offer some combination of these features:
           </p>
           <ul className="mt-4 space-y-2 pl-5">
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Full-page capture</strong> — save the entire article,
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Full-page capture</strong> — save the entire article,
               including images and formatting.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Selective clipping</strong> — highlight and save only
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Selective clipping</strong> — highlight and save only
               the paragraphs you care about.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Annotations</strong> — add your own notes or tags to
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Annotations</strong> — add your own notes or tags to
               each clip.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Organization</strong> — sort clips into folders,
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Organization</strong> — sort clips into folders,
               notebooks, or link them with related content.
             </li>
-            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[#E8B931]">
-              <strong className="text-white">Search</strong> — full-text search across everything
+            <li className="relative before:absolute before:-left-4 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-nod-gold">
+              <strong className="text-cm-text">Search</strong> — full-text search across everything
               you&apos;ve saved.
             </li>
           </ul>
@@ -222,7 +222,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* Section 2 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             Why Bookmarks Aren&apos;t Enough Anymore
           </h2>
           <p>
@@ -236,7 +236,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               href="https://www.nngroup.com/articles/information-overload/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               Nielsen Norman Group
             </a>{" "}
@@ -251,7 +251,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             save you hours every month. For a deeper dive, see our guide on{" "}
             <Link
               href={`/${locale}/pricing`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               choosing the right plan for your research workflow
             </Link>
@@ -261,19 +261,19 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* Section 3 */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             How to Choose the Best Web Clipper for Chrome
           </h2>
           <p>Not every web clipper is built the same. Here are the key factors to consider:</p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">1. Content fidelity</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">1. Content fidelity</h3>
           <p>
             Does it capture the actual text and structure, or just a screenshot? The best web
             clippers use reader-mode parsing (similar to Safari&apos;s Reader View) to extract
             clean, readable content — without ads, popups, or navigation cruft.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             2. Organization and tagging
           </h3>
           <p>
@@ -282,13 +282,13 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             project, look for tools with tag hierarchies or linking features.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">3. Search capabilities</h3>
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">3. Search capabilities</h3>
           <p>
             Full-text search is essential. Even better: semantic search that understands meaning,
             not just keywords. If you save 200 articles, you need to find the right one in seconds.
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             4. Highlight and annotate web pages
           </h3>
           <p>
@@ -298,14 +298,14 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               href="https://www.sciencedirect.com/science/article/abs/pii/S0360131514002139"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               improves comprehension and retention by up to 30%
             </a>
             .
           </p>
 
-          <h3 className="mb-2 mt-6 text-lg font-semibold text-white">
+          <h3 className="mb-2 mt-6 text-lg font-semibold text-cm-text">
             5. Privacy and data ownership
           </h3>
           <p>
@@ -317,7 +317,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* Section 4 — Comparison */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             Popular Chrome Web Clippers Compared
           </h2>
           <p>
@@ -325,43 +325,43 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             workflow:
           </p>
 
-          <div className="mt-6 overflow-x-auto rounded-xl border border-white/10">
+          <div className="mt-6 overflow-x-auto rounded-xl border border-cm-text/10">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10 bg-white/[0.03]">
-                  <th className="px-4 py-3 text-left font-semibold text-white">Tool</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Best For</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Key Strength</th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Free Plan</th>
+                <tr className="border-b border-cm-text/10 bg-cm-mint/30">
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Tool</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Best For</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Key Strength</th>
+                  <th className="px-4 py-3 text-left font-semibold text-cm-text">Free Plan</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Evernote Web Clipper</td>
+              <tbody className="divide-y divide-cm-text/10">
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Evernote Web Clipper</td>
                   <td className="px-4 py-2.5">General note-takers</td>
                   <td className="px-4 py-2.5">Mature ecosystem</td>
                   <td className="px-4 py-2.5">Limited</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Notion Web Clipper</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Notion Web Clipper</td>
                   <td className="px-4 py-2.5">Notion users</td>
                   <td className="px-4 py-2.5">Database integration</td>
                   <td className="px-4 py-2.5">Yes</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Readwise Reader</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Readwise Reader</td>
                   <td className="px-4 py-2.5">Heavy readers</td>
                   <td className="px-4 py-2.5">Highlight syncing</td>
                   <td className="px-4 py-2.5">Trial only</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Pocket</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Pocket</td>
                   <td className="px-4 py-2.5">Read-later</td>
                   <td className="px-4 py-2.5">Clean reading view</td>
                   <td className="px-4 py-2.5">Yes</td>
                 </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-2.5 text-white">Raindrop.io</td>
+                <tr className="hover:bg-cm-mint/20">
+                  <td className="px-4 py-2.5 text-cm-text">Raindrop.io</td>
                   <td className="px-4 py-2.5">Visual bookmark managers</td>
                   <td className="px-4 py-2.5">Beautiful UI + tags</td>
                   <td className="px-4 py-2.5">Yes</td>
@@ -379,7 +379,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* Section 5 — How to */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">
             How to Set Up a Web Clipper Workflow in 5 Minutes
           </h2>
           <p>
@@ -389,27 +389,27 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
           <ol className="mt-4 space-y-4 pl-5">
             <li>
-              <strong className="text-white">Install a web clipper chrome extension</strong> — Pick
-              one from the table above (or try a few). Install it from the Chrome Web Store and pin
-              it to your toolbar.
+              <strong className="text-cm-text">Install a web clipper chrome extension</strong> —
+              Pick one from the table above (or try a few). Install it from the Chrome Web Store and
+              pin it to your toolbar.
             </li>
             <li>
-              <strong className="text-white">Create 3-5 top-level categories</strong> — Don&apos;t
+              <strong className="text-cm-text">Create 3-5 top-level categories</strong> — Don&apos;t
               overthink folders. Start with broad buckets like &ldquo;Work&rdquo;,
               &ldquo;Learning&rdquo;, &ldquo;Inspiration&rdquo;, and &ldquo;Reference&rdquo;.
             </li>
             <li>
-              <strong className="text-white">Clip and annotate in real-time</strong> — When you find
-              something worth saving, clip it immediately. Add a one-sentence note explaining{" "}
+              <strong className="text-cm-text">Clip and annotate in real-time</strong> — When you
+              find something worth saving, clip it immediately. Add a one-sentence note explaining{" "}
               <em>why</em> you saved it. Future you will thank you.
             </li>
             <li>
-              <strong className="text-white">Do a weekly review</strong> — Spend 10 minutes each
+              <strong className="text-cm-text">Do a weekly review</strong> — Spend 10 minutes each
               week reviewing your clips. Archive what&apos;s no longer relevant. This prevents your
               library from becoming another junk drawer.
             </li>
             <li>
-              <strong className="text-white">Use search, not folders</strong> — Once you have 50+
+              <strong className="text-cm-text">Use search, not folders</strong> — Once you have 50+
               clips, rely on full-text search to find things. It&apos;s faster and more reliable
               than navigating folder trees.
             </li>
@@ -418,12 +418,12 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* Section 6 — Product Mention (subtle) */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-white">A Simple Option to Try</h2>
+          <h2 className="mb-4 text-2xl font-bold text-cm-text">A Simple Option to Try</h2>
           <p>
             If you want a lightweight web clipper with built-in AI summaries,{" "}
             <Link
               href={`/${locale}`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               NOD
             </Link>{" "}
@@ -433,7 +433,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             to organize web content without setting up a complex system. You can install it from the{" "}
             <Link
               href={`/${locale}/pricing`}
-              className="text-[#E8B931] underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               pricing page
             </Link>{" "}
@@ -443,20 +443,20 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
 
         {/* FAQ Section */}
         <section>
-          <h2 className="mb-6 text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <h2 className="mb-6 text-2xl font-bold text-cm-text">Frequently Asked Questions</h2>
 
           <div className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
             <div
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 What is the best free web clipper for Chrome?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   For general use, Raindrop.io and Pocket both offer solid free plans. If you need
                   AI summaries, NOD provides 20 free clippings per month. The best choice depends on
                   whether you prioritize visual organization, read-later features, or automatic
@@ -469,13 +469,13 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 How is a web clipper different from bookmarks?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Bookmarks save only a URL. A web clipper saves the actual page content — text,
                   images, and formatting. This means you can search within saved articles, the
                   content won&apos;t disappear if the page goes offline, and you can add notes and
@@ -488,13 +488,13 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Can I use a web clipper to save paywalled articles?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Most web clippers can save any content visible in your browser window, including
                   paywalled content you have legitimate access to (e.g., through a subscription).
                   The clipper captures what you can see, so if you&apos;re logged in and can read
@@ -507,13 +507,13 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Does a Chrome web clipper slow down my browser?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Modern web clippers are designed to be lightweight. Most only activate when you
                   click the extension icon, so they use virtually zero resources during normal
                   browsing. Check that the extension uses Manifest V3, Chrome&apos;s latest
@@ -526,13 +526,13 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
               itemProp="mainEntity"
               itemScope
               itemType="https://schema.org/Question"
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-5"
+              className="rounded-xl border border-cm-text/10 bg-cm-mint/20 p-5"
             >
-              <h3 className="text-base font-semibold text-white" itemProp="name">
+              <h3 className="text-base font-semibold text-cm-text" itemProp="name">
                 Can I export my clipped content to other apps?
               </h3>
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
-                <p className="mt-2 text-sm text-neutral-400" itemProp="text">
+                <p className="mt-2 text-sm text-cm-text-light" itemProp="text">
                   Most web clippers support some form of export — typically Markdown, HTML, or CSV.
                   Some tools integrate directly with Notion, Obsidian, or Google Docs. Before
                   committing to a tool, check its export options to make sure you won&apos;t get
@@ -544,8 +544,8 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
         </section>
 
         {/* Conclusion */}
-        <section className="rounded-xl border border-[#E8B931]/20 bg-[#E8B931]/5 p-6">
-          <h2 className="mb-3 text-xl font-bold text-white">Start Clipping Smarter Today</h2>
+        <section className="rounded-xl border cm-doodle-border border-nod-gold/20 bg-nod-gold/5 p-6">
+          <h2 className="mb-3 text-xl font-bold text-cm-text">Start Clipping Smarter Today</h2>
           <p>
             A Chrome web clipper is one of the simplest productivity upgrades you can make. Instead
             of losing articles in a sea of tabs and bookmarks, you&apos;ll have a searchable,
@@ -557,13 +557,13 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
             workflow. If you want to try an AI-powered option,{" "}
             <Link
               href={`/${locale}`}
-              className="text-[#E8B931] font-medium underline decoration-[#E8B931]/30 hover:decoration-[#E8B931] transition-colors"
+              className="text-nod-gold font-medium underline decoration-nod-gold/30 hover:decoration-nod-gold transition-colors"
             >
               give NOD a try — it&apos;s free to start
             </Link>
             .
           </p>
-          <p className="mt-3 text-sm text-neutral-400 italic">
+          <p className="mt-3 text-sm text-cm-text-light italic">
             What&apos;s your current system for saving web content? We&apos;d love to hear what
             works for you.
           </p>

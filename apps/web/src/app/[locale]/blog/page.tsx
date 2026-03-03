@@ -1,9 +1,65 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { Locale } from "next-intl";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { locales } from "@/lib/i18n/config";
 
 interface BlogIndexProps {
   params: Promise<{ locale: string }>;
+}
+
+const blogTitles: Record<string, string> = {
+  ko: "NOD 블로그 — AI 지식 관리 인사이트",
+  en: "NOD Blog — AI Knowledge Management Insights",
+  ja: "NODブログ — AIナレッジ管理インサイト",
+  es: "Blog NOD — Perspectivas de gestión del conocimiento con IA",
+  "pt-BR": "Blog NOD — Insights de gestão de conhecimento com IA",
+  "zh-CN": "NOD博客 — AI知识管理洞察",
+  de: "NOD Blog — KI-Wissensmanagement Insights",
+  fr: "Blog NOD — Perspectives de gestion des connaissances IA",
+};
+
+const blogDescriptions: Record<string, string> = {
+  ko: "AI 아티클 요약, 시맨틱 검색, 지식 관리에 관한 최신 가이드와 비교 분석을 확인하세요.",
+  en: "Explore guides and comparisons on AI article summarization, semantic search, and knowledge management.",
+  ja: "AI記事要約、セマンティック検索、ナレッジ管理に関する最新ガイドと比較をご覧ください。",
+  es: "Explore guías y comparaciones sobre resumen de artículos con IA, búsqueda semántica y gestión del conocimiento.",
+  "pt-BR":
+    "Explore guias e comparações sobre resumo de artigos com IA, busca semântica e gestão do conhecimento.",
+  "zh-CN": "探索关于AI文章摘要、语义搜索和知识管理的最新指南和对比分析。",
+  de: "Entdecken Sie Leitfäden und Vergleiche zu KI-Artikelzusammenfassung, semantischer Suche und Wissensmanagement.",
+  fr: "Explorez des guides et comparaisons sur le résumé d'articles IA, la recherche sémantique et la gestion des connaissances.",
+};
+
+export async function generateMetadata({ params }: BlogIndexProps): Promise<Metadata> {
+  const { locale } = await params;
+  const title = blogTitles[locale] || blogTitles.en;
+  const description = blogDescriptions[locale] || blogDescriptions.en;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog",
+      languages: Object.fromEntries(locales.map((l) => [l, l === "ko" ? "/blog" : `/${l}/blog`])),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: "/blog",
+      locale: locale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
 }
 
 const posts = [
@@ -171,30 +227,38 @@ export default async function BlogIndex({ params }: BlogIndexProps) {
 
   return (
     <div>
-      <h1 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "https://nod-archive.com" },
+          { name: "Blog", url: "https://nod-archive.com/blog" },
+        ]}
+      />
+      <h1 className="mb-4 font-creative-display text-3xl font-bold tracking-tight text-cm-text md:text-4xl">
         {t("title")}
       </h1>
-      <p className="mb-12 text-lg text-neutral-400">{t("subtitle")}</p>
+      <p className="mb-12 font-creative-body text-lg text-cm-text-light">{t("subtitle")}</p>
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {posts.map((post) => (
           <article
             key={post.slug}
-            className="group rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-colors hover:border-white/10 hover:bg-white/[0.04]"
+            className="group cm-doodle-border bg-white p-6 transition-all hover:cm-sketch-shadow"
           >
             <Link href={`/${locale}/blog/${post.slug}`} className="block">
-              <time className="text-sm text-neutral-500" dateTime={post.date}>
+              <time className="font-creative-body text-sm text-cm-text/50" dateTime={post.date}>
                 {format.dateTime(new Date(post.date), {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
               </time>
-              <h2 className="mt-2 text-xl font-semibold text-white group-hover:text-[#E8B931] transition-colors">
+              <h2 className="mt-2 font-creative-display text-xl font-semibold text-cm-text group-hover:text-nod-gold transition-colors">
                 {lang(post.title)}
               </h2>
-              <p className="mt-2 text-sm text-neutral-400 line-clamp-2">{lang(post.excerpt)}</p>
-              <span className="mt-3 inline-block text-sm font-medium text-[#E8B931]">
+              <p className="mt-2 font-creative-body text-sm text-cm-text-light line-clamp-2">
+                {lang(post.excerpt)}
+              </p>
+              <span className="mt-3 inline-block font-creative-body text-sm font-semibold text-nod-gold">
                 {t("readArticle")}
               </span>
             </Link>

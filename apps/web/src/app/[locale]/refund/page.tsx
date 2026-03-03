@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LegalHeader } from "@/components/legal/legal-header";
@@ -5,6 +6,11 @@ import { LegalHeader } from "@/components/legal/legal-header";
 interface RefundPageProps {
   params: Promise<{ locale: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Refund Policy — NOD",
+  robots: { index: false, follow: true },
+};
 
 export default async function RefundPage({ params }: RefundPageProps) {
   const { locale } = await params;

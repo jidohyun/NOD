@@ -41,6 +41,7 @@ export function LandingFooter() {
     { label: t("dashboard"), href: "/articles" },
     { label: t("extension"), href: extensionInstallUrl },
     { label: t("pricing"), href: "/pricing" },
+    { label: t("blog"), href: "/blog" },
     { label: t("docs"), href: "https://github.com/jidohyun/NOD/blob/main/docs/USAGE.md" },
     { label: t("github"), href: "https://github.com/jidohyun/NOD" },
     { label: t("privacy"), href: "/privacy" },
