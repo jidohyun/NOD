@@ -171,6 +171,16 @@ def classify_url(url: str) -> ContentType:
     if host.startswith("blog.") or "/blog/" in path or "/posts/" in path:
         return ContentType.TECH_BLOG
 
+    # Domain + path combinations for company tech blogs
+    _domain_path_blog_rules: list[tuple[str, str]] = [
+        ("openai.com", "/index/"),
+        ("anthropic.com", "/research/"),
+        ("deepmind.google", "/blog/"),
+        ("ai.meta.com", "/blog/"),
+    ]
+    if any(host == d and path.startswith(p) for d, p in _domain_path_blog_rules):
+        return ContentType.TECH_BLOG
+
     # Hostname-based heuristics for company tech/engineering blogs
     _tech_blog_keywords = ("techblog", "engineering", "engblog", "devblog")
     if any(kw in host for kw in _tech_blog_keywords):
