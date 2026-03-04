@@ -4,6 +4,7 @@ export type ErrorCode =
   | "EXTRACT_FAILED"
   | "ANALYSIS_FAILED"
   | "USAGE_LIMIT_REACHED"
+  | "PRO_CONTENT_REQUIRED"
   | "RATE_LIMITED"
   | "SERVER_ERROR"
   | "UNKNOWN";
@@ -26,12 +27,15 @@ export class ExtensionError extends Error {
           message || "Session expired. Please log in again.",
           true
         );
-      case 402:
+      case 402: {
+        const isContentTypeRestriction =
+          message?.includes("content type") || message?.includes("Pro plan only");
         return new ExtensionError(
-          "USAGE_LIMIT_REACHED",
+          isContentTypeRestriction ? "PRO_CONTENT_REQUIRED" : "USAGE_LIMIT_REACHED",
           message || "Usage limit reached. Upgrade to Pro to continue.",
           true
         );
+      }
       case 422:
         return new ExtensionError(
           "EXTRACT_FAILED",
@@ -85,6 +89,7 @@ export function getErrorMessage(code: ErrorCode): string {
     EXTRACT_FAILED: "Could not extract content",
     ANALYSIS_FAILED: "Article analysis failed",
     USAGE_LIMIT_REACHED: "Usage limit reached",
+    PRO_CONTENT_REQUIRED: "Pro plan required for this content",
     RATE_LIMITED: "Please wait a moment",
     SERVER_ERROR: "Server error occurred",
     UNKNOWN: "Something went wrong",

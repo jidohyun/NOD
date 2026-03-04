@@ -37,7 +37,10 @@ const translations = {
     "extPdfDocument": "PDF 문서 · 서버에서 분석",
     "extYoutubeVideo": "YouTube 영상 · 자막 기반 분석",
     "extGithubRepo": "GitHub 저장소",
-    "extServerProcessed": "서버에서 콘텐츠를 추출하여 분석합니다"
+    "extServerProcessed": "서버에서 콘텐츠를 추출하여 분석합니다",
+    "extProContentTitle": "Pro 플랜이 필요한 콘텐츠입니다",
+    "extProContentSubtitle": "논문, 영상 등 프리미엄 콘텐츠를 요약하려면 Pro 플랜으로 업그레이드하세요.",
+    "extProContentUpgrade": "Pro로 업그레이드"
   },
   "ja": {
     "extHeaderTitle": "NOD",
@@ -75,7 +78,10 @@ const translations = {
     "extPdfDocument": "PDFドキュメント · サーバーで分析",
     "extYoutubeVideo": "YouTube動画 · 字幕ベースの分析",
     "extGithubRepo": "GitHubリポジトリ",
-    "extServerProcessed": "サーバーでコンテンツを抽出して分析します"
+    "extServerProcessed": "サーバーでコンテンツを抽出して分析します",
+    "extProContentTitle": "Proプランが必要なコンテンツです",
+    "extProContentSubtitle": "論文や動画などのプレミアムコンテンツを要約するには、Proプランにアップグレードしてください。",
+    "extProContentUpgrade": "Proにアップグレード"
   },
   "en": {
     "extHeaderTitle": "NOD",
@@ -113,7 +119,10 @@ const translations = {
     "extPdfDocument": "PDF Document · Server-side analysis",
     "extYoutubeVideo": "YouTube Video · Transcript-based analysis",
     "extGithubRepo": "GitHub Repository",
-    "extServerProcessed": "Content will be extracted and analyzed on the server"
+    "extServerProcessed": "Content will be extracted and analyzed on the server",
+    "extProContentTitle": "Pro plan required",
+    "extProContentSubtitle": "Upgrade to Pro to summarize papers, videos, and other premium content.",
+    "extProContentUpgrade": "Upgrade to Pro"
   },
   "es": {
     "extHeaderTitle": "NOD",
@@ -151,7 +160,10 @@ const translations = {
     "extPdfDocument": "Documento PDF · Análisis en servidor",
     "extYoutubeVideo": "Video de YouTube · Análisis basado en subtítulos",
     "extGithubRepo": "Repositorio de GitHub",
-    "extServerProcessed": "El contenido se extraerá y analizará en el servidor"
+    "extServerProcessed": "El contenido se extraerá y analizará en el servidor",
+    "extProContentTitle": "Se requiere el plan Pro",
+    "extProContentSubtitle": "Actualiza a Pro para resumir artículos académicos, videos y otros contenidos premium.",
+    "extProContentUpgrade": "Actualizar a Pro"
   },
   "pt-BR": {
     "extHeaderTitle": "NOD",
@@ -189,7 +201,10 @@ const translations = {
     "extPdfDocument": "Documento PDF · Análise no servidor",
     "extYoutubeVideo": "Vídeo do YouTube · Análise baseada em legendas",
     "extGithubRepo": "Repositório GitHub",
-    "extServerProcessed": "O conteúdo será extraído e analisado no servidor"
+    "extServerProcessed": "O conteúdo será extraído e analisado no servidor",
+    "extProContentTitle": "Plano Pro necessário",
+    "extProContentSubtitle": "Atualize para o Pro para resumir artigos acadêmicos, vídeos e outros conteúdos premium.",
+    "extProContentUpgrade": "Atualizar para Pro"
   },
   "zh-CN": {
     "extHeaderTitle": "NOD",
@@ -227,7 +242,10 @@ const translations = {
     "extPdfDocument": "PDF文档 · 服务器端分析",
     "extYoutubeVideo": "YouTube视频 · 基于字幕分析",
     "extGithubRepo": "GitHub仓库",
-    "extServerProcessed": "内容将在服务器上提取并分析"
+    "extServerProcessed": "内容将在服务器上提取并分析",
+    "extProContentTitle": "需要Pro计划",
+    "extProContentSubtitle": "升级到Pro以摘要论文、视频和其他高级内容。",
+    "extProContentUpgrade": "升级到Pro"
   },
   "de": {
     "extHeaderTitle": "NOD",
@@ -265,7 +283,10 @@ const translations = {
     "extPdfDocument": "PDF-Dokument · Serverseitige Analyse",
     "extYoutubeVideo": "YouTube-Video · Untertitelbasierte Analyse",
     "extGithubRepo": "GitHub-Repository",
-    "extServerProcessed": "Inhalt wird auf dem Server extrahiert und analysiert"
+    "extServerProcessed": "Inhalt wird auf dem Server extrahiert und analysiert",
+    "extProContentTitle": "Pro-Plan erforderlich",
+    "extProContentSubtitle": "Upgraden Sie auf Pro, um Facharbeiten, Videos und andere Premium-Inhalte zusammenzufassen.",
+    "extProContentUpgrade": "Auf Pro upgraden"
   },
   "fr": {
     "extHeaderTitle": "NOD",
@@ -303,7 +324,10 @@ const translations = {
     "extPdfDocument": "Document PDF · Analyse côté serveur",
     "extYoutubeVideo": "Vidéo YouTube · Analyse basée sur les sous-titres",
     "extGithubRepo": "Dépôt GitHub",
-    "extServerProcessed": "Le contenu sera extrait et analysé sur le serveur"
+    "extServerProcessed": "Le contenu sera extrait et analysé sur le serveur",
+    "extProContentTitle": "Plan Pro requis",
+    "extProContentSubtitle": "Passez à Pro pour résumer des articles académiques, des vidéos et d'autres contenus premium.",
+    "extProContentUpgrade": "Passer à Pro"
   }
 } as const;
 
@@ -340,7 +364,9 @@ export function setLocale(locale: Locale): void {
 
 export function t(key: TranslationKey): string {
   const locale = getCurrentLocale();
-  return translations[locale]?.[key] ?? translations.en[key];
+  const table = translations[locale] as Record<string, string>;
+  const fallback = translations.en as Record<string, string>;
+  return table?.[key] ?? fallback[key];
 }
 
 export type { TranslationKey };
