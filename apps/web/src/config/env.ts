@@ -15,7 +15,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
     NEXT_PUBLIC_API_URL: z.string().url().optional().default("http://localhost:8000"),
-    NEXT_PUBLIC_SITE_URL: z.string().url().optional().default("https://example.com"),
+    NEXT_PUBLIC_SITE_URL: z.string().url().optional().default("https://nod-archive.com"),
     NEXT_PUBLIC_GA_ID: z.string().optional(),
     NEXT_PUBLIC_ENABLE_DEVTOOLS: z.enum(["true", "false"]).optional().default("false"),
     NEXT_PUBLIC_GIT_COMMIT: z.string().optional(),
