@@ -144,6 +144,27 @@ export function SuccessMessage({ articleId }: SuccessMessageProps) {
 export function ErrorMessage({ code, message, onRetry }: ErrorMessageProps) {
   const isRecoverable = code !== "EXTRACT_FAILED";
   const isUsageLimited = code === "USAGE_LIMIT_REACHED";
+  const isProContentRequired = code === "PRO_CONTENT_REQUIRED";
+
+  if (isProContentRequired) {
+    return (
+      <StatusCard
+        icon={
+          <svg aria-hidden="true" className="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        }
+        title={t("extProContentTitle")}
+        subtitle={t("extProContentSubtitle")}
+      >
+        <StatusActionButton
+          label={t("extProContentUpgrade")}
+          href={`${WEB_BASE}/pricing`}
+          accent
+        />
+      </StatusCard>
+    );
+  }
 
   return (
     <StatusCard
