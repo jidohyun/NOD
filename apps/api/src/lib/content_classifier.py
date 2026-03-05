@@ -79,6 +79,7 @@ _DOMAIN_RULES: list[tuple[list[str], ContentType]] = [
             "toss.tech",
             "blog.given-log.com",
             "johnnyreilly.com",
+            "joseph0926.com",
         ],
         ContentType.TECH_BLOG,
     ),
