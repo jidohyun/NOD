@@ -95,7 +95,7 @@ export function LandingHero() {
           <div className="max-w-4xl">
             {/* Badge */}
             <div
-              className="mb-8 inline-flex items-center gap-2.5 cm-doodle-border bg-white/80 px-4 py-2 backdrop-blur-sm"
+              className="mb-8 inline-flex items-center gap-2.5 cm-doodle-border bg-cm-bg/80 px-4 py-2 backdrop-blur-sm"
               data-hero-badge
             >
               <div className="w-2 h-2 cm-organic-shape bg-nod-gold animate-cm-wiggle" />
@@ -114,7 +114,7 @@ export function LandingHero() {
 
             {/* Description */}
             <p
-              className="mt-8 max-w-xl font-creative-body text-lg leading-relaxed text-cm-text-light"
+              className="mt-8 max-w-xl font-creative-body text-lg leading-relaxed text-cm-text/80"
               data-hero-description
             >
               {t("description")}
@@ -133,7 +133,7 @@ export function LandingHero() {
                 href={extensionInstallUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-[2rem] border-2 border-cm-text/10 bg-white px-6 py-4 font-creative-body text-base font-bold text-cm-text transition-all hover:border-cm-text/20 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg px-6 py-4 font-creative-body text-base font-bold text-cm-text transition-all hover:border-cm-text/20 hover:-translate-y-0.5"
               >
                 {t("ctaExtension")}
               </a>

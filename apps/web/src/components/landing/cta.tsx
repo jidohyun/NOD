@@ -58,7 +58,7 @@ export function LandingCta() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         {/* Organic container */}
-        <div className="mx-auto max-w-3xl text-center cm-organic-shape border-4 border-dashed border-nod-gold/20 bg-white/60 backdrop-blur-sm py-16 px-8 lg:py-20 lg:px-12">
+        <div className="mx-auto max-w-3xl text-center cm-organic-shape border-4 border-dashed border-nod-gold/20 bg-cm-bg/60 backdrop-blur-sm py-16 px-8 lg:py-20 lg:px-12">
           <h2 className="reveal font-creative-display text-[clamp(2.5rem,5vw,4.5rem)] font-black leading-[1.05] tracking-tight text-cm-text">
             {t("headline")}
           </h2>

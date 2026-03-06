@@ -92,7 +92,7 @@ export function LandingNav() {
     >
       <nav
         className={cn(
-          "cm-doodle-border bg-white/80 backdrop-blur-md px-6 py-3 transition-shadow duration-500",
+          "cm-doodle-border bg-cm-bg/80 backdrop-blur-md px-6 py-3 transition-shadow duration-500",
           scrolled ? "cm-sketch-shadow" : ""
         )}
       >
