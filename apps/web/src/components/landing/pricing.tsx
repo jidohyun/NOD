@@ -59,7 +59,7 @@ export function LandingPricing() {
   ] as const;
 
   return (
-    <section id="pricing" className="relative bg-white py-32 lg:py-40 ko-keep overflow-hidden">
+    <section id="pricing" className="relative bg-cm-bg py-32 lg:py-40 ko-keep overflow-hidden">
       {/* Decorations */}
       <FloatingCircle
         color="bg-cm-lavender/40"
@@ -160,7 +160,7 @@ export function LandingPricing() {
                     className={`group flex w-full items-center justify-center gap-2 cm-doodle-border py-4 font-creative-display text-base font-black transition-all ${
                       plan.highlighted
                         ? "bg-nod-gold text-white hover:bg-nod-gold/90 hover:cm-sketch-shadow"
-                        : "bg-white text-cm-text border-2 border-cm-text/10 hover:border-cm-text/20 hover:bg-cm-bg"
+                        : "bg-cm-bg text-cm-text border-2 border-cm-text/10 hover:border-cm-text/20 hover:bg-cm-mint/30"
                     }`}
                   >
                     {t("cta")}

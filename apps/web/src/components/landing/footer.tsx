@@ -12,7 +12,7 @@ export function LandingFooter() {
 
   const renderLink = (href: string, label: string) => {
     const className =
-      "font-creative-body text-sm font-bold text-cm-text/55 transition-colors hover:text-nod-gold";
+      "font-creative-body text-sm font-bold text-cm-text/70 transition-colors hover:text-nod-gold";
 
     if (href.startsWith("http")) {
       return (
@@ -49,7 +49,7 @@ export function LandingFooter() {
   ];
 
   return (
-    <footer className="relative bg-white border-t-2 border-dashed border-cm-text/10 ko-keep">
+    <footer className="relative bg-cm-bg border-t-2 border-dashed border-cm-text/10 ko-keep">
       <div className="mx-auto max-w-5xl px-6 lg:px-8 py-16">
         {/* Center-aligned layout */}
         <div className="flex flex-col items-center gap-8 text-center">

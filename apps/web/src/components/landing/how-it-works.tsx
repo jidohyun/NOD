@@ -47,7 +47,7 @@ export function LandingHowItWorks() {
     <section
       ref={sectionRef}
       id="how-it-works"
-      className="relative bg-white py-32 lg:py-48 ko-keep overflow-hidden"
+      className="relative bg-cm-bg py-32 lg:py-48 ko-keep overflow-hidden"
     >
       {/* Top dashed border */}
       <div className="absolute top-0 left-[10%] right-[10%] h-px border-t-2 border-dashed border-cm-text/10" />
