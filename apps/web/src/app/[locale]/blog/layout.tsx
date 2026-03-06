@@ -14,7 +14,7 @@ export default async function BlogLayout({ children, params }: BlogLayoutProps) 
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-cm-text">
+    <div className="min-h-screen flex flex-col bg-cm-bg text-cm-text">
       <LandingNav />
       <main className="flex-1 mx-auto w-full max-w-3xl px-6 pt-24 pb-16 md:pt-32 md:pb-24">
         {children}

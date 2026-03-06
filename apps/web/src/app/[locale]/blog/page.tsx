@@ -242,10 +242,10 @@ export default async function BlogIndex({ params }: BlogIndexProps) {
         {posts.map((post) => (
           <article
             key={post.slug}
-            className="group cm-doodle-border bg-white p-6 transition-all hover:cm-sketch-shadow"
+            className="group cm-doodle-border bg-cm-bg p-6 transition-all hover:cm-sketch-shadow"
           >
             <Link href={`/${locale}/blog/${post.slug}`} className="block">
-              <time className="font-creative-body text-sm text-cm-text/50" dateTime={post.date}>
+              <time className="font-creative-body text-sm text-cm-text/70" dateTime={post.date}>
                 {format.dateTime(new Date(post.date), {
                   year: "numeric",
                   month: "long",
@@ -255,7 +255,7 @@ export default async function BlogIndex({ params }: BlogIndexProps) {
               <h2 className="mt-2 font-creative-display text-xl font-semibold text-cm-text group-hover:text-nod-gold transition-colors">
                 {lang(post.title)}
               </h2>
-              <p className="mt-2 font-creative-body text-sm text-cm-text-light line-clamp-2">
+              <p className="mt-2 font-creative-body text-sm text-cm-text/80 line-clamp-2">
                 {lang(post.excerpt)}
               </p>
               <span className="mt-3 inline-block font-creative-body text-sm font-semibold text-nod-gold">
