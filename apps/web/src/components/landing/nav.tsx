@@ -66,10 +66,17 @@ export function LandingNav() {
     setMounted(true);
   }, []);
 
-  const scrollTo = useCallback((id: string) => {
-    setMobileOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  const navigateTo = useCallback(
+    (id: string) => {
+      setMobileOpen(false);
+      if (isLandingPage) {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.location.assign(`/#${id}`);
+      }
+    },
+    [isLandingPage]
+  );
 
   const navButtonClass = (id: "features" | "how-it-works" | "pricing") =>
     cn(
@@ -112,21 +119,21 @@ export function LandingNav() {
           <div className="hidden md:flex items-center gap-8">
             <button
               type="button"
-              onClick={() => scrollTo("features")}
+              onClick={() => navigateTo("features")}
               className={navButtonClass("features")}
             >
               {t("features")}
             </button>
             <button
               type="button"
-              onClick={() => scrollTo("how-it-works")}
+              onClick={() => navigateTo("how-it-works")}
               className={navButtonClass("how-it-works")}
             >
               {t("howItWorks")}
             </button>
             <button
               type="button"
-              onClick={() => scrollTo("pricing")}
+              onClick={() => navigateTo("pricing")}
               className={navButtonClass("pricing")}
             >
               {t("pricing")}
@@ -210,21 +217,21 @@ export function LandingNav() {
             <div className="flex flex-col gap-4">
               <button
                 type="button"
-                onClick={() => scrollTo("features")}
+                onClick={() => navigateTo("features")}
                 className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
               >
                 {t("features")}
               </button>
               <button
                 type="button"
-                onClick={() => scrollTo("how-it-works")}
+                onClick={() => navigateTo("how-it-works")}
                 className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
               >
                 {t("howItWorks")}
               </button>
               <button
                 type="button"
-                onClick={() => scrollTo("pricing")}
+                onClick={() => navigateTo("pricing")}
                 className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
               >
                 {t("pricing")}
