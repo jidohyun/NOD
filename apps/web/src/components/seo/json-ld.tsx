@@ -100,9 +100,11 @@ export function BlogPostingJsonLd({
           datePublished,
           dateModified: dateModified || datePublished,
           author: {
-            "@type": "Organization",
-            name: "NOD Team",
+            "@type": "Person",
+            name: "Dohyun Ji",
             url: "https://nod-archive.com",
+            jobTitle: "Software Engineer",
+            sameAs: ["https://github.com/jidohyun"],
           },
           publisher: {
             "@type": "Organization",
@@ -177,6 +179,30 @@ export function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
             name: item.name,
             item: item.url,
           })),
+        }),
+      }}
+    />
+  );
+}
+
+export function PersonJsonLd() {
+  return (
+    <script
+      type="application/ld+json"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Dohyun Ji",
+          url: "https://nod-archive.com",
+          jobTitle: "Software Engineer",
+          sameAs: ["https://github.com/jidohyun"],
+          worksFor: {
+            "@type": "Organization",
+            name: "NOD",
+            url: "https://nod-archive.com",
+          },
         }),
       }}
     />

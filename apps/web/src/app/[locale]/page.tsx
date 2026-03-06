@@ -12,6 +12,7 @@ import { LandingPricing } from "@/components/landing/pricing";
 import {
   BreadcrumbJsonLd,
   OrganizationJsonLd,
+  PersonJsonLd,
   SoftwareApplicationJsonLd,
   WebSiteJsonLd,
 } from "@/components/seo/json-ld";
@@ -83,6 +84,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <WebSiteJsonLd />
       <SoftwareApplicationJsonLd />
       <OrganizationJsonLd />
+      <PersonJsonLd />
       <BreadcrumbJsonLd items={[{ name: "Home", url: "https://nod-archive.com" }]} />
       <LandingNav />
       <main>
