@@ -4,6 +4,7 @@ import type { Locale } from "next-intl";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { AuthorProfile } from "@/components/seo/author-profile";
 import { BlogPostingJsonLd } from "@/components/seo/json-ld";
+import { RelatedPosts } from "@/components/seo/related-posts";
 import { locales } from "@/lib/i18n/config";
 
 interface BlogPostProps {
@@ -752,6 +753,7 @@ export default async function BestArticleSummarizerPost({ params }: BlogPostProp
         </div>
 
         <AuthorProfile locale={locale} />
+        <RelatedPosts currentSlug="best-article-summarizer" locale={locale} />
       </article>
     </>
   );
