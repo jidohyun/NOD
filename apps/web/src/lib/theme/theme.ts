@@ -22,12 +22,17 @@ export function isLandingPath(pathname: string): boolean {
   return normalizePathname(pathname) === "/";
 }
 
+function isLightOnlyPath(pathname: string): boolean {
+  const normalized = normalizePathname(pathname);
+  return normalized === "/" || normalized.startsWith("/blog");
+}
+
 export function resolveWebTheme(value: string | null | undefined): WebTheme {
   return value === "dark" ? "dark" : "light";
 }
 
 export function resolveThemeForPath(pathname: string, preferredTheme: WebTheme): WebTheme {
-  return isLandingPath(pathname) ? "light" : preferredTheme;
+  return isLightOnlyPath(pathname) ? "light" : preferredTheme;
 }
 
 export function applyWebTheme(theme: WebTheme): void {

@@ -38,7 +38,7 @@ const quicksand = Quicksand({
   display: "swap",
 });
 
-const themeInitScript = `(function(){try{var key='nod_web_theme';var path=window.location.pathname||'/';var normalized=(path.replace(/^/[a-z]{2}(?:-[A-Za-z]{2})?(?=/|$)/,'')||'/');var isLanding=normalized==='/'||normalized==='';var stored=localStorage.getItem(key);var system=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var preferred=stored==='light'||stored==='dark'?stored:system;var theme=isLanding?'light':preferred;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(theme);root.style.colorScheme=theme;}catch(_e){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light';}})();`;
+const themeInitScript = `(function(){try{var key='nod_web_theme';var path=window.location.pathname||'/';var normalized=(path.replace(/^\/[a-z]{2}(?:-[A-Za-z]{2})?(?=\/|$)/,'')||'/');var isLightOnly=normalized==='/'||normalized===''||normalized.indexOf('/blog')===0;var stored=localStorage.getItem(key);var system=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var preferred=stored==='light'||stored==='dark'?stored:system;var theme=isLightOnly?'light':preferred;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(theme);root.style.colorScheme=theme;}catch(_e){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light';}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nod-archive.com"),
