@@ -33,6 +33,8 @@ export function LandingNav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isLandingPage = pathname === "/" || pathname === "";
+  const isBlogPage = pathname.startsWith("/blog");
   const [activeSection, setActiveSection] = useState<"features" | "how-it-works" | "pricing">(
     "features"
   );
@@ -72,7 +74,7 @@ export function LandingNav() {
   const navButtonClass = (id: "features" | "how-it-works" | "pricing") =>
     cn(
       "font-creative-body text-sm font-semibold transition-colors",
-      activeSection === id
+      isLandingPage && activeSection === id
         ? "text-cm-text underline decoration-nod-gold decoration-2 underline-offset-8"
         : "text-cm-text/70 hover:text-cm-text"
     );
@@ -131,7 +133,12 @@ export function LandingNav() {
             </button>
             <Link
               href="/blog"
-              className="font-creative-body text-sm font-semibold text-cm-text/70 transition-colors hover:text-cm-text"
+              className={cn(
+                "font-creative-body text-sm font-semibold transition-colors",
+                isBlogPage
+                  ? "text-cm-text underline decoration-nod-gold decoration-2 underline-offset-8"
+                  : "text-cm-text/70 hover:text-cm-text"
+              )}
             >
               {t("blog")}
             </Link>
