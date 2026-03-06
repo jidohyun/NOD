@@ -5,6 +5,7 @@ import type { Locale } from "next-intl";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { AuthorProfile } from "@/components/seo/author-profile";
 import { BlogPostingJsonLd } from "@/components/seo/json-ld";
+import { RelatedPosts } from "@/components/seo/related-posts";
 import { locales } from "@/lib/i18n/config";
 import { resolveWebClipperSlugForLocale } from "../web-clipper-slug-routing";
 
@@ -585,6 +586,7 @@ export default async function ChromeWebClipperPost({ params }: BlogPostProps) {
         </div>
 
         <AuthorProfile locale={locale} />
+        <RelatedPosts currentSlug="chrome-web-clipper" locale={locale} />
       </article>
     </>
   );
