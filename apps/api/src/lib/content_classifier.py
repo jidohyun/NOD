@@ -178,6 +178,7 @@ def classify_url(url: str) -> ContentType:
     _domain_path_blog_rules: list[tuple[str, str]] = [
         ("openai.com", "/index/"),
         ("anthropic.com", "/research/"),
+        ("anthropic.com", "/engineering/"),
         ("deepmind.google", "/blog/"),
         ("ai.meta.com", "/blog/"),
     ]
