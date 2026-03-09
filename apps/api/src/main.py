@@ -255,6 +255,26 @@ async def liveness_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/debug/telemetry")
+async def debug_telemetry() -> dict[str, object]:
+    """Temporary endpoint to verify OTLP config."""
+    endpoint = settings.OTEL_EXPORTER_OTLP_ENDPOINT
+    return {
+        "otel_endpoint_configured": bool(endpoint),
+        "otel_endpoint_value": (
+            endpoint[:60] + "..." if endpoint else None
+        ),
+        "otel_headers_configured": bool(
+            settings.OTEL_EXPORTER_OTLP_HEADERS
+        ),
+        "otel_service_name": settings.OTEL_SERVICE_NAME,
+        "project_env": settings.PROJECT_ENV,
+        "tracer_provider_type": type(
+            trace.get_tracer_provider()
+        ).__name__,
+    }
+
+
 @app.get("/health/ready")
 async def readiness_check() -> dict[str, str]:
     """Readiness probe - checks if app can serve traffic."""
