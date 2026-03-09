@@ -17,11 +17,13 @@ from sqlalchemy import select
 from src.lib.config import settings
 from src.lib.database import async_session_factory
 from src.lib.logging import configure_logging, get_logger
+from src.lib.sentry import configure_sentry
 from src.lib.telemetry import configure_telemetry, instrument_app
 
-# Configure logging first
+# Configure logging first, then Sentry
 configure_logging()
 logger = get_logger(__name__)
+configure_sentry()
 
 
 @asynccontextmanager
@@ -31,6 +33,30 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logger.info("Starting application", env=settings.PROJECT_ENV)
     configure_telemetry()
     instrument_app(app)
+
+    # Prometheus metrics
+    from prometheus_fastapi_instrumentator import Instrumentator
+
+    Instrumentator(
+        should_group_status_codes=True,
+        should_ignore_untemplated=True,
+        should_respect_env_var=False,
+        excluded_handlers=["/health", "/health/live", "/health/ready", "/metrics"],
+        inprogress_name="nod_http_requests_inprogress",
+        inprogress_labels=True,
+    ).instrument(app).expose(
+        app,
+        endpoint="/metrics",
+        include_in_schema=False,
+    )
+
+    from src.lib.metrics import APP_INFO
+
+    APP_INFO.info({
+        "version": settings.APP_VERSION,
+        "environment": settings.PROJECT_ENV,
+    })
+
     yield
     # Shutdown
     logger.info("Shutting down application")
@@ -91,6 +117,15 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
         trace_id = format(ctx.trace_id, "032x")
         span.record_exception(exc)
         span.set_status(trace.StatusCode.ERROR, str(exc))
+
+    # Add Sentry context
+    import sentry_sdk
+
+    sentry_sdk.set_context("request", {
+        "request_id": request_id,
+        "path": request.url.path,
+        "method": request.method,
+    })
 
     # Log the exception
     logger.exception(

@@ -1,4 +1,5 @@
 import asyncio
+import time as _time
 import uuid
 from typing import Literal
 
@@ -20,6 +21,14 @@ from src.common.models.pagination import PaginatedResponse
 from src.lib.config import settings
 from src.lib.content_classifier import ContentType, classify_url
 from src.lib.dependencies import AIService, CurrentUser, DBSession
+from src.lib.metrics import (
+    AI_SUMMARY_DURATION,
+    AI_SUMMARY_REQUESTS,
+    ARTICLE_SAVE_REQUESTS,
+    BACKGROUND_TASKS_ACTIVE,
+    SEARCH_DURATION,
+    SEARCH_REQUESTS,
+)
 from src.lib.pdf_extractor import extract_text_from_pdf_url
 from src.lib.video_transcript import (
     TranscriptProviderError,
@@ -211,6 +220,8 @@ async def _run_analysis(
         classify_url(article_url) if article_url else ContentType.GENERAL_NEWS
     )
 
+    BACKGROUND_TASKS_ACTIVE.inc()
+    _start_time = _time.monotonic()
     try:
         initial_timeout_seconds = get_article_analysis_timeout_seconds(
             analysis_content_type
@@ -359,6 +370,18 @@ async def _run_analysis(
 
         logger.info("Article analysis complete", article_id=str(article_id))
 
+        _duration = _time.monotonic() - _start_time
+        AI_SUMMARY_DURATION.labels(
+            provider=provider,
+            content_type=str(analysis_content_type),
+        ).observe(_duration)
+        AI_SUMMARY_REQUESTS.labels(
+            provider=provider,
+            content_type=str(analysis_content_type),
+            status="success",
+        ).inc()
+        ARTICLE_SAVE_REQUESTS.labels(status="success").inc()
+
         # Trigger embedding generation asynchronously.
         try:
             from src.lib.worker_client import dispatch_worker_task
@@ -371,6 +394,18 @@ async def _run_analysis(
             )
         return True
     except Exception as e:
+        _duration = _time.monotonic() - _start_time
+        AI_SUMMARY_DURATION.labels(
+            provider=provider,
+            content_type=str(analysis_content_type),
+        ).observe(_duration)
+        AI_SUMMARY_REQUESTS.labels(
+            provider=provider,
+            content_type=str(analysis_content_type),
+            status="failed",
+        ).inc()
+        ARTICLE_SAVE_REQUESTS.labels(status="failed").inc()
+
         logger.exception(
             "Article analysis failed",
             article_id=str(article_id),
@@ -397,6 +432,8 @@ async def _run_analysis(
                 db_error_message=str(db_error),
             )
         return False
+    finally:
+        BACKGROUND_TASKS_ACTIVE.dec()
 
 
 async def _run_analysis_async(
@@ -534,9 +571,10 @@ async def search_articles(
     status_filter: str | None = Query(default=None, alias="status"),
     content_type_filter: str | None = Query(default=None, alias="content_type"),
 ) -> PaginatedResponse[ArticleListResponse]:
+    _search_start = _time.monotonic()
     try:
         embedding = await ai.generate_embedding(q)
-        return await service.search_articles_semantic(
+        result = await service.search_articles_semantic(
             db,
             user.id,
             embedding,
@@ -545,9 +583,14 @@ async def search_articles(
             status_filter=status_filter,
             content_type_filter=content_type_filter,
         )
+        SEARCH_REQUESTS.labels(type="semantic").inc()
+        SEARCH_DURATION.labels(type="semantic").observe(
+            _time.monotonic() - _search_start
+        )
+        return result
     except Exception:
         logger.warning("Semantic search failed, falling back to text search", query=q)
-        return await service.list_articles(
+        result = await service.list_articles(
             db,
             user.id,
             page=page,
@@ -556,6 +599,11 @@ async def search_articles(
             status_filter=status_filter,
             content_type_filter=content_type_filter,
         )
+        SEARCH_REQUESTS.labels(type="fallback_text").inc()
+        SEARCH_DURATION.labels(type="fallback_text").observe(
+            _time.monotonic() - _search_start
+        )
+        return result
 
 
 @router.get("/stats/content-types", response_model=ContentTypeStatsResponse)

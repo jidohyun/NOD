@@ -31,6 +31,9 @@ dependencies = [
     "pypdf>=4.0.0",
     "youtube-transcript-api>=1.2.3",
     "langfuse>=3.14.0",
+    "sentry-sdk[fastapi]>=2.0.0",
+    "prometheus-client>=0.21.0",
+    "prometheus-fastapi-instrumentator>=7.0.0",
 ]
 
 [dependency-groups]
@@ -121,4 +124,16 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = ["langfuse.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["sentry_sdk.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["prometheus_client.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["prometheus_fastapi_instrumentator.*"]
 ignore_missing_imports = true
