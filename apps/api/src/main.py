@@ -20,10 +20,11 @@ from src.lib.logging import configure_logging, get_logger
 from src.lib.sentry import configure_sentry
 from src.lib.telemetry import configure_telemetry, instrument_app
 
-# Configure logging first, then Sentry
+# Configure logging first, then Sentry, then telemetry
 configure_logging()
 logger = get_logger(__name__)
 configure_sentry()
+configure_telemetry()
 
 
 @asynccontextmanager
@@ -31,8 +32,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Application lifespan handler for startup/shutdown events."""
     # Startup
     logger.info("Starting application", env=settings.PROJECT_ENV)
-    configure_telemetry()
-    instrument_app(app)
 
     from src.lib.metrics import APP_INFO
 
@@ -53,6 +52,9 @@ app = FastAPI(
     docs_url="/docs" if settings.PROJECT_ENV != "prod" else None,
     redoc_url="/redoc" if settings.PROJECT_ENV != "prod" else None,
 )
+
+# OpenTelemetry instrumentation (before Prometheus to wrap correctly)
+instrument_app(app)
 
 # Prometheus metrics (must be before middleware registration)
 from prometheus_fastapi_instrumentator import Instrumentator  # noqa: E402
