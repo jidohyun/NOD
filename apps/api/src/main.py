@@ -34,22 +34,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     configure_telemetry()
     instrument_app(app)
 
-    # Prometheus metrics
-    from prometheus_fastapi_instrumentator import Instrumentator
-
-    Instrumentator(
-        should_group_status_codes=True,
-        should_ignore_untemplated=True,
-        should_respect_env_var=False,
-        excluded_handlers=["/health", "/health/live", "/health/ready", "/metrics"],
-        inprogress_name="nod_http_requests_inprogress",
-        inprogress_labels=True,
-    ).instrument(app).expose(
-        app,
-        endpoint="/metrics",
-        include_in_schema=False,
-    )
-
     from src.lib.metrics import APP_INFO
 
     APP_INFO.info({
@@ -68,6 +52,22 @@ app = FastAPI(
     lifespan=lifespan,
     docs_url="/docs" if settings.PROJECT_ENV != "prod" else None,
     redoc_url="/redoc" if settings.PROJECT_ENV != "prod" else None,
+)
+
+# Prometheus metrics (must be before middleware registration)
+from prometheus_fastapi_instrumentator import Instrumentator  # noqa: E402
+
+Instrumentator(
+    should_group_status_codes=True,
+    should_ignore_untemplated=True,
+    should_respect_env_var=False,
+    excluded_handlers=["/health", "/health/live", "/health/ready", "/metrics"],
+    inprogress_name="nod_http_requests_inprogress",
+    inprogress_labels=True,
+).instrument(app).expose(
+    app,
+    endpoint="/metrics",
+    include_in_schema=False,
 )
 
 
