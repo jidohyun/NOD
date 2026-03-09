@@ -30,9 +30,15 @@ def configure_telemetry() -> None:
 
     # Configure exporter based on environment
     if settings.OTEL_EXPORTER_OTLP_ENDPOINT:
-        # OTLP exporter for production (e.g., Jaeger, Tempo, Cloud Trace)
+        # OTLP exporter for production (e.g., Jaeger, Tempo, Grafana Cloud)
+        headers = (
+            _parse_otlp_headers(settings.OTEL_EXPORTER_OTLP_HEADERS)
+            if settings.OTEL_EXPORTER_OTLP_HEADERS
+            else None
+        )
         otlp_exporter = OTLPSpanExporter(
             endpoint=settings.OTEL_EXPORTER_OTLP_ENDPOINT,
+            headers=headers,
             insecure=settings.PROJECT_ENV != "prod",
         )
         provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
@@ -70,3 +76,13 @@ def instrument_app(app: FastAPI) -> None:
 def get_tracer(name: str = __name__) -> trace.Tracer:
     """Get a tracer instance for manual instrumentation."""
     return trace.get_tracer(name)
+
+
+def _parse_otlp_headers(header_str: str) -> dict[str, str]:
+    """Parse 'Key=Value,Key2=Value2' format OTLP headers."""
+    headers: dict[str, str] = {}
+    for item in header_str.split(","):
+        if "=" in item:
+            key, value = item.split("=", 1)
+            headers[key.strip()] = value.strip()
+    return headers

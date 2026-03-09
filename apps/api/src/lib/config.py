@@ -83,6 +83,19 @@ class Settings(BaseSettings):
     PADDLE_PRICE_ID_PRO: str | None = None
     PADDLE_ENVIRONMENT: Literal["sandbox", "production"] = "sandbox"
 
+    # Sentry
+    SENTRY_DSN: str | None = None
+    APP_VERSION: str = "0.1.0"
+
+    # Monitoring
+    DISCORD_WEBHOOK_URL: str | None = None
+
+    # Grafana Cloud
+    OTEL_EXPORTER_OTLP_HEADERS: str | None = None
+    GRAFANA_METRICS_URL: str | None = None
+    GRAFANA_METRICS_USER: str | None = None
+    GRAFANA_API_KEY: str | None = None
+
     def model_post_init(self, __context: object) -> None:
         # Backward compatible: support Terraform's ENVIRONMENT variable.
         if (
