@@ -20,7 +20,7 @@ def configure_telemetry() -> None:
     """Configure OpenTelemetry tracing with OTLP exporter."""
     resource = Resource.create(
         {
-            "service.name": settings.PROJECT_NAME,
+            "service.name": settings.OTEL_SERVICE_NAME or settings.PROJECT_NAME,
             "service.version": "0.1.0",
             "deployment.environment": settings.PROJECT_ENV,
         }
