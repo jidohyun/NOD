@@ -4,7 +4,7 @@ import contextlib
 
 from fastapi import FastAPI
 from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
@@ -37,9 +37,8 @@ def configure_telemetry() -> None:
             else None
         )
         otlp_exporter = OTLPSpanExporter(
-            endpoint=settings.OTEL_EXPORTER_OTLP_ENDPOINT,
+            endpoint=f"{settings.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces",
             headers=headers,
-            insecure=settings.PROJECT_ENV != "prod",
         )
         provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
     elif settings.PROJECT_ENV == "local":
