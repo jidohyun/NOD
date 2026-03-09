@@ -257,37 +257,6 @@ async def liveness_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.get("/debug/telemetry")
-async def debug_telemetry() -> dict[str, object]:
-    """Temporary endpoint to verify OTLP config."""
-    endpoint = settings.OTEL_EXPORTER_OTLP_ENDPOINT
-    # Check current span context
-    current_span = trace.get_current_span()
-    span_ctx = current_span.get_span_context()
-    return {
-        "otel_endpoint_configured": bool(endpoint),
-        "otel_endpoint_value": (
-            endpoint[:60] + "..." if endpoint else None
-        ),
-        "otel_headers_configured": bool(
-            settings.OTEL_EXPORTER_OTLP_HEADERS
-        ),
-        "otel_service_name": settings.OTEL_SERVICE_NAME,
-        "project_env": settings.PROJECT_ENV,
-        "tracer_provider_type": type(
-            trace.get_tracer_provider()
-        ).__name__,
-        "current_span_valid": span_ctx.is_valid,
-        "current_span_recording": current_span.is_recording(),
-        "trace_id": format(span_ctx.trace_id, "032x"),
-        "span_id": format(span_ctx.span_id, "016x"),
-        "span_name": (
-            current_span.name
-            if hasattr(current_span, "name")
-            else "N/A"
-        ),
-    }
-
 
 @app.get("/health/ready")
 async def readiness_check() -> dict[str, str]:
