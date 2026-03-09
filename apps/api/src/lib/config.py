@@ -108,6 +108,12 @@ class Settings(BaseSettings):
                 self.ENVIRONMENT,
             )
 
+        # Ensure DATABASE_URL uses asyncpg driver (Railway provides postgresql://)
+        if self.DATABASE_URL.startswith("postgresql://"):
+            self.DATABASE_URL = self.DATABASE_URL.replace(
+                "postgresql://", "postgresql+asyncpg://", 1
+            )
+
         # Compose DATABASE_URL from split env vars when DATABASE_URL isn't explicitly
         # provided.
         # (BaseSettings always applies defaults, so we must check the real env vars.)
