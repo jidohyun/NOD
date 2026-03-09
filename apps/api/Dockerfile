@@ -19,9 +19,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 # Copy application code
-COPY src ./src
-COPY alembic ./alembic
-COPY alembic.ini .
+COPY . .
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash appuser
