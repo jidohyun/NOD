@@ -16,8 +16,7 @@ FROM base AS production
 COPY pyproject.toml uv.lock ./
 
 # Install dependencies
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --no-install-project
+RUN uv sync --frozen --no-dev --no-install-project
 
 # Copy application code
 COPY src ./src
