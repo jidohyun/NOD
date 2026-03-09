@@ -1,6 +1,7 @@
 """OpenTelemetry configuration for distributed tracing."""
 
 import contextlib
+import logging
 
 from fastapi import FastAPI
 from opentelemetry import trace
@@ -14,6 +15,8 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
 
 from src.lib.config import settings
+
+_logger = logging.getLogger(__name__)
 
 
 def configure_telemetry() -> None:
@@ -36,14 +39,25 @@ def configure_telemetry() -> None:
             if settings.OTEL_EXPORTER_OTLP_HEADERS
             else None
         )
+        otlp_endpoint = f"{settings.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces"
+        _logger.info(
+            "Configuring OTLP exporter: endpoint=%s, headers_present=%s",
+            otlp_endpoint,
+            bool(headers),
+        )
         otlp_exporter = OTLPSpanExporter(
-            endpoint=f"{settings.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces",
+            endpoint=otlp_endpoint,
             headers=headers,
         )
         provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
     elif settings.PROJECT_ENV == "local":
         # Console exporter for local development
         provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
+    else:
+        _logger.warning(
+            "No OTLP endpoint configured; traces will not be exported. "
+            "Set OTEL_EXPORTER_OTLP_ENDPOINT to enable."
+        )
 
     trace.set_tracer_provider(provider)
 
