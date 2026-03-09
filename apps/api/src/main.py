@@ -259,6 +259,9 @@ async def liveness_check() -> dict[str, str]:
 async def debug_telemetry() -> dict[str, object]:
     """Temporary endpoint to verify OTLP config."""
     endpoint = settings.OTEL_EXPORTER_OTLP_ENDPOINT
+    # Check current span context
+    current_span = trace.get_current_span()
+    span_ctx = current_span.get_span_context()
     return {
         "otel_endpoint_configured": bool(endpoint),
         "otel_endpoint_value": (
@@ -272,6 +275,15 @@ async def debug_telemetry() -> dict[str, object]:
         "tracer_provider_type": type(
             trace.get_tracer_provider()
         ).__name__,
+        "current_span_valid": span_ctx.is_valid,
+        "current_span_recording": current_span.is_recording(),
+        "trace_id": format(span_ctx.trace_id, "032x"),
+        "span_id": format(span_ctx.span_id, "016x"),
+        "span_name": (
+            current_span.name
+            if hasattr(current_span, "name")
+            else "N/A"
+        ),
     }
 
 
