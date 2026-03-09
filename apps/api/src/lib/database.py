@@ -62,7 +62,7 @@ def update_pool_metrics() -> None:
     )
 
     pool = engine.pool
-    DB_POOL_SIZE.set(pool.size())
-    DB_POOL_CHECKED_IN.set(pool.checkedin())
-    DB_POOL_CHECKED_OUT.set(pool.checkedout())
-    DB_POOL_OVERFLOW.set(pool.overflow())
+    DB_POOL_SIZE.set(pool.size())  # type: ignore[union-attr]
+    DB_POOL_CHECKED_IN.set(pool.checkedin())  # type: ignore[union-attr]
+    DB_POOL_CHECKED_OUT.set(pool.checkedout())  # type: ignore[union-attr]
+    DB_POOL_OVERFLOW.set(pool.overflow())  # type: ignore[union-attr]

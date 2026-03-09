@@ -1,5 +1,7 @@
 """Sentry SDK initialization for error tracking and performance monitoring."""
 
+from typing import Any
+
 import sentry_sdk
 from sentry_sdk.integrations.asyncio import AsyncioIntegration
 from sentry_sdk.integrations.fastapi import FastApiIntegration
@@ -33,7 +35,7 @@ def configure_sentry() -> None:
     )
 
 
-def _before_send(event: dict, hint: dict) -> dict | None:
+def _before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any] | None:
     """Filter out noisy or expected errors."""
     if "exc_info" in hint:
         _, exc_value, _ = hint["exc_info"]
