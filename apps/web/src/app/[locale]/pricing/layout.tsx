@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
-import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { LandingFooter } from "@/components/landing/footer";
+import { LandingNav } from "@/components/landing/nav";
 
 export default function PricingLayout({ children }: { children: ReactNode }) {
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <div className="bg-cm-bg font-creative-body text-cm-text selection:bg-nod-gold selection:text-white">
+      <LandingNav />
+      <main className="min-h-screen">{children}</main>
+      <LandingFooter />
+    </div>
+  );
 }
