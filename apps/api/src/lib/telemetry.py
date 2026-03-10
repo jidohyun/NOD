@@ -1,15 +1,18 @@
-"""OpenTelemetry configuration for distributed tracing."""
+"""OpenTelemetry configuration for distributed tracing and metrics."""
 
 import contextlib
 import logging
 
 from fastapi import FastAPI
-from opentelemetry import trace
+from opentelemetry import metrics, trace
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
@@ -20,7 +23,7 @@ _logger = logging.getLogger(__name__)
 
 
 def configure_telemetry() -> None:
-    """Configure OpenTelemetry tracing with OTLP exporter."""
+    """Configure OpenTelemetry tracing and metrics with OTLP exporter."""
     resource = Resource.create(
         {
             "service.name": settings.OTEL_SERVICE_NAME or settings.PROJECT_NAME,
@@ -29,6 +32,7 @@ def configure_telemetry() -> None:
         }
     )
 
+    # --- Tracing ---
     provider = TracerProvider(resource=resource)
 
     # Configure exporter based on environment
@@ -50,6 +54,23 @@ def configure_telemetry() -> None:
             headers=headers,
         )
         provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+
+        # --- Metrics ---
+        metrics_endpoint = f"{settings.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/metrics"
+        _logger.info("Configuring OTLP metrics exporter: endpoint=%s", metrics_endpoint)
+        metric_exporter = OTLPMetricExporter(
+            endpoint=metrics_endpoint,
+            headers=headers,
+        )
+        metric_reader = PeriodicExportingMetricReader(
+            metric_exporter,
+            export_interval_millis=60_000,
+        )
+        meter_provider = MeterProvider(
+            resource=resource, metric_readers=[metric_reader]
+        )
+        metrics.set_meter_provider(meter_provider)
+
     elif settings.PROJECT_ENV == "local":
         # Console exporter for local development
         provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
