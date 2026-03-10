@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { PricingContent } from "@/components/subscription/pricing-content";
+import { LandingPricing } from "@/components/landing/pricing";
 import { locales } from "@/lib/i18n/config";
 
 interface PricingPageProps {
@@ -62,5 +62,5 @@ export default async function PricingPage({ params }: PricingPageProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  return <PricingContent />;
+  return <LandingPricing />;
 }
