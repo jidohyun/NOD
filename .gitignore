@@ -90,3 +90,6 @@ docs/.bkit-memory.json
 # Serena Memory (runtime state)
 .serena/memories/*
 !.serena/memories/.gitkeep
+
+# MCP config (contains API tokens)
+.mcp.json

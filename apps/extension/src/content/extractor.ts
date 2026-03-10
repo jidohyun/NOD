@@ -259,12 +259,15 @@ export function isArticlePage(): boolean {
   const hasOgArticle =
     sourceDocument.querySelector('meta[property="og:type"]')?.getAttribute("content") === "article";
 
+  // Check for documentation site patterns (often lack <article>/<main> tags)
+  const isDocsSite = isDocumentationSite(sourceDocument);
+
   // Check content length
   const mainContent = extractMainContent();
   const wordCount = countWords(mainContent);
   const hasEnoughContent = wordCount > 100;
 
-  return (hasArticle || hasMain || hasOgArticle) && hasEnoughContent;
+  return (hasArticle || hasMain || hasOgArticle || isDocsSite) && hasEnoughContent;
 }
 
 function isEligiblePage(): boolean {
@@ -412,6 +415,31 @@ function extractPDFContent(): ExtractedContent {
     wordCount: 0,
     readingTime: 0,
   };
+}
+
+function isDocumentationSite(doc: Document): boolean {
+  const url = window.location;
+  const host = url.hostname.replace(/^www\./, "");
+  const path = url.pathname;
+
+  // Hostname patterns: docs.*, developer.*, wiki.*
+  if (/^(docs|developer|wiki|devdocs|reference|api)\./.test(host)) {
+    return true;
+  }
+
+  // Path patterns: /docs/, /documentation/, /guide/, /concepts/, /reference/
+  if (/\/(docs|documentation|guide|guides|concepts|reference|api-reference|handbook|manual|tutorial|tutorials|learn|wiki)(\/|$)/.test(path)) {
+    return true;
+  }
+
+  // Common documentation frameworks: Docusaurus, GitBook, ReadTheDocs, MkDocs, Nextra, VitePress
+  const hasDocsFramework =
+    !!doc.querySelector('[class*="docusaurus" i], [class*="gitbook" i], [class*="mkdocs" i]') ||
+    !!doc.querySelector('[data-docusaurus], [data-nextra], [class*="vitepress" i]') ||
+    !!doc.querySelector('[class*="docs-content" i], [class*="doc-content" i]') ||
+    !!doc.querySelector('[role="main"][class*="content" i]');
+
+  return hasDocsFramework;
 }
 
 function isBlockedHost(host: string): boolean {
