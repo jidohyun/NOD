@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <a href="README.ko.md">한국어</a>
+  <img width="720" height="1236" alt="스크린샷 2026-03-11 오전 11 14 06" src="https://github.com/user-attachments/assets/e9b5a517-daba-449d-b8f4-55c557710630" />
 </p>
 
 ---
@@ -49,7 +49,7 @@ apps/
 ├── api/          # FastAPI — AI summarization, auth, storage
 ├── worker/       # FastAPI — async jobs via Cloud Tasks & Pub/Sub
 ├── extension/    # Chrome Extension — content capture & summarization
-├── mobile/       # React Native (planned)
+├── mobile/       # flutter (planned)
 └── infra/        # Terraform — GCP Cloud Run deployment
 ```
 
