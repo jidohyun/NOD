@@ -289,6 +289,15 @@ app.include_router(
     tags=["subscriptions"],
 )
 
+from src.extraction_failures.router import (  # noqa: E402
+    router as extraction_failures_router,
+)
 from src.users.router import router as users_router  # noqa: E402
 
 app.include_router(users_router, prefix="/api/users", tags=["users"])
+
+app.include_router(
+    extraction_failures_router,
+    prefix="/api/extraction-failures",
+    tags=["extraction-failures"],
+)
