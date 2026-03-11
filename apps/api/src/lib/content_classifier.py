@@ -185,6 +185,10 @@ def classify_url(url: str) -> ContentType:
     if any(host == d and path.startswith(p) for d, p in _domain_path_blog_rules):
         return ContentType.TECH_BLOG
 
+    # GitHub Pages — most *.github.io sites are personal tech blogs
+    if host.endswith(".github.io"):
+        return ContentType.TECH_BLOG
+
     # Hostname-based heuristics for company tech/engineering blogs
     _tech_blog_keywords = ("techblog", "engineering", "engblog", "devblog")
     if any(kw in host for kw in _tech_blog_keywords):
