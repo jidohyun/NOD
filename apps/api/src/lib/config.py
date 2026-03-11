@@ -83,6 +83,9 @@ class Settings(BaseSettings):
     PADDLE_PRICE_ID_PRO: str | None = None
     PADDLE_ENVIRONMENT: Literal["sandbox", "production"] = "production"
 
+    # Admin
+    ADMIN_USER_IDS: list[str] = []
+
     # Sentry
     SENTRY_DSN: str | None = None
     APP_VERSION: str = "0.1.0"

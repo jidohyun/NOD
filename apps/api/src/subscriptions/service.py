@@ -4,9 +4,14 @@ from datetime import UTC, datetime
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.lib.config import settings
 from src.lib.content_classifier import ContentType
 from src.subscriptions.model import Subscription, UsageRecord
 from src.subscriptions.schemas import PLAN_LIMITS, UsageResponse
+
+
+def _is_admin(user_id: uuid_lib.UUID | str) -> bool:
+    return str(user_id) in settings.ADMIN_USER_IDS
 
 FREE_ALLOWED_CONTENT_TYPES = {
     ContentType.GENERAL_NEWS,
@@ -24,12 +29,18 @@ async def get_or_create_subscription(
 ) -> Subscription:
     """Get user's subscription, creating a default 'basic' one if none exists."""
     uid = _normalize_user_id(user_id)
+    default_plan = "pro" if _is_admin(uid) else "basic"
+
     result = await db.execute(select(Subscription).where(Subscription.user_id == uid))
     subscription = result.scalar_one_or_none()
 
     if not subscription:
-        subscription = Subscription(user_id=uid, plan="basic", status="active")
+        subscription = Subscription(user_id=uid, plan=default_plan, status="active")
         db.add(subscription)
+        await db.flush()
+    elif _is_admin(uid) and subscription.plan != "pro":
+        subscription.plan = "pro"
+        subscription.status = "active"
         await db.flush()
 
     return subscription
@@ -78,8 +89,17 @@ async def get_usage_info(
     """Get combined subscription + usage info for the user."""
     subscription = await get_or_create_subscription(db, user_id)
     usage = await get_or_create_usage(db, user_id)
-    limits = PLAN_LIMITS.get(subscription.plan, PLAN_LIMITS["basic"])
 
+    if _is_admin(user_id):
+        return UsageResponse(
+            plan="pro",
+            status="active",
+            summaries_used=usage.summaries_used,
+            summaries_limit=-1,
+            can_summarize=True,
+        )
+
+    limits = PLAN_LIMITS.get(subscription.plan, PLAN_LIMITS["basic"])
     summaries_limit = limits["summaries_per_month"]
     can_summarize = summaries_limit == -1 or usage.summaries_used < summaries_limit
 
