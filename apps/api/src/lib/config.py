@@ -81,7 +81,7 @@ class Settings(BaseSettings):
     PADDLE_WEBHOOK_SECRET: str | None = None
     PADDLE_CLIENT_TOKEN: str | None = None
     PADDLE_PRICE_ID_PRO: str | None = None
-    PADDLE_ENVIRONMENT: Literal["sandbox", "production"] = "sandbox"
+    PADDLE_ENVIRONMENT: Literal["sandbox", "production"] = "production"
 
     # Sentry
     SENTRY_DSN: str | None = None
