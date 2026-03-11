@@ -141,6 +141,8 @@ export function BillingContent() {
         userId: data.user_id,
         userEmail: data.user_email,
         locale,
+        clientToken: data.client_token,
+        environment: data.environment as "sandbox" | "production",
       });
     } catch {
       setUpgradeError(t("upgradeUnavailable"));

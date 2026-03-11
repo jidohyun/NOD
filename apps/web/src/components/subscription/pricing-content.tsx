@@ -92,6 +92,8 @@ export function PricingContent() {
         userId: data.user_id,
         userEmail: data.user_email,
         locale,
+        clientToken: data.client_token,
+        environment: data.environment as "sandbox" | "production",
       });
     } catch {
     } finally {
