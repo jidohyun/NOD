@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import type { ExtractedContent } from "../../types/article";
 import type { ContentScriptResponse } from "../../types/api";
+import { reportExtractionFailure } from "../../lib/api";
 
 interface UseArticleResult {
   isLoading: boolean;
@@ -100,6 +101,13 @@ export function useArticle(): UseArticleResult {
       }
 
       setError(lastError || "Could not extract content from this page");
+
+      reportExtractionFailure({
+        url: tabUrl,
+        error_code: "EXTRACT_FAILED",
+        error_message: lastError || "Could not extract content from this page",
+        page_title: tab.title || undefined,
+      });
     } catch {
       setError("Could not extract content from this page");
     } finally {

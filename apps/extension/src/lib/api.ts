@@ -157,6 +157,37 @@ export async function getSimilarArticles(url: string) {
 }
 
 /**
+ * Report an extraction failure for analytics
+ */
+export async function reportExtractionFailure(data: {
+  url: string;
+  error_code: string;
+  error_message?: string;
+  page_title?: string;
+  extension_version?: string;
+}): Promise<void> {
+  try {
+    const token = await getToken();
+    const url = `${API_BASE}/api/extraction-failures`;
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        ...data,
+        user_agent: navigator.userAgent,
+      }),
+    });
+  } catch {
+    // Silently fail — logging should never block UX
+  }
+}
+
+/**
  * Get current usage info
  */
 export interface UsageInfo {
