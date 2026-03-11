@@ -578,6 +578,7 @@
       "proSearch": "무제한 시맨틱 검색"
     },
     "processing": "처리 중...",
+    "upgradeUnavailable": "결제 서비스가 준비 중입니다. 잠시 후 다시 시도해 주세요.",
     "managePayment": "결제 수단 관리",
     "cancelDescription": "구독을 취소하면 현재 결제 기간이 끝날 때까지 Pro 기능을 계속 사용할 수 있습니다.",
     "checkoutSuccess": "결제가 완료되었습니다! Pro 구독이 활성화되었습니다.",

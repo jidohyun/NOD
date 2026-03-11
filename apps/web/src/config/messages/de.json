@@ -578,6 +578,7 @@
       "proSearch": "Unbegrenzte semantische Suchen"
     },
     "processing": "Wird verarbeitet...",
+    "upgradeUnavailable": "Der Zahlungsdienst wird vorbereitet. Bitte versuchen Sie es später erneut.",
     "managePayment": "Zahlungsmethode verwalten",
     "cancelDescription": "Wenn Sie kündigen, bleiben Ihre Pro-Funktionen bis zum Ende Ihres aktuellen Abrechnungszeitraums aktiv.",
     "checkoutSuccess": "Zahlung erfolgreich! Ihr Pro-Abonnement ist jetzt aktiv.",

@@ -578,6 +578,7 @@
       "proSearch": "無制限セマンティック検索"
     },
     "processing": "処理中...",
+    "upgradeUnavailable": "決済サービスを準備中です。しばらくしてからもう一度お試しください。",
     "managePayment": "お支払い方法の管理",
     "cancelDescription": "キャンセルすると、現在の請求期間の終了までPro機能をご利用いただけます。",
     "checkoutSuccess": "お支払いが完了しました！Proサブスクリプションが有効になりました。",
