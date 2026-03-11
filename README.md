@@ -29,7 +29,7 @@ NOD is a Chrome extension and web app that summarizes web content with AI and sa
 It started as a personal [n8n + Gemini + Obsidian automation](https://velog.io/@do-hyun123/ipone-n8n-automation). People kept asking me to set it up for them, so I turned it into a product anyone can install in 30 seconds.
 
 <p align="center">
-  <img width="720" height="1236" alt="스크린샷 2026-03-11 오전 11 14 06" src="https://github.com/user-attachments/assets/e9b5a517-daba-449d-b8f4-55c557710630" />
+  <img width="720" height="1234" alt="스크린샷 2026-03-11 오후 12 04 49" src="https://github.com/user-attachments/assets/925c755b-30f3-465e-8696-ae860cdb7dff" />
 </p>
 
 ## What it does
