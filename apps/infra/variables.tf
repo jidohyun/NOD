@@ -311,5 +311,5 @@ variable "PADDLE_PRICE_ID_PRO" {
 variable "PADDLE_ENVIRONMENT" {
   description = "Paddle environment (sandbox or production)"
   type        = string
-  default     = "sandbox"
+  default     = "production"
 }

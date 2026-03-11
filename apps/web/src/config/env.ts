@@ -22,7 +22,7 @@ export const env = createEnv({
     NEXT_PUBLIC_PADDLE_CLIENT_TOKEN: z.string().optional(),
     NEXT_PUBLIC_PADDLE_ENVIRONMENT: z.preprocess(
       (val) => (val === "" ? undefined : val),
-      z.enum(["sandbox", "production"]).optional().default("sandbox")
+      z.enum(["sandbox", "production"]).optional().default("production")
     ),
   },
 
