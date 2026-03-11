@@ -113,7 +113,7 @@ export function HelpContent({ locale }: HelpContentProps) {
               {t("shortcuts.billing")}
             </Link>
             <Link
-              href="/pricing"
+              href="/settings/billing"
               className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
             >
               {t("shortcuts.pricing")}
