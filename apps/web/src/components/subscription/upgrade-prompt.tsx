@@ -15,7 +15,7 @@ export function UpgradePrompt() {
       <p className="text-sm font-medium text-yellow-800">{t("limitReached")}</p>
       <p className="mt-1 text-xs text-yellow-700">{t("upgradePrompt")}</p>
       <Link
-        href="/pricing"
+        href="/settings/billing"
         className="mt-2 inline-block rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
       >
         {t("upgrade")}

@@ -162,7 +162,7 @@ export function SettingsProfile() {
                   </div>
 
                   <Link
-                    href="/pricing"
+                    href="/settings/billing"
                     className="text-xs font-creative-body font-black text-nod-gold underline decoration-dotted"
                   >
                     {t("actions.changePlan")}
@@ -226,7 +226,7 @@ export function SettingsProfile() {
                 </Link>
 
                 <Link
-                  href="/pricing"
+                  href="/settings/billing"
                   className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"
                 >
                   <UserIcon className="mx-auto h-8 w-8 text-[#8BA888]" />

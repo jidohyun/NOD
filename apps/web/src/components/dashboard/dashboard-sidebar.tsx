@@ -43,7 +43,7 @@ export function DashboardSidebar() {
   const bottomNavItems = [
     { href: "/settings", icon: Settings, label: t("sidebar.nav.settings") },
     { href: "/settings/billing", icon: CreditCard, label: t("sidebar.nav.billing") },
-    { href: "/pricing", icon: Tag, label: t("sidebar.nav.pricing") },
+    { href: "/settings/billing", icon: Tag, label: t("sidebar.nav.pricing") },
   ] as const;
 
   const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";

@@ -205,7 +205,7 @@ export function BillingContent() {
 
               {!isPro ? (
                 <Link
-                  href="/pricing"
+                  href="/settings/billing"
                   className="mt-6 inline-flex items-center cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold"
                 >
                   {t("upgrade")}
@@ -311,7 +311,7 @@ export function BillingContent() {
                     {t("proUpgradeDescription")}
                   </p>
                   <Link
-                    href="/pricing"
+                    href="/settings/billing"
                     className="inline-flex cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold"
                   >
                     {t("upgrade")}
