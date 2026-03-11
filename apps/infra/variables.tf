@@ -313,3 +313,10 @@ variable "PADDLE_ENVIRONMENT" {
   type        = string
   default     = "production"
 }
+
+# Admin
+variable "ADMIN_USER_IDS" {
+  description = "Comma-separated list of admin user IDs for pro plan override"
+  type        = string
+  default     = ""
+}
