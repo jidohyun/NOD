@@ -578,6 +578,7 @@
       "proSearch": "Búsquedas semánticas ilimitadas"
     },
     "processing": "Procesando...",
+    "upgradeUnavailable": "El servicio de pago se está preparando. Por favor, inténtelo de nuevo más tarde.",
     "managePayment": "Gestionar método de pago",
     "cancelDescription": "Si cancelas, tus funciones Pro permanecerán activas hasta el final de tu período de facturación actual.",
     "checkoutSuccess": "¡Pago exitoso! Tu suscripción Pro está activa.",

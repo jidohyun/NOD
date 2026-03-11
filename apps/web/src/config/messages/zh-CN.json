@@ -578,6 +578,7 @@
       "proSearch": "无限语义搜索"
     },
     "processing": "处理中...",
+    "upgradeUnavailable": "支付服务正在准备中，请稍后再试。",
     "managePayment": "管理支付方式",
     "cancelDescription": "取消后，您的 Pro 功能将保持活跃直到当前计费周期结束。",
     "checkoutSuccess": "支付成功！您的 Pro 订阅已激活。",

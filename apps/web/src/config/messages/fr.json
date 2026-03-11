@@ -578,6 +578,7 @@
       "proSearch": "Recherches sémantiques illimitées"
     },
     "processing": "Traitement en cours...",
+    "upgradeUnavailable": "Le service de paiement est en cours de préparation. Veuillez réessayer plus tard.",
     "managePayment": "Gérer le mode de paiement",
     "cancelDescription": "Si vous annulez, vos fonctionnalités Pro resteront actives jusqu'à la fin de votre période de facturation en cours.",
     "checkoutSuccess": "Paiement réussi ! Votre abonnement Pro est maintenant actif.",

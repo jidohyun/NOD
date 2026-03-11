@@ -50,6 +50,7 @@ export function BillingContent() {
   const checkout = useCheckout();
   const invalidate = useInvalidateSubscription();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [upgradeError, setUpgradeError] = useState("");
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
 
@@ -132,6 +133,7 @@ export function BillingContent() {
   async function handleUpgrade() {
     if (isProcessing) return;
     setIsProcessing(true);
+    setUpgradeError("");
     try {
       const data = await checkout.mutateAsync();
       await openCheckout({
@@ -141,6 +143,7 @@ export function BillingContent() {
         locale,
       });
     } catch {
+      setUpgradeError(t("upgradeUnavailable"));
     } finally {
       setIsProcessing(false);
     }
@@ -225,14 +228,21 @@ export function BillingContent() {
               </div>
 
               {!isPro ? (
-                <button
-                  type="button"
-                  onClick={handleUpgrade}
-                  disabled={isProcessing}
-                  className="mt-6 inline-flex items-center cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold disabled:opacity-50"
-                >
-                  {isProcessing ? t("processing") : t("upgrade")}
-                </button>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    onClick={handleUpgrade}
+                    disabled={isProcessing}
+                    className="inline-flex items-center cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold disabled:opacity-50"
+                  >
+                    {isProcessing ? t("processing") : t("upgrade")}
+                  </button>
+                  {upgradeError ? (
+                    <p className="mt-2 font-creative-body text-xs font-bold text-red-500">
+                      {upgradeError}
+                    </p>
+                  ) : null}
+                </div>
               ) : null}
             </section>
 
@@ -333,14 +343,21 @@ export function BillingContent() {
                   <p className="font-creative-body text-sm font-semibold text-cm-text/65">
                     {t("proUpgradeDescription")}
                   </p>
-                  <button
-                    type="button"
-                    onClick={handleUpgrade}
-                    disabled={isProcessing}
-                    className="inline-flex cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold disabled:opacity-50"
-                  >
-                    {isProcessing ? t("processing") : t("upgrade")}
-                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={handleUpgrade}
+                      disabled={isProcessing}
+                      className="inline-flex cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold disabled:opacity-50"
+                    >
+                      {isProcessing ? t("processing") : t("upgrade")}
+                    </button>
+                    {upgradeError ? (
+                      <p className="mt-2 font-creative-body text-xs font-bold text-red-500">
+                        {upgradeError}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
               )}
             </section>
