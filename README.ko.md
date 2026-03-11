@@ -29,8 +29,9 @@ NOD는 웹 콘텐츠를 AI로 요약하고, 검색 가능한 지식으로 저장
 원래 개인용 [n8n + Gemini + Obsidian 자동화](https://velog.io/@do-hyun123/ipone-n8n-automation)로 만들었는데, 세팅을 부탁하는 사람이 많아서 누구나 30초만에 쓸 수 있는 서비스로 만들었습니다.
 
 <p align="center">
-  <img src="https://nod-archive.com/og-image.png" width="720" alt="NOD 스크린샷" />
+  <img width="720" height="1236" alt="스크린샷 2026-03-11 오전 11 14 06" src="https://github.com/user-attachments/assets/e9b5a517-daba-449d-b8f4-55c557710630" />
 </p>
+
 
 ## 기능
 
@@ -49,7 +50,7 @@ apps/
 ├── api/          # FastAPI — AI 요약, 인증, 저장
 ├── worker/       # FastAPI — Cloud Tasks & Pub/Sub 비동기 작업
 ├── extension/    # Chrome Extension — 콘텐츠 캡처 & 요약
-├── mobile/       # React Native (예정)
+├── mobile/       # flutter (예정)
 └── infra/        # Terraform — GCP Cloud Run 배포
 ```
 
