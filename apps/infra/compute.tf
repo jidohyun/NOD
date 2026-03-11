@@ -178,6 +178,14 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       dynamic "env" {
+        for_each = var.ADMIN_USER_IDS != "" ? [1] : []
+        content {
+          name  = "ADMIN_USER_IDS"
+          value = jsonencode(split(",", var.ADMIN_USER_IDS))
+        }
+      }
+
+      dynamic "env" {
         for_each = var.LANGFUSE_PUBLIC_KEY != "" ? [1] : []
         content {
           name  = "LANGFUSE_PUBLIC_KEY"
