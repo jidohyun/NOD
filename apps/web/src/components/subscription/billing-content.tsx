@@ -10,15 +10,17 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { type CSSProperties, useEffect } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  useCheckout,
   useInvalidateSubscription,
   usePortalUrl,
   useSubscription,
   useUsage,
 } from "@/lib/api/subscriptions";
 import { Link } from "@/lib/i18n/routing";
+import { openCheckout } from "@/lib/paddle";
 
 const BILLING_BG_STYLE: CSSProperties = {
   backgroundImage:
@@ -45,7 +47,9 @@ export function BillingContent() {
   const { data: subscription, isLoading: subLoading } = useSubscription();
   const { data: usage, isLoading: usageLoading } = useUsage();
   const { refetch: fetchPortalUrl } = usePortalUrl();
+  const checkout = useCheckout();
   const invalidate = useInvalidateSubscription();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
 
@@ -123,6 +127,23 @@ export function BillingContent() {
         window.open(data.update_payment_method_url, "_blank");
       }
     });
+  }
+
+  async function handleUpgrade() {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    try {
+      const data = await checkout.mutateAsync();
+      await openCheckout({
+        priceId: data.price_id,
+        userId: data.user_id,
+        userEmail: data.user_email,
+        locale,
+      });
+    } catch {
+    } finally {
+      setIsProcessing(false);
+    }
   }
 
   function handleCancelSubscription() {
@@ -204,12 +225,14 @@ export function BillingContent() {
               </div>
 
               {!isPro ? (
-                <Link
-                  href="/settings/billing"
-                  className="mt-6 inline-flex items-center cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold"
+                <button
+                  type="button"
+                  onClick={handleUpgrade}
+                  disabled={isProcessing}
+                  className="mt-6 inline-flex items-center cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold disabled:opacity-50"
                 >
-                  {t("upgrade")}
-                </Link>
+                  {isProcessing ? t("processing") : t("upgrade")}
+                </button>
               ) : null}
             </section>
 
@@ -310,12 +333,14 @@ export function BillingContent() {
                   <p className="font-creative-body text-sm font-semibold text-cm-text/65">
                     {t("proUpgradeDescription")}
                   </p>
-                  <Link
-                    href="/settings/billing"
-                    className="inline-flex cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold"
+                  <button
+                    type="button"
+                    onClick={handleUpgrade}
+                    disabled={isProcessing}
+                    className="inline-flex cm-doodle-border border-cm-text bg-nod-gold px-5 py-2 font-creative-body text-sm font-black text-white transition-all hover:bg-white hover:text-nod-gold disabled:opacity-50"
                   >
-                    {t("upgrade")}
-                  </Link>
+                    {isProcessing ? t("processing") : t("upgrade")}
+                  </button>
                 </div>
               )}
             </section>

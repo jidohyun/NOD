@@ -105,11 +105,11 @@ export function PricingContent() {
 
       <div className="relative space-y-10">
         <Link
-          href="/dashboard"
+          href="/settings/billing"
           className="inline-flex items-center gap-1 text-sm font-creative-body font-bold text-cm-text/55 transition-colors hover:text-cm-text"
         >
           <ChevronLeft className="h-4 w-4" />
-          {td("sidebar.nav.dashboard")}
+          {td("sidebar.nav.billing")}
         </Link>
 
         <header className="text-center">
