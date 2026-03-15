@@ -58,12 +58,27 @@ async function refreshAccessToken(): Promise<boolean> {
 }
 
 async function restoreRefreshAlarm(): Promise<void> {
+  // Check if an alarm is already scheduled — avoid duplicate work
+  const existing = await chrome.alarms.get(ALARM_TOKEN_REFRESH);
+  if (existing) return;
+
   const result = await chrome.storage.local.get([
     STORAGE_KEYS.AUTH_TOKEN,
     STORAGE_KEYS.TOKEN_EXPIRES,
+    STORAGE_KEYS.REFRESH_TOKEN,
   ]);
 
-  if (!result[STORAGE_KEYS.AUTH_TOKEN]) return;
+  const hasAccessToken = !!result[STORAGE_KEYS.AUTH_TOKEN];
+  const hasRefreshToken = !!result[STORAGE_KEYS.REFRESH_TOKEN];
+
+  // Nothing to refresh
+  if (!hasAccessToken && !hasRefreshToken) return;
+
+  // Access token gone but refresh token still alive — refresh now
+  if (!hasAccessToken && hasRefreshToken) {
+    await refreshAccessToken();
+    return;
+  }
 
   const expires = result[STORAGE_KEYS.TOKEN_EXPIRES] as number | undefined;
   if (!expires) {
@@ -93,21 +108,25 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 // ── Message Handlers ───────────────────────────────────────────────────
 
 // From web app via externally_connectable
+//
+// NOTE: Cannot use async function here — Chrome requires a synchronous
+// `return true` to keep the sendResponse port open.  An async function
+// always returns a Promise, which Chrome ignores, closing the port before
+// the awaited work finishes.
 chrome.runtime.onMessageExternal.addListener(
-  async (message, _sender, sendResponse) => {
+  (message, _sender, sendResponse) => {
     if (message.type === "SET_TOKEN" && message.token) {
-      await setToken(
-        message.token,
-        message.expiresIn,
-        message.refreshToken
+      setToken(message.token, message.expiresIn, message.refreshToken).then(
+        () => {
+          if (message.expiresIn) {
+            scheduleTokenRefresh(message.expiresIn);
+          }
+          updateBadge();
+          sendResponse({ success: true });
+        }
       );
-      if (message.expiresIn) {
-        scheduleTokenRefresh(message.expiresIn);
-      }
-      await updateBadge();
-      sendResponse({ success: true });
+      return true;
     }
-    return true;
   }
 );
 
@@ -173,3 +192,9 @@ chrome.runtime.onStartup.addListener(() => {
   updateBadge();
   void restoreRefreshAlarm();
 });
+
+// Service workers can go idle and restart at any time.  onInstalled and
+// onStartup only fire on browser/extension lifecycle events, NOT when
+// the worker wakes from idle.  Run restore at module-level so every
+// wake-up re-checks the alarm state.
+void restoreRefreshAlarm();
