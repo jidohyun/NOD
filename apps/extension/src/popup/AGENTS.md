@@ -16,18 +16,16 @@ The following commands are relevant for development within the popup:
 | Command       | Description                                   |
 | :------------ | :-------------------------------------------- |
 | `dev`         | Starts development mode for all extension parts |
-| `dev:main`    | Starts development mode for the main (background) script, which includes the popup's build process |
 | `build:prod`  | Builds the extension for production           |
 | `typecheck`   | Type checks the entire extension codebase     |
 
 ## 3. Where to Look
 
 *   **Main Entry Point**: `apps/extension/src/popup/main.tsx`
-*   **Root Component**: `apps/extension/src/popup/App.tsx`
+*   **Application Component**: `apps/extension/src/popup/App.tsx`
 *   **UI Components**: `apps/extension/src/popup/components/`
 *   **Custom Hooks**: `apps/extension/src/popup/hooks/`
 *   **Styling**: `apps/extension/src/popup/styles/globals.css`
-*   **Shared Utilities/Types**: `apps/extension/src/lib/` and `apps/extension/src/types/`
 
 ## 4. Security Considerations
 

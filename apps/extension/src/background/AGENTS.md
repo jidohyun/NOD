@@ -24,6 +24,7 @@ The following commands are relevant for development within the background servic
 
 *   `apps/extension/src/background/service-worker.ts`
 *   `apps/extension/src/lib/`
+*   `apps/extension/src/lib/`
 *   `apps/extension/src/types/`
 
 
@@ -32,4 +33,4 @@ The following commands are relevant for development within the background servic
 *   **Input Sanitization**: Treat all data from content scripts or web pages as untrusted. Sanitize and validate thoroughly.
 
 
-*   **Manifest Configuration**: Review and modify all manifest-related configurations, including permissions and Content Security Policies (CSP), in the manifest generation file: `apps/extension/vite.config.ts`.
+*   **Manifest Configuration**: The `manifest.json` is generated at build time by `apps/extension/vite.config.ts`. All permissions, content security policies (CSP), and other manifest-related configurations should be reviewed and modified in that file.
