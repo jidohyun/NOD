@@ -12,7 +12,7 @@ class _FakeTracerProvider:
 
 
 @pytest.mark.asyncio
-async def test_configure_telemetry_skips_console_exporter_under_pytest(
+async def test_configure_telemetry_adds_console_exporter_for_local(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     provider = _FakeTracerProvider()
@@ -22,11 +22,6 @@ async def test_configure_telemetry_skips_console_exporter_under_pytest(
     monkeypatch.setattr(telemetry, "TracerProvider", lambda resource: provider)
     monkeypatch.setattr(telemetry.trace, "set_tracer_provider", lambda _provider: None)
 
-    def _unexpected_console_exporter() -> object:
-        raise AssertionError("ConsoleSpanExporter should not be created during pytest")
-
-    monkeypatch.setattr(telemetry, "ConsoleSpanExporter", _unexpected_console_exporter)
-
     telemetry.configure_telemetry()
 
-    assert provider.processors == []
+    assert len(provider.processors) == 1
