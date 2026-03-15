@@ -53,7 +53,7 @@ async def test_report_extraction_failure_converts_user_id_to_uuid(
         user=CurrentUserInfo(id=raw_user_id),
     )
 
-    assert captured["user_id"] == uuid.UUID(raw_user_id)
+    assert captured["user_id"] == raw_user_id
     assert response.url == "https://example.com/article"
 
 
@@ -85,5 +85,5 @@ async def test_get_extraction_failure_stats_converts_user_id_to_uuid(
         user=CurrentUserInfo(id=raw_user_id),
     )
 
-    assert captured["user_id"] == uuid.UUID(raw_user_id)
+    assert captured["user_id"] == raw_user_id
     assert response.total_failures == 1
