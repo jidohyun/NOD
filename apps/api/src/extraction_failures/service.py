@@ -1,4 +1,5 @@
 import uuid
+from typing import TypedDict
 from urllib.parse import urlparse
 
 import structlog
@@ -9,6 +10,14 @@ from src.extraction_failures.model import ExtractionFailure
 from src.extraction_failures.schemas import ExtractionFailureCreate
 
 logger = structlog.get_logger(__name__)
+
+StatsRow = dict[str, int | str]
+
+
+class FailureStats(TypedDict):
+    total_failures: int
+    by_domain: list[StatsRow]
+    by_error_code: list[StatsRow]
 
 
 def extract_domain(url: str) -> str:
@@ -51,7 +60,7 @@ async def get_failure_stats(
     db: AsyncSession,
     user_id: uuid.UUID | None = None,
     limit: int = 20,
-) -> dict:
+) -> FailureStats:
     # By domain
     domain_query = (
         select(
@@ -66,8 +75,8 @@ async def get_failure_stats(
         domain_query = domain_query.where(ExtractionFailure.user_id == user_id)
 
     domain_result = await db.execute(domain_query)
-    by_domain = [
-        {"domain": row.domain, "count": row.count}
+    by_domain: list[StatsRow] = [
+        {"domain": row.domain, "count": int(row._mapping["count"])}
         for row in domain_result.all()
     ]
 
@@ -84,8 +93,8 @@ async def get_failure_stats(
         error_query = error_query.where(ExtractionFailure.user_id == user_id)
 
     error_result = await db.execute(error_query)
-    by_error_code = [
-        {"error_code": row.error_code, "count": row.count}
+    by_error_code: list[StatsRow] = [
+        {"error_code": row.error_code, "count": int(row._mapping["count"])}
         for row in error_result.all()
     ]
 
