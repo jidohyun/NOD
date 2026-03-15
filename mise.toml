@@ -88,7 +88,7 @@ fi
 
 if echo "$changed" | grep -q "^apps/mobile/"; then
     echo "[pre-commit] apps/mobile detected, running lint..."
-    mise //apps/mobile:lint || exit 1
+    env -u GIT_DIR -u GIT_WORK_TREE mise //apps/mobile:lint || exit 1
 fi
 
 if echo "$changed" | grep -qE "Dockerfile$"; then
