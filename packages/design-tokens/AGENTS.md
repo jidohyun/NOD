@@ -8,8 +8,7 @@ This document provides specific guidance for AI agents working within the `packa
 *   **Mise Configuration**: `mise.toml`
 *   **Source Tokens**: `src/tokens.ts`
 *   **Build Scripts**: `scripts/`
-*   **Generated CSS**: dist/css/
-*   **Generated Flutter Theme**: dist/flutter/
+*   **Generated Output**: Output files are generated under dist/ after running build commands.
 
 ## 2. Commands (via `mise run` from `packages/design-tokens/`)
 

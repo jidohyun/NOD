@@ -17,15 +17,14 @@ The following commands are relevant for development within the content script:
 | Command         | Description                                   |
 | :-------------- | :-------------------------------------------- |
 | `dev`           | Starts development mode for all extension parts |
-| `dev:content`   | Starts development mode for the content script  |
 | `build:prod`    | Builds the extension for production           |
 | `typecheck`     | Type checks the entire extension codebase     |
 
 ## 3. Where to Look
 
-*   **Main Entry Point**: `apps/extension/src/content/content-script.ts`
-*   **Extraction Logic**: `apps/extension/src/content/extractor.ts`
-*   **Shared Utilities/Types**: `apps/extension/src/lib/` and `apps/extension/src/types/`
+*   `apps/extension/src/content/content-script.ts`
+*   `apps/extension/src/content/extractor.ts`
+*   `apps/extension/src/lib/`
 
 ## 4. Security Considerations
 

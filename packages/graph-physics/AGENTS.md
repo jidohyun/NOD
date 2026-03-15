@@ -8,7 +8,7 @@ This document provides specific guidance for AI agents working within the `packa
 *   **Main Source File**: `src/index.ts`
 *   **Physics Presets**: `src/presets.ts`
 *   **Test Configuration**: `vitest.config.ts`
-*   **Tests**: `src/__tests__/` (based on common Vitest patterns, though not explicitly listed in README)
+*   **Tests**: `src/__tests__/`
 *   **README**: `README.md`
 
 ## 2. Commands (via `bun run` from `packages/graph-physics/`)

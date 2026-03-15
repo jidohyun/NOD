@@ -23,11 +23,11 @@ The `mise` tool orchestrates tasks across the monorepo. Use `mise run <task>` fr
 
 | Command           | Description                                   |
 | :---------------- | :-------------------------------------------- |
-| `dev`             | Start the extension development server        |
-| `build`           | Build the extension for production            |
-| `typecheck`       | Type check the extension codebase             |
-
-Note: The global `lint` and `test` commands defined in the root mise.toml do not currently include the extension. To lint or test the extension, you must run `npm run <task>` directly from `apps/extension/`.
+| `dev:extension`   | Start the extension development server        |
+| `build:extension` | Build the extension for production            |
+| `lint:extension`  | Lint the extension codebase                   |
+| `test:extension`  | Run tests for the extension                   |
+| `typecheck:extension` | Type check the extension codebase           |
 
 ## 4. Where to Look by Task
 
@@ -37,16 +37,11 @@ This extension is structured into `src/` subdirectories.
 *   **Content Scripts**: `apps/extension/src/content/`
 *   **Popup UI**: `apps/extension/src/popup/`
 *   **Shared Libraries**:
-    *   `apps/extension/src/lib/api.ts`
-    *   `apps/extension/src/lib/auth.ts`
-    *   `apps/extension/src/lib/errors.ts`
-    *   `apps/extension/src/lib/constants.ts`
-    *   `apps/extension/src/lib/config.ts`
-    *   `apps/extension/src/types/api.ts`
-    *   `apps/extension/src/types/article.ts`
+    *   `apps/extension/src/types/`
+    *   `apps/extension/src/lib/`
 *   **Message Boundaries**:
     *   `apps/extension/src/background/service-worker.ts`
-    *   `apps/extension/src/lib/config.ts`
+    *   `apps/extension/src/lib/`
 
 ## 5. Child `AGENTS.md` Files
 

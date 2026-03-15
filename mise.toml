@@ -88,7 +88,7 @@ fi
 
 if echo "$changed" | grep -q "^apps/mobile/"; then
     echo "[pre-commit] apps/mobile detected, running lint..."
-    env -u GIT_DIR -u GIT_WORK_TREE mise //apps/mobile:lint || exit 1
+    mise //apps/mobile:lint || exit 1
 fi
 
 if echo "$changed" | grep -qE "Dockerfile$"; then
@@ -128,6 +128,6 @@ fi
 
 if echo "$changed" | grep -q "^apps/mobile/"; then
     echo "[pre-push] apps/mobile detected, running test..."
-    env -u GIT_DIR -u GIT_WORK_TREE mise //apps/mobile:test || exit 1
+    mise //apps/mobile:test || exit 1
 fi
 '''

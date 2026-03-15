@@ -1,5 +1,3 @@
-import uuid
-
 import structlog
 from fastapi import APIRouter, status
 
@@ -26,7 +24,7 @@ async def report_extraction_failure(
     db: DBSession,
     user: OptionalUser,
 ) -> ExtractionFailureResponse:
-    user_id = uuid.UUID(user.id) if user else None
+    user_id = user.id if user else None
     failure = await service.create_failure(db, data, user_id=user_id)
     await db.commit()
     return ExtractionFailureResponse.model_validate(failure)
@@ -37,5 +35,5 @@ async def get_extraction_failure_stats(
     db: DBSession,
     user: CurrentUser,
 ) -> ExtractionFailureStatsResponse:
-    stats = await service.get_failure_stats(db, user_id=uuid.UUID(user.id))
+    stats = await service.get_failure_stats(db, user_id=user.id)
     return ExtractionFailureStatsResponse(**stats)

@@ -6,10 +6,8 @@ This document provides specific guidance for AI agents working within the `packa
 
 *   **Package Configuration**: `package.json`
 *   **Mise Configuration**: `mise.toml`
-*   **Source Translations**: src/
-*   **Build Scripts**: `scripts/`
-*   **Generated Web Translations**: dist/web/
-*   **Generated Mobile Translations**: dist/mobile/
+*   **Source Translations**: `src/` (where `.arb` files live)
+*   **Generated Output**: Output files are generated under dist/ after running build commands.
 
 ## 2. Commands (via `mise run` from `packages/i18n/`)
 
