@@ -40,6 +40,20 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+vi.mock("@/components/dashboard/hooks/use-sidebar-user", () => ({
+  useSidebarUser: () => ({
+    mounted: true,
+    userName: "Test User",
+    userEmail: "test@example.com",
+    avatarUrl: "",
+    initials: "TU",
+  }),
+}));
+
+vi.mock("@/components/dashboard/user-menu", () => ({
+  UserMenu: () => <div data-testid="user-menu" />,
+}));
+
 // Mock Supabase client
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
