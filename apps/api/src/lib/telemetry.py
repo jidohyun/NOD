@@ -2,6 +2,8 @@
 
 import contextlib
 import logging
+import os
+import sys
 
 from fastapi import FastAPI
 from opentelemetry import metrics, trace
@@ -20,6 +22,10 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExport
 from src.lib.config import settings
 
 _logger = logging.getLogger(__name__)
+
+
+def _is_pytest_runtime() -> bool:
+    return "pytest" in sys.modules or os.getenv("PYTEST_CURRENT_TEST") is not None
 
 
 def configure_telemetry() -> None:
@@ -71,7 +77,7 @@ def configure_telemetry() -> None:
         )
         metrics.set_meter_provider(meter_provider)
 
-    elif settings.PROJECT_ENV == "local":
+    elif settings.PROJECT_ENV == "local" and not _is_pytest_runtime():
         # Console exporter for local development
         provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
     else:
