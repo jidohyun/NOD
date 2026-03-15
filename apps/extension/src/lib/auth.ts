@@ -41,7 +41,12 @@ function extractUserInfo(token: string): UserInfo | null {
 }
 
 /**
- * Get the current auth token
+ * Get the current auth token.
+ *
+ * When the access token has expired we return null so callers know they
+ * cannot use it, but we intentionally keep the refresh token in storage
+ * so the service-worker alarm (or a 401-triggered refresh) can still
+ * obtain a fresh access token.
  */
 export async function getToken(): Promise<string | null> {
   const result = await chrome.storage.local.get([AUTH_TOKEN, TOKEN_EXPIRES]);
@@ -49,7 +54,8 @@ export async function getToken(): Promise<string | null> {
   const expires = result[TOKEN_EXPIRES];
 
   if (expires && Date.now() > expires) {
-    await clearToken();
+    // Only clear the access token and expiry — keep refresh_token alive
+    await chrome.storage.local.remove([AUTH_TOKEN, TOKEN_EXPIRES]);
     return null;
   }
 
