@@ -77,3 +77,24 @@ class TestAgentRegistry:
             agent = get_agent(ct)
             system = agent.build_system_prompt("ko")
             assert "한국어" in system
+
+    def test_json_prompt_markdown_note_has_complete_instruction(self):
+        """모든 에이전트의 json_prompt가 완결성 지시를 포함해야 함."""
+        for ct in ContentType:
+            agent = get_agent(ct)
+            prompt = agent.build_json_prompt("en")
+            assert "COMPLETE" in prompt, (
+                f"{ct} agent missing 'COMPLETE' in markdown_note instruction"
+            )
+            assert "actual newline" in prompt.lower(), (
+                f"{ct} agent missing 'actual newline' in markdown_note instruction"
+            )
+
+    def test_json_prompt_markdown_note_no_truncation_instruction(self):
+        """모든 에이전트의 json_prompt가 truncation 방지 지시를 포함해야 함."""
+        for ct in ContentType:
+            agent = get_agent(ct)
+            prompt = agent.build_json_prompt("en")
+            assert "truncated" in prompt.lower() or "not truncated" in prompt.lower(), (
+                f"{ct} agent missing truncation warning in markdown_note instruction"
+            )

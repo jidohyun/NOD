@@ -12,6 +12,7 @@ from src.lib.agents.registry import get_agent
 from src.lib.config import settings
 from src.lib.content_classifier import ContentType, classify_url
 from src.lib.langfuse_client import get_langfuse
+from src.lib.markdown_normalizer import normalize_markdown_note
 
 if TYPE_CHECKING:
     from langfuse import Langfuse
@@ -122,10 +123,9 @@ async def summarize_article(
                 parent_span=span,
             )
 
-        # Normalize markdown_note: AI sometimes returns literal \n instead of
-        # actual newlines inside JSON string values.
-        if result.markdown_note:
-            result.markdown_note = result.markdown_note.replace("\\n", "\n")
+        # Normalize markdown_note: AI sometimes returns literal \n, \\n, \t, \r\n
+        # instead of actual characters inside JSON string values.
+        result.markdown_note = normalize_markdown_note(result.markdown_note)  # type: ignore[assignment]
 
         if span:
             span.update(
@@ -197,7 +197,16 @@ async def _summarize_with_gemini(
             generation.end()
         raise ValueError("Gemini returned empty response")
 
-    result = result_schema.model_validate_json(response.text)
+    try:
+        result = result_schema.model_validate_json(response.text)
+    except Exception as e:
+        logger.error(
+            "Gemini structured output validation failed",
+            error=str(e),
+            response_length=len(response.text),
+            response_preview=response.text[:300],
+        )
+        raise ValueError(f"Gemini response failed validation: {e}") from e
 
     if generation:
         usage_meta = getattr(response, "usage_metadata", None)

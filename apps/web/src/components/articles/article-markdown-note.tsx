@@ -33,6 +33,7 @@ const MARKDOWN_COMPONENTS: NonNullable<React.ComponentProps<typeof ReactMarkdown
 };
 
 export function ArticleMarkdownNote({ markdownNote }: { markdownNote: string }) {
+  // 백엔드에서 정규화하지만, 기존 DB 데이터 하위호환을 위해 유지
   const normalized = markdownNote.replace(/\\n/g, "\n");
   return (
     <div className="text-sm leading-relaxed">

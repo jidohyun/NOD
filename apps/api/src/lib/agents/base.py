@@ -43,3 +43,13 @@ class BaseSummaryAgent(ABC):
     def build_json_prompt(self, lang: str) -> str:
         """Return the JSON schema instruction prompt."""
         ...
+
+    def _markdown_note_prompt_fragment(self, lang_name: str) -> str:
+        """Return a standardized markdown_note field instruction for JSON prompts."""
+        return (
+            f"- markdown_note: a COMPLETE {lang_name} markdown note"
+            " following the template above."
+            " CRITICAL: Use ACTUAL newline characters in JSON string encoding."
+            " The note MUST be complete and not truncated mid-sentence or mid-section."
+            " Do NOT use literal backslash-n sequences."
+        )

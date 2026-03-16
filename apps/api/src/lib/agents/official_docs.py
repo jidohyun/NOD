@@ -76,8 +76,7 @@ The final output MUST be entirely in {native}"""
 - key_points: 3-5 key points (one sentence each)
 - language: the article's language (ISO 639-1 code)
 - reading_time_minutes: estimated reading time (~200 words/min)
-- markdown_note: a {lang_name} markdown note following the template. \
-Use ACTUAL newline characters (not literal \\n) to separate lines.
+{self._markdown_note_prompt_fragment(lang_name)}
 - api_highlights: list of key APIs or methods documented
 - version_info: version information if mentioned (empty string if none)
 - prerequisites: list of prerequisites
