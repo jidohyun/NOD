@@ -1,28 +1,17 @@
 "use client";
 
-import { ArrowLeft, BookmarkCheck, Brain, Search, Shield } from "lucide-react";
+import { BookmarkCheck, Brain, Search, Shield } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { EmailLoginForm } from "@/components/auth/email-login-form";
 import { NodWordmark } from "@/components/brand/nod-wordmark";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { getSupabase, signInWithGoogle } from "@/lib/auth/auth-client";
+import { getSupabase, signInWithEmail, signInWithGoogle } from "@/lib/auth/auth-client";
 import { Link } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils";
-
-function LoginShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-foreground selection:bg-nod-gold selection:text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(196,154,28,0.24)_1px,_transparent_0)] bg-[size:24px_24px] opacity-45 dark:opacity-20" />
-      <div className="pointer-events-none absolute top-[-120px] right-[-90px] h-[300px] w-[300px] rounded-full bg-cm-mint/55 blur-3xl animate-cm-float dark:bg-nod-gold/10" />
-      <div className="pointer-events-none absolute bottom-[-140px] left-[-80px] h-[320px] w-[320px] rounded-full bg-cm-lavender/65 blur-3xl animate-cm-float-reverse dark:bg-white/5" />
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col px-8 pb-10 pt-8">
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function LoginContent() {
   const t = useTranslations();
@@ -30,6 +19,8 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const [signingIn, setSigningIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [emailSubmitting, setEmailSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const redirectTo = searchParams.get("redirect") || "/dashboard";
 
@@ -52,15 +43,34 @@ function LoginContent() {
     }
   };
 
+  const handleEmailSignIn = async (email: string, password: string) => {
+    setEmailSubmitting(true);
+    setEmailError(null);
+
+    const { error } = await signInWithEmail(email, password);
+
+    if (error) {
+      if (error.message?.includes("Email not confirmed")) {
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
+      setEmailError(t("login.loginFailed"));
+      setEmailSubmitting(false);
+      return;
+    }
+
+    router.replace(redirectTo);
+  };
+
   if (isLoading) {
     return (
-      <LoginShell>
+      <AuthShell>
         <div className="flex flex-1 items-center justify-center">
           <div className="cm-doodle-border bg-white/90 px-6 py-3 font-creative-body text-sm font-bold text-cm-text/70 dark:bg-[#17171b] dark:text-white/70">
             {t("common.loading")}
           </div>
         </div>
-      </LoginShell>
+      </AuthShell>
     );
   }
 
@@ -71,7 +81,7 @@ function LoginContent() {
   ] as const;
 
   return (
-    <LoginShell>
+    <AuthShell>
       <header className="mb-10 flex items-center justify-between animate-fade-up">
         <Link href="/" className="group inline-flex items-center gap-2">
           <div className="cm-organic-shape bg-nod-gold/15 p-2 transition-colors group-hover:bg-nod-gold/25">
@@ -191,16 +201,15 @@ function LoginContent() {
             </div>
           </div>
 
-          <Link
-            href="/"
-            className="cm-doodle-border inline-flex w-full items-center justify-center gap-2 border-cm-text/18 bg-white px-5 py-3 font-creative-body text-sm font-black text-cm-text transition-all hover:-translate-y-0.5 hover:bg-cm-bg dark:border-white/15 dark:bg-[#202027] dark:text-white/85 dark:hover:bg-[#272730]"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {t("login.backToHome")}
-          </Link>
+          <EmailLoginForm
+            onSubmit={handleEmailSignIn}
+            isSubmitting={emailSubmitting}
+            error={emailError}
+            onErrorClear={() => setEmailError(null)}
+          />
         </section>
       </main>
-    </LoginShell>
+    </AuthShell>
   );
 }
 
@@ -208,13 +217,13 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <LoginShell>
+        <AuthShell>
           <div className="flex flex-1 items-center justify-center">
             <div className="cm-doodle-border bg-white/90 px-6 py-3 font-creative-body text-sm font-bold text-cm-text/70 dark:bg-[#17171b] dark:text-white/70">
               Loading...
             </div>
           </div>
-        </LoginShell>
+        </AuthShell>
       }
     >
       <LoginContent />

@@ -56,6 +56,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const origin = getOrigin(request);
   const code = searchParams.get("code");
+  const type = searchParams.get("type");
   const nextParam = searchParams.get("next");
   const cookieStore = await cookies();
   const cookieNext = cookieStore.get("nod_auth_next")?.value ?? null;
@@ -96,6 +97,11 @@ export async function GET(request: NextRequest) {
     if (!error) {
       // Clear one-time redirect cookie.
       cookieStore.set("nod_auth_next", "", { path: "/", maxAge: 0 });
+
+      // Email verification callback — go straight to dashboard
+      if (type === "signup") {
+        return NextResponse.redirect(`${origin}/dashboard`);
+      }
 
       // Check if user needs onboarding (only when no explicit redirect)
       if (next === "/articles" || next === "/dashboard") {

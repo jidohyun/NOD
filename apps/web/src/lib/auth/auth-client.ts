@@ -9,6 +9,10 @@ export function getSupabase() {
 }
 
 function getAuthCallbackOrigin(): string {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
   const url = new URL(window.location.href);
 
   // Some dev setups open the app on 0.0.0.0 / 127.0.0.1 which may not be
@@ -40,6 +44,42 @@ export async function signInWithGoogle(redirectTo?: string) {
       redirectTo: callbackUrl,
     },
   });
+}
+
+export async function signUpWithEmail(email: string, password: string, name: string) {
+  const supabase = createClient();
+  const origin = getAuthCallbackOrigin();
+  return supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name: name },
+      emailRedirectTo: `${origin}/api/auth/callback?type=signup`,
+    },
+  });
+}
+
+export async function signInWithEmail(email: string, password: string) {
+  const supabase = createClient();
+  return supabase.auth.signInWithPassword({ email, password });
+}
+
+export async function resetPassword(email: string) {
+  const supabase = createClient();
+  const origin = getAuthCallbackOrigin();
+  return supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/reset-password`,
+  });
+}
+
+export async function updatePassword(newPassword: string) {
+  const supabase = createClient();
+  return supabase.auth.updateUser({ password: newPassword });
+}
+
+export async function resendVerificationEmail(email: string) {
+  const supabase = createClient();
+  return supabase.auth.resend({ type: "signup", email });
 }
 
 export async function signOut() {
