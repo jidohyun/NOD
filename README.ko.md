@@ -24,6 +24,8 @@
 
 ---
 
+<a href="https://www.producthunt.com/products/nod-7?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-nod-8" target="_blank" rel="noopener noreferrer"><img alt="NOD - Save Content, Unlock Insights | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1102376&amp;theme=light&amp;t=1773915591596"></a>
+
 NOD는 웹 콘텐츠를 AI로 요약하고, 검색 가능한 지식으로 저장하는 크롬 익스텐션 + 웹앱입니다. 북마크가 아니라 지식으로.
 
 원래 개인용 [n8n + Gemini + Obsidian 자동화](https://velog.io/@do-hyun123/ipone-n8n-automation)로 만들었는데, 세팅을 부탁하는 사람이 많아서 누구나 30초만에 쓸 수 있는 서비스로 만들었습니다.
