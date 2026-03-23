@@ -1,100 +1,490 @@
 {
-  "title": "NOD",
   "common": {
-    "loading": "Wird geladen...",
-    "error": "Ein Fehler ist aufgetreten",
-    "retry": "Erneut versuchen",
-    "save": "Speichern",
+    "back": "Back",
     "cancel": "Abbrechen",
     "confirm": "Bestätigen",
+    "continue": "Continue",
     "delete": "Löschen",
     "edit": "Bearbeiten",
-    "restoreOriginal": "Original wiederherstellen"
+    "email": "Email",
+    "error": "Ein Fehler ist aufgetreten",
+    "loading": "Wird geladen...",
+    "dashboard": "Dashboard",
+    "ok": "OK",
+    "password": "Password",
+    "refresh": "Refresh",
+    "restoreOriginal": "Original wiederherstellen",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "skip": "Skip for now"
+  },
+  "auth": {
+    "forgotPassword": {
+      "backToLogin": "Back to login",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailPlaceholder": "Email address",
+      "send": "Send reset link",
+      "sent": "Password reset link sent. Please check your inbox.",
+      "subtitle": "Enter your email address and we'll send you a password reset link.",
+      "title": "Forgot password"
+    },
+    "resetPassword": {
+      "confirmPassword": "Confirm password",
+      "goToLogin": "Go to login",
+      "newPassword": "New password",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "submit": "Change password",
+      "subtitle": "Enter your new password below.",
+      "success": "Your password has been changed.",
+      "title": "Set new password"
+    },
+    "verifyEmail": {
+      "backToLogin": "Back to login",
+      "description": "We sent a verification link to {email}. Please check your inbox.",
+      "resend": "Resend verification email",
+      "resent": "Verification email sent again.",
+      "title": "Verify your email"
+    }
+  },
+  "blog": {
+    "home": "Startseite",
+    "readArticle": "Artikel lesen →",
+    "readTime": "{minutes} Min. Lesezeit",
+    "subtitle": "Tipps, Anleitungen und Einblicke zu Wissensmanagement und Produktivität.",
+    "title": "Blog"
+  },
+  "continueWithGoogle": "Mit Google fortfahren",
+  "dashboard": {
+    "allContentTypes": "Alle Typen",
+    "allStatus": "Alle Status",
+    "analysisDescription": "KI liest Ihren Inhalt, extrahiert Schlüsselkonzepte und erstellt eine strukturierte Zusammenfassung. Dies dauert in der Regel 30 Sekunden bis 1 Minute.",
+    "analysisStepAnalyzing": "KI analysiert",
+    "analysisStepReading": "Inhalt wird gelesen",
+    "analysisStepSummary": "Zusammenfassung wird erstellt",
+    "analyzingArticle": "KI analysiert diesen Inhalt...",
+    "articleInfo": "Inhaltsinformationen",
+    "articleListSubtitle": "Durchsuchen Sie Ihre gespeicherten Inhalte und finden Sie schnell die benötigten Erkenntnisse.",
+    "articleNotFound": "Inhalt nicht gefunden.",
+    "checkStatus": "Status prüfen",
+    "concepts": "Konzepte",
+    "deleteConfirm": "Diesen Inhalt löschen?",
+    "details": "Details",
+    "downloadMarkdown": "Als .md herunterladen",
+    "graph": {
+      "actionClearSelection": "Auswahl aufheben",
+      "actionPinSelected": "Auswahl anheften",
+      "actionUnpinAll": "Alle loslösen",
+      "actionUnpinSelected": "Auswahl loslösen",
+      "depthLabel": "Tiefe",
+      "empty": "Noch kein Konzeptgraph. Speichern und zusammenfassen Sie mehr Inhalte.",
+      "filterMinConnections": "Min. Verbindungen",
+      "loadError": "Graphdaten konnten nicht geladen werden.",
+      "localCenterFilteredMessage": "Die aktuellen Filter schließen Ihren lokalen Mittelpunktknoten aus.",
+      "localReselectBase": "Basisknoten neu auswählen",
+      "localSwitchGlobal": "Zu Global wechseln",
+      "lockedDescription": "Upgraden Sie auf Pro, um die Konzeptgraph-Visualisierung freizuschalten.",
+      "lockedTitle": "Graphansicht ist eine Pro-Funktion",
+      "menuPin": "Anheften",
+      "menuPinSelected": "Auswahl anheften",
+      "menuUnpin": "Loslösen",
+      "menuUnpinAll": "Alle loslösen",
+      "modeGlobal": "Global",
+      "modeLocal": "Lokal",
+      "no": "Nein",
+      "openFull": "Vollständigen Graphen öffnen",
+      "pageDescription": "Visualisieren Sie Kernkonzepte aus Ihren zusammengefassten Inhalten.",
+      "pageTitle": "Graphansicht",
+      "panelFilters": "Filter",
+      "panelSearch": "Suche",
+      "panelSelection": "Auswahl",
+      "previewDescription": "Schreibgeschützte Vorschau Ihrer Konzeptkarte.",
+      "previewTitle": "Graphansicht Vorschau",
+      "searchPlaceholder": "Konzepte suchen...",
+      "sectionLabel": "Wissensgraph",
+      "selectionCount": "{count} ausgewählt",
+      "selectionEmpty": "Kein Knoten ausgewählt",
+      "selectionPinned": "Angeheftet",
+      "statsArticles": "Inhalte",
+      "statsConcepts": "Einzigartige Konzepte",
+      "statsEdges": "Verbindungen",
+      "statsNodes": "Knoten",
+      "upgrade": "Auf Pro upgraden",
+      "yes": "Ja"
+    },
+    "installExtensionCta": "Zu Chrome hinzufügen",
+    "keyPoints": "Kernpunkte",
+    "language": "Sprache",
+    "loadError": "Inhalte konnten nicht geladen werden.",
+    "loadMore": "Mehr laden",
+    "loadingArticles": "Inhalte werden geladen...",
+    "loadingSimilar": "Ähnliche Inhalte werden geladen...",
+    "markdownNote": "Notiz",
+    "minuteRead": "{minutes} Min.",
+    "myArticles": "Meine Inhalte",
+    "noArticles": "Noch keine Inhalte. Speichern Sie Inhalte mit der Chrome-Erweiterung.",
+    "noSummary": "Keine Zusammenfassung verfügbar",
+    "openContent": "Inhalt öffnen",
+    "original": "Original",
+    "overview": {
+      "aiSummaries": "KI-Zusammenfassungen",
+      "closeBanner": "Banner schließen",
+      "contentTypes": "Inhaltstypen",
+      "currentPlan": "Aktueller Plan",
+      "description": "Übersicht über Ihre Wissensbibliothek.",
+      "getSupport": "Hilfe",
+      "heroSubtitle": "Speichern Sie Inhalte, lassen Sie sie mit KI zusammenfassen und verknüpfen Sie Erkenntnisse schneller.",
+      "heroTitleAccent": "Workspace",
+      "heroTitlePrimary": "Content Insights",
+      "installExtensionDescription": "Speichern Sie Inhalte mit einem Klick beim Surfen.",
+      "installExtensionTitle": "Chrome-Erweiterung installieren",
+      "justNow": "Gerade eben",
+      "keyMetrics": "Wichtige Kennzahlen",
+      "manageBillingDescription": "Sehen Sie Ihren Plan und Nutzungsdetails ein.",
+      "manageBillingTitle": "Abrechnung verwalten",
+      "modified": "Geändert",
+      "noRecentArticles": "Noch keine Inhalte gespeichert.",
+      "onboardingDescription": "Verbinden Sie Ihre Browser-Erweiterung, um sofort Erkenntnisse zu erfassen.",
+      "onboardingSetupNow": "Jetzt einrichten",
+      "onboardingTitle": "Schließen Sie Ihr Onboarding ab!",
+      "openUsageGuide": "Nutzungsanleitung öffnen",
+      "planFreeActive": "Free-Plan aktiv",
+      "planProActive": "Pro-Plan aktiv",
+      "quickActions": "Schnellaktionen",
+      "recentArticlesDescription": "Ihre zuletzt gespeicherten Inhalte.",
+      "recentArticlesTitle": "Neueste Inhalte",
+      "savedArticles": "Gespeicherte Inhalte",
+      "storageUnlimited": "Inhaltsspeicher ist unbegrenzt",
+      "title": "Dashboard",
+      "usageCalculating": "Nutzung wird berechnet...",
+      "viewAll": "Alle anzeigen",
+      "viewArticlesDescription": "Durchsuchen Sie Ihre gespeicherten Inhalte.",
+      "viewArticlesTitle": "Inhalte ansehen",
+      "welcomeMessage": "Willkommen zurück bei NOD",
+      "workflowStepAnalyze": "Zusammenfassungen analysieren",
+      "workflowStepCapture": "Inhalte erfassen",
+      "workflowStepRefine": "Schlüsselerkenntnisse schärfen",
+      "workflowTitle": "Heutiger Workflow"
+    },
+    "pendingAnalysis": "Warten auf Analysestart...",
+    "readTime": "~{minutes} Min. Lesezeit",
+    "readingTime": "Lesezeit",
+    "refreshing": "Wird aktualisiert...",
+    "retryAnalysis": "Erneut versuchen",
+    "savedDate": "Gespeichert am",
+    "searchArticles": "Inhalte durchsuchen...",
+    "searchMinChars": "Mindestens 2 Zeichen für die Suche eingeben",
+    "searchPlaceholder": "Suchen...",
+    "semanticSearch": "KI-Suche",
+    "sidebar": {
+      "nav": {
+        "articles": "Inhalte",
+        "billing": "Abrechnung verwalten",
+        "dashboard": "Dashboard",
+        "graph": "Graphansicht",
+        "pricing": "Preise",
+        "settings": "Einstellungen",
+        "shared": "Geteilt"
+      },
+      "user": {
+        "billing": "Abrechnung verwalten",
+        "feedback": "Feedback",
+        "help": "Hilfe",
+        "logout": "Abmelden",
+        "profile": "Profil",
+        "settings": "Einstellungen"
+      }
+    },
+    "similarArticles": "Ähnliche Inhalte",
+    "similarity": "{percent} % Übereinstimmung",
+    "sourceLabel": "Quelle",
+    "statusAnalyzing": "Wird analysiert",
+    "statusCompleted": "Abgeschlossen",
+    "statusFailed": "Fehlgeschlagen",
+    "statusLabel": "Status",
+    "statusPending": "Ausstehend",
+    "statusProcessing": "Wird verarbeitet",
+    "summary": "Zusammenfassung",
+    "summaryInProgress": "Zusammenfassung wird erstellt...",
+    "typeDocs": "Docs",
+    "typeGitHub": "GitHub",
+    "typeNews": "Nachrichten",
+    "typePaper": "Wissenschaftliche Arbeit",
+    "typeTechBlog": "Tech-Blog",
+    "typeVideo": "Video/Podcast",
+    "shareSectionTitle": "Diese Zusammenfassung teilen",
+    "shareSectionDescription": "Erstellen Sie einen öffentlichen Link, um die Zusammenfassung dieses Inhalts zu teilen.",
+    "shareModalTitle": "Diese Zusammenfassung teilen?",
+    "shareModalDescription": "Andere können die KI-Zusammenfassung dieses Inhalts über einen öffentlichen Link ansehen.",
+    "shareModalIncludedTitle": "Dieser geteilte Link enthält",
+    "shareModalIncludedSummary": "KI-generierte Zusammenfassung",
+    "shareModalIncludedConcepts": "Kernkonzepte",
+    "shareModalIncludedKeyPoints": "Wichtige Punkte",
+    "shareModalHint": "Teilen Sie diesen Link nur mit Personen, denen Sie vertrauen. Jeder mit dem Link kann diese Zusammenfassung lesen.",
+    "shareGenerateLink": "Freigabelink erstellen",
+    "shareRegenerateLink": "Freigabelink neu erstellen",
+    "shareActionLink": "Teilen",
+    "shareCopyLink": "Link kopieren",
+    "shareRevokeLink": "Link widerrufen",
+    "shareCopied": "Link kopiert",
+    "shareOpenPanel": "Freigabebereich öffnen",
+    "shareAdvanced": "Erweiterte Freigabeoptionen",
+    "shareAlreadySharedTitle": "Diese Zusammenfassung wurde bereits geteilt!",
+    "shareAlreadySharedDescription": "Sie können sie über den untenstehenden Link ansehen.",
+    "sharedTrustSummarizedBy": "Zusammengefasst von",
+    "sharedTrustFallbackName": "NOD Nutzer",
+    "sharedTrustOriginalLink": "Original ansehen",
+    "sharedCommentsTitle": "Kommentare",
+    "sharedCommentsAuthorLabel": "Name",
+    "sharedCommentsAuthorPlaceholder": "Dein Name",
+    "sharedCommentsContentLabel": "Kommentar",
+    "sharedCommentsContentPlaceholder": "Teile deine Reaktion",
+    "sharedCommentsSubmit": "Kommentar hinzufügen",
+    "sharedCommentsReplyAction": "Antwort schreiben",
+    "sharedCommentsAddReplyAction": "Antworten",
+    "sharedCommentsActionMenuLabel": "Kommentaraktionen",
+    "sharedCommentsActionReport": "Melden",
+    "sharedCommentsEditSave": "Speichern",
+    "sharedCommentsReplySubmit": "Antworten",
+    "sharedCommentsReplyPlaceholder": "Antwort schreiben",
+    "sharedCommentsSharerBadge": "Teiler",
+    "sharedCommentsHideReplies": "Antworten ausblenden",
+    "sharedCommentsReplyCountSingle": "Antwort",
+    "sharedCommentsReplyCountPlural": "Antworten",
+    "sharedCommentsEmpty": "Noch keine Kommentare.",
+    "sharedCommentsSignInRequired": "Melde dich an, um einen Kommentar zu schreiben.",
+    "sharedQuickActionEmpathy": "Gefällt mir",
+    "sharedQuickActionComments": "Kommentare",
+    "sharedQuickActionShare": "Teilen",
+    "sharedShareCopyLink": "Link kopieren",
+    "sharedShareCopied": "Kopiert",
+    "sharedCommentsPanelTitle": "Responses ({count})",
+    "sharedCommentsPanelDescription": "View and write comments for this shared summary.",
+    "sharedCommentsSortLabel": "Sortieren nach",
+    "sharedCommentsSortLatest": "Neueste",
+    "sharedCommentsSortRecommended": "Empfohlen",
+    "sharedAuthSectionTitle": "Mit Ihrem Konto fortfahren",
+    "sharedAuthSectionDescription": "Melden Sie sich an oder registrieren Sie sich, um diese geteilte Zusammenfassung in Ihrem eigenen Workspace zu speichern.",
+    "viewOriginal": "Original ansehen"
+  },
+  "errors": {
+    "goHome": "Zur Startseite",
+    "notFound": "Seite nicht gefunden",
+    "somethingWrong": "Etwas ist schiefgelaufen!",
+    "tryAgain": "Erneut versuchen"
+  },
+  "help": {
+    "billingHelp": "Hilfe zur Abrechnung",
+    "centerBadge": "NOD Hilfe-Center",
+    "faq": {
+      "item1": {
+        "a": "Große Dokumente oder volle Warteschlangen können die Verarbeitung verzögern. Aktualisieren Sie nach kurzer Zeit und prüfen Sie den Status erneut.",
+        "q": "Eine Zusammenfassung dauert zu lange."
+      },
+      "item2": {
+        "a": "Stellen Sie sicher, dass die Chrome-Erweiterung installiert ist, Sie angemeldet sind und laden Sie die Seite einmal neu.",
+        "q": "Die Erweiterung funktioniert nicht."
+      },
+      "item3": {
+        "a": "Öffnen Sie Einstellungen > Abrechnung, um Zahlungsdaten zu verwalten, und prüfen Sie Planoptionen auf der Preisseite.",
+        "q": "Wo kann ich die Abrechnung verwalten?"
+      }
+    },
+    "faqTitle": "Häufig gestellte Fragen",
+    "heading": "Schnellstart mit NOD",
+    "quickShortcutsTitle": "Nützliche Kurzbefehle",
+    "quickStart": {
+      "item1": {
+        "description": "Erfassen Sie Artikel mit der Erweiterung und halten Sie alles in einem Archiv zusammen.",
+        "title": "1) Inhalte speichern"
+      },
+      "item2": {
+        "description": "Jeder gespeicherte Eintrag erhält eine KI-Zusammenfassung mit Kernpunkten und strukturierten Notizen.",
+        "title": "2) KI-Zusammenfassungen prüfen"
+      },
+      "item3": {
+        "description": "Gruppieren Sie verwandte Themen und rufen Sie wichtiges Wissen schneller ab.",
+        "title": "3) Erkenntnisse verknüpfen"
+      }
+    },
+    "sendFeedback": "Feedback senden",
+    "shortcuts": {
+      "articles": "Inhalte",
+      "billing": "Abrechnung",
+      "installExtension": "Erweiterung installieren",
+      "pricing": "Preise"
+    },
+    "subtitle": "Vom Speichern von Inhalten bis zu KI-Zusammenfassungen und Planverwaltung: Hier sind die wichtigsten Workflows.",
+    "supportTitle": "Support & Feedback"
   },
   "landing": {
-    "hero": {
-      "badge": "KI-gestütztes Wissensmanagement",
-      "headline": "Inhalte speichern, Erkenntnisse gewinnen",
-      "description": "NOD nutzt KI, um Inhalte zu analysieren und zusammenzufassen und so Ihre persönliche Wissensbibliothek aufzubauen, die Sie jederzeit durchsuchen und abrufen können.",
-      "cta": "Kostenlos starten",
-      "ctaExtension": "Zu Chrome hinzufügen",
-      "ctaSecondary": "Mehr erfahren",
-      "trustedBy": "Vertraut von Wissensarbeitern weltweit"
+    "cta": {
+      "button": "Kostenlos starten",
+      "description": "Schließen Sie sich tausenden von Lesern an, die NOD nutzen, um Inhalte mit KI zu speichern, zu analysieren und abzurufen.",
+      "headline": "Beginnen Sie, Ihre Wissensbibliothek aufzubauen",
+      "note": "Keine Kreditkarte erforderlich"
     },
-    "nav": {
-      "features": "Funktionen",
-      "howItWorks": "So funktioniert es",
-      "pricing": "Preise",
-      "blog": "Blog",
-      "login": "Anmelden",
-      "getStarted": "Loslegen",
-      "changeLanguage": "Sprache wechseln"
-    },
-    "pricing": {
-      "label": "Preise",
-      "headline": "Wählen Sie einen Plan, der zu Ihrem Leseverhalten passt",
-      "description": "Starten Sie mit Basic und wechseln Sie zu Pro, wenn Sie unbegrenzte Zusammenfassungen und qualitativ hochwertigere Modelle wünschen.",
-      "cta": "Preise ansehen",
-      "note": "Jederzeit wechselbar",
-      "basicAnalyzableTypes": "Analysierbare Typen: Nachrichten · Tech-Blog · Docs",
-      "proAnalyzableTypes": "Analysierbare Typen: Alle (inkl. GitHub, Papers, Videos)"
+    "dashboardPreview": {
+      "articles": {
+        "0": {
+          "summary": "RSC ermöglicht Streaming-UI mit serverseitig gerenderten Komponenten und behält Interaktivität dort, wo sie wichtig ist.",
+          "title": "React Server Components verstehen"
+        },
+        "1": {
+          "summary": "Einbettungen wandeln Text in Vektoren um; Ähnlichkeitssuche ruft verwandte Notizen über exakte Schlüsselwörter hinaus ab.",
+          "title": "Vektordatenbanken erklärt"
+        },
+        "2": {
+          "summary": "Lernen Sie ASGI-Grundlagen, Dependency-Injection-Muster und wie Sie typisierte APIs schnell bereitstellen.",
+          "title": "Entwickeln mit FastAPI"
+        }
+      },
+      "itemCount": "{count} Einträge",
+      "savedReads": "Gespeicherte Inhalte",
+      "searchPlaceholder": "Suche: RSC",
+      "similar": {
+        "0": "React Patterns Deep Dive",
+        "1": "Next.js 16 Migrationsleitfaden",
+        "2": "TypeScript 5.9 Neuerungen",
+        "3": "Edge Computing Einführung"
+      },
+      "similarReads": "Ähnliche Inhalte",
+      "statusAnalyzing": "wird analysiert",
+      "statusCompleted": "abgeschlossen"
     },
     "features": {
-      "label": "Funktionen",
       "headline": "Alles, was Sie für Ihr Wissensmanagement brauchen",
       "items": {
         "aiSummary": {
-          "title": "KI-Zusammenfassungen",
-          "description": "Erhalten Sie sofortige KI-generierte Zusammenfassungen beliebiger Inhalte mit Hervorhebung der wichtigsten Punkte und Erkenntnisse."
-        },
-        "vectorSearch": {
-          "title": "Semantische Suche",
-          "description": "Finden Sie Inhalte nach Bedeutung, nicht nur nach Stichwörtern. Unsere Vektorsuche versteht, wonach Sie suchen."
+          "description": "Erhalten Sie sofortige KI-generierte Zusammenfassungen beliebiger Inhalte mit Hervorhebung der wichtigsten Punkte und Erkenntnisse.",
+          "title": "KI-Zusammenfassungen"
         },
         "chromeExtension": {
-          "title": "Chrome-Erweiterung",
-          "description": "Speichern Sie Inhalte mit einem Klick aus Ihrem Browser. Kein Kopieren und Einfügen erforderlich."
-        },
-        "multiPlatform": {
-          "title": "Multiplattform",
-          "description": "Greifen Sie von Web, Mobilgerät oder Browser-Erweiterung auf Ihre Wissensbibliothek zu."
+          "description": "Speichern Sie Inhalte mit einem Klick aus Ihrem Browser. Kein Kopieren und Einfügen erforderlich.",
+          "title": "Chrome-Erweiterung"
         },
         "concepts": {
-          "title": "Konzeptextraktion",
-          "description": "Identifizieren und markieren Sie automatisch Schlüsselkonzepte, Themen und Schwerpunkte aus Ihren Inhalten."
+          "description": "Identifizieren und markieren Sie automatisch Schlüsselkonzepte, Themen und Schwerpunkte aus Ihren Inhalten.",
+          "title": "Konzeptextraktion"
+        },
+        "multiPlatform": {
+          "description": "Greifen Sie von Web, Mobilgerät oder Browser-Erweiterung auf Ihre Wissensbibliothek zu.",
+          "title": "Multiplattform"
         },
         "multilingual": {
-          "title": "Mehrsprachig",
-          "description": "Speichern und analysieren Sie Inhalte in jeder Sprache. KI-Zusammenfassungen in Ihrer bevorzugten Sprache."
+          "description": "Speichern und analysieren Sie Inhalte in jeder Sprache. KI-Zusammenfassungen in Ihrer bevorzugten Sprache.",
+          "title": "Mehrsprachig"
+        },
+        "vectorSearch": {
+          "description": "Finden Sie Inhalte nach Bedeutung, nicht nur nach Stichwörtern. Unsere Vektorsuche versteht, wonach Sie suchen.",
+          "title": "Semantische Suche"
         }
-      }
+      },
+      "label": "Funktionen"
+    },
+    "footer": {
+      "api": "API",
+      "blog": "Blog",
+      "changelog": "Änderungsprotokoll",
+      "copyright": "Alle Rechte vorbehalten.",
+      "dashboard": "Dashboard",
+      "docs": "Dokumentation",
+      "extension": "Chrome-Erweiterung",
+      "github": "GitHub",
+      "legal": "Rechtliches",
+      "mobile": "Mobile App",
+      "pricing": "Preise",
+      "privacy": "Datenschutzerklärung",
+      "product": "Produkt",
+      "refund": "Rückerstattungsrichtlinie",
+      "resources": "Ressourcen",
+      "tagline": "KI-gestützte Inhaltsspeicherung und Wissensverwaltung.",
+      "terms": "Nutzungsbedingungen"
+    },
+    "hero": {
+      "badge": "KI-gestütztes Wissensmanagement",
+      "cta": "Kostenlos starten",
+      "ctaExtension": "Zu Chrome hinzufügen",
+      "ctaSecondary": "Mehr erfahren",
+      "description": "NOD nutzt KI, um Inhalte zu analysieren und zusammenzufassen und so Ihre persönliche Wissensbibliothek aufzubauen, die Sie jederzeit durchsuchen und abrufen können.",
+      "headline": "Inhalte speichern, Erkenntnisse gewinnen",
+      "trustedBy": "Vertraut von Wissensarbeitern weltweit"
     },
     "howItWorks": {
-      "label": "So funktioniert es",
       "headline": "Drei einfache Schritte für klügeres Lesen",
+      "label": "So funktioniert es",
       "steps": {
-        "save": {
-          "number": "01",
-          "title": "Speichern",
-          "description": "Speichern Sie beliebige Webinhalte mit unserer Chrome-Erweiterung oder durch Einfügen einer URL."
-        },
         "analyze": {
+          "description": "KI fasst den Inhalt automatisch zusammen, extrahiert Schlüsselkonzepte und organisiert alles in Ihrer Bibliothek.",
           "number": "02",
-          "title": "Analysieren",
-          "description": "KI fasst den Inhalt automatisch zusammen, extrahiert Schlüsselkonzepte und organisiert alles in Ihrer Bibliothek."
+          "title": "Analysieren"
         },
         "recall": {
+          "description": "Durchsuchen Sie Ihre Bibliothek semantisch, um genau das zu finden, was Sie brauchen – wann immer Sie es brauchen.",
           "number": "03",
-          "title": "Abrufen",
-          "description": "Durchsuchen Sie Ihre Bibliothek semantisch, um genau das zu finden, was Sie brauchen – wann immer Sie es brauchen."
+          "title": "Abrufen"
+        },
+        "save": {
+          "description": "Speichern Sie beliebige Webinhalte mit unserer Chrome-Erweiterung oder durch Einfügen einer URL.",
+          "number": "01",
+          "title": "Speichern"
         }
       }
     },
-    "cta": {
-      "headline": "Beginnen Sie, Ihre Wissensbibliothek aufzubauen",
-      "description": "Schließen Sie sich tausenden von Lesern an, die NOD nutzen, um Inhalte mit KI zu speichern, zu analysieren und abzurufen.",
-      "button": "Kostenlos starten",
-      "note": "Keine Kreditkarte erforderlich"
+    "nav": {
+      "blog": "Blog",
+      "changeLanguage": "Sprache wechseln",
+      "features": "Funktionen",
+      "getStarted": "Loslegen",
+      "howItWorks": "So funktioniert es",
+      "login": "Anmelden",
+      "pricing": "Preise"
+    },
+    "pricing": {
+      "basicAnalyzableTypes": "Analysierbare Typen: Nachrichten · Tech-Blog · Docs",
+      "cta": "Preise ansehen",
+      "description": "Starten Sie mit Basic und wechseln Sie zu Pro, wenn Sie unbegrenzte Zusammenfassungen und qualitativ hochwertigere Modelle wünschen.",
+      "headline": "Wählen Sie einen Plan, der zu Ihrem Leseverhalten passt",
+      "label": "Preise",
+      "note": "Jederzeit wechselbar",
+      "proAnalyzableTypes": "Analysierbare Typen: Alle (inkl. GitHub, Papers, Videos)"
+    },
+    "stackingCards": {
+      "headline": "Verfolgen Sie Ihre Lese-Pipeline, während Karten sich in Bewegung stapeln",
+      "items": {
+        "card1": {
+          "description": "Schneiden Sie Docs, Videos, Repositories und Threads in einen Stream, während NOD den Quellkontext erhält.",
+          "kicker": "Erfassen",
+          "metrics": {
+            "first": "13 Feeds synchronisiert",
+            "second": "47 neue Clips",
+            "third": "Latenz 210 ms"
+          },
+          "title": "Signal von jeder Oberfläche sammeln"
+        },
+        "card2": {
+          "description": "Jede Karte löst KI-Extraktion für wichtige Erkenntnisse, Muster und umsetzbare Snippets aus, die Sie in Sekunden erneut aufrufen können.",
+          "kicker": "Analysieren",
+          "metrics": {
+            "first": "Modell: Gemini 3.1 Pro Preview",
+            "second": "Qualität 97",
+            "third": "3 semantische Cluster"
+          },
+          "title": "Zusammenfassungen entstehen in Echtzeit"
+        },
+        "card3": {
+          "description": "Semantisches Gedächtnis verknüpft jede Notiz, sodass Ihre nächste Suche die richtige Antwort mit verbundenen Belegen liefert.",
+          "kicker": "Abrufen",
+          "metrics": {
+            "first": "Abrufgeschwindigkeit 0,8 s",
+            "second": "112 Konzeptkanten",
+            "third": "Konfidenz 94 %"
+          },
+          "title": "Kontext genau dann abrufen, wenn er gebraucht wird"
+        }
+      },
+      "label": "Cinematisches Scrollen",
+      "pinLabel": "ScrollTrigger fixiert"
     },
     "typewriterFeed": {
       "label": "Live-Feed",
@@ -102,603 +492,330 @@
       "line2": "[09:12:16] KI hat 'React 19 Compiler' in 9 Sekunden zusammengefasst.",
       "line3": "[09:12:23] Konzeptverknüpfungen aktualisiert: RSC, Streaming, Edge Runtime.",
       "line4": "[09:12:28] Abrufwert auf 92 % für das Leseset dieser Woche gestiegen."
-    },
-    "stackingCards": {
-      "label": "Cinematisches Scrollen",
-      "headline": "Verfolgen Sie Ihre Lese-Pipeline, während Karten sich in Bewegung stapeln",
-      "pinLabel": "ScrollTrigger fixiert",
-      "items": {
-        "card1": {
-          "kicker": "Erfassen",
-          "title": "Signal von jeder Oberfläche sammeln",
-          "description": "Schneiden Sie Docs, Videos, Repositories und Threads in einen Stream, während NOD den Quellkontext erhält.",
-          "metrics": {
-            "first": "13 Feeds synchronisiert",
-            "second": "47 neue Clips",
-            "third": "Latenz 210 ms"
-          }
-        },
-        "card2": {
-          "kicker": "Analysieren",
-          "title": "Zusammenfassungen entstehen in Echtzeit",
-          "description": "Jede Karte löst KI-Extraktion für wichtige Erkenntnisse, Muster und umsetzbare Snippets aus, die Sie in Sekunden erneut aufrufen können.",
-          "metrics": {
-            "first": "Modell: Gemini 3.1 Pro Preview",
-            "second": "Qualität 97",
-            "third": "3 semantische Cluster"
-          }
-        },
-        "card3": {
-          "kicker": "Abrufen",
-          "title": "Kontext genau dann abrufen, wenn er gebraucht wird",
-          "description": "Semantisches Gedächtnis verknüpft jede Notiz, sodass Ihre nächste Suche die richtige Antwort mit verbundenen Belegen liefert.",
-          "metrics": {
-            "first": "Abrufgeschwindigkeit 0,8 s",
-            "second": "112 Konzeptkanten",
-            "third": "Konfidenz 94 %"
-          }
-        }
-      }
-    },
-    "footer": {
-      "product": "Produkt",
-      "dashboard": "Dashboard",
-      "extension": "Chrome-Erweiterung",
-      "mobile": "Mobile App",
-      "api": "API",
-      "pricing": "Preise",
-      "blog": "Blog",
-      "resources": "Ressourcen",
-      "docs": "Dokumentation",
-      "github": "GitHub",
-      "changelog": "Änderungsprotokoll",
-      "legal": "Rechtliches",
-      "privacy": "Datenschutzerklärung",
-      "terms": "Nutzungsbedingungen",
-      "refund": "Rückerstattungsrichtlinie",
-      "tagline": "KI-gestützte Inhaltsspeicherung und Wissensverwaltung.",
-      "copyright": "Alle Rechte vorbehalten."
-    },
-    "dashboardPreview": {
-      "savedReads": "Gespeicherte Inhalte",
-      "itemCount": "{count} Einträge",
-      "searchPlaceholder": "Suche: RSC",
-      "statusCompleted": "abgeschlossen",
-      "statusAnalyzing": "wird analysiert",
-      "similarReads": "Ähnliche Inhalte",
-      "articles": {
-        "0": {
-          "title": "React Server Components verstehen",
-          "summary": "RSC ermöglicht Streaming-UI mit serverseitig gerenderten Komponenten und behält Interaktivität dort, wo sie wichtig ist."
-        },
-        "1": {
-          "title": "Vektordatenbanken erklärt",
-          "summary": "Einbettungen wandeln Text in Vektoren um; Ähnlichkeitssuche ruft verwandte Notizen über exakte Schlüsselwörter hinaus ab."
-        },
-        "2": {
-          "title": "Entwickeln mit FastAPI",
-          "summary": "Lernen Sie ASGI-Grundlagen, Dependency-Injection-Muster und wie Sie typisierte APIs schnell bereitstellen."
-        }
-      },
-      "similar": {
-        "0": "React Patterns Deep Dive",
-        "1": "Next.js 16 Migrationsleitfaden",
-        "2": "TypeScript 5.9 Neuerungen",
-        "3": "Edge Computing Einführung"
-      }
     }
   },
-  "errors": {
-    "notFound": "Seite nicht gefunden",
-    "goHome": "Zur Startseite",
-    "somethingWrong": "Etwas ist schiefgelaufen!",
-    "tryAgain": "Erneut versuchen"
-  },
-  "blog": {
-    "title": "Blog",
-    "subtitle": "Tipps, Anleitungen und Einblicke zu Wissensmanagement und Produktivität.",
-    "readArticle": "Artikel lesen →",
-    "home": "Startseite",
-    "readTime": "{minutes} Min. Lesezeit"
-  },
   "legal": {
-    "terms": {
-      "title": "Nutzungsbedingungen",
+    "privacy": {
       "effectiveDate": "Gültig ab: 2026-02-19",
+      "intro": "NOD respektiert Ihre Privatsphäre. Diese Richtlinie erläutert, welche personenbezogenen Daten wir erheben, wie wir sie verwenden und welche Rechte Sie in Bezug auf Ihre Daten haben.",
       "sections": {
-        "intro": {
-          "title": "1. Zweck",
-          "content": "Diese Nutzungsbedingungen (\"Bedingungen\") regeln das Rechtsverhältnis zwischen NOD (\"wir\", \"uns\" oder \"unser\") und den Nutzern (\"Sie\") des NOD-Dienstes. Diese Bedingungen legen die Rechte und Pflichten beider Parteien fest. Durch den Zugriff auf oder die Nutzung des NOD-Dienstes erklären Sie sich mit diesen Bedingungen einverstanden. Wenn Sie nicht einverstanden sind, stellen Sie bitte die Nutzung des Dienstes ein."
+        "changes": {
+          "content": "Wir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Über wesentliche Änderungen informieren wir Sie durch dienstinterne Ankündigungen oder direkte Kommunikation.",
+          "title": "9. Änderungen"
         },
-        "account": {
-          "title": "2. Konto",
-          "content": "Sie können ein Konto mit Ihrer E-Mail-Adresse oder einem unterstützten Social-Login-Anbieter (z. B. Google) erstellen. Sie sind für die Bereitstellung genauer und aktueller Informationen sowie für die Wahrung der Vertraulichkeit und Sicherheit Ihrer Zugangsdaten verantwortlich. Sie müssen uns umgehend unter shickcoong777@gmail.com benachrichtigen, wenn Sie einen unbefugten Zugriff auf Ihr Konto vermuten. Jede Person darf nur ein Konto führen. Das Teilen von Konten oder die Weitergabe von Zugängen an Dritte ist nicht gestattet."
-        },
-        "service": {
-          "title": "3. Nutzung des Dienstes",
-          "content": "NOD bietet einen KI-gestützten Wissensmanagementdienst an, der das Speichern von Artikeln, KI-generierte Zusammenfassungen, semantische Suche und Konzeptextraktion umfasst. Wir können Funktionen des Dienstes jederzeit mit angemessener Vorankündigung aktualisieren, ändern oder einstellen. Der Dienst wird in zwei Tarifen angeboten: einem kostenlosen Basic-Plan und einem kostenpflichtigen Pro-Plan (5 $/Monat). Die gesamte Nutzung des Dienstes unterliegt den Richtlinien zur fairen Nutzung; übermäßige automatisierte Nutzung, die die Dienstleistung für andere Nutzer beeinträchtigt, ist nicht gestattet."
-        },
-        "payment": {
-          "title": "4. Zahlungsabwicklung",
-          "content": "Zahlungen für kostenpflichtige Dienste (Pro-Plan) werden über Paddle.com abgewickelt. Paddle fungiert als Merchant of Record und übernimmt die Zahlungsabwicklung, Steuererhebung und Rückerstattungen. Bei zahlungsbezogenen Anfragen wenden Sie sich bitte an shickcoong777@gmail.com oder den Kundensupport von Paddle."
-        },
-        "content": {
-          "title": "5. Inhalte & Urheberrecht",
-          "content": "Sie behalten das vollständige Eigentum und Urheberrecht an allen Inhalten, die Sie in NOD speichern. Durch das Speichern von Inhalten im Dienst räumen Sie NOD eine eingeschränkte, nicht exklusive Lizenz zur Speicherung, Verarbeitung und Analyse dieser Inhalte ausschließlich zum Zweck der Bereitstellung des Dienstes für Sie ein. NOD beansprucht kein Eigentum an Ihren Inhalten und wird diese nicht für andere Zwecke als die Diensterbringung verwenden. Sie sind dafür verantwortlich, sicherzustellen, dass Sie die erforderlichen Rechte besitzen, um Inhalte über NOD zu speichern und zu verarbeiten. NOD behält sich das Recht vor, Inhalte zu entfernen, die gegen diese Bedingungen oder geltendes Recht verstoßen."
-        },
-        "prohibited": {
-          "title": "6. Verbotene Handlungen",
-          "content": "Folgende Aktivitäten sind streng verboten: (a) Reverse Engineering, Dekompilierung oder der Versuch, den Quellcode des Dienstes zu extrahieren; (b) Umgehung oder Versuch, Zugangskontrollen oder Sicherheitsmaßnahmen zu überwinden; (c) automatisiertes Scraping oder Crawling des Dienstes über die normale Nutzung über die offizielle Benutzeroberfläche oder API hinaus; (d) das Teilen von Zugangsdaten oder die Erlaubnis, dass andere Ihr Konto nutzen; (e) das Hochladen oder Übertragen von Schadcode, Viren oder schädlichen Inhalten; (f) die Nutzung des Dienstes unter Verstoß gegen geltende lokale, nationale oder internationale Gesetze; (g) jede Handlung, die den normalen Betrieb des Dienstes oder seiner Infrastruktur beeinträchtigt oder stört."
-        },
-        "termination": {
-          "title": "7. Kündigung",
-          "content": "Sie können Ihr Konto jederzeit über die Kontoeinstellungen oder durch Kontaktaufnahme mit uns kündigen. NOD kann Ihr Konto sperren oder kündigen, wenn Sie gegen diese Bedingungen verstoßen, betrügerische Aktivitäten betreiben oder den Dienst anderweitig missbrauchen. Nach der Kündigung können Ihre Daten für einen angemessenen Zeitraum aufbewahrt werden, bevor sie dauerhaft gelöscht werden, es sei denn, Sie beantragen eine sofortige Löschung. Bestimmungen dieser Bedingungen, die ihrem Wesen nach über die Kündigung hinaus Bestand haben sollten (einschließlich, ohne Einschränkung, Eigentumsvorbehalt, Haftungsausschlüsse und Haftungsbeschränkungen), bleiben nach der Kündigung in Kraft."
+        "collection": {
+          "content": "Wir erheben folgende Kategorien von Informationen:",
+          "items": {
+            "account": "Kontoinformationen: E-Mail-Adresse, Name und Profilbild (wie vom Social-Login-Anbieter bereitgestellt), Authentifizierungstoken.",
+            "analytics": "Web-Analysen: Nutzungsstatistiken der Website (z. B. Seitenaufrufe und Ereignisse über Google Analytics).",
+            "content": "Inhaltsinformationen: Gespeicherte Artikel-URLs, Titel, extrahierter Text, KI-generierte Zusammenfassungen, Notizen und zugehörige Metadaten.",
+            "payment": "Zahlungsinformationen: Abrechnungsdaten für kostenpflichtige Pläne, verarbeitet von unserem Zahlungsanbieter (Paddle).",
+            "usage": "Nutzungsinformationen: Protokolle zur Funktionsnutzung (z. B. Speicher-/Zusammenfassungszählungen), Fehler- und Diagnosedaten."
+          },
+          "note": "Bei der Nutzung der Chrome-Erweiterung können wir die URL und den Haupttext von Seiten erfassen, die Sie speichern möchten.",
+          "title": "1. Von uns erhobene Informationen"
         },
         "contact": {
-          "title": "8. Kontakt",
-          "content": "Wenn Sie Fragen oder Bedenken zu diesen Bedingungen haben, kontaktieren Sie uns bitte unter shickcoong777@gmail.com. Wir bemühen uns, alle Anfragen innerhalb von 3 Werktagen zu beantworten."
+          "content": "Bei Fragen zu unseren Datenschutzpraktiken kontaktieren Sie uns bitte unter:\nE-Mail: shickcoong777@gmail.com",
+          "title": "8. Kontakt"
+        },
+        "cookies": {
+          "content": "Wir verwenden Cookies und ähnliche Technologien zur Authentifizierung, Sitzungsverwaltung, Nutzereinstellungen und Analyse. Sie können Ihren Browser so konfigurieren, dass Cookies abgelehnt werden, jedoch können einige Funktionen dadurch eingeschränkt sein.",
+          "title": "6. Cookies"
+        },
+        "purpose": {
+          "items": {
+            "auth": "Nutzeridentifikation, Anmeldung und Sitzungsverwaltung",
+            "billing": "Abonnement- und Zahlungsverwaltung",
+            "core": "Bereitstellung von Kernfunktionen einschließlich Artikelspeicherung, KI-Zusammenfassung, semantischer Suche und Konzeptextraktion",
+            "improve": "Verbesserung der Dienstqualität, Fehleranalyse, Sicherheit und Betrugsprävention"
+          },
+          "title": "2. Verwendung der Informationen"
+        },
+        "retention": {
+          "items": {
+            "deletion": "Wenn Sie Ihr Konto löschen oder eine Löschung beantragen, werden Ihre Daten innerhalb eines angemessenen Zeitraums entfernt.",
+            "legal": "Wir können Daten länger aufbewahren, wenn dies durch geltendes Recht vorgeschrieben ist.",
+            "principle": "Wir löschen personenbezogene Daten, wenn sie für ihren ursprünglichen Zweck nicht mehr benötigt werden."
+          },
+          "title": "4. Aufbewahrung"
+        },
+        "rights": {
+          "content": "Sie haben das Recht, auf Ihre personenbezogenen Daten zuzugreifen, diese zu berichtigen, zu löschen oder die Verarbeitung einzuschränken. Um diese Rechte auszuüben, kontaktieren Sie uns bitte über die unten angegebenen Informationen.",
+          "title": "5. Ihre Rechte"
+        },
+        "security": {
+          "content": "Wir implementieren angemessene Sicherheitsmaßnahmen zum Schutz Ihrer personenbezogenen Daten, einschließlich Zugangskontrollen, Verschlüsselung bei der Übertragung und sicherer Datenspeicherpraktiken.",
+          "title": "7. Sicherheit"
+        },
+        "sharing": {
+          "content": "Wir verkaufen Ihre personenbezogenen Daten nicht. Wir nutzen vertrauenswürdige Drittanbieter, um den Dienst zu betreiben und zu verbessern.",
+          "items": {
+            "ai": "KI-Verarbeitung: Artikelinhalte (Titel, Text) können zu KI-Anbietern (z. B. OpenAI, Google Gemini) zur Zusammenfassung und Einbettungsgenerierung übertragen werden",
+            "analytics": "Analyse und Monitoring: Google Analytics und ähnliche Tools",
+            "auth": "Authentifizierung: Social-Login (OAuth)-Anbieter und Authentifizierungsdienste",
+            "cloud": "Cloud-Infrastruktur und Hosting: Dienstbetrieb, Datenspeicherung und -verarbeitung",
+            "payment": "Zahlungsabwicklung: Paddle und zugehörige Zahlungsdienste"
+          },
+          "title": "3. Weitergabe"
         }
-      }
+      },
+      "title": "Datenschutzerklärung"
     },
     "refund": {
-      "title": "Rückerstattungs- und Stornierungsrichtlinie",
       "effectiveDate": "Gültig ab: 2026-02-18",
       "intro": "Unsere Richtlinie zu Rückerstattungen und Stornierungen für den kostenpflichtigen Plan (Pro) von NOD. Alle Zahlungen werden über Paddle.com abgewickelt.",
       "sections": {
         "cancellation": {
-          "title": "1. Abonnementkündigung",
-          "content": "Sie können Ihr Abonnement jederzeit kündigen. Nach der Kündigung behalten Sie den Zugang zu den Pro-Funktionen bis zum Ende Ihres aktuellen Abrechnungszeitraums. Es werden keine weiteren Gebühren erhoben."
-        },
-        "refunds": {
-          "title": "2. Rückerstattungsrichtlinie",
-          "content": "Sie können innerhalb von 14 Tagen nach dem Verlängerungsdatum Ihres Abonnements oder dem ursprünglichen Kaufdatum eine vollständige Rückerstattung beantragen. Nach 14 Tagen sind Rückerstattungen nicht mehr möglich; Sie können Ihr Abonnement jedoch jederzeit kündigen. Zahlungen werden über Paddle abgewickelt, und die Rückerstattungsrichtlinie von Paddle gilt."
-        },
-        "process": {
-          "title": "3. Rückerstattungsabwicklung",
-          "content": "Nach Genehmigung werden Rückerstattungen innerhalb von 5–10 Werktagen auf Ihre ursprüngliche Zahlungsmethode verarbeitet. Sie können Rückerstattungsanträge über shickcoong777@gmail.com oder den Kundensupport von Paddle einreichen."
+          "content": "Sie können Ihr Abonnement jederzeit kündigen. Nach der Kündigung behalten Sie den Zugang zu den Pro-Funktionen bis zum Ende Ihres aktuellen Abrechnungszeitraums. Es werden keine weiteren Gebühren erhoben.",
+          "title": "1. Abonnementkündigung"
         },
         "exceptions": {
-          "title": "4. Ausnahmen",
-          "content": "Wenn der Dienst aufgrund eines kritischen Fehlers nicht nutzbar ist, wird unabhängig vom seit dem Kauf vergangenen Zeitraum eine vollständige Rückerstattung gewährt."
+          "content": "Wenn der Dienst aufgrund eines kritischen Fehlers nicht nutzbar ist, wird unabhängig vom seit dem Kauf vergangenen Zeitraum eine vollständige Rückerstattung gewährt.",
+          "title": "4. Ausnahmen"
+        },
+        "process": {
+          "content": "Nach Genehmigung werden Rückerstattungen innerhalb von 5–10 Werktagen auf Ihre ursprüngliche Zahlungsmethode verarbeitet. Sie können Rückerstattungsanträge über shickcoong777@gmail.com oder den Kundensupport von Paddle einreichen.",
+          "title": "3. Rückerstattungsabwicklung"
+        },
+        "refunds": {
+          "content": "Sie können innerhalb von 14 Tagen nach dem Verlängerungsdatum Ihres Abonnements oder dem ursprünglichen Kaufdatum eine vollständige Rückerstattung beantragen. Nach 14 Tagen sind Rückerstattungen nicht mehr möglich; Sie können Ihr Abonnement jedoch jederzeit kündigen. Zahlungen werden über Paddle abgewickelt, und die Rückerstattungsrichtlinie von Paddle gilt.",
+          "title": "2. Rückerstattungsrichtlinie"
         }
-      }
+      },
+      "title": "Rückerstattungs- und Stornierungsrichtlinie"
     },
-    "privacy": {
-      "title": "Datenschutzerklärung",
+    "terms": {
       "effectiveDate": "Gültig ab: 2026-02-19",
-      "intro": "NOD respektiert Ihre Privatsphäre. Diese Richtlinie erläutert, welche personenbezogenen Daten wir erheben, wie wir sie verwenden und welche Rechte Sie in Bezug auf Ihre Daten haben.",
       "sections": {
-        "collection": {
-          "title": "1. Von uns erhobene Informationen",
-          "content": "Wir erheben folgende Kategorien von Informationen:",
-          "items": {
-            "account": "Kontoinformationen: E-Mail-Adresse, Name und Profilbild (wie vom Social-Login-Anbieter bereitgestellt), Authentifizierungstoken.",
-            "content": "Inhaltsinformationen: Gespeicherte Artikel-URLs, Titel, extrahierter Text, KI-generierte Zusammenfassungen, Notizen und zugehörige Metadaten.",
-            "usage": "Nutzungsinformationen: Protokolle zur Funktionsnutzung (z. B. Speicher-/Zusammenfassungszählungen), Fehler- und Diagnosedaten.",
-            "payment": "Zahlungsinformationen: Abrechnungsdaten für kostenpflichtige Pläne, verarbeitet von unserem Zahlungsanbieter (Paddle).",
-            "analytics": "Web-Analysen: Nutzungsstatistiken der Website (z. B. Seitenaufrufe und Ereignisse über Google Analytics)."
-          },
-          "note": "Bei der Nutzung der Chrome-Erweiterung können wir die URL und den Haupttext von Seiten erfassen, die Sie speichern möchten."
-        },
-        "purpose": {
-          "title": "2. Verwendung der Informationen",
-          "items": {
-            "auth": "Nutzeridentifikation, Anmeldung und Sitzungsverwaltung",
-            "core": "Bereitstellung von Kernfunktionen einschließlich Artikelspeicherung, KI-Zusammenfassung, semantischer Suche und Konzeptextraktion",
-            "billing": "Abonnement- und Zahlungsverwaltung",
-            "improve": "Verbesserung der Dienstqualität, Fehleranalyse, Sicherheit und Betrugsprävention"
-          }
-        },
-        "sharing": {
-          "title": "3. Weitergabe",
-          "content": "Wir verkaufen Ihre personenbezogenen Daten nicht. Wir nutzen vertrauenswürdige Drittanbieter, um den Dienst zu betreiben und zu verbessern.",
-          "items": {
-            "cloud": "Cloud-Infrastruktur und Hosting: Dienstbetrieb, Datenspeicherung und -verarbeitung",
-            "auth": "Authentifizierung: Social-Login (OAuth)-Anbieter und Authentifizierungsdienste",
-            "ai": "KI-Verarbeitung: Artikelinhalte (Titel, Text) können zu KI-Anbietern (z. B. OpenAI, Google Gemini) zur Zusammenfassung und Einbettungsgenerierung übertragen werden",
-            "payment": "Zahlungsabwicklung: Paddle und zugehörige Zahlungsdienste",
-            "analytics": "Analyse und Monitoring: Google Analytics und ähnliche Tools"
-          }
-        },
-        "retention": {
-          "title": "4. Aufbewahrung",
-          "items": {
-            "principle": "Wir löschen personenbezogene Daten, wenn sie für ihren ursprünglichen Zweck nicht mehr benötigt werden.",
-            "deletion": "Wenn Sie Ihr Konto löschen oder eine Löschung beantragen, werden Ihre Daten innerhalb eines angemessenen Zeitraums entfernt.",
-            "legal": "Wir können Daten länger aufbewahren, wenn dies durch geltendes Recht vorgeschrieben ist."
-          }
-        },
-        "rights": {
-          "title": "5. Ihre Rechte",
-          "content": "Sie haben das Recht, auf Ihre personenbezogenen Daten zuzugreifen, diese zu berichtigen, zu löschen oder die Verarbeitung einzuschränken. Um diese Rechte auszuüben, kontaktieren Sie uns bitte über die unten angegebenen Informationen."
-        },
-        "cookies": {
-          "title": "6. Cookies",
-          "content": "Wir verwenden Cookies und ähnliche Technologien zur Authentifizierung, Sitzungsverwaltung, Nutzereinstellungen und Analyse. Sie können Ihren Browser so konfigurieren, dass Cookies abgelehnt werden, jedoch können einige Funktionen dadurch eingeschränkt sein."
-        },
-        "security": {
-          "title": "7. Sicherheit",
-          "content": "Wir implementieren angemessene Sicherheitsmaßnahmen zum Schutz Ihrer personenbezogenen Daten, einschließlich Zugangskontrollen, Verschlüsselung bei der Übertragung und sicherer Datenspeicherpraktiken."
+        "account": {
+          "content": "Sie können ein Konto mit Ihrer E-Mail-Adresse oder einem unterstützten Social-Login-Anbieter (z. B. Google) erstellen. Sie sind für die Bereitstellung genauer und aktueller Informationen sowie für die Wahrung der Vertraulichkeit und Sicherheit Ihrer Zugangsdaten verantwortlich. Sie müssen uns umgehend unter shickcoong777@gmail.com benachrichtigen, wenn Sie einen unbefugten Zugriff auf Ihr Konto vermuten. Jede Person darf nur ein Konto führen. Das Teilen von Konten oder die Weitergabe von Zugängen an Dritte ist nicht gestattet.",
+          "title": "2. Konto"
         },
         "contact": {
-          "title": "8. Kontakt",
-          "content": "Bei Fragen zu unseren Datenschutzpraktiken kontaktieren Sie uns bitte unter:\nE-Mail: shickcoong777@gmail.com"
+          "content": "Wenn Sie Fragen oder Bedenken zu diesen Bedingungen haben, kontaktieren Sie uns bitte unter shickcoong777@gmail.com. Wir bemühen uns, alle Anfragen innerhalb von 3 Werktagen zu beantworten.",
+          "title": "8. Kontakt"
         },
-        "changes": {
-          "title": "9. Änderungen",
-          "content": "Wir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Über wesentliche Änderungen informieren wir Sie durch dienstinterne Ankündigungen oder direkte Kommunikation."
+        "content": {
+          "content": "Sie behalten das vollständige Eigentum und Urheberrecht an allen Inhalten, die Sie in NOD speichern. Durch das Speichern von Inhalten im Dienst räumen Sie NOD eine eingeschränkte, nicht exklusive Lizenz zur Speicherung, Verarbeitung und Analyse dieser Inhalte ausschließlich zum Zweck der Bereitstellung des Dienstes für Sie ein. NOD beansprucht kein Eigentum an Ihren Inhalten und wird diese nicht für andere Zwecke als die Diensterbringung verwenden. Sie sind dafür verantwortlich, sicherzustellen, dass Sie die erforderlichen Rechte besitzen, um Inhalte über NOD zu speichern und zu verarbeiten. NOD behält sich das Recht vor, Inhalte zu entfernen, die gegen diese Bedingungen oder geltendes Recht verstoßen.",
+          "title": "5. Inhalte & Urheberrecht"
+        },
+        "intro": {
+          "content": "Diese Nutzungsbedingungen (\"Bedingungen\") regeln das Rechtsverhältnis zwischen NOD (\"wir\", \"uns\" oder \"unser\") und den Nutzern (\"Sie\") des NOD-Dienstes. Diese Bedingungen legen die Rechte und Pflichten beider Parteien fest. Durch den Zugriff auf oder die Nutzung des NOD-Dienstes erklären Sie sich mit diesen Bedingungen einverstanden. Wenn Sie nicht einverstanden sind, stellen Sie bitte die Nutzung des Dienstes ein.",
+          "title": "1. Zweck"
+        },
+        "payment": {
+          "content": "Zahlungen für kostenpflichtige Dienste (Pro-Plan) werden über Paddle.com abgewickelt. Paddle fungiert als Merchant of Record und übernimmt die Zahlungsabwicklung, Steuererhebung und Rückerstattungen. Bei zahlungsbezogenen Anfragen wenden Sie sich bitte an shickcoong777@gmail.com oder den Kundensupport von Paddle.",
+          "title": "4. Zahlungsabwicklung"
+        },
+        "prohibited": {
+          "content": "Folgende Aktivitäten sind streng verboten: (a) Reverse Engineering, Dekompilierung oder der Versuch, den Quellcode des Dienstes zu extrahieren; (b) Umgehung oder Versuch, Zugangskontrollen oder Sicherheitsmaßnahmen zu überwinden; (c) automatisiertes Scraping oder Crawling des Dienstes über die normale Nutzung über die offizielle Benutzeroberfläche oder API hinaus; (d) das Teilen von Zugangsdaten oder die Erlaubnis, dass andere Ihr Konto nutzen; (e) das Hochladen oder Übertragen von Schadcode, Viren oder schädlichen Inhalten; (f) die Nutzung des Dienstes unter Verstoß gegen geltende lokale, nationale oder internationale Gesetze; (g) jede Handlung, die den normalen Betrieb des Dienstes oder seiner Infrastruktur beeinträchtigt oder stört.",
+          "title": "6. Verbotene Handlungen"
+        },
+        "service": {
+          "content": "NOD bietet einen KI-gestützten Wissensmanagementdienst an, der das Speichern von Artikeln, KI-generierte Zusammenfassungen, semantische Suche und Konzeptextraktion umfasst. Wir können Funktionen des Dienstes jederzeit mit angemessener Vorankündigung aktualisieren, ändern oder einstellen. Der Dienst wird in zwei Tarifen angeboten: einem kostenlosen Basic-Plan und einem kostenpflichtigen Pro-Plan (5 $/Monat). Die gesamte Nutzung des Dienstes unterliegt den Richtlinien zur fairen Nutzung; übermäßige automatisierte Nutzung, die die Dienstleistung für andere Nutzer beeinträchtigt, ist nicht gestattet.",
+          "title": "3. Nutzung des Dienstes"
+        },
+        "termination": {
+          "content": "Sie können Ihr Konto jederzeit über die Kontoeinstellungen oder durch Kontaktaufnahme mit uns kündigen. NOD kann Ihr Konto sperren oder kündigen, wenn Sie gegen diese Bedingungen verstoßen, betrügerische Aktivitäten betreiben oder den Dienst anderweitig missbrauchen. Nach der Kündigung können Ihre Daten für einen angemessenen Zeitraum aufbewahrt werden, bevor sie dauerhaft gelöscht werden, es sei denn, Sie beantragen eine sofortige Löschung. Bestimmungen dieser Bedingungen, die ihrem Wesen nach über die Kündigung hinaus Bestand haben sollten (einschließlich, ohne Einschränkung, Eigentumsvorbehalt, Haftungsausschlüsse und Haftungsbeschränkungen), bleiben nach der Kündigung in Kraft.",
+          "title": "7. Kündigung"
         }
-      }
+      },
+      "title": "Nutzungsbedingungen"
     }
   },
-  "loginWelcome": "Willkommen zurück",
-  "loginSubtitle": "Melden Sie sich bei Ihrem NOD-Konto an",
   "login": {
-    "signingIn": "Anmeldung läuft...",
-    "or": "oder",
     "backToHome": "Zurück zur Startseite",
-    "highlightSave": "Webartikel mit einem Klick speichern",
+    "emailNotVerified": "Please verify your email first.",
+    "emailPlaceholder": "Email address",
+    "forgotPassword": "Forgot password?",
     "highlightAnalyze": "KI analysiert automatisch die wichtigsten Erkenntnisse",
+    "highlightSave": "Webartikel mit einem Klick speichern",
     "highlightSearch": "Alles sofort mit semantischer Suche finden",
+    "loginFailed": "Invalid email or password.",
+    "noAccount": "Don't have an account?",
+    "or": "oder",
+    "passwordPlaceholder": "Password",
     "secureNote": "Sicher angemeldet mit deinem Google-Konto",
+    "signInSubtitle": "Melde dich an, um deine Wissensbibliothek weiterzubauen",
     "signInTitle": "Anmelden",
-    "signInSubtitle": "Melde dich an, um deine Wissensbibliothek weiterzubauen"
+    "signInWithEmail": "Sign in with email",
+    "signUpLink": "Sign up",
+    "signingIn": "Anmeldung läuft..."
   },
-  "continueWithGoogle": "Mit Google fortfahren",
-  "dashboard": {
-    "sidebar": {
-      "nav": {
-        "dashboard": "Dashboard",
-        "articles": "Inhalte",
-        "graph": "Graphansicht",
-        "settings": "Einstellungen",
-        "billing": "Abrechnung verwalten",
-        "pricing": "Preise"
-      },
-      "user": {
-        "profile": "Profil",
-        "settings": "Einstellungen",
-        "billing": "Abrechnung verwalten",
-        "help": "Hilfe",
-        "feedback": "Feedback",
-        "logout": "Abmelden"
-      }
+  "loginSubtitle": "Melden Sie sich bei Ihrem NOD-Konto an",
+  "loginWelcome": "Willkommen zurück",
+  "onboarding": {
+    "completionSubtitle": "Weiterleitung zum Dashboard. Beginne mit NOD deine Wissensbibliothek aufzubauen.",
+    "completionTitle": "Alles bereit!",
+    "firstArticle": {
+      "cta": "Zum Dashboard",
+      "step1": "Öffne einen beliebigen Artikel oder Blogbeitrag",
+      "step2": "Klicke auf das NOD-Symbol in der Browser-Leiste",
+      "step3": "Klicke auf Save & Analyze",
+      "subtitle": "Folge diesen drei einfachen Schritten",
+      "title": "Speichere deinen ersten Artikel"
     },
-    "overview": {
-      "title": "Dashboard",
-      "description": "Übersicht über Ihre Wissensbibliothek.",
-      "savedArticles": "Gespeicherte Inhalte",
-      "aiSummaries": "KI-Zusammenfassungen",
-      "currentPlan": "Aktueller Plan",
-      "viewArticlesTitle": "Inhalte ansehen",
-      "viewArticlesDescription": "Durchsuchen Sie Ihre gespeicherten Inhalte.",
-      "manageBillingTitle": "Abrechnung verwalten",
-      "manageBillingDescription": "Sehen Sie Ihren Plan und Nutzungsdetails ein.",
-      "installExtensionTitle": "Chrome-Erweiterung installieren",
-      "installExtensionDescription": "Speichern Sie Inhalte mit einem Klick beim Surfen.",
-      "recentArticlesTitle": "Neueste Inhalte",
-      "recentArticlesDescription": "Ihre zuletzt gespeicherten Inhalte.",
-      "noRecentArticles": "Noch keine Inhalte gespeichert.",
-      "viewAll": "Alle anzeigen",
-      "contentTypes": "Inhaltstypen",
-      "welcomeMessage": "Willkommen zurück bei NOD",
-      "heroTitlePrimary": "Content Insights",
-      "heroTitleAccent": "Workspace",
-      "heroSubtitle": "Speichern Sie Inhalte, lassen Sie sie mit KI zusammenfassen und verknüpfen Sie Erkenntnisse schneller.",
-      "workflowTitle": "Heutiger Workflow",
-      "workflowStepCapture": "Inhalte erfassen",
-      "workflowStepAnalyze": "Zusammenfassungen analysieren",
-      "workflowStepRefine": "Schlüsselerkenntnisse schärfen",
-      "keyMetrics": "Wichtige Kennzahlen",
-      "storageUnlimited": "Inhaltsspeicher ist unbegrenzt",
-      "usageCalculating": "Nutzung wird berechnet...",
-      "planProActive": "Pro-Plan aktiv",
-      "planFreeActive": "Free-Plan aktiv",
-      "quickActions": "Schnellaktionen",
-      "getSupport": "Hilfe",
-      "openUsageGuide": "Nutzungsanleitung öffnen",
-      "modified": "Geändert",
-      "justNow": "Gerade eben",
-      "onboardingTitle": "Schließen Sie Ihr Onboarding ab!",
-      "onboardingDescription": "Verbinden Sie Ihre Browser-Erweiterung, um sofort Erkenntnisse zu erfassen.",
-      "onboardingSetupNow": "Jetzt einrichten",
-      "closeBanner": "Banner schließen"
+    "install": {
+      "benefitAllSites": "Funktioniert auf jeder Website",
+      "benefitAutoAnalyze": "KI analysiert Inhalte automatisch beim Speichern",
+      "benefitOneClick": "Artikel sofort mit einem Klick speichern",
+      "confirmButton": "Ich habe es installiert",
+      "installButton": "Aus dem Chrome Web Store installieren",
+      "skipLink": "Später erledigen",
+      "subtitle": "Artikel mit einem Klick von jeder Seite speichern",
+      "title": "Chrome-Erweiterung installieren"
     },
-    "graph": {
-      "sectionLabel": "Wissensgraph",
-      "pageTitle": "Graphansicht",
-      "pageDescription": "Visualisieren Sie Kernkonzepte aus Ihren zusammengefassten Inhalten.",
-      "previewTitle": "Graphansicht Vorschau",
-      "previewDescription": "Schreibgeschützte Vorschau Ihrer Konzeptkarte.",
-      "openFull": "Vollständigen Graphen öffnen",
-      "lockedTitle": "Graphansicht ist eine Pro-Funktion",
-      "lockedDescription": "Upgraden Sie auf Pro, um die Konzeptgraph-Visualisierung freizuschalten.",
-      "upgrade": "Auf Pro upgraden",
-      "loadError": "Graphdaten konnten nicht geladen werden.",
-      "empty": "Noch kein Konzeptgraph. Speichern und zusammenfassen Sie mehr Inhalte.",
-      "statsArticles": "Inhalte",
-      "statsConcepts": "Einzigartige Konzepte",
-      "statsNodes": "Knoten",
-      "statsEdges": "Verbindungen",
-      "modeGlobal": "Global",
-      "modeLocal": "Lokal",
-      "depthLabel": "Tiefe",
-      "panelSearch": "Suche",
-      "panelFilters": "Filter",
-      "panelSelection": "Auswahl",
-      "searchPlaceholder": "Konzepte suchen...",
-      "filterMinConnections": "Min. Verbindungen",
-      "selectionCount": "{count} ausgewählt",
-      "selectionEmpty": "Kein Knoten ausgewählt",
-      "selectionPinned": "Angeheftet",
-      "yes": "Ja",
-      "no": "Nein",
-      "actionPinSelected": "Auswahl anheften",
-      "actionUnpinSelected": "Auswahl loslösen",
-      "actionUnpinAll": "Alle loslösen",
-      "actionClearSelection": "Auswahl aufheben",
-      "menuPin": "Anheften",
-      "menuUnpin": "Loslösen",
-      "menuUnpinAll": "Alle loslösen",
-      "menuPinSelected": "Auswahl anheften",
-      "localCenterFilteredMessage": "Die aktuellen Filter schließen Ihren lokalen Mittelpunktknoten aus.",
-      "localReselectBase": "Basisknoten neu auswählen",
-      "localSwitchGlobal": "Zu Global wechseln"
+    "progress": "{step}/3",
+    "resumeBanner": {
+      "cta": "Weiter",
+      "message": "Schließe die Einrichtung ab, um mit NOD zu starten"
     },
-    "searchPlaceholder": "Suchen...",
-    "statusLabel": "Status",
-    "markdownNote": "Notiz",
-    "downloadMarkdown": "Als .md herunterladen",
-    "myArticles": "Meine Inhalte",
-    "articleListSubtitle": "Durchsuchen Sie Ihre gespeicherten Inhalte und finden Sie schnell die benötigten Erkenntnisse.",
-    "searchArticles": "Inhalte durchsuchen...",
-    "semanticSearch": "KI-Suche",
-    "searchMinChars": "Mindestens 2 Zeichen für die Suche eingeben",
-    "allStatus": "Alle Status",
-    "statusPending": "Ausstehend",
-    "statusProcessing": "Wird verarbeitet",
-    "statusAnalyzing": "Wird analysiert",
-    "statusCompleted": "Abgeschlossen",
-    "statusFailed": "Fehlgeschlagen",
-    "checkStatus": "Status prüfen",
-    "refreshing": "Wird aktualisiert...",
-    "retryAnalysis": "Erneut versuchen",
-    "loadingArticles": "Inhalte werden geladen...",
-    "loadError": "Inhalte konnten nicht geladen werden.",
-    "noArticles": "Noch keine Inhalte. Speichern Sie Inhalte mit der Chrome-Erweiterung.",
-    "installExtensionCta": "Zu Chrome hinzufügen",
-    "loadMore": "Mehr laden",
-    "noSummary": "Keine Zusammenfassung verfügbar",
-    "openContent": "Inhalt öffnen",
-    "articleNotFound": "Inhalt nicht gefunden.",
-    "deleteConfirm": "Diesen Inhalt löschen?",
-    "original": "Original",
-    "pendingAnalysis": "Warten auf Analysestart...",
-    "analyzingArticle": "KI analysiert diesen Inhalt...",
-    "summaryInProgress": "Zusammenfassung wird erstellt...",
-    "analysisStepReading": "Inhalt wird gelesen",
-    "analysisStepAnalyzing": "KI analysiert",
-    "analysisStepSummary": "Zusammenfassung wird erstellt",
-    "analysisDescription": "KI liest Ihren Inhalt, extrahiert Schlüsselkonzepte und erstellt eine strukturierte Zusammenfassung. Dies dauert in der Regel 30 Sekunden bis 1 Minute.",
-    "summary": "Zusammenfassung",
-    "details": "Details",
-    "readTime": "~{minutes} Min. Lesezeit",
-    "concepts": "Konzepte",
-    "keyPoints": "Kernpunkte",
-    "analyzedBy": "Analysiert von {provider}/{model}",
-    "similarArticles": "Ähnliche Inhalte",
-    "loadingSimilar": "Ähnliche Inhalte werden geladen...",
-    "similarity": "{percent} % Übereinstimmung",
-    "articleInfo": "Inhaltsinformationen",
-    "savedDate": "Gespeichert am",
-    "readingTime": "Lesezeit",
-    "minuteRead": "{minutes} Min.",
-    "sourceLabel": "Quelle",
-    "viewOriginal": "Original ansehen",
-    "language": "Sprache",
-    "allContentTypes": "Alle Typen",
-    "typeTechBlog": "Tech-Blog",
-    "typePaper": "Wissenschaftliche Arbeit",
-    "typeNews": "Nachrichten",
-    "typeGitHub": "GitHub",
-    "typeDocs": "Docs",
-    "typeVideo": "Video/Podcast"
+    "skip": "Überspringen",
+    "welcome": {
+      "cta": "Loslegen",
+      "featureAnalyze": "KI analysiert automatisch die wichtigsten Erkenntnisse",
+      "featureSave": "Webartikel mit einem Klick speichern",
+      "featureSearch": "Alles mit semantischer Suche finden",
+      "subtitle": "Deine KI-gestützte Wissensbibliothek",
+      "title": "Willkommen bei NOD"
+    }
   },
   "settings": {
-    "title": "Einstellungen",
-    "description": "Verwalten Sie Ihre Kontoeinstellungen.",
-    "sections": {
-      "profile": "Profil",
-      "account": "Konto",
-      "quickLinks": "Schnelllinks",
-      "legal": "Rechtliches"
-    },
-    "fields": {
-      "email": "E-Mail",
-      "emailProviderName": "E-Mail",
-      "authProvider": "Authentifizierungsanbieter",
-      "subscription": "Abonnement"
-    },
-    "links": {
-      "manageBilling": "Abrechnung & Abonnement verwalten",
-      "viewPricing": "Preispläne ansehen",
-      "installExtension": "Chrome-Erweiterung installieren",
-      "feedback": "Feedback senden",
-      "terms": "Nutzungsbedingungen",
-      "privacy": "Datenschutzerklärung",
-      "refund": "Rückerstattungsrichtlinie"
-    },
-    "status": {
-      "active": "aktiv"
-    },
     "actions": {
       "changePlan": "Plan ändern",
       "signOut": "Abmelden"
     },
-    "usage": {
-      "title": "KI-Analyse-Nutzung",
-      "currentMonthlyUsage": "Aktuelle monatliche Nutzung",
-      "resetHint": "Die Nutzung wird monatlich zu Beginn jedes Monats zurückgesetzt."
+    "description": "Verwalten Sie Ihre Kontoeinstellungen.",
+    "fields": {
+      "authProvider": "Authentifizierungsanbieter",
+      "email": "E-Mail",
+      "emailProviderName": "E-Mail",
+      "subscription": "Abonnement"
     },
-    "footerTagline": "NOD Labs · Entwickelt für Kreative"
+    "footerTagline": "NOD Labs · Entwickelt für Kreative",
+    "links": {
+      "feedback": "Feedback senden",
+      "installExtension": "Chrome-Erweiterung installieren",
+      "manageBilling": "Abrechnung & Abonnement verwalten",
+      "privacy": "Datenschutzerklärung",
+      "refund": "Rückerstattungsrichtlinie",
+      "terms": "Nutzungsbedingungen",
+      "viewPricing": "Preispläne ansehen"
+    },
+    "sections": {
+      "account": "Konto",
+      "legal": "Rechtliches",
+      "profile": "Profil",
+      "quickLinks": "Schnelllinks"
+    },
+    "status": {
+      "active": "aktiv"
+    },
+    "title": "Einstellungen",
+    "usage": {
+      "currentMonthlyUsage": "Aktuelle monatliche Nutzung",
+      "resetHint": "Die Nutzung wird monatlich zu Beginn jedes Monats zurückgesetzt.",
+      "title": "KI-Analyse-Nutzung"
+    }
+  },
+  "signup": {
+    "confirmPasswordPlaceholder": "Confirm password",
+    "continueWithGoogle": "Sign up with Google",
+    "createAccount": "Create account",
+    "creating": "Creating account...",
+    "duplicateEmail": "This email is already registered.",
+    "emailInvalid": "Please enter a valid email address.",
+    "emailPlaceholder": "Email address",
+    "hasAccount": "Already have an account?",
+    "namePlaceholder": "Name",
+    "nameRequired": "Please enter your name.",
+    "orDivider": "or",
+    "passwordMin": "Password must be at least 8 characters.",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordPlaceholder": "Password (8+ characters)",
+    "signInLink": "Sign in",
+    "subtitle": "Create your NOD account and start building your knowledge library",
+    "title": "Sign up"
   },
   "subscription": {
-    "pricing": "Preise",
-    "currentPlan": "Aktueller Plan",
-    "basic": "Kostenlos",
-    "pro": "Pro",
-    "basicPrice": "$0",
-    "proPrice": "$5/Monat (inkl. Steuern)",
-    "upgrade": "Auf Pro upgraden",
-    "manageBilling": "Abrechnung verwalten",
+    "activeSince": "Aktiv seit {date}",
     "backToSettings": "Zurück zu den Einstellungen",
-    "billingSubtitle": "Verwalten Sie Ihr Abonnement, Ihre Zahlungsmethode und Ihre Nutzung an einem Ort.",
-    "currentMonthlyAiSummaries": "Aktuelle monatliche KI-Zusammenfassungen",
-    "includedInPlan": "In Ihrem Plan enthalten",
+    "basic": "Kostenlos",
+    "basicPrice": "$0",
+    "basicValue": {
+      "aiSummaries": "20/Monat",
+      "conceptExtraction": "Enthalten",
+      "markdownExport": "Enthalten",
+      "savedArticles": "Nachrichten · Tech-Blog · Docs",
+      "semanticSearch": "Unbegrenzt"
+    },
     "billingControls": "Abrechnungssteuerung",
-    "proUpgradeDescription": "Upgrade auf Pro für höhere Monatslimits und erweiterte Funktionen.",
+    "billingHistory": "Abrechnungsverlauf",
     "billingStatus": "Abrechnungsstatus",
-    "planStatus": "Planstatus",
-    "nextBillingLabel": "Nächste Abrechnung",
-    "pricingSubtitle": "Wählen Sie den Plan, der zu Ihrem kreativen Workflow passt.",
+    "billingSubtitle": "Verwalten Sie Ihr Abonnement, Ihre Zahlungsmethode und Ihre Nutzung an einem Ort.",
     "cancel": "Abonnement kündigen",
     "cancelConfirm": "Sind Sie sicher, dass Sie Ihr Abonnement kündigen möchten?",
-    "usage": "Nutzung",
-    "summariesUsed": "{used}/{limit} Zusammenfassungen diesen Monat verwendet",
-    "summariesRemaining": "{remaining} Zusammenfassungen verbleibend",
-    "unlimited": "Unbegrenzt",
-    "limitReached": "Monatliches Limit erreicht",
-    "upgradePrompt": "Auf Pro upgraden für mehr Zusammenfassungen",
-    "features": {
-      "basicSummaries": "20 KI-Analysen/Monat",
-      "proSummaries": "Unbegrenzte KI-Analysen",
-      "basicArticles": "Automatische KI-Analyse beim Speichern",
-      "proArticles": "Unbegrenztes Speichern & Analysieren",
-      "basicSearch": "Unbegrenzte semantische Suchen",
-      "proSearch": "Unbegrenzte semantische Suchen"
-    },
-    "processing": "Wird verarbeitet...",
-    "upgradeUnavailable": "Der Zahlungsdienst wird vorbereitet. Bitte versuchen Sie es später erneut.",
-    "managePayment": "Zahlungsmethode verwalten",
     "cancelDescription": "Wenn Sie kündigen, bleiben Ihre Pro-Funktionen bis zum Ende Ihres aktuellen Abrechnungszeitraums aktiv.",
     "checkoutSuccess": "Zahlung erfolgreich! Ihr Pro-Abonnement ist jetzt aktiv.",
-    "billingHistory": "Abrechnungsverlauf",
+    "comparisonTitle": "Pläne vergleichen",
+    "currentMonthlyAiSummaries": "Aktuelle monatliche KI-Zusammenfassungen",
+    "currentPlan": "Aktueller Plan",
+    "faq": "Häufig gestellte Fragen",
+    "faqItems": {
+      "a1": "Unbegrenzte KI-Analysen und unbegrenzte Inhaltsspeicherung.",
+      "a2": "Ja, Sie können jederzeit kündigen. Sie behalten die Pro-Funktionen bis zum Ende Ihres Abrechnungszeitraums.",
+      "a3": "Wir akzeptieren Kredit- und Debitkarten und mehr. Zahlungen werden sicher über Paddle abgewickelt.",
+      "q1": "Was erhalte ich mit Pro?",
+      "q2": "Kann ich jederzeit kündigen?",
+      "q3": "Welche Zahlungsmethoden werden unterstützt?"
+    },
+    "featureComparison": {
+      "aiSummaries": "KI-Analysen",
+      "conceptExtraction": "Konzeptextraktion",
+      "markdownExport": "Markdown-Export",
+      "savedArticles": "Analysierbare Inhaltstypen",
+      "semanticSearch": "Semantische Suche"
+    },
+    "features": {
+      "basicArticles": "Automatische KI-Analyse beim Speichern",
+      "basicSearch": "Unbegrenzte semantische Suchen",
+      "basicSummaries": "20 KI-Analysen/Monat",
+      "proArticles": "Unbegrenztes Speichern & Analysieren",
+      "proSearch": "Unbegrenzte semantische Suchen",
+      "proSummaries": "Unbegrenzte KI-Analysen"
+    },
+    "includedInPlan": "In Ihrem Plan enthalten",
+    "limitReached": "Monatliches Limit erreicht",
+    "manageBilling": "Abrechnung verwalten",
+    "managePayment": "Zahlungsmethode verwalten",
     "nextBilling": "Nächstes Abrechnungsdatum: {date}",
-    "activeSince": "Aktiv seit {date}",
+    "nextBillingLabel": "Nächste Abrechnung",
     "planDescription": {
       "basic": "Perfekt für Gelegenheitsleser, die KI-gestütztes Inhaltsmanagement ausprobieren möchten.",
       "pro": "Für Power-User, die täglich Inhalte speichern und analysieren."
     },
-    "faq": "Häufig gestellte Fragen",
-    "faqItems": {
-      "q1": "Was erhalte ich mit Pro?",
-      "a1": "Unbegrenzte KI-Analysen und unbegrenzte Inhaltsspeicherung.",
-      "q2": "Kann ich jederzeit kündigen?",
-      "a2": "Ja, Sie können jederzeit kündigen. Sie behalten die Pro-Funktionen bis zum Ende Ihres Abrechnungszeitraums.",
-      "q3": "Welche Zahlungsmethoden werden unterstützt?",
-      "a3": "Wir akzeptieren Kredit- und Debitkarten und mehr. Zahlungen werden sicher über Paddle abgewickelt."
-    },
-    "comparisonTitle": "Pläne vergleichen",
-    "featureComparison": {
-      "aiSummaries": "KI-Analysen",
-      "savedArticles": "Analysierbare Inhaltstypen",
-      "semanticSearch": "Semantische Suche",
-      "markdownExport": "Markdown-Export",
-      "conceptExtraction": "Konzeptextraktion"
-    },
-    "basicValue": {
-      "aiSummaries": "20/Monat",
-      "savedArticles": "Nachrichten · Tech-Blog · Docs",
-      "semanticSearch": "Unbegrenzt",
-      "markdownExport": "Enthalten",
-      "conceptExtraction": "Enthalten"
-    },
+    "planStatus": "Planstatus",
+    "pricing": "Preise",
+    "pricingSubtitle": "Wählen Sie den Plan, der zu Ihrem kreativen Workflow passt.",
+    "pro": "Pro",
+    "proPrice": "$5/Monat (inkl. Steuern)",
+    "proUpgradeDescription": "Upgrade auf Pro für höhere Monatslimits und erweiterte Funktionen.",
     "proValue": {
       "aiSummaries": "Unbegrenzt",
-      "savedArticles": "Alle Typen (inkl. GitHub, Papers, Videos)",
-      "semanticSearch": "Unbegrenzt",
+      "conceptExtraction": "Enthalten",
       "markdownExport": "Enthalten",
-      "conceptExtraction": "Enthalten"
-    }
+      "savedArticles": "Alle Typen (inkl. GitHub, Papers, Videos)",
+      "semanticSearch": "Unbegrenzt"
+    },
+    "processing": "Wird verarbeitet...",
+    "summariesRemaining": "{remaining} Zusammenfassungen verbleibend",
+    "summariesUsed": "{used}/{limit} Zusammenfassungen diesen Monat verwendet",
+    "unlimited": "Unbegrenzt",
+    "upgrade": "Auf Pro upgraden",
+    "upgradePrompt": "Auf Pro upgraden für mehr Zusammenfassungen",
+    "upgradeUnavailable": "Der Zahlungsdienst wird vorbereitet. Bitte versuchen Sie es später erneut.",
+    "usage": "Nutzung"
   },
-  "help": {
-    "centerBadge": "NOD Hilfe-Center",
-    "heading": "Schnellstart mit NOD",
-    "subtitle": "Vom Speichern von Inhalten bis zu KI-Zusammenfassungen und Planverwaltung: Hier sind die wichtigsten Workflows.",
-    "quickShortcutsTitle": "Nützliche Kurzbefehle",
-    "shortcuts": {
-      "articles": "Inhalte",
-      "billing": "Abrechnung",
-      "pricing": "Preise",
-      "installExtension": "Erweiterung installieren"
-    },
-    "faqTitle": "Häufig gestellte Fragen",
-    "supportTitle": "Support & Feedback",
-    "sendFeedback": "Feedback senden",
-    "billingHelp": "Hilfe zur Abrechnung",
-    "quickStart": {
-      "item1": {
-        "title": "1) Inhalte speichern",
-        "description": "Erfassen Sie Artikel mit der Erweiterung und halten Sie alles in einem Archiv zusammen."
-      },
-      "item2": {
-        "title": "2) KI-Zusammenfassungen prüfen",
-        "description": "Jeder gespeicherte Eintrag erhält eine KI-Zusammenfassung mit Kernpunkten und strukturierten Notizen."
-      },
-      "item3": {
-        "title": "3) Erkenntnisse verknüpfen",
-        "description": "Gruppieren Sie verwandte Themen und rufen Sie wichtiges Wissen schneller ab."
-      }
-    },
-    "faq": {
-      "item1": {
-        "q": "Eine Zusammenfassung dauert zu lange.",
-        "a": "Große Dokumente oder volle Warteschlangen können die Verarbeitung verzögern. Aktualisieren Sie nach kurzer Zeit und prüfen Sie den Status erneut."
-      },
-      "item2": {
-        "q": "Die Erweiterung funktioniert nicht.",
-        "a": "Stellen Sie sicher, dass die Chrome-Erweiterung installiert ist, Sie angemeldet sind und laden Sie die Seite einmal neu."
-      },
-      "item3": {
-        "q": "Wo kann ich die Abrechnung verwalten?",
-        "a": "Öffnen Sie Einstellungen > Abrechnung, um Zahlungsdaten zu verwalten, und prüfen Sie Planoptionen auf der Preisseite."
-      }
-    }
-  },
-  "onboarding": {
-    "skip": "Überspringen",
-    "progress": "{step}/3",
-    "completionTitle": "Alles bereit!",
-    "completionSubtitle": "Weiterleitung zum Dashboard. Beginne mit NOD deine Wissensbibliothek aufzubauen.",
-    "welcome": {
-      "title": "Willkommen bei NOD",
-      "subtitle": "Deine KI-gestützte Wissensbibliothek",
-      "featureSave": "Webartikel mit einem Klick speichern",
-      "featureAnalyze": "KI analysiert automatisch die wichtigsten Erkenntnisse",
-      "featureSearch": "Alles mit semantischer Suche finden",
-      "cta": "Loslegen"
-    },
-    "install": {
-      "title": "Chrome-Erweiterung installieren",
-      "subtitle": "Artikel mit einem Klick von jeder Seite speichern",
-      "benefitOneClick": "Artikel sofort mit einem Klick speichern",
-      "benefitAutoAnalyze": "KI analysiert Inhalte automatisch beim Speichern",
-      "benefitAllSites": "Funktioniert auf jeder Website",
-      "installButton": "Aus dem Chrome Web Store installieren",
-      "confirmButton": "Ich habe es installiert",
-      "skipLink": "Später erledigen"
-    },
-    "firstArticle": {
-      "title": "Speichere deinen ersten Artikel",
-      "subtitle": "Folge diesen drei einfachen Schritten",
-      "step1": "Öffne einen beliebigen Artikel oder Blogbeitrag",
-      "step2": "Klicke auf das NOD-Symbol in der Browser-Leiste",
-      "step3": "Klicke auf Save & Analyze",
-      "cta": "Zum Dashboard"
-    },
-    "resumeBanner": {
-      "message": "Schließe die Einrichtung ab, um mit NOD zu starten",
-      "cta": "Weiter"
-    }
-  }
+  "title": "NOD"
 }

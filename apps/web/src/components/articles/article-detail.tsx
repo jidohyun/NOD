@@ -1,9 +1,12 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import {
   BookOpen,
   Brain,
+  Check,
   ChevronLeft,
+  Copy,
   ExternalLink,
   FileText,
   Pencil,
@@ -11,6 +14,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { Dialog as DialogPrimitive } from "radix-ui";
 import {
   type CSSProperties,
   type KeyboardEvent,
@@ -22,7 +26,12 @@ import {
 import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
 import { TypeMetadataSection } from "@/components/articles/type-metadata";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useArticle, useDeleteArticle, useUpdateArticle } from "@/lib/api/articles";
+import {
+  useArticle,
+  useCreateArticleShareLink,
+  useDeleteArticle,
+  useUpdateArticle,
+} from "@/lib/api/articles";
 import { Link } from "@/lib/i18n/routing";
 
 const DETAIL_BG_STYLE: CSSProperties = {
@@ -76,6 +85,12 @@ const DATE_LOCALE_MAP: Record<string, string> = {
   fr: "fr-FR",
 };
 
+const SHARE_LINK_STORAGE_KEY_PREFIX = "article-share-link:";
+
+function getShareLinkStorageKey(articleId: string) {
+  return `${SHARE_LINK_STORAGE_KEY_PREFIX}${articleId}`;
+}
+
 const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string }> = {
   tech_blog: {
     labelKey: "typeTechBlog",
@@ -125,9 +140,17 @@ export function ArticleDetail({ id }: { id: string }) {
   const { data: article, isLoading, isError } = useArticle(id);
   const deleteArticle = useDeleteArticle();
   const updateArticle = useUpdateArticle();
+  const createShareLink = useCreateArticleShareLink();
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitle, setEditTitle] = useState("");
+  const [shareLinkUrl, setShareLinkUrl] = useState("");
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [shareUrlMode, setShareUrlMode] = useState<"default" | "manual">("default");
+  const [shareThumbnailMode, setShareThumbnailMode] = useState<"default" | "manual">("default");
+  const [customShareUrl, setCustomShareUrl] = useState("");
+  const [customThumbnailUrl, setCustomThumbnailUrl] = useState("");
   const titleInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -136,6 +159,22 @@ export function ArticleDetail({ id }: { id: string }) {
       titleInputRef.current.select();
     }
   }, [isEditingTitle]);
+
+  useEffect(() => {
+    setCopied(false);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const cachedShareLink = window.localStorage.getItem(getShareLinkStorageKey(id));
+    if (cachedShareLink) {
+      setShareLinkUrl(cachedShareLink);
+      return;
+    }
+
+    setShareLinkUrl("");
+  }, [id]);
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
 
@@ -250,6 +289,41 @@ export function ArticleDetail({ id }: { id: string }) {
     URL.revokeObjectURL(url);
   };
 
+  const createAbsoluteShareUrl = async () => {
+    const trimmedCustomUrl = customShareUrl.trim();
+    const trimmedCustomOgImageUrl = customThumbnailUrl.trim();
+
+    const response = await createShareLink.mutateAsync({
+      articleId: id,
+      options: {
+        url_mode: shareUrlMode,
+        custom_url: shareUrlMode === "manual" ? trimmedCustomUrl : undefined,
+        thumbnail_mode: shareThumbnailMode,
+        thumbnail_url: shareThumbnailMode === "manual" ? trimmedCustomOgImageUrl : undefined,
+      },
+    });
+    const sharePath = response.canonical_share_url || response.share_url;
+    const absoluteUrl =
+      typeof window === "undefined" ? sharePath : `${window.location.origin}${sharePath}`;
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(getShareLinkStorageKey(id), absoluteUrl);
+    }
+
+    setShareLinkUrl(absoluteUrl);
+    return absoluteUrl;
+  };
+
+  const handleCopyShareLink = async () => {
+    if (!shareLinkUrl) return;
+    await navigator.clipboard.writeText(shareLinkUrl);
+    setCopied(true);
+  };
+
+  const handleShareGenerate = async () => {
+    await createAbsoluteShareUrl();
+  };
+
   return (
     <div className="relative overflow-hidden rounded-[2rem] border-2 border-cm-text/10 bg-cm-bg p-6 lg:p-8">
       <div
@@ -333,27 +407,38 @@ export function ArticleDetail({ id }: { id: string }) {
               </div>
             </div>
 
-            <div className="flex shrink-0 items-center gap-2">
-              {article.original_title && article.title !== article.original_title ? (
+            <div className="flex shrink-0 flex-col items-start gap-2 lg:items-end">
+              <div className="flex items-center gap-2">
+                {article.original_title && article.title !== article.original_title ? (
+                  <button
+                    type="button"
+                    onClick={restoreOriginalTitle}
+                    disabled={updateArticle.isPending}
+                    className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:hover:bg-cm-surface-raised disabled:opacity-50"
+                    title={tc("restoreOriginal")}
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    {tc("restoreOriginal")}
+                  </button>
+                ) : null}
+
                 <button
                   type="button"
-                  onClick={restoreOriginalTitle}
-                  disabled={updateArticle.isPending}
+                  onClick={() => setIsShareModalOpen(true)}
+                  disabled={createShareLink.isPending}
                   className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:hover:bg-cm-surface-raised disabled:opacity-50"
-                  title={tc("restoreOriginal")}
                 >
-                  <RotateCcw className="h-3 w-3" />
-                  {tc("restoreOriginal")}
+                  {t("shareActionLink")}
                 </button>
-              ) : null}
 
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-red-200 dark:border-red-800 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-950/30"
-              >
-                {tc("delete")}
-              </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-red-200 dark:border-red-800 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-950/30"
+                >
+                  {tc("delete")}
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -457,15 +542,215 @@ export function ArticleDetail({ id }: { id: string }) {
                 </div>
               </section>
             ) : null}
-
-            <p className="font-creative-body text-xs font-bold italic text-cm-text/45">
-              {t("analyzedBy", {
-                provider: article.summary.ai_provider,
-                model: article.summary.ai_model,
-              })}
-            </p>
           </div>
         ) : null}
+
+        <DialogPrimitive.Root open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
+          <AnimatePresence>
+            {isShareModalOpen ? (
+              <DialogPrimitive.Portal forceMount>
+                <DialogPrimitive.Overlay asChild forceMount>
+                  <motion.div
+                    className="fixed inset-0 z-50 bg-black/45 backdrop-blur-[1px]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  />
+                </DialogPrimitive.Overlay>
+
+                <DialogPrimitive.Content asChild forceMount>
+                  <motion.div
+                    className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 border-cm-text/18 bg-white/98 p-6 shadow-2xl dark:bg-cm-surface"
+                    initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.985 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 28, mass: 0.85 }}
+                  >
+                    <DialogPrimitive.Title asChild>
+                      <h2 className="font-creative-display text-2xl font-black text-cm-text">
+                        {shareLinkUrl ? t("shareAlreadySharedTitle") : t("shareModalTitle")}
+                      </h2>
+                    </DialogPrimitive.Title>
+
+                    <DialogPrimitive.Description asChild>
+                      <p className="mt-3 font-creative-body text-sm leading-relaxed text-cm-text/80">
+                        {shareLinkUrl
+                          ? t("shareAlreadySharedDescription")
+                          : t("shareModalDescription")}
+                      </p>
+                    </DialogPrimitive.Description>
+
+                    {!shareLinkUrl ? (
+                      <>
+                        <div className="mt-4 space-y-3 rounded-2xl border border-cm-text/15 bg-cm-bg/70 p-4">
+                          <p className="font-creative-body text-xs font-black uppercase tracking-wide text-cm-text/60">
+                            {t("shareUrlSettingsTitle")}
+                          </p>
+
+                          <div className="grid gap-2 sm:grid-cols-2">
+                            <label className="inline-flex items-center gap-2 rounded-lg border border-cm-text/15 bg-white/80 px-3 py-2 text-xs font-bold text-cm-text dark:bg-cm-surface">
+                              <input
+                                type="radio"
+                                name="share-url-mode"
+                                value="default"
+                                checked={shareUrlMode === "default"}
+                                onChange={() => setShareUrlMode("default")}
+                              />
+                              {t("shareUseDefaultUrl")}
+                            </label>
+
+                            <label className="inline-flex items-center gap-2 rounded-lg border border-cm-text/15 bg-white/80 px-3 py-2 text-xs font-bold text-cm-text dark:bg-cm-surface">
+                              <input
+                                type="radio"
+                                name="share-url-mode"
+                                value="manual"
+                                checked={shareUrlMode === "manual"}
+                                onChange={() => setShareUrlMode("manual")}
+                              />
+                              {t("shareSetCustomUrl")}
+                            </label>
+                          </div>
+
+                          {shareUrlMode === "manual" ? (
+                            <div className="space-y-1">
+                              <label
+                                htmlFor="share-custom-url"
+                                className="block text-xs font-bold text-cm-text/70"
+                              >
+                                {t("shareCustomUrlInputLabel")}
+                              </label>
+                              <input
+                                id="share-custom-url"
+                                type="text"
+                                value={customShareUrl}
+                                onChange={(e) => setCustomShareUrl(e.target.value)}
+                                placeholder={t("shareCustomUrlPlaceholder")}
+                                className="w-full rounded-lg border border-cm-text/20 bg-white px-3 py-2 text-xs font-semibold text-cm-text outline-none ring-nod-gold/30 placeholder:text-cm-text/40 focus:ring-2 dark:bg-cm-surface"
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+
+                        <div className="mt-4 space-y-3 rounded-2xl border border-cm-text/15 bg-cm-bg/70 p-4">
+                          <p className="font-creative-body text-xs font-black uppercase tracking-wide text-cm-text/60">
+                            {t("shareOgSettingsTitle")}
+                          </p>
+
+                          <div className="grid gap-2 sm:grid-cols-2">
+                            <label className="inline-flex items-center gap-2 rounded-lg border border-cm-text/15 bg-white/80 px-3 py-2 text-xs font-bold text-cm-text dark:bg-cm-surface">
+                              <input
+                                type="radio"
+                                name="share-og-mode"
+                                value="default"
+                                checked={shareThumbnailMode === "default"}
+                                onChange={() => setShareThumbnailMode("default")}
+                              />
+                              {t("shareUseDefaultOgImage")}
+                            </label>
+
+                            <label className="inline-flex items-center gap-2 rounded-lg border border-cm-text/15 bg-white/80 px-3 py-2 text-xs font-bold text-cm-text dark:bg-cm-surface">
+                              <input
+                                type="radio"
+                                name="share-og-mode"
+                                value="manual"
+                                checked={shareThumbnailMode === "manual"}
+                                onChange={() => setShareThumbnailMode("manual")}
+                              />
+                              {t("shareSetCustomOgImage")}
+                            </label>
+                          </div>
+
+                          {shareThumbnailMode === "manual" ? (
+                            <div className="space-y-1">
+                              <label
+                                htmlFor="share-custom-og-image"
+                                className="block text-xs font-bold text-cm-text/70"
+                              >
+                                {t("shareCustomOgImageInputLabel")}
+                              </label>
+                              <input
+                                id="share-custom-og-image"
+                                type="url"
+                                value={customThumbnailUrl}
+                                onChange={(e) => setCustomThumbnailUrl(e.target.value)}
+                                placeholder={t("shareCustomOgImagePlaceholder")}
+                                className="w-full rounded-lg border border-cm-text/20 bg-white px-3 py-2 text-xs font-semibold text-cm-text outline-none ring-nod-gold/30 placeholder:text-cm-text/40 focus:ring-2 dark:bg-cm-surface"
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+
+                        <div className="mt-4 rounded-2xl border border-cm-text/15 bg-cm-bg/70 p-4">
+                          <p className="font-creative-body text-xs font-black uppercase tracking-wide text-cm-text/60">
+                            {t("shareModalIncludedTitle")}
+                          </p>
+                          <ul className="mt-2 list-disc space-y-1.5 pl-4 font-creative-body text-sm text-cm-text/80">
+                            <li>{t("shareModalIncludedSummary")}</li>
+                            <li>{t("shareModalIncludedConcepts")}</li>
+                            <li>{t("shareModalIncludedKeyPoints")}</li>
+                          </ul>
+                        </div>
+
+                        <p className="mt-4 font-creative-body text-xs font-bold text-cm-text/60">
+                          {t("shareModalHint")}
+                        </p>
+                      </>
+                    ) : null}
+
+                    {shareLinkUrl ? (
+                      <div className="mt-4 rounded-2xl border border-cm-text/20 bg-cm-bg/85 p-3 dark:bg-cm-surface-raised/80">
+                        <div className="flex items-start gap-2">
+                          <code className="min-w-0 flex-1 break-all rounded-lg border border-cm-text/12 bg-white/90 px-2.5 py-2 font-mono text-xs font-semibold leading-relaxed text-cm-text/85 dark:bg-cm-surface dark:text-cm-text/75">
+                            {shareLinkUrl}
+                          </code>
+
+                          <button
+                            type="button"
+                            aria-label={t("shareCopyLink")}
+                            onClick={() => {
+                              void handleCopyShareLink();
+                            }}
+                            className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+                              copied
+                                ? "border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300"
+                                : "border-cm-text/20 bg-white text-cm-text/80 hover:bg-cm-bg dark:border-cm-text/25 dark:bg-cm-surface dark:text-cm-text/70"
+                            }`}
+                          >
+                            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <div className="mt-6 flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsShareModalOpen(false)}
+                        className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:bg-cm-surface dark:hover:bg-cm-surface-raised"
+                      >
+                        {shareLinkUrl ? tc("ok") : tc("cancel")}
+                      </button>
+
+                      {!shareLinkUrl ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            void handleShareGenerate();
+                          }}
+                          disabled={createShareLink.isPending}
+                          className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-nod-gold/35 bg-nod-gold/15 px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-nod-gold/25 disabled:opacity-50"
+                        >
+                          {t("shareGenerateLink")}
+                        </button>
+                      ) : null}
+                    </div>
+                  </motion.div>
+                </DialogPrimitive.Content>
+              </DialogPrimitive.Portal>
+            ) : null}
+          </AnimatePresence>
+        </DialogPrimitive.Root>
       </div>
     </div>
   );
