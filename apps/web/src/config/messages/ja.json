@@ -1,100 +1,490 @@
 {
-  "title": "NOD",
   "common": {
-    "loading": "読み込み中...",
-    "error": "エラーが発生しました",
-    "retry": "再試行",
-    "save": "保存",
+    "back": "Back",
     "cancel": "キャンセル",
     "confirm": "確認",
+    "continue": "Continue",
     "delete": "削除",
     "edit": "編集",
-    "restoreOriginal": "元に戻す"
+    "email": "Email",
+    "error": "エラーが発生しました",
+    "loading": "読み込み中...",
+    "dashboard": "ダッシュボード",
+    "ok": "OK",
+    "password": "Password",
+    "refresh": "Refresh",
+    "restoreOriginal": "元に戻す",
+    "retry": "再試行",
+    "save": "保存",
+    "skip": "Skip for now"
+  },
+  "auth": {
+    "forgotPassword": {
+      "backToLogin": "Back to login",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailPlaceholder": "Email address",
+      "send": "Send reset link",
+      "sent": "Password reset link sent. Please check your inbox.",
+      "subtitle": "Enter your email address and we'll send you a password reset link.",
+      "title": "Forgot password"
+    },
+    "resetPassword": {
+      "confirmPassword": "Confirm password",
+      "goToLogin": "Go to login",
+      "newPassword": "New password",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "submit": "Change password",
+      "subtitle": "Enter your new password below.",
+      "success": "Your password has been changed.",
+      "title": "Set new password"
+    },
+    "verifyEmail": {
+      "backToLogin": "Back to login",
+      "description": "We sent a verification link to {email}. Please check your inbox.",
+      "resend": "Resend verification email",
+      "resent": "Verification email sent again.",
+      "title": "Verify your email"
+    }
+  },
+  "blog": {
+    "home": "ホーム",
+    "readArticle": "記事を読む →",
+    "readTime": "{minutes}分で読める",
+    "subtitle": "ナレッジ管理と生産性に関するヒント、ガイド、インサイトを共有します。",
+    "title": "ブログ"
+  },
+  "continueWithGoogle": "Googleで続ける",
+  "dashboard": {
+    "allContentTypes": "すべてのタイプ",
+    "allStatus": "すべてのステータス",
+    "analysisDescription": "AIがコンテンツを読み、主要な概念を抽出し、構造化された要約を生成します。通常30秒〜1分かかります。",
+    "analysisStepAnalyzing": "AI分析中",
+    "analysisStepReading": "コンテンツ読み取り",
+    "analysisStepSummary": "要約生成",
+    "analyzingArticle": "AIがコンテンツを分析しています...",
+    "articleInfo": "コンテンツ情報",
+    "articleListSubtitle": "保存したコンテンツを探索し、必要なインサイトを素早く見つけましょう。",
+    "articleNotFound": "コンテンツが見つかりません。",
+    "checkStatus": "ステータス確認",
+    "concepts": "キーコンセプト",
+    "deleteConfirm": "このコンテンツを削除しますか？",
+    "details": "詳細",
+    "downloadMarkdown": ".mdをダウンロード",
+    "graph": {
+      "actionClearSelection": "選択解除",
+      "actionPinSelected": "選択ノードを固定",
+      "actionUnpinAll": "すべて固定解除",
+      "actionUnpinSelected": "選択ノードの固定解除",
+      "depthLabel": "深さ",
+      "empty": "まだグラフデータがありません。コンテンツを保存して要約してください。",
+      "filterMinConnections": "最小接続数",
+      "loadError": "グラフデータの読み込みに失敗しました。",
+      "localCenterFilteredMessage": "現在のフィルターで基準ノードが除外されています。",
+      "localReselectBase": "基準を再選択",
+      "localSwitchGlobal": "グローバルへ切替",
+      "lockedDescription": "Proにアップグレードすると概念グラフを利用できます。",
+      "lockedTitle": "グラフビューはPro機能です",
+      "menuPin": "固定",
+      "menuPinSelected": "選択ノードを固定",
+      "menuUnpin": "固定解除",
+      "menuUnpinAll": "すべて固定解除",
+      "modeGlobal": "グローバル",
+      "modeLocal": "ローカル",
+      "no": "いいえ",
+      "openFull": "フルグラフを開く",
+      "pageDescription": "要約したコンテンツのコア概念のつながりを可視化します。",
+      "pageTitle": "グラフビュー",
+      "panelFilters": "フィルター",
+      "panelSearch": "検索",
+      "panelSelection": "選択",
+      "previewDescription": "ダッシュボード下部で読み取り専用プレビューを表示します。",
+      "previewTitle": "グラフビュー プレビュー",
+      "searchPlaceholder": "概念を検索...",
+      "sectionLabel": "ナレッジグラフ",
+      "selectionCount": "{count}件選択中",
+      "selectionEmpty": "選択中のノードはありません",
+      "selectionPinned": "固定",
+      "statsArticles": "コンテンツ",
+      "statsConcepts": "ユニーク概念",
+      "statsEdges": "接続",
+      "statsNodes": "ノード",
+      "upgrade": "Proにアップグレード",
+      "yes": "はい"
+    },
+    "installExtensionCta": "Chromeに追加",
+    "keyPoints": "主要ポイント",
+    "language": "言語",
+    "loadError": "コンテンツの読み込みに失敗しました。",
+    "loadMore": "もっと見る",
+    "loadingArticles": "コンテンツを読み込み中...",
+    "loadingSimilar": "類似コンテンツを読み込み中...",
+    "markdownNote": "ノート",
+    "minuteRead": "{minutes}分",
+    "myArticles": "マイコンテンツ",
+    "noArticles": "まだコンテンツがありません。Chrome拡張機能でコンテンツを保存してください。",
+    "noSummary": "要約なし",
+    "openContent": "コンテンツを開く",
+    "original": "原文を見る",
+    "overview": {
+      "aiSummaries": "AI要約",
+      "closeBanner": "バナーを閉じる",
+      "contentTypes": "コンテンツタイプ",
+      "currentPlan": "現在のプラン",
+      "description": "ナレッジライブラリの概要です。",
+      "getSupport": "ヘルプ",
+      "heroSubtitle": "保存したコンテンツをAIで要約し、主要インサイトをすばやくつなげましょう。",
+      "heroTitleAccent": "ワークスペース",
+      "heroTitlePrimary": "コンテンツインサイト",
+      "installExtensionDescription": "ブラウジング中のコンテンツをワンクリックで保存します。",
+      "installExtensionTitle": "Chrome拡張機能をインストール",
+      "justNow": "たった今",
+      "keyMetrics": "主要指標",
+      "manageBillingDescription": "プランと使用状況を確認します。",
+      "manageBillingTitle": "請求管理",
+      "modified": "更新",
+      "noRecentArticles": "まだコンテンツがありません。",
+      "onboardingDescription": "ブラウザ拡張機能を接続して、すぐにインサイト収集を始めましょう。",
+      "onboardingSetupNow": "今すぐ設定",
+      "onboardingTitle": "オンボーディングを完了しましょう！",
+      "openUsageGuide": "利用ガイドを開く",
+      "planFreeActive": "Freeプラン利用中",
+      "planProActive": "Proプラン利用中",
+      "quickActions": "クイックアクション",
+      "recentArticlesDescription": "最近保存したコンテンツです。",
+      "recentArticlesTitle": "最近のコンテンツ",
+      "savedArticles": "保存したコンテンツ",
+      "storageUnlimited": "コンテンツ保存は無制限",
+      "title": "ダッシュボード",
+      "usageCalculating": "使用量を計算中...",
+      "viewAll": "すべて見る",
+      "viewArticlesDescription": "保存したコンテンツを閲覧・検索します。",
+      "viewArticlesTitle": "コンテンツを見る",
+      "welcomeMessage": "NODへようこそ",
+      "workflowStepAnalyze": "要約分析",
+      "workflowStepCapture": "コンテンツ収集",
+      "workflowStepRefine": "主要インサイト整理",
+      "workflowTitle": "今日のワークフロー"
+    },
+    "pendingAnalysis": "分析待機中...",
+    "readTime": "約{minutes}分",
+    "readingTime": "読了時間",
+    "refreshing": "更新中...",
+    "retryAnalysis": "再試行",
+    "savedDate": "保存日",
+    "searchArticles": "コンテンツを検索...",
+    "searchMinChars": "2文字以上入力してください",
+    "searchPlaceholder": "検索...",
+    "semanticSearch": "AI検索",
+    "sidebar": {
+      "nav": {
+        "articles": "コンテンツ",
+        "billing": "請求管理",
+        "dashboard": "ダッシュボード",
+        "graph": "グラフビュー",
+        "pricing": "料金プラン",
+        "settings": "設定",
+        "shared": "共有済み"
+      },
+      "user": {
+        "billing": "請求管理",
+        "feedback": "フィードバック",
+        "help": "ヘルプ",
+        "logout": "ログアウト",
+        "profile": "プロフィール",
+        "settings": "設定"
+      }
+    },
+    "similarArticles": "類似コンテンツ",
+    "similarity": "{percent}%一致",
+    "sourceLabel": "ソース",
+    "statusAnalyzing": "分析中",
+    "statusCompleted": "完了",
+    "statusFailed": "失敗",
+    "statusLabel": "ステータス",
+    "statusPending": "待機中",
+    "statusProcessing": "処理中",
+    "summary": "要約",
+    "summaryInProgress": "要約中...",
+    "typeDocs": "ドキュメント",
+    "typeGitHub": "GitHub",
+    "typeNews": "ニュース",
+    "typePaper": "論文",
+    "typeTechBlog": "テックブログ",
+    "typeVideo": "動画/ポッドキャスト",
+    "shareSectionTitle": "この要約を共有",
+    "shareSectionDescription": "このコンテンツ要約を共有するための公開リンクを作成します。",
+    "shareModalTitle": "この要約を共有しますか？",
+    "shareModalDescription": "公開リンクを通じて、他の人がこのコンテンツのAI要約を閲覧できます。",
+    "shareModalIncludedTitle": "この共有リンクに含まれる内容",
+    "shareModalIncludedSummary": "AI生成の要約",
+    "shareModalIncludedConcepts": "主要な概念",
+    "shareModalIncludedKeyPoints": "重要ポイント",
+    "shareModalHint": "信頼できる相手にのみ共有してください。リンクを知っている人は誰でもこの要約を閲覧できます。",
+    "shareGenerateLink": "共有リンクを作成",
+    "shareRegenerateLink": "共有リンクを再作成",
+    "shareActionLink": "共有",
+    "shareCopyLink": "リンクをコピー",
+    "shareRevokeLink": "リンクを無効化",
+    "shareCopied": "リンクをコピーしました",
+    "shareOpenPanel": "共有パネルを開く",
+    "shareAdvanced": "共有の詳細オプション",
+    "shareAlreadySharedTitle": "この要約はすでに共有されています！",
+    "shareAlreadySharedDescription": "下のリンクから確認できます。",
+    "sharedTrustSummarizedBy": "要約作成者",
+    "sharedTrustFallbackName": "NODユーザー",
+    "sharedTrustOriginalLink": "原文を見る",
+    "sharedCommentsTitle": "コメント",
+    "sharedCommentsAuthorLabel": "名前",
+    "sharedCommentsAuthorPlaceholder": "名前を入力",
+    "sharedCommentsContentLabel": "コメント",
+    "sharedCommentsContentPlaceholder": "感想を入力してください",
+    "sharedCommentsSubmit": "コメントを追加",
+    "sharedCommentsReplyAction": "返信を書く",
+    "sharedCommentsAddReplyAction": "返信する",
+    "sharedCommentsActionMenuLabel": "コメント操作",
+    "sharedCommentsActionReport": "報告",
+    "sharedCommentsEditSave": "保存",
+    "sharedCommentsReplySubmit": "返信",
+    "sharedCommentsReplyPlaceholder": "返信を入力",
+    "sharedCommentsSharerBadge": "共有者",
+    "sharedCommentsHideReplies": "返信を隠す",
+    "sharedCommentsReplyCountSingle": "返信",
+    "sharedCommentsReplyCountPlural": "返信",
+    "sharedCommentsEmpty": "まだコメントはありません。",
+    "sharedCommentsSignInRequired": "コメントを投稿するにはサインインしてください。",
+    "sharedQuickActionEmpathy": "共感",
+    "sharedQuickActionComments": "コメント",
+    "sharedQuickActionShare": "共有",
+    "sharedShareCopyLink": "リンクをコピー",
+    "sharedShareCopied": "コピー済み",
+    "sharedCommentsPanelTitle": "返信 ({count})",
+    "sharedCommentsPanelDescription": "この共有要約のコメントを閲覧・投稿できます。",
+    "sharedCommentsSortLabel": "並び替え",
+    "sharedCommentsSortLatest": "新しい順",
+    "sharedCommentsSortRecommended": "おすすめ順",
+    "sharedAuthSectionTitle": "アカウントで続行",
+    "sharedAuthSectionDescription": "ログインまたは新規登録して、この共有要約を自分のワークスペースに保存できます。",
+    "viewOriginal": "原文を見る"
+  },
+  "errors": {
+    "goHome": "ホームへ戻る",
+    "notFound": "ページが見つかりません",
+    "somethingWrong": "エラーが発生しました！",
+    "tryAgain": "再試行"
+  },
+  "help": {
+    "billingHelp": "請求に関するヘルプ",
+    "centerBadge": "NOD ヘルプセンター",
+    "faq": {
+      "item1": {
+        "a": "長い文書や混雑したキューでは処理が遅れることがあります。少し待ってから更新し、記事の状態を再確認してください。",
+        "q": "要約に時間がかかります。"
+      },
+      "item2": {
+        "a": "Chrome拡張機能がインストールされているか確認し、ログイン状態を維持したままページを一度更新してください。",
+        "q": "拡張機能が動作しません。"
+      },
+      "item3": {
+        "a": "支払い情報は「設定 > 請求管理」で管理でき、プランの詳細は料金ページで確認できます。",
+        "q": "請求はどこで管理できますか？"
+      }
+    },
+    "faqTitle": "よくある質問",
+    "heading": "NOD スタートガイド",
+    "quickShortcutsTitle": "よく使うショートカット",
+    "quickStart": {
+      "item1": {
+        "description": "拡張機能で記事を保存して、すべてを1つのアーカイブにまとめましょう。",
+        "title": "1) コンテンツを保存"
+      },
+      "item2": {
+        "description": "保存した各コンテンツに、主要ポイントと構造化ノート付きのAI要約が付きます。",
+        "title": "2) AI要約を確認"
+      },
+      "item3": {
+        "description": "関連トピックをまとめて、必要な知識をより速く取り出せます。",
+        "title": "3) インサイトを接続"
+      }
+    },
+    "sendFeedback": "フィードバックを送る",
+    "shortcuts": {
+      "articles": "コンテンツ",
+      "billing": "請求管理",
+      "installExtension": "拡張機能をインストール",
+      "pricing": "料金プラン"
+    },
+    "subtitle": "コンテンツ保存からAI要約確認、プラン管理まで、主要な流れをまとめました。",
+    "supportTitle": "サポートとフィードバック"
   },
   "landing": {
-    "hero": {
-      "badge": "AI搭載ナレッジ管理",
-      "headline": "コンテンツを保存し、インサイトを発見",
-      "description": "NODはAIを活用してコンテンツを分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
-      "cta": "無料で始める",
-      "ctaExtension": "Chromeに追加",
-      "ctaSecondary": "詳しく見る",
-      "trustedBy": "世界中のナレッジワーカーに信頼されています"
+    "cta": {
+      "button": "無料で始める",
+      "description": "NODでコンテンツを保存・分析・想起する数千人の読者と一緒に。",
+      "headline": "ナレッジライブラリの構築を始めましょう",
+      "note": "クレジットカード不要"
     },
-    "nav": {
-      "features": "機能",
-      "howItWorks": "使い方",
-      "pricing": "料金プラン",
-      "blog": "ブログ",
-      "login": "ログイン",
-      "getStarted": "始める",
-      "changeLanguage": "言語を変更"
-    },
-    "pricing": {
-      "label": "料金プラン",
-      "headline": "読書フローに合うプランを選択",
-      "description": "まずはBasic。要約無制限や高品質モデルが必要になったらProへアップグレード。",
-      "cta": "料金を見る",
-      "note": "いつでも変更可能",
-      "basicAnalyzableTypes": "分析可能タイプ: ニュース・技術ブログ・公式ドキュメント",
-      "proAnalyzableTypes": "分析可能タイプ: 全タイプ（GitHub・論文・動画を含む）"
+    "dashboardPreview": {
+      "articles": {
+        "0": {
+          "summary": "RSCはインタラクティブ性を維持しながら、サーバーレンダリングコンポーネントでストリーミングUIを実現します。",
+          "title": "React Server Componentsを理解する"
+        },
+        "1": {
+          "summary": "エンベディングはテキストをベクトルに変換し、類似検索はキーワードを超えて関連ノートを取得します。",
+          "title": "ベクトルデータベース解説"
+        },
+        "2": {
+          "summary": "ASGIの基礎、依存性注入パターン、型付きAPIを素早くデプロイする方法を学びます。",
+          "title": "FastAPIで構築する"
+        }
+      },
+      "itemCount": "{count}件",
+      "savedReads": "保存した記事",
+      "searchPlaceholder": "検索: RSC",
+      "similar": {
+        "0": "Reactパターン深掘り",
+        "1": "Next.js 16移行ガイド",
+        "2": "TypeScript 5.9の新機能",
+        "3": "エッジコンピューティング入門"
+      },
+      "similarReads": "類似記事",
+      "statusAnalyzing": "分析中",
+      "statusCompleted": "完了"
     },
     "features": {
-      "label": "機能",
       "headline": "ナレッジ管理に必要なすべて",
       "items": {
         "aiSummary": {
-          "title": "AI要約",
-          "description": "あらゆるコンテンツのキーポイントとインサイトを強調するAI生成要約を即座に取得できます。"
-        },
-        "vectorSearch": {
-          "title": "セマンティック検索",
-          "description": "キーワードではなく意味でコンテンツを検索。ベクトル検索があなたの探しているものを理解します。"
+          "description": "あらゆるコンテンツのキーポイントとインサイトを強調するAI生成要約を即座に取得できます。",
+          "title": "AI要約"
         },
         "chromeExtension": {
-          "title": "Chrome拡張機能",
-          "description": "ブラウザからワンクリックでコンテンツを保存。コピー＆ペースト不要です。"
-        },
-        "multiPlatform": {
-          "title": "マルチプラットフォーム",
-          "description": "Web、モバイル、ブラウザ拡張機能からナレッジライブラリにアクセスできます。"
+          "description": "ブラウザからワンクリックでコンテンツを保存。コピー＆ペースト不要です。",
+          "title": "Chrome拡張機能"
         },
         "concepts": {
-          "title": "コンセプト抽出",
-          "description": "コンテンツから主要なコンセプト、テーマ、トピックを自動的に識別しタグ付けします。"
+          "description": "コンテンツから主要なコンセプト、テーマ、トピックを自動的に識別しタグ付けします。",
+          "title": "コンセプト抽出"
+        },
+        "multiPlatform": {
+          "description": "Web、モバイル、ブラウザ拡張機能からナレッジライブラリにアクセスできます。",
+          "title": "マルチプラットフォーム"
         },
         "multilingual": {
-          "title": "多言語対応",
-          "description": "あらゆる言語のコンテンツを保存・分析できます。AI要約はお好みの言語で提供されます。"
+          "description": "あらゆる言語のコンテンツを保存・分析できます。AI要約はお好みの言語で提供されます。",
+          "title": "多言語対応"
+        },
+        "vectorSearch": {
+          "description": "キーワードではなく意味でコンテンツを検索。ベクトル検索があなたの探しているものを理解します。",
+          "title": "セマンティック検索"
         }
-      }
+      },
+      "label": "機能"
+    },
+    "footer": {
+      "api": "API",
+      "blog": "ブログ",
+      "changelog": "変更履歴",
+      "copyright": "All rights reserved.",
+      "dashboard": "ダッシュボード",
+      "docs": "ドキュメント",
+      "extension": "Chrome拡張機能",
+      "github": "GitHub",
+      "legal": "法的情報",
+      "mobile": "モバイルアプリ",
+      "pricing": "料金プラン",
+      "privacy": "プライバシーポリシー",
+      "product": "製品",
+      "refund": "返金ポリシー",
+      "resources": "リソース",
+      "tagline": "AI搭載のコンテンツ保存とナレッジ管理。",
+      "terms": "利用規約"
+    },
+    "hero": {
+      "badge": "AI搭載ナレッジ管理",
+      "cta": "無料で始める",
+      "ctaExtension": "Chromeに追加",
+      "ctaSecondary": "詳しく見る",
+      "description": "NODはAIを活用してコンテンツを分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
+      "headline": "コンテンツを保存し、インサイトを発見",
+      "trustedBy": "世界中のナレッジワーカーに信頼されています"
     },
     "howItWorks": {
-      "label": "使い方",
       "headline": "スマートな読書のための3ステップ",
+      "label": "使い方",
       "steps": {
-        "save": {
-          "number": "01",
-          "title": "保存",
-          "description": "Chrome拡張機能でWebのコンテンツを保存するか、URLを貼り付けてください。"
-        },
         "analyze": {
+          "description": "AIが自動でコンテンツを要約し、キーコンセプトを抽出し、ライブラリに整理します。",
           "number": "02",
-          "title": "分析",
-          "description": "AIが自動でコンテンツを要約し、キーコンセプトを抽出し、ライブラリに整理します。"
+          "title": "分析"
         },
         "recall": {
+          "description": "セマンティック検索で必要なものを正確に見つけましょう。",
           "number": "03",
-          "title": "想起",
-          "description": "セマンティック検索で必要なものを正確に見つけましょう。"
+          "title": "想起"
+        },
+        "save": {
+          "description": "Chrome拡張機能でWebのコンテンツを保存するか、URLを貼り付けてください。",
+          "number": "01",
+          "title": "保存"
         }
       }
     },
-    "cta": {
-      "headline": "ナレッジライブラリの構築を始めましょう",
-      "description": "NODでコンテンツを保存・分析・想起する数千人の読者と一緒に。",
-      "button": "無料で始める",
-      "note": "クレジットカード不要"
+    "nav": {
+      "blog": "ブログ",
+      "changeLanguage": "言語を変更",
+      "features": "機能",
+      "getStarted": "始める",
+      "howItWorks": "使い方",
+      "login": "ログイン",
+      "pricing": "料金プラン"
+    },
+    "pricing": {
+      "basicAnalyzableTypes": "分析可能タイプ: ニュース・技術ブログ・公式ドキュメント",
+      "cta": "料金を見る",
+      "description": "まずはBasic。要約無制限や高品質モデルが必要になったらProへアップグレード。",
+      "headline": "読書フローに合うプランを選択",
+      "label": "料金プラン",
+      "note": "いつでも変更可能",
+      "proAnalyzableTypes": "分析可能タイプ: 全タイプ（GitHub・論文・動画を含む）"
+    },
+    "stackingCards": {
+      "headline": "積み重なるカードで読書パイプラインを追跡",
+      "items": {
+        "card1": {
+          "description": "ドキュメント、動画、リポジトリ、スレッドを一つのストリームに統合し、出典コンテキストを保ちます。",
+          "kicker": "収集",
+          "metrics": {
+            "first": "13フィード同期",
+            "second": "新規クリップ47件",
+            "third": "遅延210ms"
+          },
+          "title": "あらゆる面からシグナルを取得"
+        },
+        "card2": {
+          "description": "各カードが主要インサイト・パターン・実行可能な断片を抽出し、数秒で再確認できます。",
+          "kicker": "分析",
+          "metrics": {
+            "first": "モデル: Gemini 3.1 Pro Preview",
+            "second": "品質 97",
+            "third": "セマンティッククラスタ 3"
+          },
+          "title": "要約はリアルタイムで生成"
+        },
+        "card3": {
+          "description": "セマンティックメモリが全ノートを接続し、次の検索で根拠付きの答えを返します。",
+          "kicker": "想起",
+          "metrics": {
+            "first": "想起速度 0.8秒",
+            "second": "概念エッジ 112",
+            "third": "信頼度 94%"
+          },
+          "title": "必要な瞬間に正確な文脈を取得"
+        }
+      },
+      "label": "シネマティックスクロール",
+      "pinLabel": "ScrollTrigger 固定"
     },
     "typewriterFeed": {
       "label": "ライブフィード",
@@ -102,603 +492,330 @@
       "line2": "[09:12:16] AIが'React 19 Compiler'を9秒で要約しました。",
       "line3": "[09:12:23] 概念リンクを更新: RSC、ストリーミング、エッジランタイム。",
       "line4": "[09:12:28] 今週の読書セットの想起スコアが92%まで上がりました。"
-    },
-    "stackingCards": {
-      "label": "シネマティックスクロール",
-      "headline": "積み重なるカードで読書パイプラインを追跡",
-      "pinLabel": "ScrollTrigger 固定",
-      "items": {
-        "card1": {
-          "kicker": "収集",
-          "title": "あらゆる面からシグナルを取得",
-          "description": "ドキュメント、動画、リポジトリ、スレッドを一つのストリームに統合し、出典コンテキストを保ちます。",
-          "metrics": {
-            "first": "13フィード同期",
-            "second": "新規クリップ47件",
-            "third": "遅延210ms"
-          }
-        },
-        "card2": {
-          "kicker": "分析",
-          "title": "要約はリアルタイムで生成",
-          "description": "各カードが主要インサイト・パターン・実行可能な断片を抽出し、数秒で再確認できます。",
-          "metrics": {
-            "first": "モデル: Gemini 3.1 Pro Preview",
-            "second": "品質 97",
-            "third": "セマンティッククラスタ 3"
-          }
-        },
-        "card3": {
-          "kicker": "想起",
-          "title": "必要な瞬間に正確な文脈を取得",
-          "description": "セマンティックメモリが全ノートを接続し、次の検索で根拠付きの答えを返します。",
-          "metrics": {
-            "first": "想起速度 0.8秒",
-            "second": "概念エッジ 112",
-            "third": "信頼度 94%"
-          }
-        }
-      }
-    },
-    "footer": {
-      "product": "製品",
-      "dashboard": "ダッシュボード",
-      "extension": "Chrome拡張機能",
-      "mobile": "モバイルアプリ",
-      "api": "API",
-      "pricing": "料金プラン",
-      "blog": "ブログ",
-      "resources": "リソース",
-      "docs": "ドキュメント",
-      "github": "GitHub",
-      "changelog": "変更履歴",
-      "legal": "法的情報",
-      "privacy": "プライバシーポリシー",
-      "terms": "利用規約",
-      "refund": "返金ポリシー",
-      "tagline": "AI搭載のコンテンツ保存とナレッジ管理。",
-      "copyright": "All rights reserved."
-    },
-    "dashboardPreview": {
-      "savedReads": "保存した記事",
-      "itemCount": "{count}件",
-      "searchPlaceholder": "検索: RSC",
-      "statusCompleted": "完了",
-      "statusAnalyzing": "分析中",
-      "similarReads": "類似記事",
-      "articles": {
-        "0": {
-          "title": "React Server Componentsを理解する",
-          "summary": "RSCはインタラクティブ性を維持しながら、サーバーレンダリングコンポーネントでストリーミングUIを実現します。"
-        },
-        "1": {
-          "title": "ベクトルデータベース解説",
-          "summary": "エンベディングはテキストをベクトルに変換し、類似検索はキーワードを超えて関連ノートを取得します。"
-        },
-        "2": {
-          "title": "FastAPIで構築する",
-          "summary": "ASGIの基礎、依存性注入パターン、型付きAPIを素早くデプロイする方法を学びます。"
-        }
-      },
-      "similar": {
-        "0": "Reactパターン深掘り",
-        "1": "Next.js 16移行ガイド",
-        "2": "TypeScript 5.9の新機能",
-        "3": "エッジコンピューティング入門"
-      }
     }
   },
-  "errors": {
-    "notFound": "ページが見つかりません",
-    "goHome": "ホームへ戻る",
-    "somethingWrong": "エラーが発生しました！",
-    "tryAgain": "再試行"
-  },
-  "blog": {
-    "title": "ブログ",
-    "subtitle": "ナレッジ管理と生産性に関するヒント、ガイド、インサイトを共有します。",
-    "readArticle": "記事を読む →",
-    "home": "ホーム",
-    "readTime": "{minutes}分で読める"
-  },
   "legal": {
-    "terms": {
-      "title": "利用規約",
+    "privacy": {
       "effectiveDate": "施行日: 2026-02-19",
+      "intro": "NODはユーザーのプライバシーを尊重します。",
       "sections": {
-        "intro": {
-          "title": "1. 目的",
-          "content": "本規約は、NOD（以下「本サービス」）の利用条件および手続き、利用者と運営者の権利・義務・責任事項を定めることを目的とします。本サービスを利用することにより、本規約に同意したものとみなされます。"
+        "changes": {
+          "content": "本ポリシーは変更される場合があります。重要な変更がある場合は、サービス内の告知または直接の通知によりお知らせします。",
+          "title": "9. 変更"
         },
-        "account": {
-          "title": "2. アカウント",
-          "content": "利用者はメールアドレスまたはソーシャルログインを通じてアカウントを作成できます。アカウント情報は常に正確に維持する必要があり、アカウントのセキュリティに関する責任は利用者にあります。不正アクセスを発見した場合は、速やかに運営者へご連絡ください。1人1アカウントの原則とします。"
-        },
-        "service": {
-          "title": "3. サービス利用",
-          "content": "本サービスは、AIを活用した記事の保存・要約・セマンティック検索・コンセプト抽出などの機能を提供します。サービス内容は技術的な状況により変更または中断される場合があります。無料プラン（Basic）と有料プラン（Pro）があり、利用はフェアユースの範囲内とします。"
-        },
-        "payment": {
-          "title": "4. 決済処理",
-          "content": "有料サービス（Proプラン）の決済はPaddle.comを通じて処理されます。PaddleはMerchant of Recordとして、決済処理、税金徴収、返金処理を担当します。決済に関するお問い合わせはshickcoong777@gmail.comまたはPaddleカスタマーサポートまでご連絡ください。"
-        },
-        "content": {
-          "title": "5. コンテンツ",
-          "content": "利用者が本サービスに保存したコンテンツの著作権は利用者に帰属します。運営者はサービス提供に必要な範囲内でコンテンツを処理・保存・分析する限定的なライセンスを付与されます。運営者はコンテンツの所有権を主張しません。利用者は保存するコンテンツに対する権利を有していることを保証するものとし、規約に違反するコンテンツは削除される場合があります。"
-        },
-        "prohibited": {
-          "title": "6. 禁止事項",
-          "content": "以下の行為を禁止します：リバースエンジニアリング、アクセス制御の回避、通常利用を超える自動スクレイピング、アカウントの共有、悪意のあるコンテンツのアップロード、適用法令の違反、サービス運営の妨害行為。"
-        },
-        "termination": {
-          "title": "7. 解約",
-          "content": "利用者はいつでもアカウントを解約できます。規約違反があった場合、運営者はサービスの利用を一時停止または終了することがあります。解約後、合理的な期間内にデータが削除されます。一部の条項は解約後も有効に存続します。"
+        "collection": {
+          "content": "本サービスでは以下の情報を収集する場合があります。",
+          "items": {
+            "account": "アカウント情報：メールアドレス、名前・プロフィール画像（ソーシャルログインプロバイダーが提供する範囲内）、認証トークン",
+            "analytics": "Web分析情報：Webサイト利用統計（Google Analyticsによるページビュー・イベント等）",
+            "content": "コンテンツ情報：保存した記事のURL、タイトル、本文（抽出テキスト）、AI生成要約・ノート、および関連メタデータ",
+            "payment": "決済情報：有料プラン利用時の決済処理・サブスクリプション管理に必要な情報（決済プロバイダーにより処理）",
+            "usage": "利用情報：機能利用記録（保存・要約回数など）、エラー・診断情報"
+          },
+          "note": "Chrome拡張機能を使用する場合、利用者が保存を実行したページのURLおよび本文テキストを収集する場合があります。",
+          "title": "1. 収集する情報"
         },
         "contact": {
-          "title": "8. お問い合わせ",
-          "content": "サービスに関するお問い合わせは以下までご連絡ください。\nメール: shickcoong777@gmail.com\n通常5営業日以内に回答いたします。"
+          "content": "個人情報の取り扱いに関するお問い合わせは以下までご連絡ください。\nメール: shickcoong777@gmail.com",
+          "title": "8. お問い合わせ"
+        },
+        "cookies": {
+          "content": "本サービスは、ログイン維持、環境設定、分析などの目的でクッキーおよび類似技術を使用する場合があります。ブラウザの設定でクッキーの保存を拒否できますが、一部の機能が制限される場合があります。",
+          "title": "6. クッキー"
+        },
+        "purpose": {
+          "items": {
+            "auth": "利用者の識別、ログイン・セッション管理",
+            "billing": "サブスクリプション・決済管理",
+            "core": "記事の保存、AI要約生成、セマンティック検索、コンセプト抽出などのコア機能の提供",
+            "improve": "サービス品質の改善、エラー分析、セキュリティおよび不正利用の防止"
+          },
+          "title": "2. 利用目的"
+        },
+        "retention": {
+          "items": {
+            "deletion": "利用者がアカウントを削除した場合、または削除を要求した場合、合理的な期間内に関連データを削除します。",
+            "legal": "法令により保存が必要な場合は、該当期間中安全に保管します。",
+            "principle": "原則として、個人情報は利用目的の達成時に速やかに削除します。"
+          },
+          "title": "4. 保存期間"
+        },
+        "rights": {
+          "content": "利用者は自身の個人情報について、アクセス・訂正・削除・処理制限を請求する権利を有します。権利の行使は以下のお問い合わせ先にてお受けします。",
+          "title": "5. ユーザーの権利"
+        },
+        "security": {
+          "content": "本サービスは個人情報の保護のため、アクセス制御、通信の暗号化、安全なデータ保管など合理的な保護措置を講じています。",
+          "title": "7. セキュリティ"
+        },
+        "sharing": {
+          "content": "本サービスは原則として利用者の個人情報を第三者に販売することはありません。サービスの運営・改善のため、以下の信頼できるサービスプロバイダーを利用する場合があります。",
+          "items": {
+            "ai": "AI処理：要約・エンベディング生成のため、一部コンテンツ（タイトル・本文等）がAIプロバイダー（OpenAIまたはGoogle Gemini等）に送信・処理される場合があります",
+            "analytics": "分析・モニタリング：Google Analytics等",
+            "auth": "認証・ログイン：ソーシャルログイン（OAuth）プロバイダーおよび認証サービス",
+            "cloud": "クラウドインフラ・ホスティング：サービス運営、データの保存・処理",
+            "payment": "決済・サブスクリプション：Paddle等の決済処理サービス"
+          },
+          "title": "3. 第三者への提供"
         }
-      }
+      },
+      "title": "プライバシーポリシー"
     },
     "refund": {
-      "title": "返金・キャンセルポリシー",
       "effectiveDate": "施行日: 2026-02-18",
       "intro": "NODの有料プラン（Pro）の返金およびキャンセルに関する規定です。すべての決済はPaddle.comを通じて処理されます。",
       "sections": {
         "cancellation": {
-          "title": "1. サブスクリプションのキャンセル",
-          "content": "サブスクリプションはいつでもキャンセル可能です。キャンセル後も現在の請求期間の終了までPro機能をご利用いただけます。次回以降の請求は発生しません。"
-        },
-        "refunds": {
-          "title": "2. 返金ポリシー",
-          "content": "サブスクリプションの更新日または初回購入日から14日以内であれば、全額返金をリクエストできます。14日を過ぎた場合、返金はできませんが、いつでもサブスクリプションをキャンセルすることは可能です。決済はPaddleを通じて処理され、Paddleの返金ポリシーが適用されます。"
-        },
-        "process": {
-          "title": "3. 返金処理",
-          "content": "承認後、元のお支払い方法に5〜10営業日以内に返金されます。返金のリクエストはshickcoong777@gmail.comまたはPaddleカスタマーサポートにて受け付けています。"
+          "content": "サブスクリプションはいつでもキャンセル可能です。キャンセル後も現在の請求期間の終了までPro機能をご利用いただけます。次回以降の請求は発生しません。",
+          "title": "1. サブスクリプションのキャンセル"
         },
         "exceptions": {
-          "title": "4. 例外",
-          "content": "サービスの重大な欠陥により利用できない場合、購入からの経過期間にかかわらず全額返金いたします。"
+          "content": "サービスの重大な欠陥により利用できない場合、購入からの経過期間にかかわらず全額返金いたします。",
+          "title": "4. 例外"
+        },
+        "process": {
+          "content": "承認後、元のお支払い方法に5〜10営業日以内に返金されます。返金のリクエストはshickcoong777@gmail.comまたはPaddleカスタマーサポートにて受け付けています。",
+          "title": "3. 返金処理"
+        },
+        "refunds": {
+          "content": "サブスクリプションの更新日または初回購入日から14日以内であれば、全額返金をリクエストできます。14日を過ぎた場合、返金はできませんが、いつでもサブスクリプションをキャンセルすることは可能です。決済はPaddleを通じて処理され、Paddleの返金ポリシーが適用されます。",
+          "title": "2. 返金ポリシー"
         }
-      }
+      },
+      "title": "返金・キャンセルポリシー"
     },
-    "privacy": {
-      "title": "プライバシーポリシー",
+    "terms": {
       "effectiveDate": "施行日: 2026-02-19",
-      "intro": "NODはユーザーのプライバシーを尊重します。",
       "sections": {
-        "collection": {
-          "title": "1. 収集する情報",
-          "content": "本サービスでは以下の情報を収集する場合があります。",
-          "items": {
-            "account": "アカウント情報：メールアドレス、名前・プロフィール画像（ソーシャルログインプロバイダーが提供する範囲内）、認証トークン",
-            "content": "コンテンツ情報：保存した記事のURL、タイトル、本文（抽出テキスト）、AI生成要約・ノート、および関連メタデータ",
-            "usage": "利用情報：機能利用記録（保存・要約回数など）、エラー・診断情報",
-            "payment": "決済情報：有料プラン利用時の決済処理・サブスクリプション管理に必要な情報（決済プロバイダーにより処理）",
-            "analytics": "Web分析情報：Webサイト利用統計（Google Analyticsによるページビュー・イベント等）"
-          },
-          "note": "Chrome拡張機能を使用する場合、利用者が保存を実行したページのURLおよび本文テキストを収集する場合があります。"
-        },
-        "purpose": {
-          "title": "2. 利用目的",
-          "items": {
-            "auth": "利用者の識別、ログイン・セッション管理",
-            "core": "記事の保存、AI要約生成、セマンティック検索、コンセプト抽出などのコア機能の提供",
-            "billing": "サブスクリプション・決済管理",
-            "improve": "サービス品質の改善、エラー分析、セキュリティおよび不正利用の防止"
-          }
-        },
-        "sharing": {
-          "title": "3. 第三者への提供",
-          "content": "本サービスは原則として利用者の個人情報を第三者に販売することはありません。サービスの運営・改善のため、以下の信頼できるサービスプロバイダーを利用する場合があります。",
-          "items": {
-            "cloud": "クラウドインフラ・ホスティング：サービス運営、データの保存・処理",
-            "auth": "認証・ログイン：ソーシャルログイン（OAuth）プロバイダーおよび認証サービス",
-            "ai": "AI処理：要約・エンベディング生成のため、一部コンテンツ（タイトル・本文等）がAIプロバイダー（OpenAIまたはGoogle Gemini等）に送信・処理される場合があります",
-            "payment": "決済・サブスクリプション：Paddle等の決済処理サービス",
-            "analytics": "分析・モニタリング：Google Analytics等"
-          }
-        },
-        "retention": {
-          "title": "4. 保存期間",
-          "items": {
-            "principle": "原則として、個人情報は利用目的の達成時に速やかに削除します。",
-            "deletion": "利用者がアカウントを削除した場合、または削除を要求した場合、合理的な期間内に関連データを削除します。",
-            "legal": "法令により保存が必要な場合は、該当期間中安全に保管します。"
-          }
-        },
-        "rights": {
-          "title": "5. ユーザーの権利",
-          "content": "利用者は自身の個人情報について、アクセス・訂正・削除・処理制限を請求する権利を有します。権利の行使は以下のお問い合わせ先にてお受けします。"
-        },
-        "cookies": {
-          "title": "6. クッキー",
-          "content": "本サービスは、ログイン維持、環境設定、分析などの目的でクッキーおよび類似技術を使用する場合があります。ブラウザの設定でクッキーの保存を拒否できますが、一部の機能が制限される場合があります。"
-        },
-        "security": {
-          "title": "7. セキュリティ",
-          "content": "本サービスは個人情報の保護のため、アクセス制御、通信の暗号化、安全なデータ保管など合理的な保護措置を講じています。"
+        "account": {
+          "content": "利用者はメールアドレスまたはソーシャルログインを通じてアカウントを作成できます。アカウント情報は常に正確に維持する必要があり、アカウントのセキュリティに関する責任は利用者にあります。不正アクセスを発見した場合は、速やかに運営者へご連絡ください。1人1アカウントの原則とします。",
+          "title": "2. アカウント"
         },
         "contact": {
-          "title": "8. お問い合わせ",
-          "content": "個人情報の取り扱いに関するお問い合わせは以下までご連絡ください。\nメール: shickcoong777@gmail.com"
+          "content": "サービスに関するお問い合わせは以下までご連絡ください。\nメール: shickcoong777@gmail.com\n通常5営業日以内に回答いたします。",
+          "title": "8. お問い合わせ"
         },
-        "changes": {
-          "title": "9. 変更",
-          "content": "本ポリシーは変更される場合があります。重要な変更がある場合は、サービス内の告知または直接の通知によりお知らせします。"
+        "content": {
+          "content": "利用者が本サービスに保存したコンテンツの著作権は利用者に帰属します。運営者はサービス提供に必要な範囲内でコンテンツを処理・保存・分析する限定的なライセンスを付与されます。運営者はコンテンツの所有権を主張しません。利用者は保存するコンテンツに対する権利を有していることを保証するものとし、規約に違反するコンテンツは削除される場合があります。",
+          "title": "5. コンテンツ"
+        },
+        "intro": {
+          "content": "本規約は、NOD（以下「本サービス」）の利用条件および手続き、利用者と運営者の権利・義務・責任事項を定めることを目的とします。本サービスを利用することにより、本規約に同意したものとみなされます。",
+          "title": "1. 目的"
+        },
+        "payment": {
+          "content": "有料サービス（Proプラン）の決済はPaddle.comを通じて処理されます。PaddleはMerchant of Recordとして、決済処理、税金徴収、返金処理を担当します。決済に関するお問い合わせはshickcoong777@gmail.comまたはPaddleカスタマーサポートまでご連絡ください。",
+          "title": "4. 決済処理"
+        },
+        "prohibited": {
+          "content": "以下の行為を禁止します：リバースエンジニアリング、アクセス制御の回避、通常利用を超える自動スクレイピング、アカウントの共有、悪意のあるコンテンツのアップロード、適用法令の違反、サービス運営の妨害行為。",
+          "title": "6. 禁止事項"
+        },
+        "service": {
+          "content": "本サービスは、AIを活用した記事の保存・要約・セマンティック検索・コンセプト抽出などの機能を提供します。サービス内容は技術的な状況により変更または中断される場合があります。無料プラン（Basic）と有料プラン（Pro）があり、利用はフェアユースの範囲内とします。",
+          "title": "3. サービス利用"
+        },
+        "termination": {
+          "content": "利用者はいつでもアカウントを解約できます。規約違反があった場合、運営者はサービスの利用を一時停止または終了することがあります。解約後、合理的な期間内にデータが削除されます。一部の条項は解約後も有効に存続します。",
+          "title": "7. 解約"
         }
-      }
+      },
+      "title": "利用規約"
     }
   },
-  "loginWelcome": "おかえりなさい",
-  "loginSubtitle": "NODアカウントにログイン",
   "login": {
-    "signingIn": "ログイン中...",
-    "or": "または",
     "backToHome": "ホームに戻る",
-    "highlightSave": "ワンクリックでウェブ記事を保存",
+    "emailNotVerified": "Please verify your email first.",
+    "emailPlaceholder": "Email address",
+    "forgotPassword": "Forgot password?",
     "highlightAnalyze": "AIが自動で重要なインサイトを分析",
+    "highlightSave": "ワンクリックでウェブ記事を保存",
     "highlightSearch": "セマンティック検索ですぐに見つかる",
+    "loginFailed": "Invalid email or password.",
+    "noAccount": "Don't have an account?",
+    "or": "または",
+    "passwordPlaceholder": "Password",
     "secureNote": "Googleアカウントで安全にログイン",
+    "signInSubtitle": "ログインしてナレッジライブラリを続けましょう",
     "signInTitle": "ログイン",
-    "signInSubtitle": "ログインしてナレッジライブラリを続けましょう"
+    "signInWithEmail": "Sign in with email",
+    "signUpLink": "Sign up",
+    "signingIn": "ログイン中..."
   },
-  "continueWithGoogle": "Googleで続ける",
-  "dashboard": {
-    "sidebar": {
-      "nav": {
-        "dashboard": "ダッシュボード",
-        "articles": "コンテンツ",
-        "graph": "グラフビュー",
-        "settings": "設定",
-        "billing": "請求管理",
-        "pricing": "料金プラン"
-      },
-      "user": {
-        "profile": "プロフィール",
-        "settings": "設定",
-        "billing": "請求管理",
-        "help": "ヘルプ",
-        "feedback": "フィードバック",
-        "logout": "ログアウト"
-      }
+  "loginSubtitle": "NODアカウントにログイン",
+  "loginWelcome": "おかえりなさい",
+  "onboarding": {
+    "completionSubtitle": "ダッシュボードへ移動します。NODでナレッジを蓄えましょう。",
+    "completionTitle": "準備完了！",
+    "firstArticle": {
+      "cta": "ダッシュボードへ",
+      "step1": "任意の記事やブログを開く",
+      "step2": "ブラウザのツールバーでNODアイコンをクリック",
+      "step3": "Save & Analyzeをクリック",
+      "subtitle": "以下の3つのステップで始められます",
+      "title": "最初の記事を保存しましょう"
     },
-    "overview": {
-      "title": "ダッシュボード",
-      "description": "ナレッジライブラリの概要です。",
-      "savedArticles": "保存したコンテンツ",
-      "aiSummaries": "AI要約",
-      "currentPlan": "現在のプラン",
-      "viewArticlesTitle": "コンテンツを見る",
-      "viewArticlesDescription": "保存したコンテンツを閲覧・検索します。",
-      "manageBillingTitle": "請求管理",
-      "manageBillingDescription": "プランと使用状況を確認します。",
-      "installExtensionTitle": "Chrome拡張機能をインストール",
-      "installExtensionDescription": "ブラウジング中のコンテンツをワンクリックで保存します。",
-      "recentArticlesTitle": "最近のコンテンツ",
-      "recentArticlesDescription": "最近保存したコンテンツです。",
-      "noRecentArticles": "まだコンテンツがありません。",
-      "viewAll": "すべて見る",
-      "contentTypes": "コンテンツタイプ",
-      "welcomeMessage": "NODへようこそ",
-      "heroTitlePrimary": "コンテンツインサイト",
-      "heroTitleAccent": "ワークスペース",
-      "heroSubtitle": "保存したコンテンツをAIで要約し、主要インサイトをすばやくつなげましょう。",
-      "workflowTitle": "今日のワークフロー",
-      "workflowStepCapture": "コンテンツ収集",
-      "workflowStepAnalyze": "要約分析",
-      "workflowStepRefine": "主要インサイト整理",
-      "keyMetrics": "主要指標",
-      "storageUnlimited": "コンテンツ保存は無制限",
-      "usageCalculating": "使用量を計算中...",
-      "planProActive": "Proプラン利用中",
-      "planFreeActive": "Freeプラン利用中",
-      "quickActions": "クイックアクション",
-      "getSupport": "ヘルプ",
-      "openUsageGuide": "利用ガイドを開く",
-      "modified": "更新",
-      "justNow": "たった今",
-      "onboardingTitle": "オンボーディングを完了しましょう！",
-      "onboardingDescription": "ブラウザ拡張機能を接続して、すぐにインサイト収集を始めましょう。",
-      "onboardingSetupNow": "今すぐ設定",
-      "closeBanner": "バナーを閉じる"
+    "install": {
+      "benefitAllSites": "すべてのウェブサイトで利用可能",
+      "benefitAutoAnalyze": "保存と同時にAIが自動分析",
+      "benefitOneClick": "ワンクリックで記事を即座に保存",
+      "confirmButton": "インストールしました",
+      "installButton": "Chrome Web Storeからインストール",
+      "skipLink": "後でやります",
+      "subtitle": "どのページからもワンクリックで記事を保存できます",
+      "title": "Chrome拡張機能をインストール"
     },
-    "graph": {
-      "sectionLabel": "ナレッジグラフ",
-      "pageTitle": "グラフビュー",
-      "pageDescription": "要約したコンテンツのコア概念のつながりを可視化します。",
-      "previewTitle": "グラフビュー プレビュー",
-      "previewDescription": "ダッシュボード下部で読み取り専用プレビューを表示します。",
-      "openFull": "フルグラフを開く",
-      "lockedTitle": "グラフビューはPro機能です",
-      "lockedDescription": "Proにアップグレードすると概念グラフを利用できます。",
-      "upgrade": "Proにアップグレード",
-      "loadError": "グラフデータの読み込みに失敗しました。",
-      "empty": "まだグラフデータがありません。コンテンツを保存して要約してください。",
-      "statsArticles": "コンテンツ",
-      "statsConcepts": "ユニーク概念",
-      "statsNodes": "ノード",
-      "statsEdges": "接続",
-      "modeGlobal": "グローバル",
-      "modeLocal": "ローカル",
-      "depthLabel": "深さ",
-      "panelSearch": "検索",
-      "panelFilters": "フィルター",
-      "panelSelection": "選択",
-      "searchPlaceholder": "概念を検索...",
-      "filterMinConnections": "最小接続数",
-      "selectionCount": "{count}件選択中",
-      "selectionEmpty": "選択中のノードはありません",
-      "selectionPinned": "固定",
-      "yes": "はい",
-      "no": "いいえ",
-      "actionPinSelected": "選択ノードを固定",
-      "actionUnpinSelected": "選択ノードの固定解除",
-      "actionUnpinAll": "すべて固定解除",
-      "actionClearSelection": "選択解除",
-      "menuPin": "固定",
-      "menuUnpin": "固定解除",
-      "menuUnpinAll": "すべて固定解除",
-      "menuPinSelected": "選択ノードを固定",
-      "localCenterFilteredMessage": "現在のフィルターで基準ノードが除外されています。",
-      "localReselectBase": "基準を再選択",
-      "localSwitchGlobal": "グローバルへ切替"
+    "progress": "{step}/3",
+    "resumeBanner": {
+      "cta": "続ける",
+      "message": "オンボーディングを完了してNODを始めましょう"
     },
-    "searchPlaceholder": "検索...",
-    "statusLabel": "ステータス",
-    "markdownNote": "ノート",
-    "downloadMarkdown": ".mdをダウンロード",
-    "myArticles": "マイコンテンツ",
-    "articleListSubtitle": "保存したコンテンツを探索し、必要なインサイトを素早く見つけましょう。",
-    "searchArticles": "コンテンツを検索...",
-    "semanticSearch": "AI検索",
-    "searchMinChars": "2文字以上入力してください",
-    "allStatus": "すべてのステータス",
-    "statusPending": "待機中",
-    "statusProcessing": "処理中",
-    "statusAnalyzing": "分析中",
-    "statusCompleted": "完了",
-    "statusFailed": "失敗",
-    "checkStatus": "ステータス確認",
-    "refreshing": "更新中...",
-    "retryAnalysis": "再試行",
-    "loadingArticles": "コンテンツを読み込み中...",
-    "loadError": "コンテンツの読み込みに失敗しました。",
-    "noArticles": "まだコンテンツがありません。Chrome拡張機能でコンテンツを保存してください。",
-    "installExtensionCta": "Chromeに追加",
-    "loadMore": "もっと見る",
-    "noSummary": "要約なし",
-    "openContent": "コンテンツを開く",
-    "articleNotFound": "コンテンツが見つかりません。",
-    "deleteConfirm": "このコンテンツを削除しますか？",
-    "original": "原文を見る",
-    "pendingAnalysis": "分析待機中...",
-    "analyzingArticle": "AIがコンテンツを分析しています...",
-    "summaryInProgress": "要約中...",
-    "analysisStepReading": "コンテンツ読み取り",
-    "analysisStepAnalyzing": "AI分析中",
-    "analysisStepSummary": "要約生成",
-    "analysisDescription": "AIがコンテンツを読み、主要な概念を抽出し、構造化された要約を生成します。通常30秒〜1分かかります。",
-    "summary": "要約",
-    "details": "詳細",
-    "readTime": "約{minutes}分",
-    "concepts": "キーコンセプト",
-    "keyPoints": "主要ポイント",
-    "analyzedBy": "{provider}/{model}で分析",
-    "similarArticles": "類似コンテンツ",
-    "loadingSimilar": "類似コンテンツを読み込み中...",
-    "similarity": "{percent}%一致",
-    "articleInfo": "コンテンツ情報",
-    "savedDate": "保存日",
-    "readingTime": "読了時間",
-    "minuteRead": "{minutes}分",
-    "sourceLabel": "ソース",
-    "viewOriginal": "原文を見る",
-    "language": "言語",
-    "allContentTypes": "すべてのタイプ",
-    "typeTechBlog": "テックブログ",
-    "typePaper": "論文",
-    "typeNews": "ニュース",
-    "typeGitHub": "GitHub",
-    "typeDocs": "ドキュメント",
-    "typeVideo": "動画/ポッドキャスト"
+    "skip": "スキップ",
+    "welcome": {
+      "cta": "始める",
+      "featureAnalyze": "AIが自動で重要なインサイトを分析",
+      "featureSave": "ワンクリックでウェブ記事を保存",
+      "featureSearch": "セマンティック検索でいつでも検索",
+      "subtitle": "AIが分析するあなただけのナレッジライブラリ",
+      "title": "NODへようこそ"
+    }
   },
   "settings": {
-    "title": "設定",
-    "description": "アカウント設定を管理します。",
-    "sections": {
-      "profile": "プロフィール",
-      "account": "アカウント",
-      "quickLinks": "クイックリンク",
-      "legal": "法的情報"
-    },
-    "fields": {
-      "email": "メール",
-      "emailProviderName": "メール",
-      "authProvider": "認証プロバイダー",
-      "subscription": "サブスクリプション"
-    },
-    "links": {
-      "manageBilling": "請求とサブスクリプションを管理",
-      "viewPricing": "料金プランを見る",
-      "installExtension": "Chrome拡張機能をインストール",
-      "feedback": "フィードバックを送る",
-      "terms": "利用規約",
-      "privacy": "プライバシーポリシー",
-      "refund": "返金ポリシー"
-    },
-    "status": {
-      "active": "有効"
-    },
     "actions": {
       "changePlan": "プラン変更",
       "signOut": "ログアウト"
     },
-    "usage": {
-      "title": "AI分析の使用量",
-      "currentMonthlyUsage": "今月の使用量",
-      "resetHint": "月次使用量は毎月1日にリセットされます。"
+    "description": "アカウント設定を管理します。",
+    "fields": {
+      "authProvider": "認証プロバイダー",
+      "email": "メール",
+      "emailProviderName": "メール",
+      "subscription": "サブスクリプション"
     },
-    "footerTagline": "NOD Labs · クリエイターのためのワークスペース"
+    "footerTagline": "NOD Labs · クリエイターのためのワークスペース",
+    "links": {
+      "feedback": "フィードバックを送る",
+      "installExtension": "Chrome拡張機能をインストール",
+      "manageBilling": "請求とサブスクリプションを管理",
+      "privacy": "プライバシーポリシー",
+      "refund": "返金ポリシー",
+      "terms": "利用規約",
+      "viewPricing": "料金プランを見る"
+    },
+    "sections": {
+      "account": "アカウント",
+      "legal": "法的情報",
+      "profile": "プロフィール",
+      "quickLinks": "クイックリンク"
+    },
+    "status": {
+      "active": "有効"
+    },
+    "title": "設定",
+    "usage": {
+      "currentMonthlyUsage": "今月の使用量",
+      "resetHint": "月次使用量は毎月1日にリセットされます。",
+      "title": "AI分析の使用量"
+    }
+  },
+  "signup": {
+    "confirmPasswordPlaceholder": "Confirm password",
+    "continueWithGoogle": "Sign up with Google",
+    "createAccount": "Create account",
+    "creating": "Creating account...",
+    "duplicateEmail": "This email is already registered.",
+    "emailInvalid": "Please enter a valid email address.",
+    "emailPlaceholder": "Email address",
+    "hasAccount": "Already have an account?",
+    "namePlaceholder": "Name",
+    "nameRequired": "Please enter your name.",
+    "orDivider": "or",
+    "passwordMin": "Password must be at least 8 characters.",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordPlaceholder": "Password (8+ characters)",
+    "signInLink": "Sign in",
+    "subtitle": "Create your NOD account and start building your knowledge library",
+    "title": "Sign up"
   },
   "subscription": {
-    "pricing": "料金プラン",
-    "currentPlan": "現在のプラン",
-    "basic": "Free",
-    "pro": "Pro",
-    "basicPrice": "$0",
-    "proPrice": "$5/月（税込）",
-    "upgrade": "Proにアップグレード",
-    "manageBilling": "請求管理",
+    "activeSince": "{date}から有効",
     "backToSettings": "設定に戻る",
-    "billingSubtitle": "サブスクリプション、支払い方法、使用量を一箇所で管理できます。",
-    "currentMonthlyAiSummaries": "今月のAI要約使用量",
-    "includedInPlan": "現在のプランに含まれる機能",
+    "basic": "Free",
+    "basicPrice": "$0",
+    "basicValue": {
+      "aiSummaries": "月20回",
+      "conceptExtraction": "対応",
+      "markdownExport": "対応",
+      "savedArticles": "ニュース・技術ブログ・公式ドキュメント",
+      "semanticSearch": "無制限"
+    },
     "billingControls": "請求コントロール",
-    "proUpgradeDescription": "より高い月間上限と高度な機能のためにProへアップグレードしましょう。",
+    "billingHistory": "請求履歴",
     "billingStatus": "請求ステータス",
-    "planStatus": "プランの状態",
-    "nextBillingLabel": "次回請求",
-    "pricingSubtitle": "あなたの知的ワークフローに合ったプランを選びましょう。",
+    "billingSubtitle": "サブスクリプション、支払い方法、使用量を一箇所で管理できます。",
     "cancel": "サブスクリプションをキャンセル",
     "cancelConfirm": "サブスクリプションをキャンセルしますか？",
-    "usage": "使用量",
-    "summariesUsed": "今月の要約 {used}/{limit}件使用",
-    "summariesRemaining": "要約 残り{remaining}件",
-    "unlimited": "無制限",
-    "limitReached": "今月の上限に達しました",
-    "upgradePrompt": "Proにアップグレードしてより多くの要約を利用",
-    "features": {
-      "basicSummaries": "月20回 AI分析",
-      "proSummaries": "無制限 AI分析",
-      "basicArticles": "保存時に自動AI分析",
-      "proArticles": "無制限保存・分析",
-      "basicSearch": "無制限 セマンティック検索",
-      "proSearch": "無制限セマンティック検索"
-    },
-    "processing": "処理中...",
-    "upgradeUnavailable": "決済サービスを準備中です。しばらくしてからもう一度お試しください。",
-    "managePayment": "お支払い方法の管理",
     "cancelDescription": "キャンセルすると、現在の請求期間の終了までPro機能をご利用いただけます。",
     "checkoutSuccess": "お支払いが完了しました！Proサブスクリプションが有効になりました。",
-    "billingHistory": "請求履歴",
+    "comparisonTitle": "プラン比較",
+    "currentMonthlyAiSummaries": "今月のAI要約使用量",
+    "currentPlan": "現在のプラン",
+    "faq": "よくある質問",
+    "faqItems": {
+      "a1": "無制限のAI分析、無制限のコンテンツ保存が利用可能になります。",
+      "a2": "はい、いつでもキャンセルできます。現在の請求期間の終了までPro機能をご利用いただけます。",
+      "a3": "クレジットカード、デビットカードなどに対応しています。Paddleにより安全に処理されます。",
+      "q1": "Proにすると何が変わりますか？",
+      "q2": "いつでもキャンセルできますか？",
+      "q3": "どの支払い方法に対応していますか？"
+    },
+    "featureComparison": {
+      "aiSummaries": "AI分析",
+      "conceptExtraction": "コンセプト抽出",
+      "markdownExport": "マークダウンエクスポート",
+      "savedArticles": "分析可能なコンテンツタイプ",
+      "semanticSearch": "セマンティック検索"
+    },
+    "features": {
+      "basicArticles": "保存時に自動AI分析",
+      "basicSearch": "無制限 セマンティック検索",
+      "basicSummaries": "月20回 AI分析",
+      "proArticles": "無制限保存・分析",
+      "proSearch": "無制限セマンティック検索",
+      "proSummaries": "無制限 AI分析"
+    },
+    "includedInPlan": "現在のプランに含まれる機能",
+    "limitReached": "今月の上限に達しました",
+    "manageBilling": "請求管理",
+    "managePayment": "お支払い方法の管理",
     "nextBilling": "次回請求日: {date}",
-    "activeSince": "{date}から有効",
+    "nextBillingLabel": "次回請求",
     "planDescription": {
       "basic": "AI搭載のコンテンツ管理を試したいカジュアルな読者に最適です。",
       "pro": "毎日コンテンツを保存・分析するパワーユーザー向けのプランです。"
     },
-    "faq": "よくある質問",
-    "faqItems": {
-      "q1": "Proにすると何が変わりますか？",
-      "a1": "無制限のAI分析、無制限のコンテンツ保存が利用可能になります。",
-      "q2": "いつでもキャンセルできますか？",
-      "a2": "はい、いつでもキャンセルできます。現在の請求期間の終了までPro機能をご利用いただけます。",
-      "q3": "どの支払い方法に対応していますか？",
-      "a3": "クレジットカード、デビットカードなどに対応しています。Paddleにより安全に処理されます。"
-    },
-    "comparisonTitle": "プラン比較",
-    "featureComparison": {
-      "aiSummaries": "AI分析",
-      "savedArticles": "分析可能なコンテンツタイプ",
-      "semanticSearch": "セマンティック検索",
-      "markdownExport": "マークダウンエクスポート",
-      "conceptExtraction": "コンセプト抽出"
-    },
-    "basicValue": {
-      "aiSummaries": "月20回",
-      "savedArticles": "ニュース・技術ブログ・公式ドキュメント",
-      "semanticSearch": "無制限",
-      "markdownExport": "対応",
-      "conceptExtraction": "対応"
-    },
+    "planStatus": "プランの状態",
+    "pricing": "料金プラン",
+    "pricingSubtitle": "あなたの知的ワークフローに合ったプランを選びましょう。",
+    "pro": "Pro",
+    "proPrice": "$5/月（税込）",
+    "proUpgradeDescription": "より高い月間上限と高度な機能のためにProへアップグレードしましょう。",
     "proValue": {
       "aiSummaries": "無制限",
-      "savedArticles": "全タイプ（GitHub・論文・動画を含む）",
-      "semanticSearch": "無制限",
+      "conceptExtraction": "対応",
       "markdownExport": "対応",
-      "conceptExtraction": "対応"
-    }
+      "savedArticles": "全タイプ（GitHub・論文・動画を含む）",
+      "semanticSearch": "無制限"
+    },
+    "processing": "処理中...",
+    "summariesRemaining": "要約 残り{remaining}件",
+    "summariesUsed": "今月の要約 {used}/{limit}件使用",
+    "unlimited": "無制限",
+    "upgrade": "Proにアップグレード",
+    "upgradePrompt": "Proにアップグレードしてより多くの要約を利用",
+    "upgradeUnavailable": "決済サービスを準備中です。しばらくしてからもう一度お試しください。",
+    "usage": "使用量"
   },
-  "help": {
-    "centerBadge": "NOD ヘルプセンター",
-    "heading": "NOD スタートガイド",
-    "subtitle": "コンテンツ保存からAI要約確認、プラン管理まで、主要な流れをまとめました。",
-    "quickShortcutsTitle": "よく使うショートカット",
-    "shortcuts": {
-      "articles": "コンテンツ",
-      "billing": "請求管理",
-      "pricing": "料金プラン",
-      "installExtension": "拡張機能をインストール"
-    },
-    "faqTitle": "よくある質問",
-    "supportTitle": "サポートとフィードバック",
-    "sendFeedback": "フィードバックを送る",
-    "billingHelp": "請求に関するヘルプ",
-    "quickStart": {
-      "item1": {
-        "title": "1) コンテンツを保存",
-        "description": "拡張機能で記事を保存して、すべてを1つのアーカイブにまとめましょう。"
-      },
-      "item2": {
-        "title": "2) AI要約を確認",
-        "description": "保存した各コンテンツに、主要ポイントと構造化ノート付きのAI要約が付きます。"
-      },
-      "item3": {
-        "title": "3) インサイトを接続",
-        "description": "関連トピックをまとめて、必要な知識をより速く取り出せます。"
-      }
-    },
-    "faq": {
-      "item1": {
-        "q": "要約に時間がかかります。",
-        "a": "長い文書や混雑したキューでは処理が遅れることがあります。少し待ってから更新し、記事の状態を再確認してください。"
-      },
-      "item2": {
-        "q": "拡張機能が動作しません。",
-        "a": "Chrome拡張機能がインストールされているか確認し、ログイン状態を維持したままページを一度更新してください。"
-      },
-      "item3": {
-        "q": "請求はどこで管理できますか？",
-        "a": "支払い情報は「設定 > 請求管理」で管理でき、プランの詳細は料金ページで確認できます。"
-      }
-    }
-  },
-  "onboarding": {
-    "skip": "スキップ",
-    "progress": "{step}/3",
-    "completionTitle": "準備完了！",
-    "completionSubtitle": "ダッシュボードへ移動します。NODでナレッジを蓄えましょう。",
-    "welcome": {
-      "title": "NODへようこそ",
-      "subtitle": "AIが分析するあなただけのナレッジライブラリ",
-      "featureSave": "ワンクリックでウェブ記事を保存",
-      "featureAnalyze": "AIが自動で重要なインサイトを分析",
-      "featureSearch": "セマンティック検索でいつでも検索",
-      "cta": "始める"
-    },
-    "install": {
-      "title": "Chrome拡張機能をインストール",
-      "subtitle": "どのページからもワンクリックで記事を保存できます",
-      "benefitOneClick": "ワンクリックで記事を即座に保存",
-      "benefitAutoAnalyze": "保存と同時にAIが自動分析",
-      "benefitAllSites": "すべてのウェブサイトで利用可能",
-      "installButton": "Chrome Web Storeからインストール",
-      "confirmButton": "インストールしました",
-      "skipLink": "後でやります"
-    },
-    "firstArticle": {
-      "title": "最初の記事を保存しましょう",
-      "subtitle": "以下の3つのステップで始められます",
-      "step1": "任意の記事やブログを開く",
-      "step2": "ブラウザのツールバーでNODアイコンをクリック",
-      "step3": "Save & Analyzeをクリック",
-      "cta": "ダッシュボードへ"
-    },
-    "resumeBanner": {
-      "message": "オンボーディングを完了してNODを始めましょう",
-      "cta": "続ける"
-    }
-  }
+  "title": "NOD"
 }

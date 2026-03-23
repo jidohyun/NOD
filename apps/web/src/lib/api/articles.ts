@@ -1,6 +1,26 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 
+// Re-export share types & hooks from separate file (survives Orval cleanup)
+export {
+  type ArticleShareLink,
+  type SharedArticle,
+  type SharedArticleComment,
+  useCreateArticleShareLink,
+  useSharedArticle,
+  useSharedArticleByUsername,
+  useSharedArticleComments,
+  useCreateSharedArticleComment,
+  useUpdateSharedArticleComment,
+  useDeleteSharedArticleComment,
+  useToggleSharedArticleEmpathy,
+  useToggleSharedArticleCommentEmpathy,
+  createArticleShareLink,
+  revokeArticleShareLink,
+  fetchSharedArticle,
+  fetchSharedArticleBySlug,
+} from "@/lib/api/article-shares";
+
 export interface ArticleSummary {
   id: string;
   summary: string;
