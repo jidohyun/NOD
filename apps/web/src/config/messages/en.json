@@ -54,6 +54,34 @@
     "subtitle": "Tips, guides, and insights on knowledge management and productivity.",
     "title": "Blog"
   },
+  "changelogPage": {
+    "title": "Release Notes",
+    "subtitle": "Track what changed in NOD and what’s new in each release.",
+    "latest": {
+      "badge": "Latest release",
+      "version": "v1.0.0 — Share Release",
+      "publishedAtLabel": "Published",
+      "publishedAt": "2026-03-23",
+      "summary": "This release delivers public sharing for summarized content, including stable share URLs, a dedicated shared view, and engagement features like comments and empathy reactions."
+    },
+    "sections": {
+      "highlightsTitle": "Highlights"
+    },
+    "highlights": {
+      "shareRoutingTitle": "Stable share URL routing",
+      "shareRoutingDescription": "Added canonical share paths and slug-based routing so shared links are cleaner and easier to remember.",
+      "publicPageTitle": "Dedicated shared article page",
+      "publicPageDescription": "Published summaries now render in a focused public view with title hero, metadata, and original-link context.",
+      "commentsTitle": "Comments and empathy reactions",
+      "commentsDescription": "Readers can interact on shared summaries through comments, threaded replies, and empathy reactions.",
+      "shareControlsTitle": "Advanced share controls",
+      "shareControlsDescription": "Added controls for custom share URL and custom thumbnail settings when generating share links."
+    },
+    "links": {
+      "githubReleases": "View all releases on GitHub",
+      "backToDashboard": "Back to dashboard"
+    }
+  },
   "continueWithGoogle": "Continue with Google",
   "dashboard": {
     "allContentTypes": "All Types",
@@ -180,6 +208,7 @@
       "nav": {
         "articles": "Content",
         "billing": "Manage Billing",
+        "changelog": "Release Notes",
         "dashboard": "Dashboard",
         "graph": "Graph View",
         "pricing": "Pricing",
@@ -443,6 +472,7 @@
     },
     "nav": {
       "blog": "Blog",
+      "changelog": "Release Notes",
       "changeLanguage": "Change language",
       "features": "Features",
       "getStarted": "Get Started",

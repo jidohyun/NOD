@@ -4,6 +4,7 @@ import {
   CreditCard,
   FileText,
   HelpCircle,
+  History,
   LayoutDashboard,
   LogOut,
   MessageSquare,
@@ -42,6 +43,7 @@ export function DashboardSidebar() {
   const bottomNavItems = [
     { href: "/settings", icon: Settings, label: t("sidebar.nav.settings") },
     { href: "/settings/billing", icon: CreditCard, label: t("sidebar.nav.billing") },
+    { href: "/changelog", icon: History, label: t("sidebar.nav.changelog") },
   ] as const;
 
   const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";

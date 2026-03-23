@@ -180,6 +180,7 @@
       "nav": {
         "articles": "콘텐츠",
         "billing": "결제 관리",
+        "changelog": "릴리즈 노트",
         "dashboard": "대시보드",
         "graph": "그래프 뷰",
         "pricing": "요금제",
@@ -443,6 +444,7 @@
     },
     "nav": {
       "blog": "블로그",
+      "changelog": "릴리즈 노트",
       "changeLanguage": "언어 변경",
       "features": "기능",
       "getStarted": "시작하기",

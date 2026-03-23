@@ -180,6 +180,7 @@
       "nav": {
         "articles": "Inhalte",
         "billing": "Abrechnung verwalten",
+        "changelog": "Release Notes",
         "dashboard": "Dashboard",
         "graph": "Graphansicht",
         "pricing": "Preise",
@@ -433,6 +434,7 @@
     },
     "nav": {
       "blog": "Blog",
+      "changelog": "Release Notes",
       "changeLanguage": "Sprache wechseln",
       "features": "Funktionen",
       "getStarted": "Loslegen",
