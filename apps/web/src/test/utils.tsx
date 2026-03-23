@@ -10,6 +10,7 @@ const TEST_MESSAGES = {
     },
     footer: {
       dashboard: "Dashboard",
+      changelog: "Changelog",
       extension: "Chrome Extension",
       pricing: "Pricing",
       blog: "Blog",
@@ -26,6 +27,7 @@ const TEST_MESSAGES = {
       nav: {
         dashboard: "Dashboard",
         articles: "Articles",
+        changelog: "Changelog",
         settings: "Settings",
         billing: "Manage Billing",
         pricing: "Pricing",

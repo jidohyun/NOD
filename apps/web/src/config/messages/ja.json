@@ -180,6 +180,7 @@
       "nav": {
         "articles": "コンテンツ",
         "billing": "請求管理",
+        "changelog": "リリースノート",
         "dashboard": "ダッシュボード",
         "graph": "グラフビュー",
         "pricing": "料金プラン",
@@ -433,6 +434,7 @@
     },
     "nav": {
       "blog": "ブログ",
+      "changelog": "リリースノート",
       "changeLanguage": "言語を変更",
       "features": "機能",
       "getStarted": "始める",

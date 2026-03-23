@@ -180,6 +180,7 @@
       "nav": {
         "articles": "Conteúdo",
         "billing": "Gerenciar faturamento",
+        "changelog": "Notas da versão",
         "dashboard": "Painel",
         "graph": "Visualização de grafo",
         "pricing": "Preços",
@@ -433,6 +434,7 @@
     },
     "nav": {
       "blog": "Blog",
+      "changelog": "Notas da versão",
       "changeLanguage": "Mudar idioma",
       "features": "Recursos",
       "getStarted": "Começar",

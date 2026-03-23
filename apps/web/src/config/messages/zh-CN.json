@@ -180,6 +180,7 @@
       "nav": {
         "articles": "内容",
         "billing": "管理账单",
+        "changelog": "发布说明",
         "dashboard": "仪表盘",
         "graph": "图谱视图",
         "pricing": "定价",
@@ -433,6 +434,7 @@
     },
     "nav": {
       "blog": "博客",
+      "changelog": "发布说明",
       "changeLanguage": "切换语言",
       "features": "功能",
       "getStarted": "开始使用",
