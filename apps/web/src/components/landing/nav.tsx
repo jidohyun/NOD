@@ -149,6 +149,12 @@ export function LandingNav() {
             >
               {t("blog")}
             </Link>
+            <Link
+              href="/changelog"
+              className="font-creative-body text-sm font-semibold text-cm-text/70 transition-colors hover:text-cm-text"
+            >
+              {t("changelog")}
+            </Link>
           </div>
 
           {/* Desktop CTAs */}
@@ -242,6 +248,13 @@ export function LandingNav() {
                 onClick={() => setMobileOpen(false)}
               >
                 {t("blog")}
+              </Link>
+              <Link
+                href="/changelog"
+                className="text-left font-creative-body text-sm font-semibold text-cm-text/70 hover:text-cm-text"
+                onClick={() => setMobileOpen(false)}
+              >
+                {t("changelog")}
               </Link>
               <hr className="border-cm-text/10" />
               <DropdownMenu>

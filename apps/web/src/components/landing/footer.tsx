@@ -39,6 +39,7 @@ export function LandingFooter() {
 
   const links = [
     { label: t("dashboard"), href: "/articles" },
+    { label: t("changelog"), href: "/changelog" },
     { label: t("extension"), href: extensionInstallUrl },
     { label: t("pricing"), href: "/pricing" },
     { label: t("blog"), href: "/blog" },

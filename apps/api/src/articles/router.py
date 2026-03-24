@@ -13,14 +13,23 @@ from src.articles.schemas import (
     ArticleListResponse,
     ArticleResponse,
     ArticleSaveResponse,
+    ArticleShareLinkCreate,
+    ArticleShareLinkResponse,
     ArticleUpdate,
     ContentTypeStatsResponse,
+    MyShareLinkItem,
+    SharedArticleCommentCreate,
+    SharedArticleCommentEmpathyResponse,
+    SharedArticleCommentResponse,
+    SharedArticleCommentUpdate,
+    SharedArticleEmpathyResponse,
+    SharedArticleSummaryResponse,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
 from src.lib.config import settings
 from src.lib.content_classifier import ContentType, classify_url
-from src.lib.dependencies import AIService, CurrentUser, DBSession
+from src.lib.dependencies import AIService, CurrentUser, DBSession, OptionalUser
 from src.lib.metrics import (
     AI_SUMMARY_DURATION,
     AI_SUMMARY_REQUESTS,
@@ -614,6 +623,281 @@ async def get_content_type_stats(
     """Return article counts grouped by content type."""
     counts = await service.get_content_type_stats(db, user.id)
     return ContentTypeStatsResponse(counts=counts, total=sum(counts.values()))
+
+
+@router.get("/my-shares", response_model=list[MyShareLinkItem])
+async def list_my_shares(
+    db: DBSession,
+    user: CurrentUser,
+) -> list[MyShareLinkItem]:
+    return await service.list_my_share_links(db, uuid.UUID(user.id))
+
+
+@router.post("/{article_id}/share-link", response_model=ArticleShareLinkResponse)
+async def create_article_share_link(
+    article_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+    payload: ArticleShareLinkCreate | None = None,
+) -> ArticleShareLinkResponse:
+    try:
+        share_link = await service.create_or_regenerate_share_link(
+            db=db,
+            article_id=article_id,
+            owner_user_id=uuid.UUID(user.id),
+            config=payload,
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+    await db.commit()
+    return share_link
+
+
+@router.delete("/{article_id}/share-link", status_code=status.HTTP_204_NO_CONTENT)
+async def revoke_article_share_link(
+    article_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+) -> None:
+    revoked = await service.revoke_share_link(
+        db=db,
+        article_id=article_id,
+        owner_user_id=uuid.UUID(user.id),
+    )
+    if not revoked:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Share link not found",
+        )
+    await db.commit()
+
+
+@router.get("/share/{share_id}", response_model=SharedArticleSummaryResponse)
+async def get_shared_article(
+    share_id: uuid.UUID,
+    db: DBSession,
+    user: OptionalUser,
+    token: str | None = Query(default=None),
+) -> SharedArticleSummaryResponse:
+    shared = await service.get_shared_article_by_token(
+        db=db,
+        share_id=share_id,
+        token=token,
+        viewer_user_id=user.id if user else None,
+    )
+    if shared is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    return shared
+
+
+@router.get("/share/by-slug/{share_slug}", response_model=SharedArticleSummaryResponse)
+async def get_shared_article_by_slug(
+    share_slug: str,
+    db: DBSession,
+    user: OptionalUser,
+    token: str | None = Query(default=None),
+) -> SharedArticleSummaryResponse:
+    shared = await service.get_shared_article_by_slug(
+        db=db,
+        share_slug=share_slug,
+        token=token,
+        viewer_user_id=user.id if user else None,
+    )
+    if shared is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    return shared
+
+
+@router.get(
+    "/share/by-user/{username}/{share_slug}",
+    response_model=SharedArticleSummaryResponse,
+)
+async def get_shared_article_by_username(
+    username: str,
+    share_slug: str,
+    db: DBSession,
+    user: OptionalUser,
+) -> SharedArticleSummaryResponse:
+    shared = await service.get_shared_article_by_username(
+        db=db,
+        username=username,
+        share_slug=share_slug,
+        viewer_user_id=user.id if user else None,
+    )
+    if shared is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    return shared
+
+
+@router.get(
+    "/share/{share_id}/comments",
+    response_model=list[SharedArticleCommentResponse],
+)
+async def get_shared_article_comments(
+    share_id: uuid.UUID,
+    db: DBSession,
+    user: OptionalUser,
+    token: str = Query(min_length=1),
+) -> list[SharedArticleCommentResponse]:
+    comments = await service.list_shared_article_comments(
+        db=db,
+        share_id=share_id,
+        token=token,
+        viewer_user_id=user.id if user else None,
+    )
+    if comments is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    return comments
+
+
+@router.post(
+    "/share/{share_id}/comments",
+    response_model=SharedArticleCommentResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_shared_article_comment(
+    share_id: uuid.UUID,
+    payload: SharedArticleCommentCreate,
+    db: DBSession,
+    user: CurrentUser,
+    token: str = Query(min_length=1),
+) -> SharedArticleCommentResponse:
+    comment = await service.create_shared_article_comment(
+        db=db,
+        share_id=share_id,
+        token=token,
+        user_id=user.id,
+        payload=payload,
+    )
+    if comment is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    await db.commit()
+    return comment
+
+
+@router.patch(
+    "/share/{share_id}/comments/{comment_id}",
+    response_model=SharedArticleCommentResponse,
+)
+async def patch_shared_article_comment(
+    share_id: uuid.UUID,
+    comment_id: uuid.UUID,
+    payload: SharedArticleCommentUpdate,
+    db: DBSession,
+    user: CurrentUser,
+    token: str = Query(min_length=1),
+) -> SharedArticleCommentResponse:
+    comment = await service.update_shared_article_comment(
+        db=db,
+        share_id=share_id,
+        token=token,
+        comment_id=comment_id,
+        user_id=user.id,
+        payload=payload,
+    )
+    if comment is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article comment not found",
+        )
+    await db.commit()
+    return comment
+
+
+@router.delete(
+    "/share/{share_id}/comments/{comment_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_shared_article_comment(
+    share_id: uuid.UUID,
+    comment_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+    token: str = Query(min_length=1),
+) -> None:
+    deleted = await service.delete_shared_article_comment(
+        db=db,
+        share_id=share_id,
+        token=token,
+        comment_id=comment_id,
+        user_id=user.id,
+    )
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article comment not found",
+        )
+    await db.commit()
+
+
+@router.post(
+    "/share/{share_id}/comments/{comment_id}/empathy",
+    response_model=SharedArticleCommentEmpathyResponse,
+)
+async def post_shared_article_comment_empathy(
+    share_id: uuid.UUID,
+    comment_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+    token: str = Query(min_length=1),
+) -> SharedArticleCommentEmpathyResponse:
+    empathy = await service.toggle_shared_article_comment_empathy(
+        db=db,
+        share_id=share_id,
+        token=token,
+        comment_id=comment_id,
+        user_id=user.id,
+    )
+    if empathy is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    await db.commit()
+    return empathy
+
+
+@router.post(
+    "/share/{share_id}/empathy",
+    response_model=SharedArticleEmpathyResponse,
+)
+async def post_shared_article_empathy(
+    share_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+    token: str = Query(min_length=1),
+) -> SharedArticleEmpathyResponse:
+    empathy = await service.toggle_shared_article_empathy(
+        db=db,
+        share_id=share_id,
+        token=token,
+        user_id=user.id,
+    )
+    if empathy is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+    await db.commit()
+    return empathy
 
 
 @router.get("/{article_id}", response_model=ArticleResponse)

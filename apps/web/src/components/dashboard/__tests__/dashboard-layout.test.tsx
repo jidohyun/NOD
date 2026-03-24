@@ -6,8 +6,9 @@ import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { renderWithProviders } from "@/test/utils";
 
 const RE_NOD = /NOD/i;
-const RE_DASHBOARD = /dashboard/i;
+const RE_DASHBOARD = /^dashboard$/i;
 const RE_ARTICLES = /articles/i;
+const RE_SHARED = /shared/i;
 const RE_CHANGE_LANGUAGE = /change language/i;
 
 type NextLinkProps = {
@@ -67,7 +68,7 @@ describe("DashboardSidebar", () => {
   it("renders Dashboard navigation link", () => {
     renderWithProviders(<DashboardSidebar />);
 
-    const dashboardLink = screen.getByRole("link", { name: RE_DASHBOARD });
+    const dashboardLink = screen.getAllByRole("link", { name: RE_DASHBOARD })[0];
     expect(dashboardLink).toBeInTheDocument();
     expect(dashboardLink).toHaveAttribute("href", "/en/dashboard");
   });
@@ -78,6 +79,14 @@ describe("DashboardSidebar", () => {
     const articlesLink = screen.getByRole("link", { name: RE_ARTICLES });
     expect(articlesLink).toBeInTheDocument();
     expect(articlesLink).toHaveAttribute("href", "/en/articles");
+  });
+
+  it("renders Shared navigation link", () => {
+    renderWithProviders(<DashboardSidebar />);
+
+    const sharedLink = screen.getByRole("link", { name: RE_SHARED });
+    expect(sharedLink).toBeInTheDocument();
+    expect(sharedLink).toHaveAttribute("href", "/en/shared");
   });
 
   it("renders user section at bottom", () => {
@@ -131,7 +140,7 @@ describe("DashboardLayout", () => {
     );
 
     // Check for sidebar by looking for navigation elements
-    expect(screen.getByRole("link", { name: RE_DASHBOARD })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: RE_DASHBOARD })[0]).toBeInTheDocument();
   });
 
   it("contains header component", () => {

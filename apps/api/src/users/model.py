@@ -19,6 +19,9 @@ class User(Base):
         server_default=text("gen_random_uuid()"),
     )
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    username: Mapped[str | None] = mapped_column(
+        String(50), unique=True, nullable=True, index=True
+    )
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     image: Mapped[str | None] = mapped_column(String(500), nullable=True)
     email_verified: Mapped[bool] = mapped_column(default=False)
@@ -43,6 +46,7 @@ class UserResponse(BaseModel):
 
     id: str
     email: str
+    username: str | None = None
     name: str | None = None
     image: str | None = None
     email_verified: bool = False

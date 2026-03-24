@@ -1,25 +1,51 @@
 import difflib
+import hashlib
+import inspect
 import re
+import secrets
 import unicodedata
 import uuid
 from collections import Counter
+from collections.abc import Awaitable, Callable
+from datetime import UTC, datetime, timedelta
+from typing import cast as typing_cast
 
 from sqlalchemy import String, cast, delete, func, or_, select, true, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, selectinload
 
-from src.articles.model import Article, ArticleEmbedding, ArticleSummary
+from src.articles.model import (
+    Article,
+    ArticleEmbedding,
+    ArticleShareComment,
+    ArticleShareCommentEmpathy,
+    ArticleShareEmpathy,
+    ArticleShareLink,
+    ArticleShareSlugHistory,
+    ArticleSummary,
+)
 from src.articles.schemas import (
     ArticleCreate,
     ArticleListResponse,
+    ArticleShareLinkCreate,
+    ArticleShareLinkResponse,
     ArticleUpdate,
     ConceptGraphEdge,
     ConceptGraphMeta,
     ConceptGraphNode,
     ConceptGraphResponse,
+    MyShareLinkItem,
+    SharedArticleCommentCreate,
+    SharedArticleCommentEmpathyResponse,
+    SharedArticleCommentResponse,
+    SharedArticleCommentUpdate,
+    SharedArticleEmpathyResponse,
+    SharedArticleSharerResponse,
+    SharedArticleSummaryResponse,
     SimilarArticleResponse,
 )
 from src.common.models.pagination import PaginatedResponse
+from src.users.model import User
 
 ContentTypeStats = dict[str, int]
 
@@ -31,6 +57,846 @@ VALID_ARTICLE_STATUSES = {
     "failed",
     "completed",
 }
+
+VALID_SHARE_MODE_VALUES = {"default", "manual"}
+
+DEFAULT_SHARE_SLUG = "shared-article"
+SHARE_SID_LENGTH = 12
+SHARE_UUID_SUFFIX_PATTERN = re.compile(
+    r"^(?P<slug>.+)-(?P<share_uuid>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$"
+)
+SHARE_SID_SUFFIX_PATTERN = re.compile(r"^(?P<slug>.+)-(?P<share_sid>[0-9a-fA-F]{12})$")
+
+
+def _slugify_share_title(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value)
+    ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
+    lowered = ascii_text.casefold()
+    cleaned = re.sub(r"[^a-z0-9]+", "-", lowered).strip("-")
+    collapsed = re.sub(r"-{2,}", "-", cleaned)
+    return collapsed[:120] if collapsed else DEFAULT_SHARE_SLUG
+
+
+def _share_sid_from_uuid(value: uuid.UUID) -> str:
+    return value.hex[:SHARE_SID_LENGTH]
+
+
+def _canonical_share_path(share_slug: str, share_identifier: str) -> str:
+    return f"/share/{share_slug}-{share_identifier}"
+
+
+def _resolve_share_config(
+    config: ArticleShareLinkCreate | None,
+) -> tuple[str, str | None, str, str | None]:
+    if config is None:
+        return ("default", None, "default", None)
+
+    url_mode = (
+        config.url_mode if config.url_mode in VALID_SHARE_MODE_VALUES else "default"
+    )
+    thumbnail_mode = (
+        config.thumbnail_mode
+        if config.thumbnail_mode in VALID_SHARE_MODE_VALUES
+        else "default"
+    )
+
+    custom_url = (config.custom_url or "").strip() or None
+    thumbnail_url = (config.thumbnail_url or "").strip() or None
+
+    if url_mode == "manual" and custom_url is None:
+        url_mode = "default"
+
+    if thumbnail_mode == "manual" and thumbnail_url is None:
+        thumbnail_mode = "default"
+
+    return (url_mode, custom_url, thumbnail_mode, thumbnail_url)
+
+
+def _utc_now() -> datetime:
+    return datetime.now(tz=UTC)
+
+
+async def _flush_if_possible(db: AsyncSession) -> None:
+    flush_method = getattr(db, "flush", None)
+    if flush_method is None or not callable(flush_method):
+        return
+
+    flush_callable = typing_cast(Callable[[], object], flush_method)
+    flush_result = flush_callable()
+    if inspect.isawaitable(flush_result):
+        await typing_cast(Awaitable[object], flush_result)
+
+
+def _hash_share_token(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+async def _get_valid_share_link(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str | None = None,
+    *,
+    with_relations: bool = False,
+) -> ArticleShareLink | None:
+    query = select(ArticleShareLink).where(ArticleShareLink.id == share_id)
+    if with_relations:
+        query = query.options(
+            selectinload(ArticleShareLink.article).selectinload(Article.summary),
+            selectinload(ArticleShareLink.owner_user),
+        )
+
+    result = await db.execute(query)
+    share_link = result.scalar_one_or_none()
+    if share_link is None:
+        return None
+
+    now = _utc_now()
+    if share_link.revoked_at is not None:
+        return None
+    if share_link.expires_at is not None and share_link.expires_at <= now:
+        return None
+
+    # Public shares don't require token verification
+    if share_link.is_public:
+        return share_link
+
+    # Private shares require valid token
+    if token is None or share_link.token_hash != _hash_share_token(token):
+        return None
+
+    return share_link
+
+
+async def create_or_regenerate_share_link(
+    db: AsyncSession,
+    article_id: uuid.UUID,
+    owner_user_id: uuid.UUID,
+    ttl: timedelta | None = None,
+    config: ArticleShareLinkCreate | None = None,
+) -> ArticleShareLinkResponse:
+    article_result = await db.execute(
+        select(Article).where(
+            Article.id == article_id,
+            Article.user_id == owner_user_id,
+        )
+    )
+    article = article_result.scalar_one_or_none()
+    if article is None:
+        msg = "Article not found"
+        raise ValueError(msg)
+
+    result = await db.execute(
+        select(ArticleShareLink).where(
+            ArticleShareLink.article_id == article_id,
+            ArticleShareLink.owner_user_id == owner_user_id,
+        )
+    )
+    share_link = result.scalar_one_or_none()
+
+    token = secrets.token_urlsafe(24)
+    token_hash = _hash_share_token(token)
+    expires_at = _utc_now() + ttl if ttl else None
+    url_mode, custom_url, thumbnail_mode, thumbnail_url = _resolve_share_config(config)
+
+    if share_link is None:
+        share_uuid = uuid.uuid4()
+        share_slug = _slugify_share_title(article.title)
+        share_link = ArticleShareLink(
+            id=share_uuid,
+            article_id=article_id,
+            owner_user_id=owner_user_id,
+            token_hash=token_hash,
+            expires_at=expires_at,
+            revoked_at=None,
+            share_slug=share_slug,
+            share_sid=_share_sid_from_uuid(share_uuid),
+            url_mode=url_mode,
+            custom_url=custom_url,
+            thumbnail_mode=thumbnail_mode,
+            thumbnail_url=thumbnail_url,
+        )
+        db.add(share_link)
+    else:
+        existing_slug = share_link.share_slug
+        next_slug = _slugify_share_title(article.title)
+        if existing_slug and existing_slug != next_slug:
+            # Only record history when slug actually changes, and avoid duplicates
+            existing_history = await db.execute(
+                select(ArticleShareSlugHistory.id).where(
+                    ArticleShareSlugHistory.share_link_id == share_link.id,
+                    ArticleShareSlugHistory.slug == existing_slug,
+                )
+            )
+            if existing_history.scalar_one_or_none() is None:
+                db.add(
+                    ArticleShareSlugHistory(
+                        share_link_id=share_link.id,
+                        slug=existing_slug,
+                    )
+                )
+        share_link.share_slug = next_slug
+        share_link.share_sid = _share_sid_from_uuid(share_link.id)
+        share_link.token_hash = token_hash
+        share_link.expires_at = expires_at
+        share_link.revoked_at = None
+        share_link.url_mode = url_mode
+        share_link.custom_url = custom_url
+        share_link.thumbnail_mode = thumbnail_mode
+        share_link.thumbnail_url = thumbnail_url
+
+    await db.flush()
+
+    share_slug = share_link.share_slug
+    canonical_path = _canonical_share_path(share_slug, str(share_link.id))
+
+    return ArticleShareLinkResponse(
+        share_id=share_link.id,
+        expires_at=share_link.expires_at,
+        share_url=f"/share/{share_link.id}?token={token}",
+        share_slug=share_slug,
+        canonical_share_url=f"{canonical_path}?token={token}",
+        url_mode=share_link.url_mode,
+        custom_url=share_link.custom_url,
+        thumbnail_mode=share_link.thumbnail_mode,
+        thumbnail_url=share_link.thumbnail_url,
+    )
+
+
+async def list_my_share_links(
+    db: AsyncSession,
+    owner_user_id: uuid.UUID,
+) -> list[MyShareLinkItem]:
+    # Fetch owner username for public URL generation
+    from src.users.model import User as UserModel
+
+    owner_result = await db.execute(
+        select(UserModel.username).where(UserModel.id == owner_user_id)
+    )
+    owner_username = owner_result.scalar_one_or_none()
+
+    result = await db.execute(
+        select(ArticleShareLink)
+        .options(
+            selectinload(ArticleShareLink.article).selectinload(Article.summary),
+            selectinload(ArticleShareLink.comments),
+            selectinload(ArticleShareLink.empathy_reactions),
+        )
+        .where(
+            ArticleShareLink.owner_user_id == owner_user_id,
+            ArticleShareLink.revoked_at.is_(None),
+        )
+        .order_by(ArticleShareLink.created_at.desc())
+    )
+    share_links = result.scalars().all()
+    items: list[MyShareLinkItem] = []
+    for sl in share_links:
+        share_sid = _share_sid_from_uuid(sl.id)
+        canonical_path = _canonical_share_path(sl.share_slug, share_sid)
+        article = sl.article
+        summary = article.summary if article else None
+        summary_text = summary.summary if summary else None
+        summary_preview = (
+            summary_text[:400]
+            if summary_text and len(summary_text) > 400
+            else summary_text
+        )
+        concepts = summary.concepts if summary and summary.concepts else []
+        content_type = summary.content_type if summary else None
+
+        public_url: str | None = None
+        if sl.is_public and owner_username:
+            public_url = f"/@{owner_username}/{sl.share_slug}"
+        elif sl.is_public:
+            public_url = canonical_path
+
+        items.append(
+            MyShareLinkItem(
+                share_id=sl.id,
+                article_id=sl.article_id,
+                article_title=article.title if article else "",
+                article_url=article.url if article else None,
+                share_slug=sl.share_slug,
+                canonical_share_url=canonical_path,
+                public_url=public_url,
+                view_count=sl.view_count,
+                empathy_count=len(sl.empathy_reactions),
+                comment_count=len(sl.comments),
+                summary_preview=summary_preview,
+                concepts=concepts[:5],
+                content_type=content_type,
+                thumbnail_url=sl.thumbnail_url,
+                created_at=sl.created_at,
+                expires_at=sl.expires_at,
+            )
+        )
+    return items
+
+
+async def revoke_share_link(
+    db: AsyncSession,
+    article_id: uuid.UUID,
+    owner_user_id: uuid.UUID,
+) -> bool:
+    result = await db.execute(
+        select(ArticleShareLink).where(
+            ArticleShareLink.article_id == article_id,
+            ArticleShareLink.owner_user_id == owner_user_id,
+        )
+    )
+    share_link = result.scalar_one_or_none()
+    if share_link is None:
+        return False
+
+    await db.delete(share_link)
+    await db.flush()
+    return True
+
+
+async def get_shared_article_by_token(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str | None = None,
+    viewer_user_id: str | None = None,
+) -> SharedArticleSummaryResponse | None:
+    share_link = await _get_valid_share_link(
+        db,
+        share_id,
+        token,
+        with_relations=True,
+    )
+    if share_link is None:
+        return None
+
+    # Increment view count
+    share_link.view_count = (share_link.view_count or 0) + 1
+    share_link.last_viewed_at = _utc_now()
+    await _flush_if_possible(db)
+
+    return await _build_shared_article_response(db, share_link, viewer_user_id)
+
+
+async def _build_shared_article_response(
+    db: AsyncSession,
+    share_link: ArticleShareLink,
+    viewer_user_id: str | None = None,
+) -> SharedArticleSummaryResponse | None:
+    article = share_link.article
+    summary = article.summary if article else None
+    if article is None or summary is None:
+        return None
+
+    owner_user = share_link.owner_user
+    empathy_count_result = await db.execute(
+        select(func.count())
+        .select_from(ArticleShareEmpathy)
+        .where(ArticleShareEmpathy.share_link_id == share_link.id)
+    )
+    empathy_count = int(empathy_count_result.scalar_one() or 0)
+
+    viewer_has_empathy = False
+    if viewer_user_id:
+        viewer_uuid = uuid.UUID(viewer_user_id)
+        viewer_empathy_result = await db.execute(
+            select(ArticleShareEmpathy.id).where(
+                ArticleShareEmpathy.share_link_id == share_link.id,
+                ArticleShareEmpathy.user_id == viewer_uuid,
+            )
+        )
+        viewer_has_empathy = viewer_empathy_result.scalar_one_or_none() is not None
+
+    return SharedArticleSummaryResponse(
+        share_id=share_link.id,
+        share_slug=share_link.share_slug,
+        share_sid=share_link.share_sid,
+        canonical_share_path=_canonical_share_path(
+            share_link.share_slug,
+            str(share_link.id),
+        ),
+        article_id=article.id,
+        title=article.title,
+        source=article.source,
+        url=article.url,
+        created_at=share_link.created_at or article.created_at,
+        summary=summary.summary,
+        markdown_note=summary.markdown_note,
+        key_points=summary.key_points,
+        concepts=summary.concepts,
+        reading_time_minutes=summary.reading_time_minutes,
+        language=summary.language,
+        content_type=summary.content_type,
+        type_metadata=summary.type_metadata,
+        empathy_count=empathy_count,
+        viewer_has_empathy=viewer_has_empathy,
+        is_owner=(
+            viewer_user_id is not None
+            and str(share_link.owner_user_id) == viewer_user_id
+        ),
+        sharer=SharedArticleSharerResponse(
+            name=owner_user.name if owner_user else None,
+            image=owner_user.image if owner_user else None,
+        ),
+        url_mode=share_link.url_mode or "default",
+        custom_url=share_link.custom_url,
+        thumbnail_mode=share_link.thumbnail_mode or "default",
+        thumbnail_url=share_link.thumbnail_url,
+        og_mode=share_link.thumbnail_mode or "default",
+        og_image_url=share_link.thumbnail_url,
+    )
+
+
+async def get_shared_article_by_slug(
+    db: AsyncSession,
+    share_slug: str,
+    token: str | None = None,
+    viewer_user_id: str | None = None,
+) -> SharedArticleSummaryResponse | None:
+    normalized_slug = share_slug.strip()
+    if not normalized_slug:
+        return None
+
+    share_uuid: uuid.UUID | None = None
+    uuid_match = SHARE_UUID_SUFFIX_PATTERN.match(normalized_slug)
+    sid_match = SHARE_SID_SUFFIX_PATTERN.match(normalized_slug)
+
+    if uuid_match:
+        share_uuid = uuid.UUID(uuid_match.group("share_uuid"))
+    elif sid_match:
+        share_identifier = sid_match.group("share_sid").lower()
+        result = await db.execute(
+            select(ArticleShareLink.id).where(
+                ArticleShareLink.share_sid == share_identifier
+            )
+        )
+        share_uuid = result.scalar_one_or_none()
+
+    if share_uuid is None:
+        candidate_ids_result = await db.execute(
+            select(ArticleShareLink.id).where(
+                func.lower(ArticleShareLink.share_slug) == normalized_slug.casefold()
+            )
+        )
+
+        candidate_ids = [
+            candidate_id for candidate_id in candidate_ids_result.scalars().all()
+        ]
+
+        if not candidate_ids:
+            history_result = await db.execute(
+                select(ArticleShareSlugHistory.share_link_id)
+                .where(
+                    func.lower(ArticleShareSlugHistory.slug)
+                    == normalized_slug.casefold()
+                )
+                .order_by(ArticleShareSlugHistory.created_at.desc())
+            )
+            candidate_ids = [
+                candidate_id for candidate_id in history_result.scalars().all()
+            ]
+
+        seen_ids: set[uuid.UUID] = set()
+        for candidate_id in candidate_ids:
+            if candidate_id in seen_ids:
+                continue
+            seen_ids.add(candidate_id)
+
+            shared = await get_shared_article_by_token(
+                db=db,
+                share_id=candidate_id,
+                token=token,
+                viewer_user_id=viewer_user_id,
+            )
+            if shared is not None:
+                return shared
+
+        return None
+
+    shared = await get_shared_article_by_token(
+        db=db,
+        share_id=share_uuid,
+        token=token,
+        viewer_user_id=viewer_user_id,
+    )
+    return shared
+
+
+async def get_shared_article_by_username(
+    db: AsyncSession,
+    username: str,
+    share_slug: str,
+    viewer_user_id: str | None = None,
+) -> SharedArticleSummaryResponse | None:
+    from src.users.model import User as UserModel
+
+    user_result = await db.execute(
+        select(UserModel).where(
+            func.lower(UserModel.username) == username.strip().casefold()
+        )
+    )
+    user = user_result.scalar_one_or_none()
+    if user is None:
+        return None
+
+    result = await db.execute(
+        select(ArticleShareLink)
+        .options(
+            selectinload(ArticleShareLink.article).selectinload(Article.summary),
+            selectinload(ArticleShareLink.owner_user),
+        )
+        .where(
+            ArticleShareLink.owner_user_id == user.id,
+            ArticleShareLink.is_public.is_(True),
+            ArticleShareLink.revoked_at.is_(None),
+            func.lower(ArticleShareLink.share_slug) == share_slug.strip().casefold(),
+        )
+    )
+    share_link = result.scalar_one_or_none()
+    if share_link is None:
+        return None
+
+    if share_link.expires_at is not None and share_link.expires_at <= _utc_now():
+        return None
+
+    # Increment view count
+    share_link.view_count = (share_link.view_count or 0) + 1
+    share_link.last_viewed_at = _utc_now()
+    await _flush_if_possible(db)
+
+    return await _build_shared_article_response(
+        db=db,
+        share_link=share_link,
+        viewer_user_id=viewer_user_id,
+    )
+
+
+async def toggle_shared_article_empathy(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str,
+    user_id: str,
+) -> SharedArticleEmpathyResponse | None:
+    share_link = await _get_valid_share_link(db, share_id, token)
+    if share_link is None:
+        return None
+
+    user_uuid = uuid.UUID(user_id)
+    existing_result = await db.execute(
+        select(ArticleShareEmpathy).where(
+            ArticleShareEmpathy.share_link_id == share_link.id,
+            ArticleShareEmpathy.user_id == user_uuid,
+        )
+    )
+    existing = existing_result.scalar_one_or_none()
+
+    if existing is None:
+        db.add(
+            ArticleShareEmpathy(
+                share_link_id=share_link.id,
+                user_id=user_uuid,
+            )
+        )
+        viewer_has_empathy = True
+    else:
+        await db.delete(existing)
+        viewer_has_empathy = False
+
+    await db.flush()
+
+    empathy_count_result = await db.execute(
+        select(func.count())
+        .select_from(ArticleShareEmpathy)
+        .where(ArticleShareEmpathy.share_link_id == share_link.id)
+    )
+    empathy_count = int(empathy_count_result.scalar_one() or 0)
+
+    return SharedArticleEmpathyResponse(
+        empathy_count=empathy_count,
+        viewer_has_empathy=viewer_has_empathy,
+    )
+
+
+async def list_shared_article_comments(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str,
+    viewer_user_id: str | None = None,
+) -> list[SharedArticleCommentResponse] | None:
+    share_link = await _get_valid_share_link(db, share_id, token)
+    if share_link is None:
+        return None
+
+    comments_result = await db.execute(
+        select(ArticleShareComment)
+        .where(ArticleShareComment.share_link_id == share_link.id)
+        .order_by(ArticleShareComment.created_at.asc())
+    )
+    comments = comments_result.scalars().all()
+
+    if not comments:
+        return []
+
+    comment_ids = [comment.id for comment in comments]
+
+    empathy_count_rows = await db.execute(
+        select(
+            ArticleShareCommentEmpathy.comment_id,
+            func.count().label("empathy_count"),
+        )
+        .where(ArticleShareCommentEmpathy.comment_id.in_(comment_ids))
+        .group_by(ArticleShareCommentEmpathy.comment_id)
+    )
+    empathy_count_by_comment = {
+        comment_id: int(empathy_count)
+        for comment_id, empathy_count in empathy_count_rows.all()
+    }
+
+    viewer_empathy_comment_ids: set[uuid.UUID] = set()
+    if viewer_user_id:
+        viewer_uuid = uuid.UUID(viewer_user_id)
+        viewer_rows = await db.execute(
+            select(ArticleShareCommentEmpathy.comment_id).where(
+                ArticleShareCommentEmpathy.comment_id.in_(comment_ids),
+                ArticleShareCommentEmpathy.user_id == viewer_uuid,
+            )
+        )
+        viewer_empathy_comment_ids = set(viewer_rows.scalars().all())
+
+    response_by_id: dict[uuid.UUID, SharedArticleCommentResponse] = {}
+    for comment in comments:
+        response_by_id[comment.id] = SharedArticleCommentResponse(
+            id=comment.id,
+            author_name=comment.author_name,
+            author_image=comment.author_image,
+            author_user_id=comment.author_user_id,
+            parent_comment_id=comment.parent_comment_id,
+            content=comment.content,
+            created_at=comment.created_at,
+            empathy_count=empathy_count_by_comment.get(comment.id, 0),
+            viewer_has_empathy=comment.id in viewer_empathy_comment_ids,
+            replies=[],
+        )
+
+    roots: list[SharedArticleCommentResponse] = []
+    for comment in comments:
+        comment_response = response_by_id[comment.id]
+        if comment.parent_comment_id is None:
+            roots.append(comment_response)
+            continue
+
+        parent = response_by_id.get(comment.parent_comment_id)
+        if parent is None:
+            roots.append(comment_response)
+            continue
+
+        parent.replies.append(comment_response)
+
+    for root in roots:
+        root.replies.sort(key=lambda item: item.created_at)
+
+    roots.sort(key=lambda item: item.created_at, reverse=True)
+
+    return roots
+
+
+async def create_shared_article_comment(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str,
+    user_id: str,
+    payload: SharedArticleCommentCreate,
+) -> SharedArticleCommentResponse | None:
+    share_link = await _get_valid_share_link(db, share_id, token)
+    if share_link is None:
+        return None
+
+    user_result = await db.execute(select(User).where(User.id == uuid.UUID(user_id)))
+    user = user_result.scalar_one_or_none()
+    if user is None:
+        return None
+
+    author_name = (user.name or "").strip()
+    if not author_name:
+        author_name = (user.email or "").strip() or "NOD User"
+
+    parent_comment_id = payload.parent_comment_id
+    if parent_comment_id is not None:
+        parent_result = await db.execute(
+            select(ArticleShareComment).where(
+                ArticleShareComment.id == parent_comment_id,
+                ArticleShareComment.share_link_id == share_link.id,
+            )
+        )
+        parent_comment = parent_result.scalar_one_or_none()
+        if parent_comment is None:
+            return None
+
+        if parent_comment.parent_comment_id is not None:
+            return None
+
+    comment = ArticleShareComment(
+        share_link_id=share_link.id,
+        author_name=author_name,
+        author_image=(user.image or None),
+        author_user_id=user.id,
+        parent_comment_id=parent_comment_id,
+        content=payload.content.strip(),
+    )
+    db.add(comment)
+    await db.flush()
+
+    return SharedArticleCommentResponse(
+        id=comment.id,
+        author_name=comment.author_name,
+        author_image=comment.author_image,
+        author_user_id=comment.author_user_id,
+        parent_comment_id=comment.parent_comment_id,
+        content=comment.content,
+        created_at=comment.created_at,
+        empathy_count=0,
+        viewer_has_empathy=False,
+        replies=[],
+    )
+
+
+async def update_shared_article_comment(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str,
+    comment_id: uuid.UUID,
+    user_id: str,
+    payload: SharedArticleCommentUpdate,
+) -> SharedArticleCommentResponse | None:
+    share_link = await _get_valid_share_link(db, share_id, token)
+    if share_link is None:
+        return None
+
+    user_uuid = uuid.UUID(user_id)
+    comment_result = await db.execute(
+        select(ArticleShareComment).where(
+            ArticleShareComment.id == comment_id,
+            ArticleShareComment.share_link_id == share_link.id,
+            ArticleShareComment.author_user_id == user_uuid,
+        )
+    )
+    comment = comment_result.scalar_one_or_none()
+    if comment is None:
+        return None
+
+    comment.content = payload.content.strip()
+    await db.flush()
+
+    empathy_count_result = await db.execute(
+        select(func.count())
+        .select_from(ArticleShareCommentEmpathy)
+        .where(ArticleShareCommentEmpathy.comment_id == comment.id)
+    )
+    empathy_count = int(empathy_count_result.scalar_one() or 0)
+
+    viewer_empathy_result = await db.execute(
+        select(ArticleShareCommentEmpathy.id).where(
+            ArticleShareCommentEmpathy.comment_id == comment.id,
+            ArticleShareCommentEmpathy.user_id == user_uuid,
+        )
+    )
+    viewer_has_empathy = viewer_empathy_result.scalar_one_or_none() is not None
+
+    return SharedArticleCommentResponse(
+        id=comment.id,
+        author_name=comment.author_name,
+        author_image=comment.author_image,
+        author_user_id=comment.author_user_id,
+        parent_comment_id=comment.parent_comment_id,
+        content=comment.content,
+        created_at=comment.created_at,
+        empathy_count=empathy_count,
+        viewer_has_empathy=viewer_has_empathy,
+        replies=[],
+    )
+
+
+async def delete_shared_article_comment(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str,
+    comment_id: uuid.UUID,
+    user_id: str,
+) -> bool:
+    share_link = await _get_valid_share_link(db, share_id, token)
+    if share_link is None:
+        return False
+
+    user_uuid = uuid.UUID(user_id)
+    comment_result = await db.execute(
+        select(ArticleShareComment.id).where(
+            ArticleShareComment.id == comment_id,
+            ArticleShareComment.share_link_id == share_link.id,
+            ArticleShareComment.author_user_id == user_uuid,
+        )
+    )
+    if comment_result.scalar_one_or_none() is None:
+        return False
+
+    await db.execute(
+        delete(ArticleShareComment).where(ArticleShareComment.id == comment_id)
+    )
+    await db.flush()
+    return True
+
+
+async def toggle_shared_article_comment_empathy(
+    db: AsyncSession,
+    share_id: uuid.UUID,
+    token: str,
+    comment_id: uuid.UUID,
+    user_id: str,
+) -> SharedArticleCommentEmpathyResponse | None:
+    share_link = await _get_valid_share_link(db, share_id, token)
+    if share_link is None:
+        return None
+
+    comment_result = await db.execute(
+        select(ArticleShareComment).where(
+            ArticleShareComment.id == comment_id,
+            ArticleShareComment.share_link_id == share_link.id,
+        )
+    )
+    comment = comment_result.scalar_one_or_none()
+    if comment is None:
+        return None
+
+    user_uuid = uuid.UUID(user_id)
+    existing_result = await db.execute(
+        select(ArticleShareCommentEmpathy).where(
+            ArticleShareCommentEmpathy.comment_id == comment_id,
+            ArticleShareCommentEmpathy.user_id == user_uuid,
+        )
+    )
+    existing = existing_result.scalar_one_or_none()
+
+    if existing is None:
+        db.add(
+            ArticleShareCommentEmpathy(
+                comment_id=comment_id,
+                user_id=user_uuid,
+            )
+        )
+        viewer_has_empathy = True
+    else:
+        await db.delete(existing)
+        viewer_has_empathy = False
+
+    await db.flush()
+
+    empathy_count_result = await db.execute(
+        select(func.count())
+        .select_from(ArticleShareCommentEmpathy)
+        .where(ArticleShareCommentEmpathy.comment_id == comment_id)
+    )
+    empathy_count = int(empathy_count_result.scalar_one() or 0)
+
+    return SharedArticleCommentEmpathyResponse(
+        empathy_count=empathy_count,
+        viewer_has_empathy=viewer_has_empathy,
+    )
 
 
 async def create_article(
