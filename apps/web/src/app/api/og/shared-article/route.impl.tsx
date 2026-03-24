@@ -176,11 +176,19 @@ function renderSharedImage(shared: SharedArticle) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://nod-archive.com/brand/nod-icon.png"
+            alt="NOD"
+            width={36}
+            height={36}
+            style={{ borderRadius: 4, opacity: 0.8 }}
+          />
           <div
             style={{
               display: "flex",
               fontSize: 26,
-              fontWeight: 800,
+              fontWeight: 700,
               color: "rgba(255,255,255,0.55)",
             }}
           >
