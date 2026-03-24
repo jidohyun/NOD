@@ -204,45 +204,47 @@ def generate_og_image(
         )
         draw.text((bx, by), label, fill=text_color, font=fb)
 
-    # --- Title ---
+    # --- Text content ---
     title_lines = _wrap_text(draw, title, ft, max_w, 3)
-    line_h_title = 62
-    title_block_h = len(title_lines) * line_h_title
+    lh_title = 64
+    summary_lines = _wrap_text(draw, summary, fs, max_w, 3)
+    lh_sum = 38
 
-    # --- Summary ---
-    summary_lines = _wrap_text(draw, summary, fs, max_w, 4)
-    line_h_sum = 36
-    sum_block_h = len(summary_lines) * line_h_sum
+    # Bottom-up layout:
+    # bar_y: NOD + domain text
+    # sep_y: separator line
+    # summary block above separator
+    # title block above summary
+    # everything pushed to bottom with spacer on top
+    bar_y = IMAGE_HEIGHT - 44
+    sep_y = bar_y - 28
+    gap_sum_sep = 20
+    gap_title_sum = 24
 
-    # Layout from bottom:
-    # bottom_y=594 | domain/NOD bar (h=24)
-    # separator at 558
-    # summary ends at 542
-    # title above summary
-    bar_y = IMAGE_HEIGHT - 36
-    sep_y = bar_y - 36
-    sum_end = sep_y - 16
-    sum_start = sum_end - sum_block_h
-    title_end = sum_start - 20
-    title_start = title_end - title_block_h
+    sum_block_h = len(summary_lines) * lh_sum
+    title_block_h = len(title_lines) * lh_title
 
-    # Clamp title_start minimum
-    if title_start < 100:
-        title_start = 100
+    sum_top = sep_y - gap_sum_sep - sum_block_h
+    title_top = sum_top - gap_title_sum - title_block_h
+
+    # Ensure title doesn't go above top padding
+    min_top = 80
+    if title_top < min_top:
+        title_top = min_top
 
     # Draw title
     for i, line in enumerate(title_lines):
-        y = title_start + i * line_h_title
+        y = title_top + i * lh_title
         draw.text((px, y), line, fill=white, font=ft)
 
     # Draw summary
     sum_color = _blend(
-        _gradient_at(sum_start, grad[0], grad[1]),
+        _gradient_at(sum_top, grad[0], grad[1]),
         (255, 255, 255),
         0.55,
     )
     for i, line in enumerate(summary_lines):
-        y = sum_start + i * line_h_sum
+        y = sum_top + i * lh_sum
         draw.text((px, y), line, fill=sum_color, font=fs)
 
     # Separator
