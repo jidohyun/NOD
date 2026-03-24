@@ -51,7 +51,7 @@ async def get_failure_stats(
     db: AsyncSession,
     user_id: uuid.UUID | None = None,
     limit: int = 20,
-) -> dict:
+) -> dict[str, int | list[dict[str, int | str]]]:
     # By domain
     domain_query = (
         select(
@@ -67,8 +67,7 @@ async def get_failure_stats(
 
     domain_result = await db.execute(domain_query)
     by_domain = [
-        {"domain": row.domain, "count": row.count}
-        for row in domain_result.all()
+        {"domain": row.domain, "count": row.count} for row in domain_result.all()
     ]
 
     # By error code
@@ -85,8 +84,7 @@ async def get_failure_stats(
 
     error_result = await db.execute(error_query)
     by_error_code = [
-        {"error_code": row.error_code, "count": row.count}
-        for row in error_result.all()
+        {"error_code": row.error_code, "count": row.count} for row in error_result.all()
     ]
 
     # Total
