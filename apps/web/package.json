@@ -43,6 +43,7 @@
     "cytoscape": "^3.33.1",
     "cytoscape-cola": "^2.5.1",
     "cytoscape-d3-force": "^1.1.4",
+    "framer-motion": "^12.38.0",
     "gsap": "^3.14.2",
     "jotai": "^2.16.1",
     "lucide-react": "^0.563.0",
