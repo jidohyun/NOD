@@ -374,6 +374,7 @@ async def get_shared_article_by_token(
     share_id: uuid.UUID,
     token: str | None = None,
     viewer_user_id: str | None = None,
+    track_view: bool = True,
 ) -> SharedArticleSummaryResponse | None:
     share_link = await _get_valid_share_link(
         db,
@@ -384,10 +385,10 @@ async def get_shared_article_by_token(
     if share_link is None:
         return None
 
-    # Increment view count
-    share_link.view_count = (share_link.view_count or 0) + 1
-    share_link.last_viewed_at = _utc_now()
-    await _flush_if_possible(db)
+    if track_view:
+        share_link.view_count = (share_link.view_count or 0) + 1
+        share_link.last_viewed_at = _utc_now()
+        await _flush_if_possible(db)
 
     return await _build_shared_article_response(db, share_link, viewer_user_id)
 
@@ -466,6 +467,7 @@ async def get_shared_article_by_slug(
     share_slug: str,
     token: str | None = None,
     viewer_user_id: str | None = None,
+    track_view: bool = True,
 ) -> SharedArticleSummaryResponse | None:
     normalized_slug = share_slug.strip()
     if not normalized_slug:
@@ -521,6 +523,7 @@ async def get_shared_article_by_slug(
                 share_id=candidate_id,
                 token=token,
                 viewer_user_id=viewer_user_id,
+                track_view=track_view,
             )
             if shared is not None:
                 return shared
@@ -532,6 +535,7 @@ async def get_shared_article_by_slug(
         share_id=share_uuid,
         token=token,
         viewer_user_id=viewer_user_id,
+        track_view=track_view,
     )
     return shared
 
@@ -541,6 +545,7 @@ async def get_shared_article_by_username(
     username: str,
     share_slug: str,
     viewer_user_id: str | None = None,
+    track_view: bool = True,
 ) -> SharedArticleSummaryResponse | None:
     from src.users.model import User as UserModel
 
@@ -573,10 +578,10 @@ async def get_shared_article_by_username(
     if share_link.expires_at is not None and share_link.expires_at <= _utc_now():
         return None
 
-    # Increment view count
-    share_link.view_count = (share_link.view_count or 0) + 1
-    share_link.last_viewed_at = _utc_now()
-    await _flush_if_possible(db)
+    if track_view:
+        share_link.view_count = (share_link.view_count or 0) + 1
+        share_link.last_viewed_at = _utc_now()
+        await _flush_if_possible(db)
 
     return await _build_shared_article_response(
         db=db,

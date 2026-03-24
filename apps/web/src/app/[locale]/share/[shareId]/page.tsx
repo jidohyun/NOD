@@ -52,9 +52,8 @@ export async function generateMetadata({
     : `/${locale}/share/${shareId}`;
 
   try {
-    const apiUrl = tokenParam
-      ? `/_proxy/api/articles/share/by-slug/${encodeURIComponent(shareId)}?${tokenParam}`
-      : `/_proxy/api/articles/share/by-slug/${encodeURIComponent(shareId)}`;
+    const metaParams = tokenParam ? `${tokenParam}&no_track=true` : "no_track=true";
+    const apiUrl = `/_proxy/api/articles/share/by-slug/${encodeURIComponent(shareId)}?${metaParams}`;
     const response = await fetch(getAbsoluteUrl(apiUrl), {
       cache: "no-store",
     });

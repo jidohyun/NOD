@@ -25,6 +25,7 @@ function buildApiUrl(shareId: string, token: string | null): string {
   if (token) {
     apiUrl.searchParams.set("token", token);
   }
+  apiUrl.searchParams.set("no_track", "true");
   return apiUrl.toString();
 }
 
