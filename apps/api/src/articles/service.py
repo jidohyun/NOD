@@ -116,6 +116,15 @@ def _utc_now() -> datetime:
     return datetime.now(tz=UTC)
 
 
+def _parse_uuid_or_none(value: str | None) -> uuid.UUID | None:
+    if not value:
+        return None
+    try:
+        return uuid.UUID(value)
+    except (ValueError, TypeError):
+        return None
+
+
 async def _flush_if_possible(db: AsyncSession) -> None:
     flush_method = getattr(db, "flush", None)
     if flush_method is None or not callable(flush_method):
@@ -393,9 +402,9 @@ async def _build_shared_article_response(
     )
     empathy_count = int(empathy_count_result.scalar_one() or 0)
 
+    viewer_uuid = _parse_uuid_or_none(viewer_user_id)
     viewer_has_empathy = False
-    if viewer_user_id:
-        viewer_uuid = uuid.UUID(viewer_user_id)
+    if viewer_uuid:
         viewer_empathy_result = await db.execute(
             select(ArticleShareEmpathy.id).where(
                 ArticleShareEmpathy.share_link_id == share_link.id,
@@ -649,9 +658,9 @@ async def list_shared_article_comments(
         for comment_id, empathy_count in empathy_count_rows.all()
     }
 
+    viewer_uuid = _parse_uuid_or_none(viewer_user_id)
     viewer_empathy_comment_ids: set[uuid.UUID] = set()
-    if viewer_user_id:
-        viewer_uuid = uuid.UUID(viewer_user_id)
+    if viewer_uuid:
         viewer_rows = await db.execute(
             select(ArticleShareCommentEmpathy.comment_id).where(
                 ArticleShareCommentEmpathy.comment_id.in_(comment_ids),

@@ -667,6 +667,62 @@ async def test_get_shared_article_by_slug_supports_plain_slug_lookup() -> None:
     get_by_token.assert_awaited_once()
 
 
+@pytest.mark.asyncio
+async def test_build_shared_article_response_tolerates_invalid_viewer_id() -> None:
+    from src.articles.model import Article, ArticleShareLink, ArticleSummary
+    from src.users.model import User
+
+    share_id = uuid.uuid4()
+    owner_id = uuid.uuid4()
+    article_id = uuid.uuid4()
+
+    summary = ArticleSummary(
+        article_id=article_id,
+        summary="public summary",
+        markdown_note=None,
+        concepts=[],
+        key_points=[],
+        content_type="general_news",
+        type_metadata={},
+    )
+
+    article = Article(
+        id=article_id,
+        user_id=owner_id,
+        title="Shared article",
+        source="web",
+        summary=summary,
+    )
+
+    owner = User(id=owner_id, email="owner@example.com", name="Owner")
+
+    token_hash_value = uuid.uuid4().hex
+    share_link = ArticleShareLink(
+        id=share_id,
+        article_id=article_id,
+        owner_user_id=owner_id,
+        token_hash=token_hash_value,
+        share_slug="shared-article",
+        share_sid=share_id.hex[:12],
+        created_at=datetime(2026, 3, 21, 12, 0, tzinfo=UTC),
+        article=article,
+        owner_user=owner,
+    )
+
+    db = AsyncMock()
+    db.execute.return_value = _FakeResult(0)
+
+    response = await service._build_shared_article_response(
+        db=cast(AsyncSession, db),
+        share_link=share_link,
+        viewer_user_id="not-a-uuid",
+    )
+
+    assert response is not None
+    assert response.share_id == share_id
+    assert response.viewer_has_empathy is False
+
+
 def test_get_shared_article_comments_returns_200_with_list() -> None:
     share_id = str(uuid.uuid4())
     token = f"tok-{uuid.uuid4()}"
