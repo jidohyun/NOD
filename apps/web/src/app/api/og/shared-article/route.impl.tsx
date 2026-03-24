@@ -5,7 +5,7 @@ import {
 } from "@/app/[locale]/share/[shareId]/og-text-utils";
 import type { SharedArticle } from "@/lib/api/articles";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 630;
@@ -13,7 +13,12 @@ const IMAGE_HEIGHT = 630;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function getApiBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  return (
+    process.env.NEXT_PUBLIC_API_URL ||
+    (process.env.NODE_ENV === "production"
+      ? "https://api.nod-archive.com"
+      : "http://localhost:8000")
+  );
 }
 
 function buildApiUrl(shareId: string, token: string | null): string {
@@ -209,7 +214,7 @@ export async function GET(request: Request) {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 3000);
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
     const response = await fetch(buildApiUrl(shareId, token ?? null), {
