@@ -44,15 +44,16 @@ export function resolveSharedMetadataImage(
     token: string;
   }
 ): string {
-  const { siteOrigin, locale, shareId, token } = options;
+  const { siteOrigin, shareId, token } = options;
   const hasManualThumbnail =
     shared.thumbnail_mode === "manual" && Boolean(shared.thumbnail_url?.trim());
   if (!hasManualThumbnail) {
-    const params = new URLSearchParams({ locale, shareId });
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.nod-archive.com";
+    const ogUrl = new URL(`/api/articles/share/og-image/${encodeURIComponent(shareId)}`, apiBase);
     if (token) {
-      params.set("token", token);
+      ogUrl.searchParams.set("token", token);
     }
-    return toAbsoluteUrl(siteOrigin, `/api/og/shared-article?${params.toString()}`);
+    return ogUrl.toString();
   }
 
   const thumbnailImageUrl = shared.thumbnail_url!.trim();

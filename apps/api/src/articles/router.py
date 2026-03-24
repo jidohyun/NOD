@@ -732,6 +732,45 @@ async def get_shared_article_by_slug(
     return shared
 
 
+@router.get("/share/og-image/{share_slug}")
+async def get_shared_article_og_image(
+    share_slug: str,
+    db: DBSession,
+    user: OptionalUser,
+    token: str | None = Query(default=None),
+) -> None:
+    from fastapi.responses import Response
+
+    from src.articles.og_image import generate_og_image
+
+    shared = await service.get_shared_article_by_slug(
+        db=db,
+        share_slug=share_slug,
+        token=token,
+        viewer_user_id=user.id if user else None,
+        track_view=False,
+    )
+    if shared is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Shared article not found",
+        )
+
+    png_bytes = generate_og_image(
+        title=shared.title,
+        summary=shared.summary,
+        content_type=shared.content_type,
+        article_url=shared.url,
+    )
+    return Response(  # type: ignore[return-value]
+        content=png_bytes,
+        media_type="image/png",
+        headers={
+            "Cache-Control": "public, max-age=86400"
+        },
+    )
+
+
 @router.get(
     "/share/by-user/{username}/{share_slug}",
     response_model=SharedArticleSummaryResponse,
