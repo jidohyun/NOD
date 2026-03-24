@@ -275,13 +275,18 @@ async def list_my_share_links(
     db: AsyncSession,
     owner_user_id: uuid.UUID,
 ) -> list[MyShareLinkItem]:
-    # Fetch owner username for public URL generation
+    # Fetch owner username for public URL generation (safe if column missing)
     from src.users.model import User as UserModel
 
-    owner_result = await db.execute(
-        select(UserModel.username).where(UserModel.id == owner_user_id)
-    )
-    owner_username = owner_result.scalar_one_or_none()
+    owner_username: str | None = None
+    try:
+        owner_result = await db.execute(
+            select(UserModel.username).where(UserModel.id == owner_user_id)
+        )
+        owner_username = owner_result.scalar_one_or_none()
+    except Exception:  # noqa: S110
+        # username column may not exist yet if migration hasn't been applied
+        pass
 
     result = await db.execute(
         select(ArticleShareLink)
@@ -312,10 +317,13 @@ async def list_my_share_links(
         concepts = summary.concepts if summary and summary.concepts else []
         content_type = summary.content_type if summary else None
 
+        is_public = getattr(sl, "is_public", True)
+        thumbnail_url = getattr(sl, "thumbnail_url", None)
+
         public_url: str | None = None
-        if sl.is_public and owner_username:
+        if is_public and owner_username:
             public_url = f"/@{owner_username}/{sl.share_slug}"
-        elif sl.is_public:
+        elif is_public:
             public_url = canonical_path
 
         items.append(
@@ -333,7 +341,7 @@ async def list_my_share_links(
                 summary_preview=summary_preview,
                 concepts=concepts[:5],
                 content_type=content_type,
-                thumbnail_url=sl.thumbnail_url,
+                thumbnail_url=thumbnail_url,
                 created_at=sl.created_at,
                 expires_at=sl.expires_at,
             )
