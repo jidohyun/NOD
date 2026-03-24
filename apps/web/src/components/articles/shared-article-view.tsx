@@ -385,14 +385,13 @@ export function SharedArticleView({
   const [showRevokeConfirm, setShowRevokeConfirm] = useState(false);
 
   useEffect(() => {
-    if (!data?.url) return;
-    fetch(`/api/og-image?url=${encodeURIComponent(data.url)}`)
-      .then((res) => res.json())
-      .then((json: { og_image: string | null }) => {
-        if (json.og_image) setArticleOgImage(json.og_image);
-      })
-      .catch(() => {});
-  }, [data?.url]);
+    if (!data) return;
+    const params = new URLSearchParams({ locale, shareId });
+    if (token) {
+      params.set("token", token);
+    }
+    setArticleOgImage(`/api/og/shared-article?${params.toString()}`);
+  }, [data, locale, shareId, token]);
   const [openCommentMenuId, setOpenCommentMenuId] = useState<string | null>(null);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingCommentContent, setEditingCommentContent] = useState("");
