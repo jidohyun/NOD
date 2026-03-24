@@ -692,12 +692,14 @@ async def get_shared_article(
     db: DBSession,
     user: OptionalUser,
     token: str | None = Query(default=None),
+    no_track: bool = Query(default=False),
 ) -> SharedArticleSummaryResponse:
     shared = await service.get_shared_article_by_token(
         db=db,
         share_id=share_id,
         token=token,
         viewer_user_id=user.id if user else None,
+        track_view=not no_track,
     )
     if shared is None:
         raise HTTPException(
@@ -713,12 +715,14 @@ async def get_shared_article_by_slug(
     db: DBSession,
     user: OptionalUser,
     token: str | None = Query(default=None),
+    no_track: bool = Query(default=False),
 ) -> SharedArticleSummaryResponse:
     shared = await service.get_shared_article_by_slug(
         db=db,
         share_slug=share_slug,
         token=token,
         viewer_user_id=user.id if user else None,
+        track_view=not no_track,
     )
     if shared is None:
         raise HTTPException(
