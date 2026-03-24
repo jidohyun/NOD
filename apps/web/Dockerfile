@@ -33,20 +33,6 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# hadolint ignore=DL3018
-RUN apk add --no-cache \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont \
-    font-noto-cjk \
-    && rm -rf /var/cache/apk/*
-
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
