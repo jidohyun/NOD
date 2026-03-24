@@ -54,6 +54,17 @@ logger = structlog.get_logger(__name__)
 
 router = APIRouter()
 
+
+def _parse_user_uuid_or_raise(user_id: str) -> uuid.UUID:
+    try:
+        return uuid.UUID(user_id)
+    except (ValueError, TypeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid user context",
+        ) from exc
+
+
 VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS = int(
     getattr(settings, "VIDEO_TRANSCRIPT_MIN_CONTENT_CHARS", 100)
 )
@@ -630,7 +641,7 @@ async def list_my_shares(
     db: DBSession,
     user: CurrentUser,
 ) -> list[MyShareLinkItem]:
-    return await service.list_my_share_links(db, uuid.UUID(user.id))
+    return await service.list_my_share_links(db, _parse_user_uuid_or_raise(user.id))
 
 
 @router.post("/{article_id}/share-link", response_model=ArticleShareLinkResponse)
@@ -644,7 +655,7 @@ async def create_article_share_link(
         share_link = await service.create_or_regenerate_share_link(
             db=db,
             article_id=article_id,
-            owner_user_id=uuid.UUID(user.id),
+            owner_user_id=_parse_user_uuid_or_raise(user.id),
             config=payload,
         )
     except ValueError as exc:
@@ -665,7 +676,7 @@ async def revoke_article_share_link(
     revoked = await service.revoke_share_link(
         db=db,
         article_id=article_id,
-        owner_user_id=uuid.UUID(user.id),
+        owner_user_id=_parse_user_uuid_or_raise(user.id),
     )
     if not revoked:
         raise HTTPException(
