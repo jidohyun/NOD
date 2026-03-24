@@ -5,28 +5,18 @@ import {
 } from "@/app/[locale]/share/[shareId]/og-text-utils";
 import type { SharedArticle } from "@/lib/api/articles";
 
-export const runtime = "nodejs";
-
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 630;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-function getApiBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "production"
-      ? "https://api.nod-archive.com"
-      : "http://localhost:8000")
-  );
-}
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.nod-archive.com";
 
 function buildApiUrl(shareId: string, token: string | null): string {
-  const apiBase = getApiBaseUrl();
   const path = UUID_RE.test(shareId)
     ? `/api/articles/share/${encodeURIComponent(shareId)}`
     : `/api/articles/share/by-slug/${encodeURIComponent(shareId)}`;
-  const apiUrl = new URL(path, apiBase);
+  const apiUrl = new URL(path, API_BASE_URL);
   if (token) {
     apiUrl.searchParams.set("token", token);
   }
@@ -61,17 +51,6 @@ const CONTENT_TYPE_LABELS: Record<string, string> = {
   github_repo: "GitHub",
 };
 
-let fontCache: ArrayBuffer | null = null;
-
-async function loadFont(): Promise<ArrayBuffer> {
-  if (fontCache) return fontCache;
-  const res = await fetch(
-    "https://fonts.gstatic.com/s/notosanskr/v36/PbyxFmXiEBPT4ITbgNA5Cgms3VYcOA-vvnIzzuoyeLGC5nwmHQ.ttf"
-  );
-  fontCache = await res.arrayBuffer();
-  return fontCache;
-}
-
 function renderFallbackImage() {
   return new ImageResponse(
     <div
@@ -82,7 +61,7 @@ function renderFallbackImage() {
         flexDirection: "column",
         justifyContent: "center",
         padding: "64px",
-        background: "linear-gradient(135deg, #0f172a 0%, #1f2937 55%, #111827 100%)",
+        background: "linear-gradient(135deg, #334155 0%, #111827 100%)",
         color: "#f9fafb",
       }}
     >
@@ -97,7 +76,7 @@ function renderFallbackImage() {
   );
 }
 
-async function renderSharedImage(shared: SharedArticle) {
+function renderSharedImage(shared: SharedArticle) {
   const headline = formatOgHeadline(shared.title);
   const description = formatOgDescription(shared.summary);
   const articleHost = getArticleHost(shared.url);
@@ -106,7 +85,6 @@ async function renderSharedImage(shared: SharedArticle) {
     to: "#111827",
   };
   const contentLabel = CONTENT_TYPE_LABELS[shared.content_type] ?? null;
-  const fontData = await loadFont();
 
   return new ImageResponse(
     <div
@@ -118,7 +96,6 @@ async function renderSharedImage(shared: SharedArticle) {
         padding: "40px 48px 36px",
         background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
         color: "#ffffff",
-        fontFamily: "NotoSansKR",
       }}
     >
       {/* Content type badge */}
@@ -213,18 +190,7 @@ async function renderSharedImage(shared: SharedArticle) {
         </div>
       </div>
     </div>,
-    {
-      width: IMAGE_WIDTH,
-      height: IMAGE_HEIGHT,
-      fonts: [
-        {
-          name: "NotoSansKR",
-          data: fontData,
-          style: "normal",
-          weight: 400,
-        },
-      ],
-    }
+    { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
   );
 }
 
@@ -255,7 +221,7 @@ export async function GET(request: Request) {
     }
 
     const shared = (await response.json()) as SharedArticle;
-    const image = await renderSharedImage(shared);
+    const image = renderSharedImage(shared);
     image.headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=2592000");
     return image;
   } catch {
