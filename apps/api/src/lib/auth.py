@@ -302,7 +302,15 @@ async def _ensure_user_exists(user_info: CurrentUserInfo) -> None:
     from src.lib.database import async_session_factory
     from src.users.model import User
 
-    uid = uuid_lib.UUID(user_info.id)
+    try:
+        uid = uuid_lib.UUID(user_info.id)
+    except (ValueError, TypeError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from None
+
     async with async_session_factory() as session:
         result = await session.execute(select(User.id).where(User.id == uid))
         if result.scalar_one_or_none() is not None:
