@@ -46,7 +46,18 @@ export function getStoredWebTheme(): WebTheme {
   if (typeof window === "undefined") {
     return "light";
   }
-  const storedTheme = window.localStorage.getItem(WEB_THEME_STORAGE_KEY);
+  const storage = window.localStorage;
+  if (!storage || typeof storage.getItem !== "function") {
+    return getSystemWebTheme();
+  }
+
+  let storedTheme: string | null = null;
+  try {
+    storedTheme = storage.getItem(WEB_THEME_STORAGE_KEY);
+  } catch {
+    return getSystemWebTheme();
+  }
+
   return storedTheme === "light" || storedTheme === "dark" ? storedTheme : getSystemWebTheme();
 }
 
@@ -54,6 +65,13 @@ export function setStoredWebTheme(theme: WebTheme): void {
   if (typeof window === "undefined") {
     return;
   }
-  window.localStorage.setItem(WEB_THEME_STORAGE_KEY, theme);
+
+  const storage = window.localStorage;
+  if (storage && typeof storage.setItem === "function") {
+    try {
+      storage.setItem(WEB_THEME_STORAGE_KEY, theme);
+    } catch {}
+  }
+
   applyWebTheme(theme);
 }

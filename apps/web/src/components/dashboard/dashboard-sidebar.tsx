@@ -4,10 +4,12 @@ import {
   CreditCard,
   FileText,
   HelpCircle,
+  History,
   LayoutDashboard,
   LogOut,
   MessageSquare,
   Settings,
+  Share2,
   User as UserIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -37,11 +39,13 @@ export function DashboardSidebar() {
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t("sidebar.nav.dashboard") },
     { href: "/articles", icon: FileText, label: t("sidebar.nav.articles") },
+    { href: "/shared", icon: Share2, label: t("sidebar.nav.shared") },
   ];
 
   const bottomNavItems = [
     { href: "/settings", icon: Settings, label: t("sidebar.nav.settings") },
     { href: "/settings/billing", icon: CreditCard, label: t("sidebar.nav.billing") },
+    { href: "/changelog", icon: History, label: t("sidebar.nav.changelog") },
   ] as const;
 
   const basePath = pathname.replace(LOCALE_PREFIX_RE, "") || "/";

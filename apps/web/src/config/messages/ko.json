@@ -1,100 +1,627 @@
 {
-  "title": "NOD",
   "common": {
-    "loading": "로딩 중...",
-    "error": "오류가 발생했습니다",
-    "retry": "재시도",
-    "save": "저장",
+    "back": "뒤로",
     "cancel": "취소",
     "confirm": "확인",
+    "continue": "계속",
     "delete": "삭제",
     "edit": "수정",
-    "restoreOriginal": "원본으로 되돌리기"
+    "email": "이메일",
+    "error": "오류가 발생했습니다",
+    "loading": "로딩 중...",
+    "dashboard": "대시보드",
+    "ok": "확인",
+    "password": "비밀번호",
+    "refresh": "새로고침",
+    "restoreOriginal": "원본으로 되돌리기",
+    "retry": "재시도",
+    "save": "저장",
+    "skip": "건너뛰기"
+  },
+  "auth": {
+    "forgotPassword": {
+      "backToLogin": "로그인으로 돌아가기",
+      "emailInvalid": "유효한 이메일 주소를 입력해 주세요.",
+      "emailPlaceholder": "이메일 주소",
+      "send": "재설정 링크 보내기",
+      "sent": "비밀번호 재설정 링크를 보냈습니다. 메일함을 확인해 주세요.",
+      "subtitle": "가입한 이메일 주소를 입력하면 비밀번호 재설정 링크를 보내드립니다.",
+      "title": "비밀번호 찾기"
+    },
+    "resetPassword": {
+      "confirmPassword": "비밀번호 확인",
+      "goToLogin": "로그인하러 가기",
+      "newPassword": "새 비밀번호",
+      "passwordMin": "비밀번호는 8자 이상이어야 합니다.",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다.",
+      "submit": "비밀번호 변경",
+      "subtitle": "새로운 비밀번호를 입력해 주세요.",
+      "success": "비밀번호가 변경되었습니다.",
+      "title": "새 비밀번호 설정"
+    },
+    "verifyEmail": {
+      "backToLogin": "로그인으로 돌아가기",
+      "description": "{email}로 인증 링크를 보냈습니다. 메일함을 확인해 주세요.",
+      "resend": "인증 메일 다시 보내기",
+      "resent": "인증 메일을 다시 보냈습니다.",
+      "title": "이메일 인증"
+    }
+  },
+  "blog": {
+    "home": "홈",
+    "readArticle": "읽어보기 →",
+    "readTime": "{minutes}분 분량",
+    "subtitle": "지식 관리와 생산성에 관한 팁, 가이드, 인사이트를 공유합니다.",
+    "title": "블로그"
+  },
+  "changelogPage": {
+    "title": "릴리즈 노트",
+    "subtitle": "v1부터 버전별 변경사항을 사이드바에서 탐색할 수 있습니다.",
+    "sections": {
+      "versionListTitle": "버전"
+    },
+    "versions": {
+      "v1_3_0": {
+        "label": "v1.3.0",
+        "status": "릴리즈 예정",
+        "tagLabel": "릴리즈 타겟",
+        "tag": "v1.3.0",
+        "publishedAtLabel": "예정 시점",
+        "publishedAt": "Upcoming",
+        "summary": "v1.3.0은 아티클 공유 기능 중심으로 릴리즈될 예정입니다. 요약 콘텐츠를 더 쉽게 공유하고, 공개 페이지에서 반응/소통까지 가능하도록 개선합니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "아티클 공개 공유 링크",
+            "description": "제품 내에서 요약 아티클의 공개 링크를 생성하고 관리할 수 있습니다."
+          },
+          "item2": {
+            "title": "전용 공유 페이지 경험",
+            "description": "공유 페이지를 가독성 중심으로 구성해 메타정보와 원문 맥락을 명확히 제공합니다."
+          },
+          "item3": {
+            "title": "댓글/공감 인터랙션",
+            "description": "댓글, 답글, 공감 반응을 통해 공유된 요약에 대한 참여를 지원합니다."
+          },
+          "item4": {
+            "title": "고급 공유 설정",
+            "description": "커스텀 공유 URL과 썸네일 설정으로 배포 품질을 높일 수 있습니다."
+          }
+        }
+      },
+      "v1_2_0": {
+        "label": "v1.2.0",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "extension-v1.2.0",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-03-03",
+        "summary": "익스텐션 릴리즈 라인의 최신 안정 버전입니다. extension-v1.1.0 이후 버전으로 현재 기준점 역할을 합니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "익스텐션 릴리즈 시퀀스 유지",
+            "description": "extension-v1.0.0 → v1.1.0 → v1.2.0 흐름으로 릴리즈 이력이 유지됩니다."
+          },
+          "item2": {
+            "title": "릴리즈 비교 추적 가능",
+            "description": "GitHub 비교 링크로 버전 간 변경사항을 투명하게 확인할 수 있습니다."
+          },
+          "item3": {
+            "title": "최신 안정 기준점",
+            "description": "다음 마일스톤 전까지의 최신 확장 기능 기준 버전입니다."
+          },
+          "item4": {
+            "title": "릴리즈 메타데이터 정합",
+            "description": "버전 표기와 게시 이력이 GitHub 릴리즈 기록과 일치합니다."
+          }
+        }
+      },
+      "v1_1_0": {
+        "label": "v1.1.0",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "extension-v1.1.0",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-03-03",
+        "summary": "v1.2.0 직전의 익스텐션 증분 릴리즈로, 최신 버전 비교의 기준점이 되는 중간 마일스톤입니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "중간 릴리즈 마일스톤",
+            "description": "extension-v1.0.0과 extension-v1.2.0 사이를 연결하는 버전입니다."
+          },
+          "item2": {
+            "title": "버전 업그레이드 연속성",
+            "description": "확장 프로그램의 점진적 업그레이드 흐름을 안정적으로 유지합니다."
+          },
+          "item3": {
+            "title": "비교 경계 버전",
+            "description": "extension-v1.2.0 변경사항을 비교/검증할 때 기준이 되는 버전입니다."
+          },
+          "item4": {
+            "title": "게시 이력 보존",
+            "description": "GitHub 릴리즈 기록으로 릴리즈 히스토리를 추적할 수 있습니다."
+          }
+        }
+      },
+      "v1_0_0": {
+        "label": "v1.0.0",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "web-v1.0.0 / extension-v1.0.0",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-02-20",
+        "summary": "NOD 웹의 첫 프로덕션 기준 릴리즈이며, 같은 날 extension-v1.0.0으로 익스텐션 릴리즈 라인이 시작되었습니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "웹 프로덕션 기준선",
+            "description": "대시보드, 아티클 리스트/상세, AI 요약 플로우를 프로덕션에 배포했습니다."
+          },
+          "item2": {
+            "title": "검색/내보내기 기능",
+            "description": "시맨틱 검색, 마크다운 내보내기, 다국어 UI를 제공했습니다."
+          },
+          "item3": {
+            "title": "결제 플로우 통합",
+            "description": "웹 제품에 요금제/결제 관리 플로우를 통합했습니다."
+          },
+          "item4": {
+            "title": "익스텐션 라인 시작",
+            "description": "extension-v1.0.0으로 첫 익스텐션 릴리즈 라인이 시작되었습니다."
+          }
+        }
+      }
+    },
+    "links": {
+      "githubReleases": "GitHub에서 전체 릴리즈 보기",
+      "backToDashboard": "대시보드로 돌아가기"
+    }
+  },
+  "continueWithGoogle": "Google로 계속하기",
+  "dashboard": {
+    "allContentTypes": "전체 유형",
+    "allStatus": "전체 상태",
+    "analysisDescription": "AI가 콘텐츠를 읽고 핵심 개념을 추출하여 구조화된 요약을 생성합니다. 보통 30초~1분 소요됩니다.",
+    "analysisStepAnalyzing": "AI 분석 중",
+    "analysisStepReading": "콘텐츠 읽기",
+    "analysisStepSummary": "요약 생성",
+    "analyzingArticle": "AI가 콘텐츠를 분석하고 있습니다...",
+    "articleInfo": "콘텐츠 정보",
+    "articleListSubtitle": "저장한 콘텐츠를 탐색하고, 필요한 인사이트를 빠르게 찾아보세요.",
+    "articleNotFound": "콘텐츠를 찾을 수 없습니다.",
+    "checkStatus": "상태 확인",
+    "concepts": "핵심 개념",
+    "deleteConfirm": "이 콘텐츠를 삭제하시겠습니까?",
+    "details": "상세",
+    "downloadMarkdown": ".md 다운로드",
+    "graph": {
+      "actionClearSelection": "선택 해제",
+      "actionPinSelected": "선택 노드 고정",
+      "actionUnpinAll": "모두 고정 해제",
+      "actionUnpinSelected": "선택 노드 고정 해제",
+      "depthLabel": "깊이",
+      "empty": "아직 그래프 데이터가 없습니다. 더 많은 콘텐츠를 요약해 보세요.",
+      "filterMinConnections": "최소 연결 수",
+      "loadError": "그래프 데이터를 불러오지 못했습니다.",
+      "localCenterFilteredMessage": "현재 필터로는 기준 노드가 제외되었습니다.",
+      "localReselectBase": "기준 다시 선택",
+      "localSwitchGlobal": "Global로 전환",
+      "lockedDescription": "Pro로 업그레이드하면 개념 그래프를 사용할 수 있습니다.",
+      "lockedTitle": "그래프 뷰는 Pro 기능입니다",
+      "menuPin": "고정",
+      "menuPinSelected": "선택 노드 고정",
+      "menuUnpin": "고정 해제",
+      "menuUnpinAll": "모두 고정 해제",
+      "modeGlobal": "글로벌",
+      "modeLocal": "로컬",
+      "no": "아니오",
+      "openFull": "전체 그래프 열기",
+      "pageDescription": "요약한 콘텐츠의 핵심 개념 연결을 시각화합니다.",
+      "pageTitle": "그래프 뷰",
+      "panelFilters": "필터",
+      "panelSearch": "검색",
+      "panelSelection": "선택",
+      "previewDescription": "대시보드에서 읽기 전용으로 확인할 수 있습니다.",
+      "previewTitle": "그래프 뷰 미리보기",
+      "searchPlaceholder": "개념 검색...",
+      "sectionLabel": "지식 그래프",
+      "selectionCount": "{count}개 선택됨",
+      "selectionEmpty": "선택된 노드가 없습니다",
+      "selectionPinned": "고정됨",
+      "statsArticles": "콘텐츠",
+      "statsConcepts": "고유 개념",
+      "statsEdges": "연결",
+      "statsNodes": "노드",
+      "upgrade": "Pro로 업그레이드",
+      "yes": "예"
+    },
+    "installExtensionCta": "Chrome에 추가",
+    "keyPoints": "주요 포인트",
+    "language": "언어",
+    "loadError": "콘텐츠를 불러오지 못했습니다.",
+    "loadMore": "더 보기",
+    "loadingArticles": "콘텐츠 불러오는 중...",
+    "loadingSimilar": "유사한 콘텐츠 불러오는 중...",
+    "markdownNote": "노트",
+    "minuteRead": "{minutes}분",
+    "myArticles": "내 콘텐츠",
+    "noArticles": "아직 콘텐츠가 없습니다. 크롬 익스텐션으로 콘텐츠를 저장하세요.",
+    "noSummary": "요약 없음",
+    "openContent": "콘텐츠 열기",
+    "original": "원문 보기",
+    "overview": {
+      "aiSummaries": "AI 요약",
+      "closeBanner": "배너 닫기",
+      "contentTypes": "콘텐츠 유형",
+      "currentPlan": "현재 플랜",
+      "description": "지식 라이브러리 개요입니다.",
+      "getSupport": "도움말",
+      "heroSubtitle": "저장한 콘텐츠를 AI로 요약해 핵심 인사이트를 빠르게 연결하세요.",
+      "heroTitleAccent": "워크스페이스",
+      "heroTitlePrimary": "콘텐츠 인사이트",
+      "installExtensionDescription": "웹을 보면서 콘텐츠를 원클릭으로 저장하세요.",
+      "installExtensionTitle": "크롬 익스텐션 설치",
+      "justNow": "방금 전",
+      "keyMetrics": "핵심 지표",
+      "manageBillingDescription": "플랜과 사용량을 확인하세요.",
+      "manageBillingTitle": "결제 관리",
+      "modified": "수정",
+      "noRecentArticles": "아직 저장한 콘텐츠가 없습니다.",
+      "onboardingDescription": "브라우저 익스텐션을 연결하면 인사이트를 바로 수집할 수 있어요.",
+      "onboardingSetupNow": "설정하기",
+      "onboardingTitle": "온보딩을 마무리하세요!",
+      "openUsageGuide": "사용 가이드 열기",
+      "planFreeActive": "Free 플랜 사용 중",
+      "planProActive": "프로 플랜 활성화",
+      "quickActions": "빠른 작업",
+      "recentArticlesDescription": "최근에 저장한 콘텐츠입니다.",
+      "recentArticlesTitle": "최근 저장한 콘텐츠",
+      "savedArticles": "저장한 콘텐츠",
+      "storageUnlimited": "콘텐츠 저장은 무제한",
+      "title": "대시보드",
+      "usageCalculating": "사용량 계산 중...",
+      "viewAll": "전체 보기",
+      "viewArticlesDescription": "저장한 콘텐츠를 찾아보고 검색하세요.",
+      "viewArticlesTitle": "콘텐츠 보기",
+      "welcomeMessage": "NOD에 다시 오신 걸 환영해요",
+      "workflowStepAnalyze": "요약 분석",
+      "workflowStepCapture": "콘텐츠 수집",
+      "workflowStepRefine": "핵심 인사이트 정리",
+      "workflowTitle": "오늘의 워크플로우"
+    },
+    "pendingAnalysis": "분석 대기 중...",
+    "readTime": "약 {minutes}분 소요",
+    "readingTime": "읽기 시간",
+    "refreshing": "새로고침 중...",
+    "retryAnalysis": "다시 시도",
+    "savedDate": "저장일",
+    "searchArticles": "콘텐츠 검색...",
+    "searchMinChars": "2자 이상 입력하세요",
+    "searchPlaceholder": "검색...",
+    "semanticSearch": "AI 검색",
+    "sidebar": {
+      "nav": {
+        "articles": "콘텐츠",
+        "billing": "결제 관리",
+        "changelog": "릴리즈 노트",
+        "dashboard": "대시보드",
+        "graph": "그래프 뷰",
+        "pricing": "요금제",
+        "settings": "설정",
+        "shared": "공유됨"
+      },
+      "user": {
+        "billing": "결제 관리",
+        "feedback": "피드백 보내기",
+        "help": "도움말",
+        "logout": "로그아웃",
+        "profile": "프로필",
+        "settings": "설정"
+      }
+    },
+    "similarArticles": "유사한 콘텐츠",
+    "similarity": "{percent}% 일치",
+    "sourceLabel": "소스",
+    "statusAnalyzing": "분석 중",
+    "statusCompleted": "완료",
+    "statusFailed": "실패",
+    "statusLabel": "상태",
+    "statusPending": "대기 중",
+    "statusProcessing": "처리 중",
+    "summary": "요약",
+    "summaryInProgress": "요약중..",
+    "typeDocs": "문서",
+    "typeGitHub": "GitHub",
+    "typeNews": "뉴스",
+    "typePaper": "논문",
+    "typeTechBlog": "기술 블로그",
+    "typeVideo": "영상/팟캐스트",
+    "shareSectionTitle": "요약 공유",
+    "shareSectionDescription": "이 콘텐츠 요약을 링크로 공유하세요.",
+    "shareModalTitle": "이 요약을 공유할까요?",
+    "shareModalDescription": "공개 링크를 통해 다른 사람이 이 콘텐츠의 AI 요약을 볼 수 있어요.",
+    "shareModalIncludedTitle": "공유에 포함되는 내용",
+    "shareModalIncludedSummary": "AI 요약",
+    "shareModalIncludedConcepts": "핵심 개념",
+    "shareModalIncludedKeyPoints": "핵심 포인트",
+    "shareModalHint": "신뢰할 수 있는 사람에게만 공유하세요. 링크를 가진 사람은 누구나 이 요약을 볼 수 있어요.",
+    "shareUrlSettingsTitle": "URL 설정",
+    "shareUseDefaultUrl": "기본 URL 사용",
+    "shareSetCustomUrl": "커스텀 URL 설정",
+    "shareCustomUrlInputLabel": "커스텀 공유 URL",
+    "shareCustomUrlPlaceholder": "예: team-update",
+    "shareOgSettingsTitle": "썸네일 이미지 설정",
+    "shareUseDefaultOgImage": "기본 썸네일 이미지 사용",
+    "shareSetCustomOgImage": "커스텀 썸네일 이미지 설정",
+    "shareCustomOgImageInputLabel": "커스텀 썸네일 이미지 URL",
+    "shareCustomOgImagePlaceholder": "https://...",
+    "shareGenerateLink": "공유 링크 생성",
+    "shareRegenerateLink": "공유 링크 재생성",
+    "shareActionLink": "공유",
+    "shareCopyLink": "링크 복사",
+    "shareRevokeLink": "링크 비활성화",
+    "shareCopied": "복사 완료!",
+    "shareOpenPanel": "공유 패널 열기",
+    "shareAdvanced": "고급 공유 옵션",
+    "shareAlreadySharedTitle": "이미 공유된 요약입니다!",
+    "shareAlreadySharedDescription": "아래 링크에서 확인할 수 있어요.",
+    "sharedTrustSummarizedBy": "요약 공유자",
+    "sharedTrustFallbackName": "NOD 사용자",
+    "sharedTrustOriginalLink": "원문 보기",
+    "sharedCommentsTitle": "댓글",
+    "sharedCommentsAuthorLabel": "이름",
+    "sharedCommentsAuthorPlaceholder": "이름을 입력하세요",
+    "sharedCommentsContentLabel": "댓글",
+    "sharedCommentsContentPlaceholder": "반응을 남겨보세요",
+    "sharedCommentsSubmit": "댓글 남기기",
+    "sharedCommentsReplyAction": "답글 쓰기",
+    "sharedCommentsAddReplyAction": "답글 달기",
+    "sharedCommentsActionMenuLabel": "댓글 작업",
+    "sharedCommentsActionReport": "신고",
+    "sharedCommentsEditSave": "저장",
+    "sharedCommentsReplySubmit": "답글",
+    "sharedCommentsReplyPlaceholder": "답글을 입력하세요",
+    "sharedCommentsSharerBadge": "공유자",
+    "sharedCommentsHideReplies": "답글 숨기기",
+    "sharedCommentsReplyCountSingle": "답글",
+    "sharedCommentsReplyCountPlural": "답글",
+    "sharedCommentsEmpty": "아직 댓글이 없어요.",
+    "sharedCommentsSignInRequired": "댓글을 남기려면 로그인해 주세요.",
+    "sharedQuickActionEmpathy": "공감",
+    "sharedQuickActionComments": "댓글",
+    "sharedQuickActionShare": "공유",
+    "sharedShareCopyLink": "링크 복사",
+    "sharedShareCopied": "복사됨",
+    "sharedCommentsPanelTitle": "댓글 ({count})",
+    "sharedCommentsPanelDescription": "이 공유 요약의 댓글을 읽고 작성할 수 있어요.",
+    "sharedCommentsSortLabel": "정렬",
+    "sharedCommentsSortLatest": "최신순",
+    "sharedCommentsSortRecommended": "추천순",
+    "sharedAuthSectionTitle": "내 계정으로 이어서 보기",
+    "sharedAuthSectionDescription": "로그인 또는 회원가입 후 이 공유 요약을 내 워크스페이스에 저장할 수 있어요.",
+    "viewOriginal": "원문 보기"
+  },
+  "errors": {
+    "goHome": "홈으로 이동",
+    "notFound": "페이지를 찾을 수 없습니다",
+    "somethingWrong": "문제가 발생했습니다!",
+    "tryAgain": "다시 시도"
+  },
+  "help": {
+    "billingHelp": "결제 문제 해결",
+    "centerBadge": "NOD 도움말 센터",
+    "faq": {
+      "item1": {
+        "a": "콘텐츠 길이나 요청량에 따라 지연될 수 있어요. 잠시 뒤 새로고침하거나 상세 페이지에서 상태를 다시 확인해 주세요.",
+        "q": "요약이 오래 걸리거나 멈춘 것 같아요."
+      },
+      "item2": {
+        "a": "크롬에 익스텐션이 설치되어 있는지 확인하고, 로그인 상태를 유지한 뒤 페이지를 새로고침해 주세요.",
+        "q": "익스텐션이 동작하지 않아요."
+      },
+      "item3": {
+        "a": "결제 관리는 설정 > 결제 관리에서 변경할 수 있고, 요금제는 요금제 페이지에서 확인할 수 있어요.",
+        "q": "플랜은 어디서 관리하나요?"
+      }
+    },
+    "faqTitle": "자주 묻는 질문",
+    "heading": "빠르게 시작하는 NOD 사용 가이드",
+    "quickShortcutsTitle": "자주 쓰는 바로가기",
+    "quickStart": {
+      "item1": {
+        "description": "웹에서 읽고 싶은 글을 익스텐션으로 저장하면 자동으로 아카이브에 쌓여요.",
+        "title": "1) 콘텐츠 저장"
+      },
+      "item2": {
+        "description": "저장된 콘텐츠는 자동 요약되고 핵심 개념, 포인트, 메모를 함께 볼 수 있어요.",
+        "title": "2) AI 요약 확인"
+      },
+      "item3": {
+        "description": "관련 주제를 묶어서 탐색하고 필요한 지식을 빠르게 다시 꺼내 쓰세요.",
+        "title": "3) 인사이트 연결"
+      }
+    },
+    "sendFeedback": "피드백 보내기",
+    "shortcuts": {
+      "articles": "콘텐츠 페이지",
+      "billing": "결제 관리",
+      "installExtension": "익스텐션 설치",
+      "pricing": "요금제 확인"
+    },
+    "subtitle": "콘텐츠 저장부터 AI 요약 확인, 플랜 관리까지 꼭 필요한 흐름만 간단하게 정리했어요.",
+    "supportTitle": "문의 및 피드백"
   },
   "landing": {
-    "hero": {
-      "badge": "AI 기반 지식 관리",
-      "headline": "콘텐츠를 저장하고, 인사이트를 발견하세요",
-      "description": "NOD는 AI를 활용하여 콘텐츠를 분석하고 요약하며, 언제든 검색하고 참조할 수 있는 개인 지식 라이브러리를 구축합니다.",
-      "cta": "무료로 시작하기",
-      "ctaExtension": "Chrome에 추가",
-      "ctaSecondary": "더 알아보기",
-      "trustedBy": "매일 읽고 기록하는 팀이 선택합니다"
+    "cta": {
+      "button": "무료로 시작하기",
+      "description": "NOD로 콘텐츠를 저장하고, 분석하고, 회상하는 수천 명의 독자와 함께하세요.",
+      "headline": "지식 라이브러리 구축을 시작하세요",
+      "note": "신용카드 불필요"
     },
-    "nav": {
-      "features": "기능",
-      "howItWorks": "사용 방법",
-      "pricing": "요금제",
-      "blog": "블로그",
-      "login": "로그인",
-      "getStarted": "시작하기",
-      "changeLanguage": "언어 변경"
-    },
-    "pricing": {
-      "label": "요금제",
-      "headline": "읽는 방식에 맞는 플랜을 선택하세요",
-      "description": "Basic으로 시작하고, 무제한 요약과 더 좋은 모델이 필요해지면 Pro로 업그레이드하세요.",
-      "cta": "요금제 보기",
-      "note": "언제든 변경 가능",
-      "basicAnalyzableTypes": "분석 가능 유형: 뉴스 · 기술 블로그 · 공식 문서",
-      "proAnalyzableTypes": "분석 가능 유형: 전체 (GitHub · 논문 · 영상 포함)"
+    "dashboardPreview": {
+      "articles": {
+        "0": {
+          "summary": "RSC는 인터랙티비티가 필요한 곳에 유지하면서 서버 렌더링 컴포넌트로 스트리밍 UI를 가능하게 합니다.",
+          "title": "React 서버 컴포넌트 이해하기"
+        },
+        "1": {
+          "summary": "임베딩은 텍스트를 벡터로 변환합니다. 유사도 검색은 정확한 키워드를 넘어 관련 노트를 검색합니다.",
+          "title": "벡터 데이터베이스 설명"
+        },
+        "2": {
+          "summary": "ASGI 기초, 의존성 주입 패턴, 타입이 있는 API를 빠르게 배포하는 방법을 배웁니다.",
+          "title": "FastAPI로 구축하기"
+        }
+      },
+      "itemCount": "{count}개 항목",
+      "savedReads": "저장한 읽기",
+      "searchPlaceholder": "검색: RSC",
+      "similar": {
+        "0": "React 패턴 심층 분석",
+        "1": "Next.js 16 마이그레이션 가이드",
+        "2": "TypeScript 5.9 기능",
+        "3": "엣지 컴퓨팅 입문"
+      },
+      "similarReads": "유사한 읽기",
+      "statusAnalyzing": "분석 중",
+      "statusCompleted": "완료"
     },
     "features": {
-      "label": "기능",
       "headline": "지식 관리에 필요한 모든 것",
       "items": {
         "aiSummary": {
-          "title": "AI 요약",
-          "description": "모든 콘텐츠에 대해 핵심 포인트와 인사이트를 강조하는 AI 생성 요약을 즉시 받아보세요."
-        },
-        "vectorSearch": {
-          "title": "시맨틱 검색",
-          "description": "키워드가 아닌 의미로 콘텐츠를 찾으세요. 벡터 검색이 원하는 것을 이해합니다."
+          "description": "모든 콘텐츠에 대해 핵심 포인트와 인사이트를 강조하는 AI 생성 요약을 즉시 받아보세요.",
+          "title": "AI 요약"
         },
         "chromeExtension": {
-          "title": "크롬 익스텐션",
-          "description": "브라우저에서 한 번의 클릭으로 콘텐츠를 저장하세요. 복사-붙여넣기가 필요 없습니다."
-        },
-        "multiPlatform": {
-          "title": "멀티 플랫폼",
-          "description": "웹, 모바일, 브라우저 익스텐션에서 지식 라이브러리에 접근하세요."
+          "description": "브라우저에서 한 번의 클릭으로 콘텐츠를 저장하세요. 복사-붙여넣기가 필요 없습니다.",
+          "title": "크롬 익스텐션"
         },
         "concepts": {
-          "title": "개념 추출",
-          "description": "콘텐츠에서 주요 개념, 테마, 주제를 자동으로 식별하고 태그합니다."
+          "description": "콘텐츠에서 주요 개념, 테마, 주제를 자동으로 식별하고 태그합니다.",
+          "title": "개념 추출"
+        },
+        "multiPlatform": {
+          "description": "웹, 모바일, 브라우저 익스텐션에서 지식 라이브러리에 접근하세요.",
+          "title": "멀티 플랫폼"
         },
         "multilingual": {
-          "title": "다국어 지원",
-          "description": "어떤 언어의 콘텐츠든 저장하고 분석하세요. AI 요약은 선호하는 언어로 제공됩니다."
+          "description": "어떤 언어의 콘텐츠든 저장하고 분석하세요. AI 요약은 선호하는 언어로 제공됩니다.",
+          "title": "다국어 지원"
+        },
+        "vectorSearch": {
+          "description": "키워드가 아닌 의미로 콘텐츠를 찾으세요. 벡터 검색이 원하는 것을 이해합니다.",
+          "title": "시맨틱 검색"
         }
-      }
+      },
+      "label": "기능"
+    },
+    "footer": {
+      "api": "API",
+      "blog": "블로그",
+      "changelog": "변경 로그",
+      "copyright": "All rights reserved.",
+      "dashboard": "대시보드",
+      "docs": "문서",
+      "extension": "크롬 익스텐션",
+      "github": "GitHub",
+      "legal": "법적 고지",
+      "mobile": "모바일 앱",
+      "pricing": "요금제",
+      "privacy": "개인정보 처리방침",
+      "product": "제품",
+      "refund": "환불 정책",
+      "resources": "리소스",
+      "tagline": "AI 기반 콘텐츠 저장 및 지식 관리.",
+      "terms": "이용약관"
+    },
+    "hero": {
+      "badge": "AI 기반 지식 관리",
+      "cta": "무료로 시작하기",
+      "ctaExtension": "Chrome에 추가",
+      "ctaSecondary": "더 알아보기",
+      "description": "NOD는 AI를 활용하여 콘텐츠를 분석하고 요약하며, 언제든 검색하고 참조할 수 있는 개인 지식 라이브러리를 구축합니다.",
+      "headline": "콘텐츠를 저장하고, 인사이트를 발견하세요",
+      "trustedBy": "매일 읽고 기록하는 팀이 선택합니다"
     },
     "howItWorks": {
-      "label": "사용 방법",
       "headline": "더 스마트한 읽기를 위한 세 단계",
+      "label": "사용 방법",
       "steps": {
-        "save": {
-          "number": "01",
-          "title": "저장",
-          "description": "크롬 익스텐션으로 웹의 모든 콘텐츠를 저장하거나 URL을 붙여넣으세요."
-        },
         "analyze": {
+          "description": "AI가 자동으로 콘텐츠를 요약하고, 핵심 개념을 추출하며, 라이브러리에 정리합니다.",
           "number": "02",
-          "title": "분석",
-          "description": "AI가 자동으로 콘텐츠를 요약하고, 핵심 개념을 추출하며, 라이브러리에 정리합니다."
+          "title": "분석"
         },
         "recall": {
+          "description": "시맨틱 검색으로 필요한 것을 정확히 찾으세요.",
           "number": "03",
-          "title": "회상",
-          "description": "시맨틱 검색으로 필요한 것을 정확히 찾으세요."
+          "title": "회상"
+        },
+        "save": {
+          "description": "크롬 익스텐션으로 웹의 모든 콘텐츠를 저장하거나 URL을 붙여넣으세요.",
+          "number": "01",
+          "title": "저장"
         }
       }
     },
-    "cta": {
-      "headline": "지식 라이브러리 구축을 시작하세요",
-      "description": "NOD로 콘텐츠를 저장하고, 분석하고, 회상하는 수천 명의 독자와 함께하세요.",
-      "button": "무료로 시작하기",
-      "note": "신용카드 불필요"
+    "nav": {
+      "blog": "블로그",
+      "changelog": "릴리즈 노트",
+      "changeLanguage": "언어 변경",
+      "features": "기능",
+      "getStarted": "시작하기",
+      "howItWorks": "사용 방법",
+      "login": "로그인",
+      "pricing": "요금제"
+    },
+    "pricing": {
+      "basicAnalyzableTypes": "분석 가능 유형: 뉴스 · 기술 블로그 · 공식 문서",
+      "cta": "요금제 보기",
+      "description": "Basic으로 시작하고, 무제한 요약과 더 좋은 모델이 필요해지면 Pro로 업그레이드하세요.",
+      "headline": "읽는 방식에 맞는 플랜을 선택하세요",
+      "label": "요금제",
+      "note": "언제든 변경 가능",
+      "proAnalyzableTypes": "분석 가능 유형: 전체 (GitHub · 논문 · 영상 포함)"
+    },
+    "stackingCards": {
+      "headline": "카드가 쌓이며 흐르는 읽기 파이프라인을 따라가세요",
+      "items": {
+        "card1": {
+          "description": "문서, 영상, 저장소, 스레드를 하나의 스트림으로 모으고 NOD가 출처 맥락을 보존합니다.",
+          "kicker": "수집",
+          "metrics": {
+            "first": "13개 피드 동기화",
+            "second": "신규 클립 47개",
+            "third": "지연 210ms"
+          },
+          "title": "모든 채널의 신호를 한 번에 확보"
+        },
+        "card2": {
+          "description": "각 카드가 핵심 인사이트, 패턴, 실행 가능한 스니펫을 추출해 빠르게 다시 볼 수 있게 만듭니다.",
+          "kicker": "분석",
+          "metrics": {
+            "first": "모델: Gemini 3.1 Pro Preview",
+            "second": "품질 97",
+            "third": "시맨틱 클러스터 3개"
+          },
+          "title": "요약이 실시간으로 자동 생성"
+        },
+        "card3": {
+          "description": "시맨틱 메모리가 모든 노트를 연결해 다음 검색에서 근거와 함께 정답을 올려줍니다.",
+          "kicker": "회상",
+          "metrics": {
+            "first": "리콜 속도 0.8초",
+            "second": "개념 엣지 112개",
+            "third": "신뢰도 94%"
+          },
+          "title": "필요한 순간에 정확한 맥락 복원"
+        }
+      },
+      "label": "시네마틱 스크롤",
+      "pinLabel": "ScrollTrigger 고정"
     },
     "typewriterFeed": {
       "label": "라이브 피드",
@@ -102,659 +629,330 @@
       "line2": "[09:12:16] AI가 'React 19 Compiler'를 9초 만에 요약했습니다.",
       "line3": "[09:12:23] 개념 링크를 업데이트했습니다: RSC, 스트리밍, 엣지 런타임.",
       "line4": "[09:12:28] 이번 주 읽기 세트의 리콜 점수가 92%로 상승했습니다."
-    },
-    "stackingCards": {
-      "label": "시네마틱 스크롤",
-      "headline": "카드가 쌓이며 흐르는 읽기 파이프라인을 따라가세요",
-      "pinLabel": "ScrollTrigger 고정",
-      "items": {
-        "card1": {
-          "kicker": "수집",
-          "title": "모든 채널의 신호를 한 번에 확보",
-          "description": "문서, 영상, 저장소, 스레드를 하나의 스트림으로 모으고 NOD가 출처 맥락을 보존합니다.",
-          "metrics": {
-            "first": "13개 피드 동기화",
-            "second": "신규 클립 47개",
-            "third": "지연 210ms"
-          }
-        },
-        "card2": {
-          "kicker": "분석",
-          "title": "요약이 실시간으로 자동 생성",
-          "description": "각 카드가 핵심 인사이트, 패턴, 실행 가능한 스니펫을 추출해 빠르게 다시 볼 수 있게 만듭니다.",
-          "metrics": {
-            "first": "모델: Gemini 3.1 Pro Preview",
-            "second": "품질 97",
-            "third": "시맨틱 클러스터 3개"
-          }
-        },
-        "card3": {
-          "kicker": "회상",
-          "title": "필요한 순간에 정확한 맥락 복원",
-          "description": "시맨틱 메모리가 모든 노트를 연결해 다음 검색에서 근거와 함께 정답을 올려줍니다.",
-          "metrics": {
-            "first": "리콜 속도 0.8초",
-            "second": "개념 엣지 112개",
-            "third": "신뢰도 94%"
-          }
-        }
-      }
-    },
-    "footer": {
-      "product": "제품",
-      "dashboard": "대시보드",
-      "extension": "크롬 익스텐션",
-      "mobile": "모바일 앱",
-      "api": "API",
-      "pricing": "요금제",
-      "blog": "블로그",
-      "resources": "리소스",
-      "docs": "문서",
-      "github": "GitHub",
-      "changelog": "변경 로그",
-      "legal": "법적 고지",
-      "privacy": "개인정보 처리방침",
-      "terms": "이용약관",
-      "refund": "환불 정책",
-      "tagline": "AI 기반 콘텐츠 저장 및 지식 관리.",
-      "copyright": "All rights reserved."
-    },
-    "dashboardPreview": {
-      "savedReads": "저장한 읽기",
-      "itemCount": "{count}개 항목",
-      "searchPlaceholder": "검색: RSC",
-      "statusCompleted": "완료",
-      "statusAnalyzing": "분석 중",
-      "similarReads": "유사한 읽기",
-      "articles": {
-        "0": {
-          "title": "React 서버 컴포넌트 이해하기",
-          "summary": "RSC는 인터랙티비티가 필요한 곳에 유지하면서 서버 렌더링 컴포넌트로 스트리밍 UI를 가능하게 합니다."
-        },
-        "1": {
-          "title": "벡터 데이터베이스 설명",
-          "summary": "임베딩은 텍스트를 벡터로 변환합니다. 유사도 검색은 정확한 키워드를 넘어 관련 노트를 검색합니다."
-        },
-        "2": {
-          "title": "FastAPI로 구축하기",
-          "summary": "ASGI 기초, 의존성 주입 패턴, 타입이 있는 API를 빠르게 배포하는 방법을 배웁니다."
-        }
-      },
-      "similar": {
-        "0": "React 패턴 심층 분석",
-        "1": "Next.js 16 마이그레이션 가이드",
-        "2": "TypeScript 5.9 기능",
-        "3": "엣지 컴퓨팅 입문"
-      }
     }
   },
-  "errors": {
-    "notFound": "페이지를 찾을 수 없습니다",
-    "goHome": "홈으로 이동",
-    "somethingWrong": "문제가 발생했습니다!",
-    "tryAgain": "다시 시도"
-  },
-  "blog": {
-    "title": "블로그",
-    "subtitle": "지식 관리와 생산성에 관한 팁, 가이드, 인사이트를 공유합니다.",
-    "readArticle": "읽어보기 →",
-    "home": "홈",
-    "readTime": "{minutes}분 분량"
-  },
   "legal": {
-    "terms": {
-      "title": "이용약관",
+    "privacy": {
       "effectiveDate": "시행일: 2026-02-19",
+      "intro": "NOD(이하 \"서비스\")는 이용자의 개인정보를 소중하게 생각하며, 관련 법령을 준수합니다. 본 개인정보 처리방침은 서비스가 어떤 정보를 수집하고, 어떻게 이용하며, 누구와 공유하는지, 그리고 이용자가 어떤 권리를 가지는지 설명합니다.",
       "sections": {
-        "intro": {
-          "title": "1. 목적",
-          "content": "본 약관은 NOD(이하 '회사')가 제공하는 서비스의 이용조건 및 절차, 이용자와 회사의 권리, 의무, 책임사항을 규정함을 목적으로 합니다. 본 서비스를 이용함으로써 본 약관에 동의한 것으로 간주합니다."
+        "changes": {
+          "content": "본 방침은 변경될 수 있으며, 중요한 변경이 있는 경우 서비스 내 공지 또는 별도 안내를 통해 고지합니다.",
+          "title": "9. 변경"
         },
-        "account": {
-          "title": "2. 계정",
-          "content": "이용자는 이메일 주소 등을 통해 계정을 생성할 수 있으며, 계정 정보의 정확성을 유지해야 합니다. 계정 보안에 대한 책임은 이용자에게 있으며, 무단 접근을 발견한 경우 즉시 회사에 알려야 합니다. 1인 1계정을 원칙으로 합니다."
-        },
-        "service": {
-          "title": "3. 서비스 이용",
-          "content": "회사는 이용자에게 아티클 저장, AI 요약, 검색 등의 기능을 제공합니다. 서비스는 회사의 기술적 상황에 따라 변경되거나 중단될 수 있습니다."
-        },
-        "payment": {
-          "title": "4. 결제 처리",
-          "content": "유료 서비스(Pro 플랜)의 결제는 Paddle.com을 통해 처리됩니다. Paddle은 Merchant of Record로서 결제, 세금 징수 및 환불 처리를 담당합니다. 결제 관련 문의는 shickcoong777@gmail.com 또는 Paddle 고객지원으로 연락해 주시기 바랍니다."
-        },
-        "content": {
-          "title": "5. 콘텐츠 및 저작권",
-          "content": "이용자가 서비스에 저장한 콘텐츠의 저작권은 이용자에게 있으며, 회사는 서비스 제공을 위해 필요한 범위 내에서 콘텐츠를 처리, 저장, 분석할 수 있는 제한적 이용권을 부여받습니다. 회사는 콘텐츠에 대한 소유권을 주장하지 않습니다. 이용자는 저장하는 콘텐츠에 대한 권리를 보유하고 있음을 보증하며, 약관을 위반하는 콘텐츠는 삭제될 수 있습니다."
-        },
-        "prohibited": {
-          "title": "6. 금지 행위",
-          "content": "이용자는 다음 행위를 해서는 안 됩니다: 리버스 엔지니어링, 접근 제어 우회, 통상적 이용 범위를 초과하는 자동 스크래핑, 계정 공유, 악성 콘텐츠 업로드, 관련 법령 위반, 서비스의 정상적인 운영을 방해하는 행위."
-        },
-        "termination": {
-          "title": "7. 해지 및 제한",
-          "content": "이용자는 언제든지 서비스 이용 계약을 해지할 수 있습니다. 회사는 이용자가 약관을 위반하는 경우 이용을 일시 중지하거나 종료할 수 있습니다. 해지 후 합리적인 기간 내에 데이터가 삭제됩니다. 일부 조항은 해지 후에도 유효합니다."
+        "collection": {
+          "content": "서비스는 아래 정보를 수집할 수 있습니다.",
+          "items": {
+            "account": "계정 정보: 이메일, 이름/프로필 이미지(소셜 로그인 제공자가 제공하는 범위 내), 인증 토큰",
+            "analytics": "웹 분석 정보: 웹사이트 이용 통계(예: Google Analytics를 통한 페이지뷰/이벤트)",
+            "content": "콘텐츠 정보: 사용자가 저장한 아티클 URL, 제목, 본문(추출된 텍스트), 요약/노트 및 관련 메타데이터",
+            "payment": "결제 정보: 유료 플랜 이용 시 결제 처리/구독 관리를 위한 정보(결제 제공자에 의해 처리)",
+            "usage": "사용 정보: 기능 사용 기록(예: 저장/요약 횟수), 오류/진단 정보"
+          },
+          "note": "크롬 확장 프로그램을 사용하는 경우, 사용자가 저장을 실행한 페이지의 URL 및 본문 텍스트를 추출하여 서비스로 전송할 수 있습니다.",
+          "title": "1. 수집하는 개인정보"
         },
         "contact": {
-          "title": "8. 문의",
-          "content": "서비스 이용과 관련된 문의는 아래로 연락해 주시기 바랍니다.\n이메일: shickcoong777@gmail.com\n통상 5영업일 이내에 답변드립니다."
+          "content": "개인정보 처리와 관련한 문의는 아래로 연락해 주세요.\n이메일: shickcoong777@gmail.com",
+          "title": "8. 문의처"
+        },
+        "cookies": {
+          "content": "서비스는 로그인 유지, 환경설정, 분석 등을 위해 쿠키 및 유사 기술을 사용할 수 있습니다. 브라우저 설정을 통해 쿠키 저장을 거부할 수 있으나, 일부 기능이 제한될 수 있습니다.",
+          "title": "6. 쿠키 및 유사 기술"
+        },
+        "purpose": {
+          "items": {
+            "auth": "회원 식별 및 로그인/세션 관리",
+            "billing": "요금제/결제/구독 관리",
+            "core": "아티클 저장, 요약 생성, 검색(유사도 기반 검색 포함) 등 핵심 기능 제공",
+            "improve": "서비스 품질 개선, 오류 분석, 보안 및 부정 사용 방지"
+          },
+          "title": "2. 개인정보의 이용 목적"
+        },
+        "retention": {
+          "items": {
+            "deletion": "이용자가 계정을 삭제하거나 삭제를 요청하는 경우, 관련 데이터는 합리적인 기간 내 삭제됩니다.",
+            "legal": "단, 법령에 따라 보관이 필요한 경우 해당 기간 동안 안전하게 보관합니다.",
+            "principle": "원칙적으로 개인정보는 목적 달성 시 지체 없이 파기합니다."
+          },
+          "title": "4. 보관 및 파기"
+        },
+        "rights": {
+          "content": "이용자는 자신의 개인정보에 대해 열람/정정/삭제/처리정지 등을 요청할 수 있습니다. 요청은 아래 문의처로 접수해 주세요.",
+          "title": "5. 이용자의 권리"
+        },
+        "security": {
+          "content": "서비스는 개인정보 보호를 위해 접근 통제, 전송 구간 암호화 등 합리적인 보호조치를 적용합니다.",
+          "title": "7. 보안"
+        },
+        "sharing": {
+          "content": "서비스는 원칙적으로 이용자의 개인정보를 외부에 판매하지 않습니다. 다만 서비스 제공을 위해 아래와 같은 수탁자/서비스 제공자를 이용할 수 있습니다.",
+          "items": {
+            "ai": "AI 처리: 요약/임베딩 생성을 위해 일부 콘텐츠(제목/본문 등)가 AI 제공자(OpenAI 또는 Google Gemini 등)로 전송되어 처리될 수 있음",
+            "analytics": "분석/모니터링: Google Analytics 등",
+            "auth": "인증/로그인: 소셜 로그인(OAuth) 제공자 및 인증 서비스",
+            "cloud": "클라우드 인프라/호스팅: 서비스 운영 및 데이터 저장/처리",
+            "payment": "결제/구독: Paddle 등 결제 처리 서비스"
+          },
+          "title": "3. 개인정보의 제3자 제공 및 처리 위탁"
         }
-      }
+      },
+      "title": "개인정보 처리방침"
     },
     "refund": {
-      "title": "환불 및 취소 정책",
       "effectiveDate": "시행일: 2026-02-18",
       "intro": "NOD의 유료 플랜(Pro)에 대한 환불 및 취소 규정은 다음과 같습니다. 모든 결제는 Paddle.com을 통해 처리됩니다.",
       "sections": {
         "cancellation": {
-          "title": "1. 구독 취소",
-          "content": "이용자는 언제든지 구독을 취소할 수 있습니다. 취소 시 현재 결제 기간이 끝날 때까지 Pro 기능을 계속 이용할 수 있으며, 다음 결제 주기부터 결제가 이루어지지 않습니다."
-        },
-        "refunds": {
-          "title": "2. 환불 정책",
-          "content": "구독 갱신일 또는 최초 구매일로부터 14일 이내에 환불을 요청하시면 전액 환불을 받으실 수 있습니다. 14일이 경과한 후에는 환불이 불가하며, 구독 취소만 가능합니다. 결제는 Paddle을 통해 처리되며 Paddle의 환불 정책이 적용됩니다."
-        },
-        "process": {
-          "title": "3. 환불 처리",
-          "content": "환불이 승인되면 원래 결제 수단으로 5~10 영업일 이내에 환불이 처리됩니다. 환불 요청은 shickcoong777@gmail.com 또는 Paddle 고객지원을 통해 접수할 수 있습니다."
+          "content": "이용자는 언제든지 구독을 취소할 수 있습니다. 취소 시 현재 결제 기간이 끝날 때까지 Pro 기능을 계속 이용할 수 있으며, 다음 결제 주기부터 결제가 이루어지지 않습니다.",
+          "title": "1. 구독 취소"
         },
         "exceptions": {
-          "title": "4. 예외",
-          "content": "서비스의 중대한 결함으로 인해 이용이 불가능한 경우, 기간에 관계없이 전액 환불이 가능합니다."
+          "content": "서비스의 중대한 결함으로 인해 이용이 불가능한 경우, 기간에 관계없이 전액 환불이 가능합니다.",
+          "title": "4. 예외"
+        },
+        "process": {
+          "content": "환불이 승인되면 원래 결제 수단으로 5~10 영업일 이내에 환불이 처리됩니다. 환불 요청은 shickcoong777@gmail.com 또는 Paddle 고객지원을 통해 접수할 수 있습니다.",
+          "title": "3. 환불 처리"
+        },
+        "refunds": {
+          "content": "구독 갱신일 또는 최초 구매일로부터 14일 이내에 환불을 요청하시면 전액 환불을 받으실 수 있습니다. 14일이 경과한 후에는 환불이 불가하며, 구독 취소만 가능합니다. 결제는 Paddle을 통해 처리되며 Paddle의 환불 정책이 적용됩니다.",
+          "title": "2. 환불 정책"
         }
-      }
+      },
+      "title": "환불 및 취소 정책"
     },
-    "privacy": {
-      "title": "개인정보 처리방침",
+    "terms": {
       "effectiveDate": "시행일: 2026-02-19",
-      "intro": "NOD(이하 \"서비스\")는 이용자의 개인정보를 소중하게 생각하며, 관련 법령을 준수합니다. 본 개인정보 처리방침은 서비스가 어떤 정보를 수집하고, 어떻게 이용하며, 누구와 공유하는지, 그리고 이용자가 어떤 권리를 가지는지 설명합니다.",
       "sections": {
-        "collection": {
-          "title": "1. 수집하는 개인정보",
-          "content": "서비스는 아래 정보를 수집할 수 있습니다.",
-          "items": {
-            "account": "계정 정보: 이메일, 이름/프로필 이미지(소셜 로그인 제공자가 제공하는 범위 내), 인증 토큰",
-            "content": "콘텐츠 정보: 사용자가 저장한 아티클 URL, 제목, 본문(추출된 텍스트), 요약/노트 및 관련 메타데이터",
-            "usage": "사용 정보: 기능 사용 기록(예: 저장/요약 횟수), 오류/진단 정보",
-            "payment": "결제 정보: 유료 플랜 이용 시 결제 처리/구독 관리를 위한 정보(결제 제공자에 의해 처리)",
-            "analytics": "웹 분석 정보: 웹사이트 이용 통계(예: Google Analytics를 통한 페이지뷰/이벤트)"
-          },
-          "note": "크롬 확장 프로그램을 사용하는 경우, 사용자가 저장을 실행한 페이지의 URL 및 본문 텍스트를 추출하여 서비스로 전송할 수 있습니다."
-        },
-        "purpose": {
-          "title": "2. 개인정보의 이용 목적",
-          "items": {
-            "auth": "회원 식별 및 로그인/세션 관리",
-            "core": "아티클 저장, 요약 생성, 검색(유사도 기반 검색 포함) 등 핵심 기능 제공",
-            "billing": "요금제/결제/구독 관리",
-            "improve": "서비스 품질 개선, 오류 분석, 보안 및 부정 사용 방지"
-          }
-        },
-        "sharing": {
-          "title": "3. 개인정보의 제3자 제공 및 처리 위탁",
-          "content": "서비스는 원칙적으로 이용자의 개인정보를 외부에 판매하지 않습니다. 다만 서비스 제공을 위해 아래와 같은 수탁자/서비스 제공자를 이용할 수 있습니다.",
-          "items": {
-            "cloud": "클라우드 인프라/호스팅: 서비스 운영 및 데이터 저장/처리",
-            "auth": "인증/로그인: 소셜 로그인(OAuth) 제공자 및 인증 서비스",
-            "ai": "AI 처리: 요약/임베딩 생성을 위해 일부 콘텐츠(제목/본문 등)가 AI 제공자(OpenAI 또는 Google Gemini 등)로 전송되어 처리될 수 있음",
-            "payment": "결제/구독: Paddle 등 결제 처리 서비스",
-            "analytics": "분석/모니터링: Google Analytics 등"
-          }
-        },
-        "retention": {
-          "title": "4. 보관 및 파기",
-          "items": {
-            "principle": "원칙적으로 개인정보는 목적 달성 시 지체 없이 파기합니다.",
-            "deletion": "이용자가 계정을 삭제하거나 삭제를 요청하는 경우, 관련 데이터는 합리적인 기간 내 삭제됩니다.",
-            "legal": "단, 법령에 따라 보관이 필요한 경우 해당 기간 동안 안전하게 보관합니다."
-          }
-        },
-        "rights": {
-          "title": "5. 이용자의 권리",
-          "content": "이용자는 자신의 개인정보에 대해 열람/정정/삭제/처리정지 등을 요청할 수 있습니다. 요청은 아래 문의처로 접수해 주세요."
-        },
-        "cookies": {
-          "title": "6. 쿠키 및 유사 기술",
-          "content": "서비스는 로그인 유지, 환경설정, 분석 등을 위해 쿠키 및 유사 기술을 사용할 수 있습니다. 브라우저 설정을 통해 쿠키 저장을 거부할 수 있으나, 일부 기능이 제한될 수 있습니다."
-        },
-        "security": {
-          "title": "7. 보안",
-          "content": "서비스는 개인정보 보호를 위해 접근 통제, 전송 구간 암호화 등 합리적인 보호조치를 적용합니다."
+        "account": {
+          "content": "이용자는 이메일 주소 등을 통해 계정을 생성할 수 있으며, 계정 정보의 정확성을 유지해야 합니다. 계정 보안에 대한 책임은 이용자에게 있으며, 무단 접근을 발견한 경우 즉시 회사에 알려야 합니다. 1인 1계정을 원칙으로 합니다.",
+          "title": "2. 계정"
         },
         "contact": {
-          "title": "8. 문의처",
-          "content": "개인정보 처리와 관련한 문의는 아래로 연락해 주세요.\n이메일: shickcoong777@gmail.com"
+          "content": "서비스 이용과 관련된 문의는 아래로 연락해 주시기 바랍니다.\n이메일: shickcoong777@gmail.com\n통상 5영업일 이내에 답변드립니다.",
+          "title": "8. 문의"
         },
-        "changes": {
-          "title": "9. 변경",
-          "content": "본 방침은 변경될 수 있으며, 중요한 변경이 있는 경우 서비스 내 공지 또는 별도 안내를 통해 고지합니다."
+        "content": {
+          "content": "이용자가 서비스에 저장한 콘텐츠의 저작권은 이용자에게 있으며, 회사는 서비스 제공을 위해 필요한 범위 내에서 콘텐츠를 처리, 저장, 분석할 수 있는 제한적 이용권을 부여받습니다. 회사는 콘텐츠에 대한 소유권을 주장하지 않습니다. 이용자는 저장하는 콘텐츠에 대한 권리를 보유하고 있음을 보증하며, 약관을 위반하는 콘텐츠는 삭제될 수 있습니다.",
+          "title": "5. 콘텐츠 및 저작권"
+        },
+        "intro": {
+          "content": "본 약관은 NOD(이하 '회사')가 제공하는 서비스의 이용조건 및 절차, 이용자와 회사의 권리, 의무, 책임사항을 규정함을 목적으로 합니다. 본 서비스를 이용함으로써 본 약관에 동의한 것으로 간주합니다.",
+          "title": "1. 목적"
+        },
+        "payment": {
+          "content": "유료 서비스(Pro 플랜)의 결제는 Paddle.com을 통해 처리됩니다. Paddle은 Merchant of Record로서 결제, 세금 징수 및 환불 처리를 담당합니다. 결제 관련 문의는 shickcoong777@gmail.com 또는 Paddle 고객지원으로 연락해 주시기 바랍니다.",
+          "title": "4. 결제 처리"
+        },
+        "prohibited": {
+          "content": "이용자는 다음 행위를 해서는 안 됩니다: 리버스 엔지니어링, 접근 제어 우회, 통상적 이용 범위를 초과하는 자동 스크래핑, 계정 공유, 악성 콘텐츠 업로드, 관련 법령 위반, 서비스의 정상적인 운영을 방해하는 행위.",
+          "title": "6. 금지 행위"
+        },
+        "service": {
+          "content": "회사는 이용자에게 아티클 저장, AI 요약, 검색 등의 기능을 제공합니다. 서비스는 회사의 기술적 상황에 따라 변경되거나 중단될 수 있습니다.",
+          "title": "3. 서비스 이용"
+        },
+        "termination": {
+          "content": "이용자는 언제든지 서비스 이용 계약을 해지할 수 있습니다. 회사는 이용자가 약관을 위반하는 경우 이용을 일시 중지하거나 종료할 수 있습니다. 해지 후 합리적인 기간 내에 데이터가 삭제됩니다. 일부 조항은 해지 후에도 유효합니다.",
+          "title": "7. 해지 및 제한"
         }
-      }
+      },
+      "title": "이용약관"
     }
   },
-  "loginWelcome": "다시 오신 것을 환영합니다",
-  "loginSubtitle": "NOD 계정에 로그인하세요",
   "login": {
-    "signingIn": "로그인 중...",
-    "or": "또는",
     "backToHome": "홈으로 돌아가기",
-    "highlightSave": "원클릭으로 웹 아티클 저장",
-    "highlightAnalyze": "AI가 핵심 인사이트를 자동 분석",
-    "highlightSearch": "시맨틱 검색으로 언제든 빠르게 찾기",
-    "secureNote": "Google 계정으로 안전하게 로그인됩니다",
-    "signInTitle": "로그인",
-    "signInSubtitle": "계정에 로그인하고 지식 라이브러리를 이어가세요",
+    "emailNotVerified": "이메일 인증이 필요합니다.",
     "emailPlaceholder": "이메일 주소",
-    "passwordPlaceholder": "비밀번호",
-    "signInWithEmail": "이메일로 로그인",
     "forgotPassword": "비밀번호 찾기",
-    "noAccount": "계정이 없으신가요?",
-    "signUpLink": "회원가입",
+    "highlightAnalyze": "AI가 핵심 인사이트를 자동 분석",
+    "highlightSave": "원클릭으로 웹 아티클 저장",
+    "highlightSearch": "시맨틱 검색으로 언제든 빠르게 찾기",
     "loginFailed": "이메일 또는 비밀번호가 올바르지 않습니다.",
-    "emailNotVerified": "이메일 인증이 필요합니다."
+    "noAccount": "계정이 없으신가요?",
+    "or": "또는",
+    "passwordPlaceholder": "비밀번호",
+    "secureNote": "Google 계정으로 안전하게 로그인됩니다",
+    "signInSubtitle": "계정에 로그인하고 지식 라이브러리를 이어가세요",
+    "signInTitle": "로그인",
+    "signInWithEmail": "이메일로 로그인",
+    "signUpLink": "회원가입",
+    "signingIn": "로그인 중..."
   },
-  "continueWithGoogle": "Google로 계속하기",
-  "dashboard": {
-    "sidebar": {
-      "nav": {
-        "dashboard": "대시보드",
-        "articles": "콘텐츠",
-        "graph": "그래프 뷰",
-        "settings": "설정",
-        "billing": "결제 관리",
-        "pricing": "요금제"
-      },
-      "user": {
-        "profile": "프로필",
-        "settings": "설정",
-        "billing": "결제 관리",
-        "help": "도움말",
-        "feedback": "피드백 보내기",
-        "logout": "로그아웃"
-      }
+  "loginSubtitle": "NOD 계정에 로그인하세요",
+  "loginWelcome": "다시 오신 것을 환영합니다",
+  "onboarding": {
+    "completionSubtitle": "대시보드로 이동합니다. NOD와 함께 지식을 쌓아보세요.",
+    "completionTitle": "준비 완료!",
+    "firstArticle": {
+      "cta": "대시보드로 이동",
+      "step1": "아무 기사나 열어보세요",
+      "step2": "브라우저 우측 상단 NOD 아이콘 클릭",
+      "step3": "Save & Analyze 버튼 클릭",
+      "subtitle": "아래 세 단계로 시작할 수 있습니다",
+      "title": "첫 아티클을 저장해보세요"
     },
-    "overview": {
-      "title": "대시보드",
-      "description": "지식 라이브러리 개요입니다.",
-      "savedArticles": "저장한 콘텐츠",
-      "aiSummaries": "AI 요약",
-      "currentPlan": "현재 플랜",
-      "viewArticlesTitle": "콘텐츠 보기",
-      "viewArticlesDescription": "저장한 콘텐츠를 찾아보고 검색하세요.",
-      "manageBillingTitle": "결제 관리",
-      "manageBillingDescription": "플랜과 사용량을 확인하세요.",
-      "installExtensionTitle": "크롬 익스텐션 설치",
-      "installExtensionDescription": "웹을 보면서 콘텐츠를 원클릭으로 저장하세요.",
-      "recentArticlesTitle": "최근 저장한 콘텐츠",
-      "recentArticlesDescription": "최근에 저장한 콘텐츠입니다.",
-      "noRecentArticles": "아직 저장한 콘텐츠가 없습니다.",
-      "viewAll": "전체 보기",
-      "contentTypes": "콘텐츠 유형",
-      "welcomeMessage": "NOD에 다시 오신 걸 환영해요",
-      "heroTitlePrimary": "콘텐츠 인사이트",
-      "heroTitleAccent": "워크스페이스",
-      "heroSubtitle": "저장한 콘텐츠를 AI로 요약해 핵심 인사이트를 빠르게 연결하세요.",
-      "workflowTitle": "오늘의 워크플로우",
-      "workflowStepCapture": "콘텐츠 수집",
-      "workflowStepAnalyze": "요약 분석",
-      "workflowStepRefine": "핵심 인사이트 정리",
-      "keyMetrics": "핵심 지표",
-      "storageUnlimited": "콘텐츠 저장은 무제한",
-      "usageCalculating": "사용량 계산 중...",
-      "planProActive": "프로 플랜 활성화",
-      "planFreeActive": "Free 플랜 사용 중",
-      "quickActions": "빠른 작업",
-      "getSupport": "도움말",
-      "openUsageGuide": "사용 가이드 열기",
-      "modified": "수정",
-      "justNow": "방금 전",
-      "onboardingTitle": "온보딩을 마무리하세요!",
-      "onboardingDescription": "브라우저 익스텐션을 연결하면 인사이트를 바로 수집할 수 있어요.",
-      "onboardingSetupNow": "설정하기",
-      "closeBanner": "배너 닫기"
+    "install": {
+      "benefitAllSites": "모든 웹사이트에서 사용 가능",
+      "benefitAutoAnalyze": "저장과 동시에 AI가 자동 분석",
+      "benefitOneClick": "원클릭으로 아티클 즉시 저장",
+      "confirmButton": "설치했어요",
+      "installButton": "Chrome Web Store에서 설치",
+      "skipLink": "나중에 할게요",
+      "subtitle": "아티클을 한 클릭으로 저장할 수 있습니다",
+      "title": "Chrome 익스텐션을 설치하세요"
     },
-    "graph": {
-      "sectionLabel": "지식 그래프",
-      "pageTitle": "그래프 뷰",
-      "pageDescription": "요약한 콘텐츠의 핵심 개념 연결을 시각화합니다.",
-      "previewTitle": "그래프 뷰 미리보기",
-      "previewDescription": "대시보드에서 읽기 전용으로 확인할 수 있습니다.",
-      "openFull": "전체 그래프 열기",
-      "lockedTitle": "그래프 뷰는 Pro 기능입니다",
-      "lockedDescription": "Pro로 업그레이드하면 개념 그래프를 사용할 수 있습니다.",
-      "upgrade": "Pro로 업그레이드",
-      "loadError": "그래프 데이터를 불러오지 못했습니다.",
-      "empty": "아직 그래프 데이터가 없습니다. 더 많은 콘텐츠를 요약해 보세요.",
-      "statsArticles": "콘텐츠",
-      "statsConcepts": "고유 개념",
-      "statsNodes": "노드",
-      "statsEdges": "연결",
-      "modeGlobal": "글로벌",
-      "modeLocal": "로컬",
-      "depthLabel": "깊이",
-      "panelSearch": "검색",
-      "panelFilters": "필터",
-      "panelSelection": "선택",
-      "searchPlaceholder": "개념 검색...",
-      "filterMinConnections": "최소 연결 수",
-      "selectionCount": "{count}개 선택됨",
-      "selectionEmpty": "선택된 노드가 없습니다",
-      "selectionPinned": "고정됨",
-      "yes": "예",
-      "no": "아니오",
-      "actionPinSelected": "선택 노드 고정",
-      "actionUnpinSelected": "선택 노드 고정 해제",
-      "actionUnpinAll": "모두 고정 해제",
-      "actionClearSelection": "선택 해제",
-      "menuPin": "고정",
-      "menuUnpin": "고정 해제",
-      "menuUnpinAll": "모두 고정 해제",
-      "menuPinSelected": "선택 노드 고정",
-      "localCenterFilteredMessage": "현재 필터로는 기준 노드가 제외되었습니다.",
-      "localReselectBase": "기준 다시 선택",
-      "localSwitchGlobal": "Global로 전환"
+    "progress": "{step}/3",
+    "resumeBanner": {
+      "cta": "계속하기",
+      "message": "온보딩을 완료하고 NOD를 시작하세요"
     },
-    "searchPlaceholder": "검색...",
-    "statusLabel": "상태",
-    "markdownNote": "노트",
-    "downloadMarkdown": ".md 다운로드",
-    "myArticles": "내 콘텐츠",
-    "articleListSubtitle": "저장한 콘텐츠를 탐색하고, 필요한 인사이트를 빠르게 찾아보세요.",
-    "searchArticles": "콘텐츠 검색...",
-    "semanticSearch": "AI 검색",
-    "searchMinChars": "2자 이상 입력하세요",
-    "allStatus": "전체 상태",
-    "statusPending": "대기 중",
-    "statusProcessing": "처리 중",
-    "statusAnalyzing": "분석 중",
-    "statusCompleted": "완료",
-    "statusFailed": "실패",
-    "checkStatus": "상태 확인",
-    "refreshing": "새로고침 중...",
-    "retryAnalysis": "다시 시도",
-    "loadingArticles": "콘텐츠 불러오는 중...",
-    "loadError": "콘텐츠를 불러오지 못했습니다.",
-    "noArticles": "아직 콘텐츠가 없습니다. 크롬 익스텐션으로 콘텐츠를 저장하세요.",
-    "installExtensionCta": "Chrome에 추가",
-    "loadMore": "더 보기",
-    "noSummary": "요약 없음",
-    "openContent": "콘텐츠 열기",
-    "articleNotFound": "콘텐츠를 찾을 수 없습니다.",
-    "deleteConfirm": "이 콘텐츠를 삭제하시겠습니까?",
-    "original": "원문 보기",
-    "pendingAnalysis": "분석 대기 중...",
-    "analyzingArticle": "AI가 콘텐츠를 분석하고 있습니다...",
-    "summaryInProgress": "요약중..",
-    "analysisStepReading": "콘텐츠 읽기",
-    "analysisStepAnalyzing": "AI 분석 중",
-    "analysisStepSummary": "요약 생성",
-    "analysisDescription": "AI가 콘텐츠를 읽고 핵심 개념을 추출하여 구조화된 요약을 생성합니다. 보통 30초~1분 소요됩니다.",
-    "summary": "요약",
-    "details": "상세",
-    "readTime": "약 {minutes}분 소요",
-    "concepts": "핵심 개념",
-    "keyPoints": "주요 포인트",
-    "analyzedBy": "{provider}/{model}로 분석됨",
-    "similarArticles": "유사한 콘텐츠",
-    "loadingSimilar": "유사한 콘텐츠 불러오는 중...",
-    "similarity": "{percent}% 일치",
-    "articleInfo": "콘텐츠 정보",
-    "savedDate": "저장일",
-    "readingTime": "읽기 시간",
-    "minuteRead": "{minutes}분",
-    "sourceLabel": "소스",
-    "viewOriginal": "원문 보기",
-    "language": "언어",
-    "allContentTypes": "전체 유형",
-    "typeTechBlog": "기술 블로그",
-    "typePaper": "논문",
-    "typeNews": "뉴스",
-    "typeGitHub": "GitHub",
-    "typeDocs": "문서",
-    "typeVideo": "영상/팟캐스트"
+    "skip": "건너뛰기",
+    "welcome": {
+      "cta": "시작하기",
+      "featureAnalyze": "AI가 자동으로 핵심 내용 분석",
+      "featureSave": "웹 아티클을 한 클릭으로 저장",
+      "featureSearch": "시맨틱 검색으로 언제든 찾기",
+      "subtitle": "AI가 분석하는 나만의 지식 라이브러리",
+      "title": "NOD에 오신 것을 환영합니다"
+    }
   },
   "settings": {
-    "title": "설정",
-    "description": "계정 설정을 관리하세요.",
-    "sections": {
-      "profile": "프로필",
-      "account": "계정",
-      "quickLinks": "빠른 링크",
-      "legal": "법적 고지"
-    },
-    "fields": {
-      "email": "이메일",
-      "emailProviderName": "이메일",
-      "authProvider": "인증 제공자",
-      "subscription": "구독"
-    },
-    "links": {
-      "manageBilling": "결제 및 구독 관리",
-      "viewPricing": "요금제 보기",
-      "installExtension": "크롬 익스텐션 설치",
-      "feedback": "피드백 보내기",
-      "terms": "이용약관",
-      "privacy": "개인정보 처리방침",
-      "refund": "환불 정책"
-    },
-    "status": {
-      "active": "활성"
-    },
     "actions": {
       "changePlan": "플랜 변경",
       "signOut": "로그아웃"
     },
-    "usage": {
-      "title": "AI 분석 사용량",
-      "currentMonthlyUsage": "이번 달 사용량",
-      "resetHint": "월별 사용량은 매월 1일에 초기화됩니다."
+    "description": "계정 설정을 관리하세요.",
+    "fields": {
+      "authProvider": "인증 제공자",
+      "email": "이메일",
+      "emailProviderName": "이메일",
+      "subscription": "구독"
     },
-    "footerTagline": "NOD Labs · Creators를 위한 워크스페이스"
+    "footerTagline": "NOD Labs · Creators를 위한 워크스페이스",
+    "links": {
+      "feedback": "피드백 보내기",
+      "installExtension": "크롬 익스텐션 설치",
+      "manageBilling": "결제 및 구독 관리",
+      "privacy": "개인정보 처리방침",
+      "refund": "환불 정책",
+      "terms": "이용약관",
+      "viewPricing": "요금제 보기"
+    },
+    "sections": {
+      "account": "계정",
+      "legal": "법적 고지",
+      "profile": "프로필",
+      "quickLinks": "빠른 링크"
+    },
+    "status": {
+      "active": "활성"
+    },
+    "title": "설정",
+    "usage": {
+      "currentMonthlyUsage": "이번 달 사용량",
+      "resetHint": "월별 사용량은 매월 1일에 초기화됩니다.",
+      "title": "AI 분석 사용량"
+    }
+  },
+  "signup": {
+    "confirmPasswordPlaceholder": "비밀번호 확인",
+    "continueWithGoogle": "Google로 가입",
+    "createAccount": "계정 만들기",
+    "creating": "계정 생성 중...",
+    "duplicateEmail": "이미 등록된 이메일입니다.",
+    "emailInvalid": "유효한 이메일 주소를 입력해 주세요.",
+    "emailPlaceholder": "이메일 주소",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "namePlaceholder": "이름",
+    "nameRequired": "이름을 입력해 주세요.",
+    "orDivider": "또는",
+    "passwordMin": "비밀번호는 8자 이상이어야 합니다.",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다.",
+    "passwordPlaceholder": "비밀번호 (8자 이상)",
+    "signInLink": "로그인",
+    "subtitle": "NOD 계정을 만들고 지식 라이브러리를 시작하세요",
+    "title": "회원가입"
   },
   "subscription": {
-    "pricing": "요금제",
-    "currentPlan": "현재 플랜",
-    "basic": "Free",
-    "pro": "Pro",
-    "basicPrice": "$0",
-    "proPrice": "$5/월 (부가세 포함)",
-    "upgrade": "Pro로 업그레이드",
-    "manageBilling": "결제 관리",
+    "activeSince": "{date}부터 활성",
     "backToSettings": "설정으로 돌아가기",
-    "billingSubtitle": "구독, 결제 수단, 사용량을 한 화면에서 관리해보세요.",
-    "currentMonthlyAiSummaries": "이번 달 AI 요약 사용량",
-    "includedInPlan": "현재 플랜 포함 기능",
+    "basic": "Free",
+    "basicPrice": "$0",
+    "basicValue": {
+      "aiSummaries": "월 20회",
+      "conceptExtraction": "지원",
+      "markdownExport": "지원",
+      "savedArticles": "뉴스 · 기술 블로그 · 공식 문서",
+      "semanticSearch": "무제한"
+    },
     "billingControls": "결제 컨트롤",
-    "proUpgradeDescription": "더 많은 월간 사용량과 고급 기능을 위해 Pro로 업그레이드해보세요.",
+    "billingHistory": "결제 내역",
     "billingStatus": "결제 상태",
-    "planStatus": "플랜 상태",
-    "nextBillingLabel": "다음 결제",
-    "pricingSubtitle": "지식 작업 흐름에 맞는 플랜을 선택해보세요.",
+    "billingSubtitle": "구독, 결제 수단, 사용량을 한 화면에서 관리해보세요.",
     "cancel": "구독 취소",
     "cancelConfirm": "구독을 취소하시겠습니까?",
-    "usage": "사용량",
-    "summariesUsed": "이번 달 요약 {used}/{limit}건 사용",
-    "summariesRemaining": "요약 {remaining}건 남음",
-    "unlimited": "무제한",
-    "limitReached": "이번 달 사용량 초과",
-    "upgradePrompt": "더 많은 요약을 원하시면 Pro로 업그레이드하세요",
-    "features": {
-      "basicSummaries": "월 20회 AI 분석",
-      "proSummaries": "무제한 AI 분석",
-      "basicArticles": "저장 시 자동 AI 분석",
-      "proArticles": "무제한 저장 및 분석",
-      "basicSearch": "무제한 시맨틱 검색",
-      "proSearch": "무제한 시맨틱 검색"
-    },
-    "processing": "처리 중...",
-    "upgradeUnavailable": "결제 서비스가 준비 중입니다. 잠시 후 다시 시도해 주세요.",
-    "managePayment": "결제 수단 관리",
     "cancelDescription": "구독을 취소하면 현재 결제 기간이 끝날 때까지 Pro 기능을 계속 사용할 수 있습니다.",
     "checkoutSuccess": "결제가 완료되었습니다! Pro 구독이 활성화되었습니다.",
-    "billingHistory": "결제 내역",
+    "comparisonTitle": "플랜 비교",
+    "currentMonthlyAiSummaries": "이번 달 AI 요약 사용량",
+    "currentPlan": "현재 플랜",
+    "faq": "자주 묻는 질문",
+    "faqItems": {
+      "a1": "무제한 AI 분석, 무제한 콘텐츠 저장이 가능합니다.",
+      "a2": "네, 언제든 취소 가능합니다. 취소 후에도 현재 결제 기간이 끝날 때까지 Pro 기능을 사용할 수 있습니다.",
+      "a3": "신용카드, 체크카드 등 다양한 결제 수단을 지원합니다. Paddle을 통해 안전하게 처리됩니다.",
+      "q1": "Pro로 업그레이드하면 어떤 혜택이 있나요?",
+      "q2": "언제든 취소할 수 있나요?",
+      "q3": "결제 수단은 무엇을 지원하나요?"
+    },
+    "featureComparison": {
+      "aiSummaries": "AI 분석",
+      "conceptExtraction": "개념 추출",
+      "markdownExport": "마크다운 내보내기",
+      "savedArticles": "분석 가능 콘텐츠 유형",
+      "semanticSearch": "시맨틱 검색"
+    },
+    "features": {
+      "basicArticles": "저장 시 자동 AI 분석",
+      "basicSearch": "무제한 시맨틱 검색",
+      "basicSummaries": "월 20회 AI 분석",
+      "proArticles": "무제한 저장 및 분석",
+      "proSearch": "무제한 시맨틱 검색",
+      "proSummaries": "무제한 AI 분석"
+    },
+    "includedInPlan": "현재 플랜 포함 기능",
+    "limitReached": "이번 달 사용량 초과",
+    "manageBilling": "결제 관리",
+    "managePayment": "결제 수단 관리",
     "nextBilling": "다음 결제일: {date}",
-    "activeSince": "{date}부터 활성",
+    "nextBillingLabel": "다음 결제",
     "planDescription": {
       "basic": "AI 기반 콘텐츠 관리를 체험하고 싶은 캐주얼 독자에게 적합합니다.",
       "pro": "매일 콘텐츠를 저장하고 분석하는 파워 유저를 위한 플랜입니다."
     },
-    "faq": "자주 묻는 질문",
-    "faqItems": {
-      "q1": "Pro로 업그레이드하면 어떤 혜택이 있나요?",
-      "a1": "무제한 AI 분석, 무제한 콘텐츠 저장이 가능합니다.",
-      "q2": "언제든 취소할 수 있나요?",
-      "a2": "네, 언제든 취소 가능합니다. 취소 후에도 현재 결제 기간이 끝날 때까지 Pro 기능을 사용할 수 있습니다.",
-      "q3": "결제 수단은 무엇을 지원하나요?",
-      "a3": "신용카드, 체크카드 등 다양한 결제 수단을 지원합니다. Paddle을 통해 안전하게 처리됩니다."
-    },
-    "comparisonTitle": "플랜 비교",
-    "featureComparison": {
-      "aiSummaries": "AI 분석",
-      "savedArticles": "분석 가능 콘텐츠 유형",
-      "semanticSearch": "시맨틱 검색",
-      "markdownExport": "마크다운 내보내기",
-      "conceptExtraction": "개념 추출"
-    },
-    "basicValue": {
-      "aiSummaries": "월 20회",
-      "savedArticles": "뉴스 · 기술 블로그 · 공식 문서",
-      "semanticSearch": "무제한",
-      "markdownExport": "지원",
-      "conceptExtraction": "지원"
-    },
+    "planStatus": "플랜 상태",
+    "pricing": "요금제",
+    "pricingSubtitle": "지식 작업 흐름에 맞는 플랜을 선택해보세요.",
+    "pro": "Pro",
+    "proPrice": "$5/월 (부가세 포함)",
+    "proUpgradeDescription": "더 많은 월간 사용량과 고급 기능을 위해 Pro로 업그레이드해보세요.",
     "proValue": {
       "aiSummaries": "무제한",
-      "savedArticles": "전체 유형 (GitHub/논문/영상 포함)",
-      "semanticSearch": "무제한",
+      "conceptExtraction": "지원",
       "markdownExport": "지원",
-      "conceptExtraction": "지원"
-    }
+      "savedArticles": "전체 유형 (GitHub/논문/영상 포함)",
+      "semanticSearch": "무제한"
+    },
+    "processing": "처리 중...",
+    "summariesRemaining": "요약 {remaining}건 남음",
+    "summariesUsed": "이번 달 요약 {used}/{limit}건 사용",
+    "unlimited": "무제한",
+    "upgrade": "Pro로 업그레이드",
+    "upgradePrompt": "더 많은 요약을 원하시면 Pro로 업그레이드하세요",
+    "upgradeUnavailable": "결제 서비스가 준비 중입니다. 잠시 후 다시 시도해 주세요.",
+    "usage": "사용량"
   },
-  "help": {
-    "centerBadge": "NOD 도움말 센터",
-    "heading": "빠르게 시작하는 NOD 사용 가이드",
-    "subtitle": "콘텐츠 저장부터 AI 요약 확인, 플랜 관리까지 꼭 필요한 흐름만 간단하게 정리했어요.",
-    "quickShortcutsTitle": "자주 쓰는 바로가기",
-    "shortcuts": {
-      "articles": "콘텐츠 페이지",
-      "billing": "결제 관리",
-      "pricing": "요금제 확인",
-      "installExtension": "익스텐션 설치"
-    },
-    "faqTitle": "자주 묻는 질문",
-    "supportTitle": "문의 및 피드백",
-    "sendFeedback": "피드백 보내기",
-    "billingHelp": "결제 문제 해결",
-    "quickStart": {
-      "item1": {
-        "title": "1) 콘텐츠 저장",
-        "description": "웹에서 읽고 싶은 글을 익스텐션으로 저장하면 자동으로 아카이브에 쌓여요."
-      },
-      "item2": {
-        "title": "2) AI 요약 확인",
-        "description": "저장된 콘텐츠는 자동 요약되고 핵심 개념, 포인트, 메모를 함께 볼 수 있어요."
-      },
-      "item3": {
-        "title": "3) 인사이트 연결",
-        "description": "관련 주제를 묶어서 탐색하고 필요한 지식을 빠르게 다시 꺼내 쓰세요."
-      }
-    },
-    "faq": {
-      "item1": {
-        "q": "요약이 오래 걸리거나 멈춘 것 같아요.",
-        "a": "콘텐츠 길이나 요청량에 따라 지연될 수 있어요. 잠시 뒤 새로고침하거나 상세 페이지에서 상태를 다시 확인해 주세요."
-      },
-      "item2": {
-        "q": "익스텐션이 동작하지 않아요.",
-        "a": "크롬에 익스텐션이 설치되어 있는지 확인하고, 로그인 상태를 유지한 뒤 페이지를 새로고침해 주세요."
-      },
-      "item3": {
-        "q": "플랜은 어디서 관리하나요?",
-        "a": "결제 관리는 설정 > 결제 관리에서 변경할 수 있고, 요금제는 요금제 페이지에서 확인할 수 있어요."
-      }
-    }
-  },
-  "signup": {
-    "title": "회원가입",
-    "subtitle": "NOD 계정을 만들고 지식 라이브러리를 시작하세요",
-    "namePlaceholder": "이름",
-    "emailPlaceholder": "이메일 주소",
-    "passwordPlaceholder": "비밀번호 (8자 이상)",
-    "confirmPasswordPlaceholder": "비밀번호 확인",
-    "createAccount": "계정 만들기",
-    "creating": "계정 생성 중...",
-    "hasAccount": "이미 계정이 있으신가요?",
-    "signInLink": "로그인",
-    "continueWithGoogle": "Google로 가입",
-    "orDivider": "또는",
-    "nameRequired": "이름을 입력해 주세요.",
-    "emailInvalid": "유효한 이메일 주소를 입력해 주세요.",
-    "passwordMin": "비밀번호는 8자 이상이어야 합니다.",
-    "passwordMismatch": "비밀번호가 일치하지 않습니다.",
-    "duplicateEmail": "이미 등록된 이메일입니다."
-  },
-  "auth": {
-    "verifyEmail": {
-      "title": "이메일 인증",
-      "description": "{email}로 인증 링크를 보냈습니다. 메일함을 확인해 주세요.",
-      "resend": "인증 메일 다시 보내기",
-      "resent": "인증 메일을 다시 보냈습니다.",
-      "backToLogin": "로그인으로 돌아가기"
-    },
-    "forgotPassword": {
-      "title": "비밀번호 찾기",
-      "subtitle": "가입한 이메일 주소를 입력하면 비밀번호 재설정 링크를 보내드립니다.",
-      "emailPlaceholder": "이메일 주소",
-      "send": "재설정 링크 보내기",
-      "sent": "비밀번호 재설정 링크를 보냈습니다. 메일함을 확인해 주세요.",
-      "backToLogin": "로그인으로 돌아가기",
-      "emailInvalid": "유효한 이메일 주소를 입력해 주세요."
-    },
-    "resetPassword": {
-      "title": "새 비밀번호 설정",
-      "subtitle": "새로운 비밀번호를 입력해 주세요.",
-      "newPassword": "새 비밀번호",
-      "confirmPassword": "비밀번호 확인",
-      "submit": "비밀번호 변경",
-      "success": "비밀번호가 변경되었습니다.",
-      "goToLogin": "로그인하러 가기",
-      "passwordMin": "비밀번호는 8자 이상이어야 합니다.",
-      "passwordMismatch": "비밀번호가 일치하지 않습니다."
-    }
-  },
-  "onboarding": {
-    "skip": "건너뛰기",
-    "progress": "{step}/3",
-    "completionTitle": "준비 완료!",
-    "completionSubtitle": "대시보드로 이동합니다. NOD와 함께 지식을 쌓아보세요.",
-    "welcome": {
-      "title": "NOD에 오신 것을 환영합니다",
-      "subtitle": "AI가 분석하는 나만의 지식 라이브러리",
-      "featureSave": "웹 아티클을 한 클릭으로 저장",
-      "featureAnalyze": "AI가 자동으로 핵심 내용 분석",
-      "featureSearch": "시맨틱 검색으로 언제든 찾기",
-      "cta": "시작하기"
-    },
-    "install": {
-      "title": "Chrome 익스텐션을 설치하세요",
-      "subtitle": "아티클을 한 클릭으로 저장할 수 있습니다",
-      "benefitOneClick": "원클릭으로 아티클 즉시 저장",
-      "benefitAutoAnalyze": "저장과 동시에 AI가 자동 분석",
-      "benefitAllSites": "모든 웹사이트에서 사용 가능",
-      "installButton": "Chrome Web Store에서 설치",
-      "confirmButton": "설치했어요",
-      "skipLink": "나중에 할게요"
-    },
-    "firstArticle": {
-      "title": "첫 아티클을 저장해보세요",
-      "subtitle": "아래 세 단계로 시작할 수 있습니다",
-      "step1": "아무 기사나 열어보세요",
-      "step2": "브라우저 우측 상단 NOD 아이콘 클릭",
-      "step3": "Save & Analyze 버튼 클릭",
-      "cta": "대시보드로 이동"
-    },
-    "resumeBanner": {
-      "message": "온보딩을 완료하고 NOD를 시작하세요",
-      "cta": "계속하기"
-    }
-  }
+  "title": "NOD"
 }
