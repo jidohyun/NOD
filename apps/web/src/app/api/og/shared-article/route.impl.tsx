@@ -66,10 +66,33 @@ function renderFallbackImage() {
   );
 }
 
+const CONTENT_TYPE_GRADIENTS: Record<string, { from: string; to: string }> = {
+  tech_blog: { from: "#2563eb", to: "#3730a3" },
+  general_news: { from: "#4b5563", to: "#1e293b" },
+  academic_paper: { from: "#9333ea", to: "#5b21b6" },
+  official_docs: { from: "#0d9488", to: "#065f46" },
+  video_podcast: { from: "#db2777", to: "#9f1239" },
+  github_repo: { from: "#334155", to: "#111827" },
+};
+
+const CONTENT_TYPE_LABELS: Record<string, string> = {
+  tech_blog: "Tech Blog",
+  general_news: "News",
+  academic_paper: "Paper",
+  official_docs: "Docs",
+  video_podcast: "Video",
+  github_repo: "GitHub",
+};
+
 function renderSharedImage(shared: SharedArticle) {
   const headline = formatOgHeadline(shared.title);
   const description = formatOgDescription(shared.summary);
   const articleHost = getArticleHost(shared.url);
+  const gradient = CONTENT_TYPE_GRADIENTS[shared.content_type] ?? {
+    from: "#334155",
+    to: "#111827",
+  };
+  const contentLabel = CONTENT_TYPE_LABELS[shared.content_type] ?? null;
 
   return new ImageResponse(
     <div
@@ -77,111 +100,96 @@ function renderSharedImage(shared: SharedArticle) {
         width: "100%",
         height: "100%",
         display: "flex",
-        position: "relative",
-        overflow: "hidden",
-        background: "linear-gradient(132deg, #090B10 0%, #1A1F2D 52%, #0D111B 100%)",
-        color: "#F9FAFB",
+        flexDirection: "column",
+        padding: "52px 60px 44px",
+        background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+        color: "#ffffff",
         fontFamily:
           "Inter, Pretendard, Apple SD Gothic Neo, Noto Sans KR, Noto Sans, system-ui, sans-serif",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          background:
-            "radial-gradient(680px 380px at 8% 12%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%)",
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          background: "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.46) 100%)",
-        }}
-      />
-
-      <div
-        style={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          height: "100%",
-          padding: "54px 62px 48px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            fontSize: 24,
-            fontWeight: 800,
-            color: "#E8B931",
-            letterSpacing: "0.04em",
-          }}
-        >
-          NOD
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            marginTop: "20px",
-            fontSize: 66,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            fontWeight: 800,
-            maxWidth: "900px",
-            textShadow: "0 2px 0 rgba(0,0,0,0.35)",
-          }}
-        >
-          {headline}
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            marginTop: "28px",
-            fontSize: 34,
-            lineHeight: 1.35,
-            fontWeight: 500,
-            maxWidth: "920px",
-            color: "rgba(249, 250, 251, 0.92)",
-          }}
-        >
-          {description}
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            marginTop: "auto",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+      {/* Content type badge */}
+      {contentLabel ? (
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <div
             style={{
               display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              color: "rgba(249, 250, 251, 0.88)",
+              padding: "6px 18px",
+              borderRadius: "9999px",
+              background: "rgba(255,255,255,0.15)",
+              fontSize: 22,
+              fontWeight: 700,
+              color: "rgba(255,255,255,0.75)",
             }}
           >
-            <div style={{ display: "flex", fontSize: 28, fontWeight: 800 }}>
-              {shared.sharer.display_name}
-            </div>
-            <div style={{ display: "flex", fontSize: 22, color: "rgba(249, 250, 251, 0.65)" }}>
-              shared via NOD
-            </div>
+            {contentLabel}
           </div>
+        </div>
+      ) : null}
 
-          <div style={{ display: "flex", fontSize: 20, color: "rgba(249, 250, 251, 0.62)" }}>
-            {articleHost ?? "nod-archive.com"}
+      {/* Spacer */}
+      <div style={{ display: "flex", flex: 1 }} />
+
+      {/* Title */}
+      <div
+        style={{
+          display: "flex",
+          fontSize: 64,
+          lineHeight: 1.1,
+          letterSpacing: "-0.02em",
+          fontWeight: 900,
+          maxWidth: "1080px",
+        }}
+      >
+        {headline}
+      </div>
+
+      {/* Summary */}
+      <div
+        style={{
+          display: "flex",
+          marginTop: "24px",
+          fontSize: 28,
+          lineHeight: 1.45,
+          fontWeight: 400,
+          maxWidth: "1050px",
+          color: "rgba(255, 255, 255, 0.55)",
+        }}
+      >
+        {description}
+      </div>
+
+      {/* Bottom bar */}
+      <div
+        style={{
+          display: "flex",
+          marginTop: "36px",
+          paddingTop: "20px",
+          borderTop: "2px solid rgba(255,255,255,0.1)",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 26,
+              fontWeight: 800,
+              color: "rgba(255,255,255,0.55)",
+            }}
+          >
+            NOD
           </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 22,
+            color: "rgba(255,255,255,0.35)",
+          }}
+        >
+          {articleHost ?? "nod-archive.com"}
         </div>
       </div>
     </div>,
