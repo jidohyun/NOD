@@ -10,10 +10,17 @@ export const runtime = "edge";
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 630;
 
-function buildProxyUrl(requestUrl: string, shareId: string, token: string): string {
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function buildProxyUrl(requestUrl: string, shareId: string, token: string | null): string {
   const url = new URL(requestUrl);
-  const proxyUrl = new URL(`/_proxy/api/articles/share/${encodeURIComponent(shareId)}`, url.origin);
-  proxyUrl.searchParams.set("token", token);
+  const path = UUID_RE.test(shareId)
+    ? `/_proxy/api/articles/share/${encodeURIComponent(shareId)}`
+    : `/_proxy/api/articles/share/by-slug/${encodeURIComponent(shareId)}`;
+  const proxyUrl = new URL(path, url.origin);
+  if (token) {
+    proxyUrl.searchParams.set("token", token);
+  }
   return proxyUrl.toString();
 }
 
@@ -182,7 +189,7 @@ export async function GET(request: Request) {
   const shareId = url.searchParams.get("shareId")?.trim();
   const token = url.searchParams.get("token")?.trim();
 
-  if (!shareId || !token) {
+  if (!shareId) {
     const image = renderFallbackImage();
     image.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
     return image;
@@ -192,7 +199,7 @@ export async function GET(request: Request) {
   const timeout = setTimeout(() => controller.abort(), 3000);
 
   try {
-    const response = await fetch(buildProxyUrl(request.url, shareId, token), {
+    const response = await fetch(buildProxyUrl(request.url, shareId, token ?? null), {
       cache: "no-store",
       signal: controller.signal,
     });

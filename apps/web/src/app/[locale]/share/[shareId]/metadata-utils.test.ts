@@ -132,4 +132,17 @@ describe("resolveSharedMetadataImage", () => {
       "https://nod-archive.com/api/og/shared-article?locale=ko&shareId=share+id&token=token+with+space"
     );
   });
+
+  it("omits token param when token is empty string", () => {
+    const shared = createSharedArticle({ thumbnail_mode: "default" });
+
+    expect(
+      resolveSharedMetadataImage(shared, {
+        siteOrigin,
+        locale: "ko",
+        shareId: "my-slug-abc123",
+        token: "",
+      })
+    ).toBe("https://nod-archive.com/api/og/shared-article?locale=ko&shareId=my-slug-abc123");
+  });
 });

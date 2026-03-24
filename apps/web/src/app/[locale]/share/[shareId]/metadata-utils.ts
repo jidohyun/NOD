@@ -48,11 +48,10 @@ export function resolveSharedMetadataImage(
   const hasManualThumbnail =
     shared.thumbnail_mode === "manual" && Boolean(shared.thumbnail_url?.trim());
   if (!hasManualThumbnail) {
-    const params = new URLSearchParams({
-      locale,
-      shareId,
-      token,
-    });
+    const params = new URLSearchParams({ locale, shareId });
+    if (token) {
+      params.set("token", token);
+    }
     return toAbsoluteUrl(siteOrigin, `/api/og/shared-article?${params.toString()}`);
   }
 
