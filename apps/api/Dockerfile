@@ -27,4 +27,4 @@ USER appuser
 
 EXPOSE 8080
 
-CMD ["sh", "-c", ".venv/bin/fastapi run src/main.py --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["sh", "-c", ".venv/bin/alembic upgrade head && .venv/bin/fastapi run src/main.py --host 0.0.0.0 --port ${PORT:-8080}"]
