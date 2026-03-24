@@ -31,7 +31,9 @@ CONTENT_TYPE_LABELS: dict[str, str] = {
 DEFAULT_GRADIENT = ((51, 65, 85), (17, 24, 39))
 
 
-def _get_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+def _get_font(
+    size: int, bold: bool = False
+) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
     """Try to load Noto Sans KR from system, fall back to default."""
     font_paths = [
         "/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
@@ -76,7 +78,7 @@ def _draw_gradient(
 def _truncate_text(
     draw: ImageDraw.ImageDraw,
     text: str,
-    font: ImageFont.FreeTypeFont,
+    font: ImageFont.FreeTypeFont | ImageFont.ImageFont,
     max_width: int,
     max_lines: int,
 ) -> list[str]:
