@@ -1,49 +1,15 @@
 import { ImageResponse } from "next/og";
-import {
-  formatOgDescription,
-  formatOgHeadline,
-} from "@/app/[locale]/share/[shareId]/og-text-utils";
-import type { SharedArticle } from "@/lib/api/articles";
+import puppeteer from "puppeteer-core";
 
 export const runtime = "nodejs";
 
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 630;
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function getApiBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "production"
-      ? "https://api.nod-archive.com"
-      : "http://localhost:8000")
-  );
-}
-
-function buildApiUrl(shareId: string, token: string | null): string {
-  const apiBase = getApiBaseUrl();
-  const path = UUID_RE.test(shareId)
-    ? `/api/articles/share/${encodeURIComponent(shareId)}`
-    : `/api/articles/share/by-slug/${encodeURIComponent(shareId)}`;
-  const apiUrl = new URL(path, apiBase);
-  if (token) {
-    apiUrl.searchParams.set("token", token);
-  }
-  apiUrl.searchParams.set("no_track", "true");
-  return apiUrl.toString();
-}
-
-function getArticleHost(articleUrl: string | null | undefined): string | null {
-  if (!articleUrl) {
-    return null;
-  }
-
-  try {
-    return new URL(articleUrl).host;
-  } catch {
-    return null;
-  }
+function getSiteOrigin(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.NODE_ENV === "production") return "https://nod-archive.com";
+  return "http://localhost:3000";
 }
 
 function renderFallbackImage() {
@@ -71,143 +37,32 @@ function renderFallbackImage() {
   );
 }
 
-const CONTENT_TYPE_GRADIENTS: Record<string, { from: string; to: string }> = {
-  tech_blog: { from: "#2563eb", to: "#3730a3" },
-  general_news: { from: "#4b5563", to: "#1e293b" },
-  academic_paper: { from: "#9333ea", to: "#5b21b6" },
-  official_docs: { from: "#0d9488", to: "#065f46" },
-  video_podcast: { from: "#db2777", to: "#9f1239" },
-  github_repo: { from: "#334155", to: "#111827" },
-};
+async function takeScreenshot(shareId: string, token: string | null): Promise<Buffer> {
+  const origin = getSiteOrigin();
+  const previewUrl = new URL(`/og-preview/${encodeURIComponent(shareId)}`, origin);
+  if (token) previewUrl.searchParams.set("token", token);
 
-const CONTENT_TYPE_LABELS: Record<string, string> = {
-  tech_blog: "Tech Blog",
-  general_news: "News",
-  academic_paper: "Paper",
-  official_docs: "Docs",
-  video_podcast: "Video",
-  github_repo: "GitHub",
-};
+  const executablePath =
+    process.env.PUPPETEER_EXECUTABLE_PATH ||
+    (process.platform === "darwin"
+      ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      : "/usr/bin/chromium-browser");
 
-function renderSharedImage(shared: SharedArticle) {
-  const headline = formatOgHeadline(shared.title);
-  const description = formatOgDescription(shared.summary);
-  const articleHost = getArticleHost(shared.url);
-  const gradient = CONTENT_TYPE_GRADIENTS[shared.content_type] ?? {
-    from: "#334155",
-    to: "#111827",
-  };
-  const contentLabel = CONTENT_TYPE_LABELS[shared.content_type] ?? null;
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+    defaultViewport: { width: IMAGE_WIDTH, height: IMAGE_HEIGHT },
+    executablePath,
+    headless: true,
+  });
 
-  return new ImageResponse(
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        padding: "52px 60px 44px",
-        background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
-        color: "#ffffff",
-        fontFamily:
-          "Inter, Pretendard, Apple SD Gothic Neo, Noto Sans KR, Noto Sans, system-ui, sans-serif",
-      }}
-    >
-      {/* Content type badge */}
-      {contentLabel ? (
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <div
-            style={{
-              display: "flex",
-              padding: "6px 18px",
-              borderRadius: "9999px",
-              background: "rgba(255,255,255,0.15)",
-              fontSize: 22,
-              fontWeight: 700,
-              color: "rgba(255,255,255,0.75)",
-            }}
-          >
-            {contentLabel}
-          </div>
-        </div>
-      ) : null}
-
-      {/* Spacer */}
-      <div style={{ display: "flex", flex: 1 }} />
-
-      {/* Title */}
-      <div
-        style={{
-          display: "flex",
-          fontSize: 64,
-          lineHeight: 1.1,
-          letterSpacing: "-0.02em",
-          fontWeight: 900,
-          maxWidth: "1080px",
-        }}
-      >
-        {headline}
-      </div>
-
-      {/* Summary */}
-      <div
-        style={{
-          display: "flex",
-          marginTop: "24px",
-          fontSize: 28,
-          lineHeight: 1.45,
-          fontWeight: 400,
-          maxWidth: "1050px",
-          color: "rgba(255, 255, 255, 0.55)",
-        }}
-      >
-        {description}
-      </div>
-
-      {/* Bottom bar */}
-      <div
-        style={{
-          display: "flex",
-          marginTop: "36px",
-          paddingTop: "20px",
-          borderTop: "2px solid rgba(255,255,255,0.1)",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://nod-archive.com/brand/nod-icon.png"
-            alt="NOD"
-            width={36}
-            height={36}
-            style={{ borderRadius: 4, opacity: 0.8 }}
-          />
-          <div
-            style={{
-              display: "flex",
-              fontSize: 26,
-              fontWeight: 700,
-              color: "rgba(255,255,255,0.55)",
-            }}
-          >
-            NOD
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 22,
-            color: "rgba(255,255,255,0.35)",
-          }}
-        >
-          {articleHost ?? "nod-archive.com"}
-        </div>
-      </div>
-    </div>,
-    { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
-  );
+  try {
+    const page = await browser.newPage();
+    await page.goto(previewUrl.toString(), { waitUntil: "networkidle0", timeout: 10000 });
+    const screenshot = await page.screenshot({ type: "png" });
+    return Buffer.from(screenshot);
+  } finally {
+    await browser.close();
+  }
 }
 
 export async function GET(request: Request) {
@@ -221,30 +76,17 @@ export async function GET(request: Request) {
     return image;
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-
   try {
-    const response = await fetch(buildApiUrl(shareId, token ?? null), {
-      cache: "no-store",
-      signal: controller.signal,
+    const png = await takeScreenshot(shareId, token ?? null);
+    return new Response(new Uint8Array(png), {
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=86400, stale-while-revalidate=2592000",
+      },
     });
-
-    if (!response.ok) {
-      const image = renderFallbackImage();
-      image.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
-      return image;
-    }
-
-    const shared = (await response.json()) as SharedArticle;
-    const image = renderSharedImage(shared);
-    image.headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=2592000");
-    return image;
   } catch {
     const image = renderFallbackImage();
     image.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
     return image;
-  } finally {
-    clearTimeout(timeout);
   }
 }
