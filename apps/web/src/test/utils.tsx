@@ -27,6 +27,7 @@ const TEST_MESSAGES = {
       nav: {
         dashboard: "Dashboard",
         articles: "Articles",
+        shared: "Shared",
         changelog: "Changelog",
         settings: "Settings",
         billing: "Manage Billing",

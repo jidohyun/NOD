@@ -17,28 +17,18 @@ export default async function ChangelogPage({ params }: ChangelogPageProps) {
   setRequestLocale(locale as Locale);
 
   const t = await getTranslations("changelogPage");
+  const versionIds = ["v1_3_0", "v1_2_0", "v1_1_0", "v1_0_0"] as const;
+  const highlightIds = ["item1", "item2", "item3", "item4"] as const;
 
-  const highlights = [
-    {
-      title: t("highlights.shareRoutingTitle"),
-      description: t("highlights.shareRoutingDescription"),
-    },
-    {
-      title: t("highlights.publicPageTitle"),
-      description: t("highlights.publicPageDescription"),
-    },
-    {
-      title: t("highlights.commentsTitle"),
-      description: t("highlights.commentsDescription"),
-    },
-    {
-      title: t("highlights.shareControlsTitle"),
-      description: t("highlights.shareControlsDescription"),
-    },
-  ];
+  const getVersionHighlights = (versionId: (typeof versionIds)[number]) => {
+    return highlightIds.map((highlightId) => ({
+      title: t(`versions.${versionId}.highlights.${highlightId}.title`),
+      description: t(`versions.${versionId}.highlights.${highlightId}.description`),
+    }));
+  };
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <main className="mx-auto max-w-6xl px-6 py-12">
       <LegalHeader />
 
       <header className="space-y-2">
@@ -46,28 +36,69 @@ export default async function ChangelogPage({ params }: ChangelogPageProps) {
         <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
       </header>
 
-      <section className="mt-8 rounded-2xl border border-cm-text/12 bg-white/80 p-6 dark:bg-cm-surface/80">
-        <p className="text-xs font-semibold uppercase tracking-wide text-nod-gold">
-          {t("latest.badge")}
-        </p>
-        <h2 className="mt-2 text-xl font-bold">{t("latest.version")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {t("latest.publishedAtLabel")}: {t("latest.publishedAt")}
-        </p>
-        <p className="mt-4 text-sm leading-6">{t("latest.summary")}</p>
-      </section>
+      <div className="mt-8 grid gap-6 md:grid-cols-[240px_minmax(0,1fr)]">
+        <aside className="h-fit rounded-2xl border border-cm-text/10 bg-white/80 p-4 md:sticky md:top-24 dark:bg-cm-surface/80">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {t("sections.versionListTitle")}
+          </h2>
+          <nav className="mt-3 space-y-1">
+            {versionIds.map((versionId) => (
+              <a
+                key={versionId}
+                href={`#${versionId}`}
+                className="block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-cm-bg"
+              >
+                {t(`versions.${versionId}.label`)}
+              </a>
+            ))}
+          </nav>
+        </aside>
 
-      <section className="mt-8 space-y-3">
-        <h2 className="text-base font-semibold">{t("sections.highlightsTitle")}</h2>
-        <ul className="space-y-2">
-          {highlights.map((highlight) => (
-            <li key={highlight.title} className="rounded-xl border border-cm-text/10 px-4 py-3">
-              <p className="text-sm font-semibold">{highlight.title}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{highlight.description}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <div className="space-y-5">
+          {versionIds.map((versionId) => {
+            const highlights = getVersionHighlights(versionId);
+
+            return (
+              <section
+                id={versionId}
+                key={versionId}
+                className="scroll-mt-24 rounded-2xl border border-cm-text/12 bg-white/80 p-6 dark:bg-cm-surface/80"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-xl font-bold">{t(`versions.${versionId}.label`)}</h2>
+                  <span className="rounded-full border border-cm-text/15 px-2 py-0.5 text-xs text-muted-foreground">
+                    {t(`versions.${versionId}.status`)}
+                  </span>
+                </div>
+
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t(`versions.${versionId}.tagLabel`)}: {t(`versions.${versionId}.tag`)}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {t(`versions.${versionId}.publishedAtLabel`)}:{" "}
+                  {t(`versions.${versionId}.publishedAt`)}
+                </p>
+                <p className="mt-4 text-sm leading-6">{t(`versions.${versionId}.summary`)}</p>
+
+                <h3 className="mt-5 text-sm font-semibold">
+                  {t(`versions.${versionId}.highlightsTitle`)}
+                </h3>
+                <ul className="mt-3 space-y-2">
+                  {highlights.map((highlight) => (
+                    <li
+                      key={highlight.title}
+                      className="rounded-xl border border-cm-text/10 px-4 py-3"
+                    >
+                      <p className="text-sm font-semibold">{highlight.title}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">{highlight.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="mt-8 flex flex-wrap gap-3 text-sm">
         <a

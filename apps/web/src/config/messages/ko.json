@@ -54,6 +54,131 @@
     "subtitle": "지식 관리와 생산성에 관한 팁, 가이드, 인사이트를 공유합니다.",
     "title": "블로그"
   },
+  "changelogPage": {
+    "title": "릴리즈 노트",
+    "subtitle": "v1부터 버전별 변경사항을 사이드바에서 탐색할 수 있습니다.",
+    "sections": {
+      "versionListTitle": "버전"
+    },
+    "versions": {
+      "v1_3_0": {
+        "label": "v1.3.0",
+        "status": "릴리즈 예정",
+        "tagLabel": "릴리즈 타겟",
+        "tag": "v1.3.0",
+        "publishedAtLabel": "예정 시점",
+        "publishedAt": "Upcoming",
+        "summary": "v1.3.0은 아티클 공유 기능 중심으로 릴리즈될 예정입니다. 요약 콘텐츠를 더 쉽게 공유하고, 공개 페이지에서 반응/소통까지 가능하도록 개선합니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "아티클 공개 공유 링크",
+            "description": "제품 내에서 요약 아티클의 공개 링크를 생성하고 관리할 수 있습니다."
+          },
+          "item2": {
+            "title": "전용 공유 페이지 경험",
+            "description": "공유 페이지를 가독성 중심으로 구성해 메타정보와 원문 맥락을 명확히 제공합니다."
+          },
+          "item3": {
+            "title": "댓글/공감 인터랙션",
+            "description": "댓글, 답글, 공감 반응을 통해 공유된 요약에 대한 참여를 지원합니다."
+          },
+          "item4": {
+            "title": "고급 공유 설정",
+            "description": "커스텀 공유 URL과 썸네일 설정으로 배포 품질을 높일 수 있습니다."
+          }
+        }
+      },
+      "v1_2_0": {
+        "label": "v1.2.0",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "extension-v1.2.0",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-03-03",
+        "summary": "익스텐션 릴리즈 라인의 최신 안정 버전입니다. extension-v1.1.0 이후 버전으로 현재 기준점 역할을 합니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "익스텐션 릴리즈 시퀀스 유지",
+            "description": "extension-v1.0.0 → v1.1.0 → v1.2.0 흐름으로 릴리즈 이력이 유지됩니다."
+          },
+          "item2": {
+            "title": "릴리즈 비교 추적 가능",
+            "description": "GitHub 비교 링크로 버전 간 변경사항을 투명하게 확인할 수 있습니다."
+          },
+          "item3": {
+            "title": "최신 안정 기준점",
+            "description": "다음 마일스톤 전까지의 최신 확장 기능 기준 버전입니다."
+          },
+          "item4": {
+            "title": "릴리즈 메타데이터 정합",
+            "description": "버전 표기와 게시 이력이 GitHub 릴리즈 기록과 일치합니다."
+          }
+        }
+      },
+      "v1_1_0": {
+        "label": "v1.1.0",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "extension-v1.1.0",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-03-03",
+        "summary": "v1.2.0 직전의 익스텐션 증분 릴리즈로, 최신 버전 비교의 기준점이 되는 중간 마일스톤입니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "중간 릴리즈 마일스톤",
+            "description": "extension-v1.0.0과 extension-v1.2.0 사이를 연결하는 버전입니다."
+          },
+          "item2": {
+            "title": "버전 업그레이드 연속성",
+            "description": "확장 프로그램의 점진적 업그레이드 흐름을 안정적으로 유지합니다."
+          },
+          "item3": {
+            "title": "비교 경계 버전",
+            "description": "extension-v1.2.0 변경사항을 비교/검증할 때 기준이 되는 버전입니다."
+          },
+          "item4": {
+            "title": "게시 이력 보존",
+            "description": "GitHub 릴리즈 기록으로 릴리즈 히스토리를 추적할 수 있습니다."
+          }
+        }
+      },
+      "v1_0_0": {
+        "label": "v1.0.0",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "web-v1.0.0 / extension-v1.0.0",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-02-20",
+        "summary": "NOD 웹의 첫 프로덕션 기준 릴리즈이며, 같은 날 extension-v1.0.0으로 익스텐션 릴리즈 라인이 시작되었습니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "웹 프로덕션 기준선",
+            "description": "대시보드, 아티클 리스트/상세, AI 요약 플로우를 프로덕션에 배포했습니다."
+          },
+          "item2": {
+            "title": "검색/내보내기 기능",
+            "description": "시맨틱 검색, 마크다운 내보내기, 다국어 UI를 제공했습니다."
+          },
+          "item3": {
+            "title": "결제 플로우 통합",
+            "description": "웹 제품에 요금제/결제 관리 플로우를 통합했습니다."
+          },
+          "item4": {
+            "title": "익스텐션 라인 시작",
+            "description": "extension-v1.0.0으로 첫 익스텐션 릴리즈 라인이 시작되었습니다."
+          }
+        }
+      }
+    },
+    "links": {
+      "githubReleases": "GitHub에서 전체 릴리즈 보기",
+      "backToDashboard": "대시보드로 돌아가기"
+    }
+  },
   "continueWithGoogle": "Google로 계속하기",
   "dashboard": {
     "allContentTypes": "전체 유형",
