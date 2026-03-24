@@ -56,26 +56,122 @@
   },
   "changelogPage": {
     "title": "Release Notes",
-    "subtitle": "Track what changed in NOD and what’s new in each release.",
-    "latest": {
-      "badge": "Latest release",
-      "version": "v1.0.0 — Share Release",
-      "publishedAtLabel": "Published",
-      "publishedAt": "2026-03-23",
-      "summary": "This release delivers public sharing for summarized content, including stable share URLs, a dedicated shared view, and engagement features like comments and empathy reactions."
-    },
     "sections": {
-      "highlightsTitle": "Highlights"
+      "versionListTitle": "Versions"
     },
-    "highlights": {
-      "shareRoutingTitle": "Stable share URL routing",
-      "shareRoutingDescription": "Added canonical share paths and slug-based routing so shared links are cleaner and easier to remember.",
-      "publicPageTitle": "Dedicated shared article page",
-      "publicPageDescription": "Published summaries now render in a focused public view with title hero, metadata, and original-link context.",
-      "commentsTitle": "Comments and empathy reactions",
-      "commentsDescription": "Readers can interact on shared summaries through comments, threaded replies, and empathy reactions.",
-      "shareControlsTitle": "Advanced share controls",
-      "shareControlsDescription": "Added controls for custom share URL and custom thumbnail settings when generating share links."
+    "versions": {
+      "v1_3_0": {
+        "label": "v1.3.0",
+        "status": "Planned",
+        "tagLabel": "Release target",
+        "tag": "v1.3.0",
+        "publishedAtLabel": "Target",
+        "publishedAt": "Upcoming",
+        "summary": "The v1.3.0 release is planned around article sharing. This update focuses on making summarized content easy to share, view publicly, and engage with.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Public share links for articles",
+            "description": "Generate and manage public links for summarized articles directly from the product."
+          },
+          "item2": {
+            "title": "Dedicated shared article experience",
+            "description": "Shared pages are optimized for readability with clear metadata and original source context."
+          },
+          "item3": {
+            "title": "Discussion and empathy interactions",
+            "description": "Readers can react and participate through comments, replies, and empathy actions."
+          },
+          "item4": {
+            "title": "Advanced sharing controls",
+            "description": "Support custom share URL and thumbnail options for cleaner distribution."
+          }
+        }
+      },
+      "v1_2_0": {
+        "label": "v1.2.0",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "extension-v1.2.0",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-03-03",
+        "summary": "Latest extension release in the published sequence. This release follows extension-v1.1.0 and represents the current stable extension baseline.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Extension release progression",
+            "description": "Published as part of the extension-v1.0.0 → v1.1.0 → v1.2.0 sequence."
+          },
+          "item2": {
+            "title": "Traceable release comparison",
+            "description": "GitHub compare links provide transparent change tracking between extension versions."
+          },
+          "item3": {
+            "title": "Stable extension baseline",
+            "description": "Serves as the latest stable extension tag before the next planned milestone."
+          },
+          "item4": {
+            "title": "Release metadata alignment",
+            "description": "Version naming and publish timing are aligned with GitHub release records."
+          }
+        }
+      },
+      "v1_1_0": {
+        "label": "v1.1.0",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "extension-v1.1.0",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-03-03",
+        "summary": "Incremental extension release preceding v1.2.0, used as the comparison base for the latest extension update.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Intermediate extension milestone",
+            "description": "Acts as the stepping stone between extension-v1.0.0 and extension-v1.2.0."
+          },
+          "item2": {
+            "title": "Version continuity",
+            "description": "Maintains release continuity and semantic upgrade flow for extension users."
+          },
+          "item3": {
+            "title": "Comparable release boundary",
+            "description": "Provides a clear boundary for comparing changes into extension-v1.2.0."
+          },
+          "item4": {
+            "title": "Published release trace",
+            "description": "Recorded in GitHub releases to keep extension history auditable."
+          }
+        }
+      },
+      "v1_0_0": {
+        "label": "v1.0.0",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "web-v1.0.0 / extension-v1.0.0",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-02-20",
+        "summary": "First production baseline of NOD web, with extension v1.0.0 released later the same day as the initial extension line start.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Production web baseline",
+            "description": "Shipped dashboard, article list/detail, and AI summary workflow for web."
+          },
+          "item2": {
+            "title": "Search and export capabilities",
+            "description": "Included semantic search, markdown export, and localized UI support."
+          },
+          "item3": {
+            "title": "Billing integration",
+            "description": "Integrated pricing and billing management flow in the web product."
+          },
+          "item4": {
+            "title": "Extension line kickoff",
+            "description": "extension-v1.0.0 established the first extension release track."
+          }
+        }
+      }
     },
     "links": {
       "githubReleases": "View all releases on GitHub",

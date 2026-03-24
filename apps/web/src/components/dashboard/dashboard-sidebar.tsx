@@ -9,6 +9,7 @@ import {
   LogOut,
   MessageSquare,
   Settings,
+  Share2,
   User as UserIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -38,6 +39,7 @@ export function DashboardSidebar() {
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t("sidebar.nav.dashboard") },
     { href: "/articles", icon: FileText, label: t("sidebar.nav.articles") },
+    { href: "/shared", icon: Share2, label: t("sidebar.nav.shared") },
   ];
 
   const bottomNavItems = [
