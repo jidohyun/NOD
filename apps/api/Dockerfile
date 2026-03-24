@@ -15,6 +15,12 @@ FROM base AS production
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
 
+# Install system fonts for OG image generation
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies
 RUN uv sync --frozen --no-dev --no-install-project
 

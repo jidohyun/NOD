@@ -10,7 +10,9 @@ from PIL import Image, ImageDraw, ImageFont
 IMAGE_WIDTH = 1200
 IMAGE_HEIGHT = 630
 
-CONTENT_TYPE_GRADIENTS: dict[str, tuple[tuple[int, int, int], tuple[int, int, int]]] = {
+CONTENT_TYPE_GRADIENTS: dict[
+    str, tuple[tuple[int, int, int], tuple[int, int, int]]
+] = {
     "tech_blog": ((37, 99, 235), (55, 48, 163)),
     "general_news": ((75, 85, 99), (30, 41, 59)),
     "academic_paper": ((147, 51, 234), (91, 33, 182)),
@@ -30,95 +32,119 @@ CONTENT_TYPE_LABELS: dict[str, str] = {
 
 DEFAULT_GRADIENT = ((51, 65, 85), (17, 24, 39))
 
+_FONT_DIRS = [
+    "/usr/share/fonts/opentype/noto/",
+    "/usr/share/fonts/noto-cjk/",
+    "/usr/share/fonts/google-noto-cjk/",
+    "/usr/share/fonts/noto/",
+]
+
+_FONT_NAMES_REGULAR = [
+    "NotoSansCJK-Regular.ttc",
+    "NotoSansCJKkr-Regular.otf",
+]
+
+_FONT_NAMES_BOLD = [
+    "NotoSansCJK-Bold.ttc",
+    "NotoSansCJKkr-Bold.otf",
+]
+
 
 def _get_font(
-    size: int, bold: bool = False
+    size: int, bold: bool = False,
 ) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    """Try to load Noto Sans KR from system, fall back to default."""
-    font_paths = [
-        "/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/google-noto-cjk/NotoSansCJKkr-Regular.otf",
-        "/usr/share/fonts/noto/NotoSansCJK-Regular.ttc",
-    ]
+    names = _FONT_NAMES_BOLD if bold else _FONT_NAMES_REGULAR
+    for d in _FONT_DIRS:
+        for n in names:
+            p = Path(d) / n
+            if p.exists():
+                return ImageFont.truetype(str(p), size)
+    # fallback: try regular even when bold requested
     if bold:
-        bold_paths = [
-            "/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc",
-            "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-            "/usr/share/fonts/google-noto-cjk/NotoSansCJKkr-Bold.otf",
-            "/usr/share/fonts/noto/NotoSansCJK-Bold.ttc",
-        ]
-        font_paths = bold_paths + font_paths
-
-    for fp in font_paths:
-        if Path(fp).exists():
-            return ImageFont.truetype(fp, size)
-
+        for d in _FONT_DIRS:
+            for n in _FONT_NAMES_REGULAR:
+                p = Path(d) / n
+                if p.exists():
+                    return ImageFont.truetype(str(p), size)
     try:
         return ImageFont.truetype("DejaVuSans.ttf", size)
     except OSError:
         return ImageFont.load_default()
 
 
+def _blend(
+    bg: tuple[int, int, int],
+    fg: tuple[int, int, int],
+    alpha: float,
+) -> tuple[int, int, int]:
+    """Blend fg over bg with alpha (0..1)."""
+    return (
+        int(bg[0] * (1 - alpha) + fg[0] * alpha),
+        int(bg[1] * (1 - alpha) + fg[1] * alpha),
+        int(bg[2] * (1 - alpha) + fg[2] * alpha),
+    )
+
+
+def _gradient_at(
+    y: int,
+    c0: tuple[int, int, int],
+    c1: tuple[int, int, int],
+) -> tuple[int, int, int]:
+    r = y / IMAGE_HEIGHT
+    return (
+        int(c0[0] + (c1[0] - c0[0]) * r),
+        int(c0[1] + (c1[1] - c0[1]) * r),
+        int(c0[2] + (c1[2] - c0[2]) * r),
+    )
+
+
 def _draw_gradient(
     img: Image.Image,
-    color_from: tuple[int, int, int],
-    color_to: tuple[int, int, int],
+    c0: tuple[int, int, int],
+    c1: tuple[int, int, int],
 ) -> None:
-    """Draw a vertical gradient on the image."""
     draw = ImageDraw.Draw(img)
     for y in range(IMAGE_HEIGHT):
-        ratio = y / IMAGE_HEIGHT
-        r = int(color_from[0] + (color_to[0] - color_from[0]) * ratio)
-        g = int(color_from[1] + (color_to[1] - color_from[1]) * ratio)
-        b = int(color_from[2] + (color_to[2] - color_from[2]) * ratio)
-        draw.line([(0, y), (IMAGE_WIDTH, y)], fill=(r, g, b))
+        c = _gradient_at(y, c0, c1)
+        draw.line([(0, y), (IMAGE_WIDTH, y)], fill=c)
 
 
-def _truncate_text(
+def _wrap_text(
     draw: ImageDraw.ImageDraw,
     text: str,
     font: ImageFont.FreeTypeFont | ImageFont.ImageFont,
-    max_width: int,
+    max_w: int,
     max_lines: int,
 ) -> list[str]:
-    """Word-wrap and truncate text to fit within bounds."""
     words = text.replace("\n", " ").split()
     lines: list[str] = []
-    current_line = ""
-
-    for word in words:
-        test = f"{current_line} {word}".strip() if current_line else word
-        bbox = draw.textbbox((0, 0), test, font=font)
-        if bbox[2] - bbox[0] <= max_width:
-            current_line = test
+    cur = ""
+    for w in words:
+        test = f"{cur} {w}".strip() if cur else w
+        bw = draw.textbbox((0, 0), test, font=font)[2]
+        if bw <= max_w:
+            cur = test
         else:
-            if current_line:
-                lines.append(current_line)
-            current_line = word
+            if cur:
+                lines.append(cur)
+            cur = w
             if len(lines) >= max_lines:
                 break
-
-    if current_line and len(lines) < max_lines:
-        lines.append(current_line)
-
+    if cur and len(lines) < max_lines:
+        lines.append(cur)
+    # ellipsis on last line if truncated
     if len(lines) == max_lines:
-        last = lines[-1]
-        bbox = draw.textbbox((0, 0), last + "...", font=font)
-        if bbox[2] - bbox[0] > max_width:
-            bbox_w = draw.textbbox((0, 0), last + "...", font=font)[2]
-            while last and bbox_w > max_width:
-                last = last[:-1]
-                bbox_w = draw.textbbox(
+        total = sum(len(ln.split()) for ln in lines)
+        if total < len(words):
+            last = lines[-1]
+            while last:
+                tw = draw.textbbox(
                     (0, 0), last + "...", font=font
                 )[2]
-            # skip the duplicate trim below
+                if tw <= max_w:
+                    break
+                last = last[:-1]
             lines[-1] = last.rstrip() + "..."
-        elif len(words) > sum(
-            len(line.split()) for line in lines
-        ):
-            lines[-1] = last + "..."
-
     return lines
 
 
@@ -127,6 +153,7 @@ def _get_host(url: str | None) -> str:
         return "nod-archive.com"
     try:
         from urllib.parse import urlparse
+
         return urlparse(url).hostname or "nod-archive.com"
     except Exception:
         return "nod-archive.com"
@@ -139,89 +166,118 @@ def generate_og_image(
     article_url: str | None = None,
 ) -> bytes:
     """Generate a 1200x630 OG image as PNG bytes."""
-    gradient = CONTENT_TYPE_GRADIENTS.get(content_type, DEFAULT_GRADIENT)
+    grad = CONTENT_TYPE_GRADIENTS.get(
+        content_type, DEFAULT_GRADIENT
+    )
     label = CONTENT_TYPE_LABELS.get(content_type)
     hostname = _get_host(article_url)
 
     img = Image.new("RGB", (IMAGE_WIDTH, IMAGE_HEIGHT))
-    _draw_gradient(img, gradient[0], gradient[1])
+    _draw_gradient(img, grad[0], grad[1])
     draw = ImageDraw.Draw(img)
 
-    font_title = _get_font(48, bold=True)
-    font_summary = _get_font(22)
-    font_badge = _get_font(18, bold=True)
-    font_bottom = _get_font(20, bold=True)
-    font_domain = _get_font(18)
+    ft = _get_font(52, bold=True)
+    fs = _get_font(24)
+    fb = _get_font(20, bold=True)
+    fn = _get_font(22, bold=True)
+    fd = _get_font(20)
 
     white = (255, 255, 255)
-    white_75 = (255, 255, 255, 191)
-    white_55 = (255, 255, 255, 140)
-    white_35 = (255, 255, 255, 89)
+    px = 48
+    max_w = IMAGE_WIDTH - px * 2
 
-    padding_x = 48
-    padding_top = 40
-
-    # Badge (top-right)
+    # --- Badge (top-right) ---
     if label:
-        badge_bbox = draw.textbbox((0, 0), label, font=font_badge)
-        badge_w = badge_bbox[2] - badge_bbox[0]
-        badge_h = badge_bbox[3] - badge_bbox[1]
-        badge_x = IMAGE_WIDTH - padding_x - badge_w - 32
-        badge_y = padding_top
+        bb = draw.textbbox((0, 0), label, font=fb)
+        bw = bb[2] - bb[0]
+        bh = bb[3] - bb[1]
+        bx = IMAGE_WIDTH - px - bw - 32
+        by = 40
+        # semi-transparent pill: blend white 15% over gradient
+        bg_color = _gradient_at(by, grad[0], grad[1])
+        pill_color = _blend(bg_color, (255, 255, 255), 0.15)
+        text_color = _blend(bg_color, (255, 255, 255), 0.75)
         draw.rounded_rectangle(
-            [badge_x - 16, badge_y - 6, badge_x + badge_w + 16, badge_y + badge_h + 6],
-            radius=9999,
-            fill=(255, 255, 255, 38),
+            [bx - 16, by - 8, bx + bw + 16, by + bh + 8],
+            radius=20,
+            fill=pill_color,
         )
-        draw.text((badge_x, badge_y), label, fill=white_75, font=font_badge)
+        draw.text((bx, by), label, fill=text_color, font=fb)
 
-    # Title (bottom area)
-    max_text_width = IMAGE_WIDTH - padding_x * 2
-    title_lines = _truncate_text(draw, title, font_title, max_text_width, 3)
-    summary_lines = _truncate_text(draw, summary, font_summary, max_text_width, 4)
+    # --- Title ---
+    title_lines = _wrap_text(draw, title, ft, max_w, 3)
+    line_h_title = 62
+    title_block_h = len(title_lines) * line_h_title
 
-    # Calculate positions from bottom
-    bottom_bar_y = IMAGE_HEIGHT - 36 - 20
-    separator_y = bottom_bar_y - 16
+    # --- Summary ---
+    summary_lines = _wrap_text(draw, summary, fs, max_w, 4)
+    line_h_sum = 36
+    sum_block_h = len(summary_lines) * line_h_sum
 
-    summary_height = len(summary_lines) * 34
-    title_height = len(title_lines) * 58
+    # Layout from bottom:
+    # bottom_y=594 | domain/NOD bar (h=24)
+    # separator at 558
+    # summary ends at 542
+    # title above summary
+    bar_y = IMAGE_HEIGHT - 36
+    sep_y = bar_y - 36
+    sum_end = sep_y - 16
+    sum_start = sum_end - sum_block_h
+    title_end = sum_start - 20
+    title_start = title_end - title_block_h
 
-    summary_y = separator_y - 20 - summary_height
-    title_y = summary_y - 16 - title_height
+    # Clamp title_start minimum
+    if title_start < 100:
+        title_start = 100
 
     # Draw title
     for i, line in enumerate(title_lines):
-        draw.text((padding_x, title_y + i * 58), line, fill=white, font=font_title)
+        y = title_start + i * line_h_title
+        draw.text((px, y), line, fill=white, font=ft)
 
     # Draw summary
+    sum_color = _blend(
+        _gradient_at(sum_start, grad[0], grad[1]),
+        (255, 255, 255),
+        0.55,
+    )
     for i, line in enumerate(summary_lines):
-        draw.text(
-            (padding_x, summary_y + i * 34),
-            line,
-            fill=white_55,
-            font=font_summary,
-        )
+        y = sum_start + i * line_h_sum
+        draw.text((px, y), line, fill=sum_color, font=fs)
 
-    # Separator line
+    # Separator
+    sep_color = _blend(
+        _gradient_at(sep_y, grad[0], grad[1]),
+        (255, 255, 255),
+        0.10,
+    )
     draw.line(
-        [(padding_x, separator_y), (IMAGE_WIDTH - padding_x, separator_y)],
-        fill=(255, 255, 255, 25),
+        [(px, sep_y), (IMAGE_WIDTH - px, sep_y)],
+        fill=sep_color,
         width=2,
     )
 
     # Bottom bar: NOD + domain
-    draw.text((padding_x + 44, bottom_bar_y), "NOD", fill=white_55, font=font_bottom)
-    domain_bbox = draw.textbbox((0, 0), hostname, font=font_domain)
-    domain_w = domain_bbox[2] - domain_bbox[0]
+    nod_color = _blend(
+        _gradient_at(bar_y, grad[0], grad[1]),
+        (255, 255, 255),
+        0.55,
+    )
+    draw.text((px, bar_y), "NOD", fill=nod_color, font=fn)
+    dom_color = _blend(
+        _gradient_at(bar_y, grad[0], grad[1]),
+        (255, 255, 255),
+        0.35,
+    )
+    dbb = draw.textbbox((0, 0), hostname, font=fd)
+    dw = dbb[2] - dbb[0]
     draw.text(
-        (IMAGE_WIDTH - padding_x - domain_w, bottom_bar_y + 2),
+        (IMAGE_WIDTH - px - dw, bar_y + 2),
         hostname,
-        fill=white_35,
-        font=font_domain,
+        fill=dom_color,
+        font=fd,
     )
 
-    # Save to bytes
     buf = io.BytesIO()
     img.save(buf, format="PNG", optimize=True)
     return buf.getvalue()
