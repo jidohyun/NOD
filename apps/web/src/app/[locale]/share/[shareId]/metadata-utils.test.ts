@@ -81,9 +81,7 @@ describe("resolveSharedMetadataImage", () => {
         shareId: "share-id",
         token: "token-value",
       })
-    ).toBe(
-      "https://nod-archive.com/api/og/shared-article?locale=en&shareId=share-id&token=token-value"
-    );
+    ).toBe("http://localhost:8000/api/articles/share/og-image/share-id?token=token-value");
   });
 
   it("uses manual absolute thumbnail_url in manual mode", () => {
@@ -128,9 +126,7 @@ describe("resolveSharedMetadataImage", () => {
         shareId: "share id",
         token: "token with space",
       })
-    ).toBe(
-      "https://nod-archive.com/api/og/shared-article?locale=ko&shareId=share+id&token=token+with+space"
-    );
+    ).toBe("http://localhost:8000/api/articles/share/og-image/share%20id?token=token+with+space");
   });
 
   it("omits token param when token is empty string", () => {
@@ -143,6 +139,6 @@ describe("resolveSharedMetadataImage", () => {
         shareId: "my-slug-abc123",
         token: "",
       })
-    ).toBe("https://nod-archive.com/api/og/shared-article?locale=ko&shareId=my-slug-abc123");
+    ).toBe("http://localhost:8000/api/articles/share/og-image/my-slug-abc123");
   });
 });
