@@ -40,21 +40,24 @@ export async function generateMetadata({
   searchParams,
 }: SharedArticlePageProps): Promise<Metadata> {
   const { locale, shareId } = await params;
-  const { token = "" } = await searchParams;
+  const { token } = await searchParams;
 
-  if (!shareId || !token) {
+  if (!shareId) {
     return baseMetadata;
   }
 
-  const sharePath = `/${locale}/share/${shareId}?token=${encodeURIComponent(token)}`;
+  const tokenParam = token ? `token=${encodeURIComponent(token)}` : "";
+  const sharePath = tokenParam
+    ? `/${locale}/share/${shareId}?${tokenParam}`
+    : `/${locale}/share/${shareId}`;
 
   try {
-    const response = await fetch(
-      getAbsoluteUrl(`/_proxy/api/articles/share/${shareId}?token=${encodeURIComponent(token)}`),
-      {
-        cache: "no-store",
-      }
-    );
+    const apiUrl = tokenParam
+      ? `/_proxy/api/articles/share/by-slug/${encodeURIComponent(shareId)}?${tokenParam}`
+      : `/_proxy/api/articles/share/by-slug/${encodeURIComponent(shareId)}`;
+    const response = await fetch(getAbsoluteUrl(apiUrl), {
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       return baseMetadata;
@@ -65,12 +68,13 @@ export async function generateMetadata({
     const title = shared.title;
     const description = shared.summary;
     const siteOrigin = getSiteOrigin();
-    const url = resolveSharedMetadataUrl(shared, { siteOrigin, locale, shareId, token });
+    const safeToken = token ?? "";
+    const url = resolveSharedMetadataUrl(shared, { siteOrigin, locale, shareId, token: safeToken });
     const image = resolveSharedMetadataImage(shared, {
       siteOrigin,
       locale,
       shareId,
-      token,
+      token: safeToken,
     });
 
     return {
