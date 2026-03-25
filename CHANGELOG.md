@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-03-25
+
+### Fixed
+
+- Restored production authentication for legacy Supabase HS256 access tokens that do not include `kid`, which had caused blanket 401 responses after JWT hardening.
+- Replaced unsafe claims-only fallback with explicit HS256 signature verification using `SUPABASE_JWT_SECRET`.
+- Added regression coverage for HS256 signature success/failure and missing-secret rejection paths in API auth tests.
+
 ## [1.3.0] - 2026-03-25
 
 ### Added
@@ -48,6 +56,7 @@ First official production release for the web product.
 - Stabilized dashboard and article UI integration issues in recent web releases.
 - Resolved payment-domain and deployment-related web issues before launch.
 
-[Unreleased]: https://github.com/jidohyun/NOD/compare/web-v1.3.0...HEAD
+[Unreleased]: https://github.com/jidohyun/NOD/compare/web-v1.3.1...HEAD
+[1.3.1]: https://github.com/jidohyun/NOD/compare/web-v1.3.0...web-v1.3.1
 [1.3.0]: https://github.com/jidohyun/NOD/compare/web-v1.0.0...web-v1.3.0
 [1.0.0]: https://github.com/jidohyun/NOD/releases/tag/web-v1.0.0

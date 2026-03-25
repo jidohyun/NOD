@@ -1,5 +1,7 @@
 import asyncio
 import base64
+import hashlib
+import hmac
 import json
 import uuid as uuid_lib
 from collections.abc import Callable
@@ -278,6 +280,30 @@ def _decode_supabase_jwt_payload_without_verification(
         return None
 
 
+def _verify_hs256_jwt_signature(token: str, secret: str) -> bool:
+    parts = token.split(".")
+    if len(parts) != 3:
+        return False
+
+    header_payload = f"{parts[0]}.{parts[1]}".encode()
+    signature_b64 = parts[2]
+    padding = 4 - len(signature_b64) % 4
+    if padding != 4:
+        signature_b64 += "=" * padding
+
+    try:
+        signature = base64.urlsafe_b64decode(signature_b64)
+    except Exception:
+        return False
+
+    expected = hmac.new(
+        secret.encode("utf-8"),
+        header_payload,
+        hashlib.sha256,
+    ).digest()
+    return hmac.compare_digest(signature, expected)
+
+
 def _decode_supabase_jwt_header(token: str) -> dict[str, Any] | None:
     parts = token.split(".")
     if len(parts) != 3:
@@ -390,26 +416,36 @@ async def _decode_supabase_jwt(token: str) -> CurrentUserInfo | None:
             return None
 
         kid = header.get("kid")
-        if not isinstance(kid, str) or not kid:
-            return None
-
-        jwks = await _get_supabase_jwks()
-        if not jwks:
-            return None
-
-        if not _jwks_contains_kid(jwks, kid):
-            return None
-
-        try:
-            keyset = jwk.JWKSet()
-            keyset.import_keyset(json.dumps(jwks))
-            verified = jwt.JWT(jwt=token, key=keyset)
-            claims = json.loads(verified.claims)
-            if not isinstance(claims, dict):
+        if alg == "HS256":
+            secret = settings.SUPABASE_JWT_SECRET
+            if not secret:
                 return None
-            payload = claims
-        except Exception:
-            return None
+            if not _verify_hs256_jwt_signature(token, secret):
+                return None
+            payload = _decode_supabase_jwt_payload_without_verification(token)
+            if payload is None:
+                return None
+        else:
+            if not isinstance(kid, str) or not kid:
+                return None
+
+            jwks = await _get_supabase_jwks()
+            if not jwks:
+                return None
+
+            if not _jwks_contains_kid(jwks, kid):
+                return None
+
+            try:
+                keyset = jwk.JWKSet()
+                keyset.import_keyset(json.dumps(jwks))
+                verified = jwt.JWT(jwt=token, key=keyset)
+                claims = json.loads(verified.claims)
+                if not isinstance(claims, dict):
+                    return None
+                payload = claims
+            except Exception:
+                return None
     else:
         payload = _decode_supabase_jwt_payload_without_verification(token)
 
