@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -60,3 +60,57 @@ class CheckoutResponse(BaseModel):
 class PortalUrlResponse(BaseModel):
     cancel_url: str | None = None
     update_payment_method_url: str | None = None
+
+
+class PromoEntitlementResponse(BaseModel):
+    plan: str
+    starts_at: datetime
+    ends_at: datetime
+    campaign_tag: str | None = None
+    message: str
+
+
+class PromoCurrentResponse(BaseModel):
+    has_active_promo: bool
+    plan: str | None = None
+    starts_at: datetime | None = None
+    ends_at: datetime | None = None
+    campaign_tag: str | None = None
+
+
+class PromoRedeemRequest(BaseModel):
+    code: str = Field(..., min_length=3, max_length=64)
+
+
+class PromoCodeCreateRequest(BaseModel):
+    code: str = Field(..., min_length=3, max_length=64)
+    grant_days: int = Field(..., gt=0, le=365)
+    expires_at: datetime | None = None
+    max_redemptions: int | None = Field(default=None, gt=0, le=1_000_000)
+    per_user_limit: int = Field(default=1, gt=0, le=100)
+    campaign_tag: str | None = Field(default=None, min_length=1, max_length=120)
+
+    @property
+    def normalized_expires_at(self) -> datetime | None:
+        if self.expires_at is None:
+            return None
+        if self.expires_at.tzinfo is None:
+            return self.expires_at.replace(tzinfo=UTC)
+        return self.expires_at
+
+
+class PromoCodeResponse(BaseModel):
+    id: uuid.UUID
+    campaign_tag: str | None
+    grant_plan: str
+    grant_days: int
+    max_redemptions: int | None
+    redeemed_count: int
+    per_user_limit: int
+    expires_at: datetime | None
+    is_active: bool
+    created_at: datetime
+
+
+class PromoCodeListResponse(BaseModel):
+    items: list[PromoCodeResponse]
