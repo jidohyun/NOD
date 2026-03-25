@@ -82,6 +82,7 @@ class Settings(BaseSettings):
     PADDLE_CLIENT_TOKEN: str | None = None
     PADDLE_PRICE_ID_PRO: str | None = None
     PADDLE_ENVIRONMENT: Literal["sandbox", "production"] = "production"
+    PROMO_CODE_PEPPER: str | None = None
 
     # Admin
     ADMIN_USER_IDS: list[str] = []
