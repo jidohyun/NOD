@@ -70,16 +70,21 @@ async def get_active_promo_entitlement(
 ) -> UserPromoEntitlement | None:
     uid = _normalize_user_id(user_id)
     now = datetime.now(UTC)
-    result = await db.execute(
-        select(UserPromoEntitlement)
-        .where(
-            UserPromoEntitlement.user_id == uid,
-            UserPromoEntitlement.is_active.is_(True),
-            UserPromoEntitlement.ends_at > now,
+    try:
+        result = await db.execute(
+            select(UserPromoEntitlement)
+            .where(
+                UserPromoEntitlement.user_id == uid,
+                UserPromoEntitlement.is_active.is_(True),
+                UserPromoEntitlement.ends_at > now,
+            )
+            .order_by(UserPromoEntitlement.ends_at.desc())
         )
-        .order_by(UserPromoEntitlement.ends_at.desc())
-    )
-    return result.scalars().first()
+        return result.scalars().first()
+    except Exception:
+        # Table may not exist yet if migration hasn't been applied
+        await db.rollback()
+        return None
 
 
 async def get_current_promo_entitlement(
