@@ -1071,6 +1071,9 @@ async def retry_article_analysis(
     return ArticleResponse.model_validate(article)
 
 
+_SELF_DOMAINS = {"nod-archive.com", "www.nod-archive.com"}
+
+
 @router.post(
     "/analyze-url",
     response_model=ArticleSaveResponse,
@@ -1081,6 +1084,16 @@ async def analyze_url(
     db: DBSession,
     user: CurrentUser,
 ) -> ArticleSaveResponse:
+    from urllib.parse import urlparse
+
+    parsed = urlparse(data.url)
+    if parsed.hostname and parsed.hostname.lower() in _SELF_DOMAINS:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="NOD links cannot be analyzed. "
+            "Please provide the original article URL.",
+        )
+
     existing_article = await service.get_article_by_url(db, user.id, data.url)
     if existing_article:
         existing_response = ArticleSaveResponse.model_validate(existing_article)
