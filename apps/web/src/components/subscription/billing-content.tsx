@@ -1,5 +1,6 @@
 "use client";
 
+import type { AxiosError } from "axios";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -14,8 +15,10 @@ import { type CSSProperties, useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useCheckout,
+  useCurrentPromoEntitlement,
   useInvalidateSubscription,
   usePortalUrl,
+  useRedeemPromoCode,
   useSubscription,
   useUsage,
 } from "@/lib/api/subscriptions";
@@ -46,11 +49,16 @@ export function BillingContent() {
   const searchParams = useSearchParams();
   const { data: subscription, isLoading: subLoading } = useSubscription();
   const { data: usage, isLoading: usageLoading } = useUsage();
+  const { data: promoCurrent } = useCurrentPromoEntitlement();
   const { refetch: fetchPortalUrl } = usePortalUrl();
   const checkout = useCheckout();
+  const redeemPromo = useRedeemPromoCode();
   const invalidate = useInvalidateSubscription();
   const [isProcessing, setIsProcessing] = useState(false);
   const [upgradeError, setUpgradeError] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoMessage, setPromoMessage] = useState("");
+  const [promoError, setPromoError] = useState("");
 
   const dateLocale = DATE_LOCALE_MAP[locale] || "en-US";
 
@@ -121,6 +129,8 @@ export function BillingContent() {
   const planFeatures = isPro
     ? [t("features.proSummaries"), t("features.proArticles"), t("features.proSearch")]
     : [t("features.basicSummaries"), t("features.basicArticles"), t("features.basicSearch")];
+  const isPromoEffectivePro =
+    promoCurrent?.has_active_promo && subscription?.plan !== "pro" && usage?.plan === "pro";
 
   function handleManagePayment() {
     fetchPortalUrl().then(({ data }) => {
@@ -158,6 +168,51 @@ export function BillingContent() {
         window.open(data.cancel_url, "_blank");
       }
     });
+  }
+
+  async function handleApplyPromoCode() {
+    const trimmed = promoCode.trim();
+    if (!trimmed) {
+      setPromoError(t("promo.errorInvalid"));
+      setPromoMessage("");
+      return;
+    }
+
+    setPromoError("");
+    setPromoMessage("");
+
+    try {
+      const response = await redeemPromo.mutateAsync({ code: trimmed });
+      setPromoMessage(response.message || t("promo.success"));
+      setPromoCode("");
+      invalidate();
+    } catch (error) {
+      const axiosError = error as AxiosError<{ detail?: string }>;
+      const status = axiosError.response?.status;
+      const detail = axiosError.response?.data?.detail ?? "";
+      const message = error instanceof Error ? error.message : "";
+
+      const isInvalidCodeError =
+        status === 404 || detail === "invalid_code" || message === "invalid_code";
+      const isExpiredCodeError =
+        status === 410 || detail === "expired_code" || message === "expired_code";
+      const isLimitCodeError =
+        status === 409 ||
+        detail === "campaign_limit_reached" ||
+        detail === "per_user_limit_reached" ||
+        message === "campaign_limit_reached" ||
+        message === "per_user_limit_reached";
+
+      if (isExpiredCodeError) {
+        setPromoError(t("promo.errorExpired"));
+      } else if (isLimitCodeError) {
+        setPromoError(t("promo.errorLimit"));
+      } else if (isInvalidCodeError) {
+        setPromoError(t("promo.errorInvalid"));
+      } else {
+        setPromoError(t("promo.errorGeneric"));
+      }
+    }
   }
 
   return (
@@ -202,6 +257,11 @@ export function BillingContent() {
                   <h2 className="mt-2 font-creative-display text-4xl font-black text-cm-text">
                     {planName}
                   </h2>
+                  {isPromoEffectivePro ? (
+                    <p className="mt-1 font-creative-body text-xs font-black uppercase tracking-wide text-emerald-700">
+                      {t("promo.effectivePro")}
+                    </p>
+                  ) : null}
                   <p className="mt-2 font-creative-body text-sm font-bold text-cm-text/70">
                     {planPrice}
                   </p>
@@ -362,6 +422,47 @@ export function BillingContent() {
                   </div>
                 </div>
               )}
+            </section>
+
+            <section className="cm-doodle-border border-2 border-cm-text/20 bg-white/85 dark:bg-cm-surface/85 p-6">
+              <h3 className="mb-3 font-creative-display text-2xl font-black text-cm-text">
+                {t("promo.title")}
+              </h3>
+
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={promoCode}
+                  onChange={(event) => setPromoCode(event.target.value)}
+                  placeholder={t("promo.placeholder")}
+                  className="w-full rounded-md border border-cm-text/25 bg-white px-3 py-2 font-creative-body text-sm text-cm-text outline-none placeholder:text-cm-text/35 focus:border-cm-text dark:border-cm-text/35 dark:bg-cm-surface dark:placeholder:text-cm-text/45"
+                />
+                <button
+                  type="button"
+                  onClick={handleApplyPromoCode}
+                  disabled={redeemPromo.isPending}
+                  className="inline-flex cm-doodle-border border-cm-text bg-cm-bg px-4 py-2 font-creative-body text-sm font-black text-cm-text transition-all hover:bg-cm-text hover:text-white dark:hover:bg-cm-surface-raised dark:hover:text-cm-text disabled:opacity-60"
+                >
+                  {redeemPromo.isPending ? t("processing") : t("promo.apply")}
+                </button>
+
+                {promoMessage ? (
+                  <p className="font-creative-body text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                    {promoMessage}
+                  </p>
+                ) : null}
+                {promoError ? (
+                  <p className="font-creative-body text-xs font-bold text-red-500">{promoError}</p>
+                ) : null}
+
+                {promoCurrent?.has_active_promo && promoCurrent.ends_at ? (
+                  <p className="font-creative-body text-xs font-semibold text-cm-text/70">
+                    {t("promo.activeUntil", {
+                      date: new Date(promoCurrent.ends_at).toLocaleDateString(dateLocale),
+                    })}
+                  </p>
+                ) : null}
+              </div>
             </section>
 
             <section className="cm-doodle-border border-2 border-cm-text/20 bg-white/85 dark:bg-cm-surface/85 p-6">

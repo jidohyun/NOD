@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import json
 import uuid as uuid_lib
@@ -10,7 +11,7 @@ import bcrypt
 import httpx
 import structlog
 from fastapi import Depends, HTTPException, Request, status
-from jwcrypto import jwe, jwk
+from jwcrypto import jwe, jwk, jwt
 from jwcrypto.common import JWException
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -18,6 +19,11 @@ from sqlalchemy import select
 from src.lib.config import settings
 
 logger = structlog.get_logger(__name__)
+
+_SUPABASE_JWKS_CACHE: dict[str, Any] | None = None
+_SUPABASE_JWKS_EXPIRES_AT: datetime = datetime.fromtimestamp(0, UTC)
+_SUPABASE_JWKS_LOCK = asyncio.Lock()
+_SUPABASE_ALLOWED_JWT_ALGS = frozenset({"RS256", "ES256", "EdDSA", "HS256"})
 
 
 class TokenPayload(BaseModel):
@@ -251,39 +257,170 @@ async def verify_oauth_token(provider: str, access_token: str) -> OAuthUserInfo:
         )
 
 
-def _decode_supabase_jwt(token: str) -> CurrentUserInfo | None:
-    """Decode a Supabase JWT token by extracting its payload.
-
-    Supabase JWTs are standard JWTs (header.payload.signature).
-    For local development, we decode the payload without cryptographic
-    verification since the token was already verified by Supabase.
-    """
+def _decode_supabase_jwt_payload_without_verification(
+    token: str,
+) -> dict[str, Any] | None:
     parts = token.split(".")
     if len(parts) != 3:
         return None
 
     try:
         payload_b64 = parts[1]
-        # Add padding for base64
         padding = 4 - len(payload_b64) % 4
         if padding != 4:
             payload_b64 += "=" * padding
         payload_bytes = base64.urlsafe_b64decode(payload_b64)
         payload = json.loads(payload_bytes)
+        if not isinstance(payload, dict):
+            return None
+        return payload
     except Exception:
         return None
 
+
+def _decode_supabase_jwt_header(token: str) -> dict[str, Any] | None:
+    parts = token.split(".")
+    if len(parts) != 3:
+        return None
+
+    try:
+        header_b64 = parts[0]
+        padding = 4 - len(header_b64) % 4
+        if padding != 4:
+            header_b64 += "=" * padding
+        header_bytes = base64.urlsafe_b64decode(header_b64)
+        header = json.loads(header_bytes)
+        if not isinstance(header, dict):
+            return None
+        return header
+    except Exception:
+        return None
+
+
+def _get_supabase_jwt_issuer() -> str | None:
+    if settings.SUPABASE_JWT_ISSUER:
+        return settings.SUPABASE_JWT_ISSUER.rstrip("/")
+
+    if not settings.SUPABASE_URL:
+        return None
+
+    return f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1"
+
+
+def _is_expected_audience(aud: object, expected_audience: str) -> bool:
+    if isinstance(aud, str):
+        return aud == expected_audience
+    if isinstance(aud, list):
+        return expected_audience in {value for value in aud if isinstance(value, str)}
+    return False
+
+
+def _is_valid_supabase_claims(payload: dict[str, Any]) -> bool:
     sub = payload.get("sub")
-    if not sub:
-        return None
+    if not isinstance(sub, str) or not sub:
+        return False
 
-    # Check expiration
-    exp = payload.get("exp", 0)
+    exp = payload.get("exp")
+    if not isinstance(exp, int | float):
+        return False
     if datetime.now(UTC).timestamp() > exp:
+        return False
+
+    issuer = _get_supabase_jwt_issuer()
+    if issuer:
+        token_issuer = payload.get("iss")
+        if not isinstance(token_issuer, str) or token_issuer.rstrip("/") != issuer:
+            return False
+
+    if settings.SUPABASE_JWT_AUDIENCE:
+        return _is_expected_audience(payload.get("aud"), settings.SUPABASE_JWT_AUDIENCE)
+
+    return True
+
+
+async def _get_supabase_jwks() -> dict[str, Any] | None:
+    global _SUPABASE_JWKS_CACHE, _SUPABASE_JWKS_EXPIRES_AT
+
+    now = datetime.now(UTC)
+    if _SUPABASE_JWKS_CACHE and now < _SUPABASE_JWKS_EXPIRES_AT:
+        return _SUPABASE_JWKS_CACHE
+
+    if not settings.SUPABASE_URL:
         return None
 
-    # Extract user metadata
+    async with _SUPABASE_JWKS_LOCK:
+        now = datetime.now(UTC)
+        if _SUPABASE_JWKS_CACHE and now < _SUPABASE_JWKS_EXPIRES_AT:
+            return _SUPABASE_JWKS_CACHE
+
+        jwks_url = f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/.well-known/jwks.json"
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(jwks_url, timeout=5.0)
+            response.raise_for_status()
+            body = response.json()
+            keys = body.get("keys") if isinstance(body, dict) else None
+            if not isinstance(keys, list) or not keys:
+                return None
+            _SUPABASE_JWKS_CACHE = {"keys": keys}
+            ttl = max(settings.SUPABASE_JWKS_CACHE_TTL_SECONDS, 60)
+            _SUPABASE_JWKS_EXPIRES_AT = now + timedelta(seconds=ttl)
+            return _SUPABASE_JWKS_CACHE
+        except Exception:
+            return None
+
+
+def _jwks_contains_kid(jwks: dict[str, Any], kid: str) -> bool:
+    keys = jwks.get("keys")
+    if not isinstance(keys, list):
+        return False
+    return any(isinstance(key, dict) and key.get("kid") == kid for key in keys)
+
+
+async def _decode_supabase_jwt(token: str) -> CurrentUserInfo | None:
+    payload: dict[str, Any] | None = None
+
+    if settings.SUPABASE_VERIFY_JWT_SIGNATURE:
+        header = _decode_supabase_jwt_header(token)
+        if not header:
+            return None
+
+        alg = header.get("alg")
+        if not isinstance(alg, str) or alg not in _SUPABASE_ALLOWED_JWT_ALGS:
+            return None
+
+        kid = header.get("kid")
+        if not isinstance(kid, str) or not kid:
+            return None
+
+        jwks = await _get_supabase_jwks()
+        if not jwks:
+            return None
+
+        if not _jwks_contains_kid(jwks, kid):
+            return None
+
+        try:
+            keyset = jwk.JWKSet()
+            keyset.import_keyset(json.dumps(jwks))
+            verified = jwt.JWT(jwt=token, key=keyset)
+            claims = json.loads(verified.claims)
+            if not isinstance(claims, dict):
+                return None
+            payload = claims
+        except Exception:
+            return None
+    else:
+        payload = _decode_supabase_jwt_payload_without_verification(token)
+
+    if not payload or not _is_valid_supabase_claims(payload):
+        return None
+
+    sub = payload.get("sub")
     user_meta = payload.get("user_metadata", {})
+    if not isinstance(user_meta, dict):
+        user_meta = {}
+
     return CurrentUserInfo(
         id=sub,
         email=payload.get("email"),
@@ -367,7 +504,7 @@ async def get_current_user(request: Request) -> CurrentUserInfo:
         pass
 
     # Fallback: try Supabase JWT (from extension or web app)
-    user_info = _decode_supabase_jwt(token)
+    user_info = await _decode_supabase_jwt(token)
     if user_info:
         logger.debug("Authenticated via Supabase JWT", user_id=user_info.id)
         await _ensure_user_exists(user_info)

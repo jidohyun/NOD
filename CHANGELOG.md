@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-25
+
+### Added
+
+- Internal promo code issuer flow for admin users, including issue/list/disable actions in the web app.
+- Promo subscription entitlement schema and API test coverage for promo admin contracts.
+- Stronger Supabase JWT validation in API auth path (JWKS signature validation, claim checks, and key/algorithm safeguards).
+
+### Changed
+
+- Billing/help/admin promo surfaces now render with improved dark-mode contrast for cards, inputs, and controls.
+- Admin access checks are now consistently enforced in both web route guards and API admin endpoints.
+- Added explicit schema-discipline guardrails to agent documentation for migration-first runtime validation.
+
+### Fixed
+
+- Resolved runtime `UndefinedTableError` failures on promo endpoints by applying pending promo-code migrations.
+- Improved promo action error mapping and messaging consistency for duplicate/not-found conditions.
+
 ## [1.0.0] - 2026-02-20
 
 First official production release for the web product.
@@ -29,5 +48,6 @@ First official production release for the web product.
 - Stabilized dashboard and article UI integration issues in recent web releases.
 - Resolved payment-domain and deployment-related web issues before launch.
 
-[Unreleased]: https://github.com/jidohyun/NOD/compare/web-v1.0.0...HEAD
+[Unreleased]: https://github.com/jidohyun/NOD/compare/web-v1.3.0...HEAD
+[1.3.0]: https://github.com/jidohyun/NOD/compare/web-v1.0.0...web-v1.3.0
 [1.0.0]: https://github.com/jidohyun/NOD/releases/tag/web-v1.0.0

@@ -16,6 +16,7 @@ When operating within this monorepo, agents MUST adhere to the following princip
 *   **Non-Destructive**: Prefer modifying existing files over creating new ones unless explicitly instructed.
 *   **Security**: NEVER handle or expose sensitive information (API keys, credentials, secrets).
 *   **Verification**: Always verify changes through linting, type-checking, and testing before claiming completion.
+*   **Schema Discipline**: For any feature touching DB schema objects (new tables/columns/indexes, or code paths that query them), run migrations before runtime verification. Required preflight: `mise run db:migrate`. If a runtime error includes `UndefinedTableError` or `relation ... does not exist`, treat it as migration drift first, apply migrations, then re-test before changing application code.
 
 ## 3. Global Commands (via `mise run`)
 
@@ -74,4 +75,3 @@ This root `AGENTS.md` provides general guidance. More specific `AGENTS.md` files
 
 *   **Supplement, Not Duplicate**: Child `AGENTS.md` files extend and supplement the guidance provided here. They focus on local conventions, commands, and caveats specific to their context.
 *   **Local Scope**: Always consult the nearest `AGENTS.md` file for the most relevant and granular instructions for your current task.
-

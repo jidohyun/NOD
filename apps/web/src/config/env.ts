@@ -9,6 +9,7 @@ export const env = createEnv({
       .optional()
       .default("0.1")
       .transform((val) => Number.parseFloat(val)),
+    ADMIN_USER_IDS: z.string().optional().default(""),
   },
 
   client: {
@@ -29,6 +30,7 @@ export const env = createEnv({
   runtimeEnv: {
     OTEL_SERVICE_NAME: process.env.OTEL_SERVICE_NAME,
     OTEL_SAMPLE_RATE: process.env.OTEL_SAMPLE_RATE,
+    ADMIN_USER_IDS: process.env.ADMIN_USER_IDS,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
+import { isAdminUserId } from "@/lib/auth/admin";
 import { routing } from "@/lib/i18n/routing";
 
 type CookiesToSet = Parameters<
@@ -30,7 +31,14 @@ function getLocaleFromPath(pathname: string): string {
   return defaultLocale;
 }
 
-const protectedPaths = ["/articles", "/dashboard", "/settings", "/extension-auth", "/onboarding"];
+const protectedPaths = [
+  "/articles",
+  "/dashboard",
+  "/settings",
+  "/extension-auth",
+  "/onboarding",
+  "/admin",
+];
 const authPaths = ["/login"];
 
 export async function proxy(request: NextRequest) {
@@ -76,9 +84,19 @@ export async function proxy(request: NextRequest) {
     (path) => pathWithoutLocale === path || pathWithoutLocale.startsWith(`${path}/`)
   );
 
+  const isAdminRoute = pathWithoutLocale === "/admin" || pathWithoutLocale.startsWith("/admin/");
+
   if (isProtectedRoute && !isAuthenticated) {
     const loginUrl = new URL(locale === defaultLocale ? "/login" : `/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
+  }
+
+  if (isAdminRoute && !isAdminUserId(user?.id)) {
+    const dashboardUrl = new URL(
+      locale === defaultLocale ? "/dashboard" : `/${locale}/dashboard`,
+      request.url
+    );
+    return NextResponse.redirect(dashboardUrl);
   }
 
   if (isAuthRoute && isAuthenticated) {

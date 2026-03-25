@@ -12,6 +12,29 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
+const SECTION_KEYS = [
+  "purpose",
+  "definitions",
+  "termsPosting",
+  "serviceDescription",
+  "agreementFormation",
+  "account",
+  "serviceTiers",
+  "payment",
+  "autoRenewal",
+  "withdrawalRefund",
+  "chromeExtension",
+  "userContent",
+  "aiServices",
+  "intellectualProperty",
+  "prohibited",
+  "serviceRestriction",
+  "disclaimers",
+  "indemnification",
+  "disputeResolution",
+  "general",
+] as const;
+
 export default async function TermsPage({ params }: TermsPageProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
@@ -28,19 +51,10 @@ export default async function TermsPage({ params }: TermsPageProps) {
       </header>
 
       <div className="mt-8 space-y-8 text-sm leading-6">
-        {[
-          "intro",
-          "account",
-          "service",
-          "payment",
-          "content",
-          "prohibited",
-          "termination",
-          "contact",
-        ].map((key) => (
+        {SECTION_KEYS.map((key) => (
           <section key={key} className="space-y-2">
             <h2 className="text-base font-semibold">{s(`${key}.title`)}</h2>
-            <p>{s(`${key}.content`)}</p>
+            <p className="whitespace-pre-line">{s(`${key}.content`)}</p>
           </section>
         ))}
       </div>
