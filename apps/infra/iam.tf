@@ -111,6 +111,13 @@ resource "google_secret_manager_secret_iam_member" "api_langfuse_secret_key" {
   member    = "serviceAccount:${google_service_account.api.email}"
 }
 
+resource "google_secret_manager_secret_iam_member" "api_supabase_jwt_secret" {
+  count     = var.SUPABASE_JWT_SECRET != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.supabase_jwt_secret[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
 # Worker Service Account Permissions
 resource "google_project_iam_member" "worker_storage" {
   project = var.project_id

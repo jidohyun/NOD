@@ -183,6 +183,23 @@ resource "google_secret_manager_secret_version" "langfuse_secret_key" {
   secret_data = var.LANGFUSE_SECRET_KEY
 }
 
+resource "google_secret_manager_secret" "supabase_jwt_secret" {
+  count     = var.SUPABASE_JWT_SECRET != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-supabase-jwt-secret"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "supabase_jwt_secret" {
+  count       = var.SUPABASE_JWT_SECRET != "" ? 1 : 0
+  secret      = google_secret_manager_secret.supabase_jwt_secret[0].id
+  secret_data = var.SUPABASE_JWT_SECRET
+}
+
 # Redis (Memorystore)
 resource "google_redis_instance" "main" {
   name           = "${local.name_prefix}-redis"
