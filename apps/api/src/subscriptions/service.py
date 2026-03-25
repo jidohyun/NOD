@@ -4,7 +4,7 @@ from hashlib import sha256
 from typing import Literal, cast
 
 from sqlalchemy import and_, func, select
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, ProgrammingError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.lib.config import settings
@@ -81,8 +81,8 @@ async def get_active_promo_entitlement(
             .order_by(UserPromoEntitlement.ends_at.desc())
         )
         return result.scalars().first()
-    except Exception:
-        # Table may not exist yet if migration hasn't been applied
+    except ProgrammingError:
+        # Table does not exist yet — migration not applied
         await db.rollback()
         return None
 
@@ -185,20 +185,28 @@ async def get_usage_info(
             can_summarize=True,
         )
 
+    # Cache scalar values before promo query — a rollback on missing
+    # promo table would detach ORM objects loaded earlier.
+    sub_plan = subscription.plan
+    sub_status = subscription.status
+    sub_is_pro = _is_subscription_pro_active(subscription)
+    summaries_used = usage.summaries_used
+
     active_promo = await get_active_promo_entitlement(db, user_id)
-    effective_plan, effective_status = resolve_effective_plan(
-        subscription=subscription,
-        has_active_promo=active_promo is not None,
-    )
+
+    if sub_is_pro or active_promo is not None:
+        effective_plan, effective_status = "pro", "active"
+    else:
+        effective_plan, effective_status = sub_plan, sub_status
 
     limits = PLAN_LIMITS.get(effective_plan, PLAN_LIMITS["basic"])
     summaries_limit = limits["summaries_per_month"]
-    can_summarize = summaries_limit == -1 or usage.summaries_used < summaries_limit
+    can_summarize = summaries_limit == -1 or summaries_used < summaries_limit
 
     return UsageResponse(
         plan=effective_plan,
         status=effective_status,
-        summaries_used=usage.summaries_used,
+        summaries_used=summaries_used,
         summaries_limit=summaries_limit,
         can_summarize=can_summarize,
     )
