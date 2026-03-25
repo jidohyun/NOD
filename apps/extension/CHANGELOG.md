@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-25
+
+### Added
+
+- Friendly premium-content gating messages in the popup for unsupported plans.
+- Documentation-site extraction detection to improve article parsing quality.
+- Extraction failure logging from extension requests for analytics and debugging.
+
+### Fixed
+
+- Prevented token refresh failures from terminating extension authentication sessions.
+
+### Changed
+
+- Expanded extension agent guidance for root/background/content/popup runtime boundaries.
+
 ## [1.2.0] - 2026-03-03
 
 ### Added
@@ -27,7 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial production-ready extension foundation (MV3 popup, service worker, content script).
 - Production packaging and GitHub release workflow support.
 
-[Unreleased]: https://github.com/jidohyun/NOD/compare/extension-v1.2.0...HEAD
+[Unreleased]: https://github.com/jidohyun/NOD/compare/extension-v1.3.0...HEAD
+[1.3.0]: https://github.com/jidohyun/NOD/compare/extension-v1.2.0...extension-v1.3.0
 [1.2.0]: https://github.com/jidohyun/NOD/compare/extension-v1.1.0...extension-v1.2.0
 [1.1.0]: https://github.com/jidohyun/NOD/releases/tag/extension-v1.1.0
 [0.1.0]: https://github.com/jidohyun/NOD/releases/tag/extension-v0.1.0
