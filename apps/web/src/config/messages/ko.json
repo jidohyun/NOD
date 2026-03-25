@@ -1014,18 +1014,6 @@
       "savedArticles": "전체 유형 (GitHub/논문/영상 포함)",
       "semanticSearch": "무제한"
     },
-    "promo": {
-      "title": "프로모션 코드",
-      "placeholder": "프로모션 코드를 입력하세요",
-      "apply": "프로모션 적용",
-      "success": "프로모션이 적용되었습니다",
-      "errorInvalid": "유효하지 않은 프로모션 코드입니다",
-      "errorExpired": "만료된 프로모션 코드입니다",
-      "errorLimit": "프로모션 사용 한도에 도달했습니다",
-      "errorGeneric": "프로모션 코드를 적용할 수 없습니다",
-      "effectivePro": "프로모션으로 Pro 적용 중",
-      "activeUntil": "프로모션 적용 만료일: {date}"
-    },
     "processing": "처리 중...",
     "promo": {
       "title": "프로모션 코드",

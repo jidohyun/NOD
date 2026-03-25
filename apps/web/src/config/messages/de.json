@@ -1003,18 +1003,6 @@
       "savedArticles": "Alle Typen (inkl. GitHub, Papers, Videos)",
       "semanticSearch": "Unbegrenzt"
     },
-    "promo": {
-      "title": "Promo-Code",
-      "placeholder": "Promo-Code eingeben",
-      "apply": "Promo anwenden",
-      "success": "Promo angewendet",
-      "errorInvalid": "Ungultiger Promo-Code",
-      "errorExpired": "Dieser Promo-Code ist abgelaufen",
-      "errorLimit": "Promo-Einloselimit erreicht",
-      "errorGeneric": "Promo-Code konnte nicht angewendet werden",
-      "effectivePro": "Pro uber Promo aktiv",
-      "activeUntil": "Promo aktiv bis: {date}"
-    },
     "processing": "Wird verarbeitet...",
     "promo": {
       "title": "Promo-Code",

@@ -6,6 +6,14 @@ const mockUseAdminListPromoCodes = vi.fn();
 const mockUseAdminCreatePromoCode = vi.fn();
 const mockUseAdminDisablePromoCode = vi.fn();
 
+const RE_PROMO_CODE_ISSUER = /promo code issuer/i;
+const RE_ISSUE_NEW_PROMO_CODE = /issue a new promo code/i;
+const RE_DISABLE = /disable/i;
+const RE_ISSUE_CODE = /issue code/i;
+const RE_PROMO_CODE_ALREADY_EXISTS = /promo code already exists/i;
+const RE_CONFIRM_DISABLE = /confirm disable/i;
+const RE_PROMO_CODE_NOT_FOUND = /promo code not found/i;
+
 vi.mock("next-intl", async () => {
   const actual = await vi.importActual("next-intl");
   const messages: Record<string, string> = {
@@ -113,10 +121,10 @@ describe("AdminPromoCodesPage", () => {
   it("renders issue form and existing promo code rows", () => {
     render(<AdminPromoCodesPage />);
 
-    expect(screen.getByText(/promo code issuer/i)).toBeTruthy();
-    expect(screen.getByText(/issue a new promo code/i)).toBeTruthy();
+    expect(screen.getByText(RE_PROMO_CODE_ISSUER)).toBeTruthy();
+    expect(screen.getByText(RE_ISSUE_NEW_PROMO_CODE)).toBeTruthy();
     expect(screen.getByText("spring")).toBeTruthy();
-    expect(screen.getByRole("button", { name: /disable/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: RE_DISABLE })).toBeTruthy();
   });
 
   it("maps create 409 error to duplicate message", async () => {
@@ -133,10 +141,10 @@ describe("AdminPromoCodesPage", () => {
     fireEvent.change(screen.getByLabelText("Code"), {
       target: { value: "SPRING2026" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /issue code/i }));
+    fireEvent.click(screen.getByRole("button", { name: RE_ISSUE_CODE }));
 
     await waitFor(() => {
-      expect(screen.getByText(/promo code already exists/i)).toBeTruthy();
+      expect(screen.getByText(RE_PROMO_CODE_ALREADY_EXISTS)).toBeTruthy();
     });
   });
 
@@ -151,11 +159,11 @@ describe("AdminPromoCodesPage", () => {
 
     render(<AdminPromoCodesPage />);
 
-    fireEvent.click(screen.getByRole("button", { name: /disable/i }));
-    fireEvent.click(screen.getByRole("button", { name: /confirm disable/i }));
+    fireEvent.click(screen.getByRole("button", { name: RE_DISABLE }));
+    fireEvent.click(screen.getByRole("button", { name: RE_CONFIRM_DISABLE }));
 
     await waitFor(() => {
-      expect(screen.getByText(/promo code not found/i)).toBeTruthy();
+      expect(screen.getByText(RE_PROMO_CODE_NOT_FOUND)).toBeTruthy();
     });
   });
 
@@ -199,15 +207,15 @@ describe("AdminPromoCodesPage", () => {
     fireEvent.change(screen.getByLabelText("Code"), {
       target: { value: "FALL2026" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /issue code/i }));
+    fireEvent.click(screen.getByRole("button", { name: RE_ISSUE_CODE }));
 
     await waitFor(() => {
       expect(createMutate).toHaveBeenCalledTimes(1);
       expect(refetch).toHaveBeenCalledTimes(1);
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /disable/i }));
-    fireEvent.click(screen.getByRole("button", { name: /confirm disable/i }));
+    fireEvent.click(screen.getByRole("button", { name: RE_DISABLE }));
+    fireEvent.click(screen.getByRole("button", { name: RE_CONFIRM_DISABLE }));
 
     await waitFor(() => {
       expect(disableMutate).toHaveBeenCalledTimes(1);
