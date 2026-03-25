@@ -35,6 +35,26 @@ export interface PortalUrlInfo {
   update_payment_method_url: string | null;
 }
 
+export interface PromoCurrentInfo {
+  has_active_promo: boolean;
+  plan?: string | null;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  campaign_tag?: string | null;
+}
+
+export interface PromoRedeemPayload {
+  code: string;
+}
+
+export interface PromoRedeemInfo {
+  plan: string;
+  starts_at: string;
+  ends_at: string;
+  campaign_tag: string | null;
+  message: string;
+}
+
 export function useUsage() {
   return useQuery({
     queryKey: ["subscription", "usage"],
@@ -72,6 +92,25 @@ export function usePortalUrl() {
       return data;
     },
     enabled: false,
+  });
+}
+
+export function useCurrentPromoEntitlement() {
+  return useQuery({
+    queryKey: ["subscription", "promo", "current"],
+    queryFn: async () => {
+      const { data } = await apiClient.get<PromoCurrentInfo>("/api/subscriptions/promo/current");
+      return data;
+    },
+  });
+}
+
+export function useRedeemPromoCode() {
+  return useMutation({
+    mutationFn: async (payload: PromoRedeemPayload) => {
+      const { data } = await apiClient.post<PromoRedeemInfo>("/api/subscriptions/promo/redeem", payload);
+      return data;
+    },
   });
 }
 

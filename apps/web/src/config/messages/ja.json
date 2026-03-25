@@ -934,6 +934,18 @@
       "savedArticles": "全タイプ（GitHub・論文・動画を含む）",
       "semanticSearch": "無制限"
     },
+    "promo": {
+      "title": "プロモーションコード",
+      "placeholder": "プロモーションコードを入力してください",
+      "apply": "適用",
+      "success": "プロモーションが適用されました",
+      "errorInvalid": "無効なプロモーションコードです",
+      "errorExpired": "このプロモーションコードは有効期限切れです",
+      "errorLimit": "プロモーション利用上限に達しました",
+      "errorGeneric": "プロモーションコードを適用できません",
+      "effectivePro": "プロモーションによりProが有効です",
+      "activeUntil": "プロモーション有効期限: {date}"
+    },
     "processing": "処理中...",
     "summariesRemaining": "要約 残り{remaining}件",
     "summariesUsed": "今月の要約 {used}/{limit}件使用",
