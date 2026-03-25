@@ -30,9 +30,9 @@ resource "google_compute_region_network_endpoint_group" "web" {
 }
 
 resource "google_compute_backend_service" "web" {
-  count       = var.domain != "" ? 1 : 0
-  name        = "${local.name_prefix}-web-backend"
-  protocol    = "HTTPS"
+  count    = var.domain != "" ? 1 : 0
+  name     = "${local.name_prefix}-web-backend"
+  protocol = "HTTPS"
   # NOTE: Serverless NEGs (Cloud Run) have limitations on backend service
   # timeout settings; keep defaults for compatibility.
 
@@ -79,9 +79,9 @@ resource "google_compute_region_network_endpoint_group" "api" {
 }
 
 resource "google_compute_backend_service" "api" {
-  count       = var.domain != "" ? 1 : 0
-  name        = "${local.name_prefix}-api-backend"
-  protocol    = "HTTPS"
+  count    = var.domain != "" ? 1 : 0
+  name     = "${local.name_prefix}-api-backend"
+  protocol = "HTTPS"
   # NOTE: Serverless NEGs (Cloud Run) have limitations on backend service
   # timeout settings; keep defaults for compatibility.
 

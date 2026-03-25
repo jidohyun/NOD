@@ -49,6 +49,35 @@ resource "google_cloud_run_v2_service" "api" {
         value = var.domain != "" ? "https://${var.domain}" : "http://localhost:3000"
       }
 
+      dynamic "env" {
+        for_each = var.SUPABASE_URL != "" ? [1] : []
+        content {
+          name  = "SUPABASE_URL"
+          value = var.SUPABASE_URL
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.SUPABASE_ANON_KEY != "" ? [1] : []
+        content {
+          name  = "SUPABASE_ANON_KEY"
+          value = var.SUPABASE_ANON_KEY
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.SUPABASE_JWT_SECRET != "" ? [1] : []
+        content {
+          name = "SUPABASE_JWT_SECRET"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.supabase_jwt_secret[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
       env {
         name  = "DATABASE_HOST"
         value = google_sql_database_instance.main.private_ip_address

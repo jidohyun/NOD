@@ -173,6 +173,25 @@ variable "BETTER_AUTH_SECRET" {
   sensitive   = true
 }
 
+variable "SUPABASE_URL" {
+  description = "Supabase project URL"
+  type        = string
+  default     = ""
+}
+
+variable "SUPABASE_ANON_KEY" {
+  description = "Supabase anon key"
+  type        = string
+  default     = ""
+}
+
+variable "SUPABASE_JWT_SECRET" {
+  description = "Supabase JWT secret for legacy HS256 verification"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 # OAuth Providers
 variable "GOOGLE_CLIENT_ID" {
   description = "Google OAuth client ID"
