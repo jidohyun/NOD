@@ -632,130 +632,198 @@
   },
   "legal": {
     "privacy": {
-      "effectiveDate": "Effective Date: 2026-02-19",
-      "intro": "NOD respects your privacy. This policy explains what personal information we collect, how we use it, and your rights regarding your data.",
+      "effectiveDate": "Effective Date: 2026-03-26",
+      "intro": "NOD (the \"Service\") values your privacy and is committed to protecting your personal information in compliance with applicable laws, including the Korean Personal Information Protection Act (PIPA), the EU General Data Protection Regulation (GDPR), and the California Consumer Privacy Act (CCPA). This Privacy Policy explains what personal information we collect, how we use it, who we share it with, and how you can exercise your rights.",
       "sections": {
-        "changes": {
-          "content": "We may update this Privacy Policy from time to time. We will notify you of significant changes through in-service announcements or direct communication.",
-          "title": "9. Changes"
+        "purpose": {
+          "title": "1. Purpose of Processing Personal Information",
+          "content": "We process personal information for the following purposes:\n\n(a) Member management: User identification, login authentication, session management, and account administration.\n(b) Core service delivery: Article saving, AI-powered summarization, key point extraction, concept tagging, content classification, semantic search, and embedding generation.\n(c) Subscription and payment management: Subscription status management, payment processing via Paddle, billing history, and promotional code administration.\n(d) Service improvement: Service quality enhancement, error analysis and diagnosis, usage statistics, security monitoring, and fraud prevention.\n(e) Communication: Service notices, policy change notifications, and responses to user inquiries.\n(f) Legal compliance: Fulfillment of obligations under applicable laws and regulations."
         },
         "collection": {
-          "content": "We collect the following categories of information:",
-          "items": {
-            "account": "Account information: Email address, name and profile image (as provided by social login provider), authentication tokens.",
-            "analytics": "Web analytics: Website usage statistics (e.g., page views and events via Google Analytics).",
-            "content": "Content information: Saved article URLs, titles, extracted text, AI-generated summaries, notes, and related metadata.",
-            "payment": "Payment information: Billing data for paid plans, processed by our payment provider (Paddle).",
-            "usage": "Usage information: Feature usage logs (e.g., save/summarize counts), error and diagnostic data."
-          },
-          "note": "When using the Chrome extension, we may collect the URL and body text of pages you choose to save.",
-          "title": "1. Information We Collect"
-        },
-        "contact": {
-          "content": "For questions about our privacy practices, please contact us at:\nEmail: shickcoong777@gmail.com",
-          "title": "8. Contact"
-        },
-        "cookies": {
-          "content": "We use cookies and similar technologies for authentication, session management, user preferences, and analytics. You can configure your browser to reject cookies, but some features may be limited.",
-          "title": "6. Cookies"
-        },
-        "purpose": {
-          "items": {
-            "auth": "User identification, login, and session management",
-            "billing": "Subscription and payment management",
-            "core": "Providing core features including article saving, AI summarization, semantic search, and concept extraction",
-            "improve": "Service quality improvement, error analysis, security, and fraud prevention"
-          },
-          "title": "2. How We Use Information"
+          "title": "2. Personal Information Collected and Collection Methods",
+          "content": "We collect the following categories of personal information. Items marked as required are necessary for service provision; optional items may be declined without affecting core functionality.\n\nRequired information (Account):\n- Email address, name, profile image (as provided by your social login provider), password hash (for email registration), authentication tokens.\n\nRequired information (Service):\n- Article URLs, titles, extracted body text, and related metadata saved through the web application or Chrome extension.\n\nAutomatically generated information:\n- AI-generated summaries, key points, concept tags, content classifications, and embedding vectors produced by processing your saved content.\n\nService usage information:\n- Usage records (e.g., save counts, AI analysis counts), subscription information, promotional code redemption records.\n\nSocial activity information (optional):\n- Shared links, comments, likes, and display names created through the social features of the Service.\n\nDevice and access information:\n- IP address, User-Agent string, browser type, Chrome extension version, access timestamps.\n\nOAuth information:\n- Social login provider (Google, GitHub, Facebook, Kakao) identifiers, email addresses, names, and profile images as authorized by you during the OAuth flow.\n\nAnalytics information:\n- Website usage data collected through Google Analytics (e.g., page views, events, session duration).\n\nCollection methods: Direct input during registration; automatic collection through the web application, Chrome extension, cookies, and analytics tools; information received from third-party OAuth providers upon your authorization.",
+          "note": "When using the Chrome extension, the URL and body text of web pages you choose to save are extracted and transmitted to the Service. The extension operates only upon your explicit action and does not collect browsing data in the background."
         },
         "retention": {
-          "items": {
-            "deletion": "When you delete your account or request deletion, your data will be removed within a reasonable period.",
-            "legal": "We may retain data longer where required by applicable law.",
-            "principle": "We delete personal data when it is no longer needed for its original purpose."
-          },
-          "title": "4. Retention"
+          "title": "3. Retention Periods",
+          "content": "We retain personal information only for as long as necessary to fulfill the purposes for which it was collected, or as required by applicable law. When the retention period expires, personal information is promptly destroyed.\n\nService usage period:\n- Account information, saved content, and AI-generated data are retained while your account remains active. Upon account deletion, data is destroyed within 30 days, except as required by law.\n\nStatutory retention periods (Korean law):\n- Records of contracts and withdrawal of offers (Act on Consumer Protection in Electronic Commerce): 5 years\n- Records of payment and supply of goods/services: 5 years\n- Records of consumer complaints and dispute resolution: 3 years\n- Login and access logs (Protection of Communications Secrets Act): 3 months\n\nBackup retention:\n- Production database backups are retained for 30 days and development backups for 7 days, after which they are automatically purged."
+        },
+        "thirdParty": {
+          "title": "4. Disclosure to Third Parties",
+          "content": "We do not sell, rent, or trade your personal information. We may disclose personal information to third parties only in the following circumstances:\n\n(a) With your explicit consent.\n(b) Where required by applicable law, regulation, or legal process.\n(c) To protect the rights, property, or safety of the Company, our users, or the public.\n(d) In connection with a merger, acquisition, or sale of all or a portion of our assets, with notice to affected users."
+        },
+        "delegation": {
+          "title": "5. Delegation of Processing",
+          "content": "We use the following trusted service providers to operate and improve the Service. These providers process personal information only within the scope of their delegated tasks and under contractual data protection obligations.\n\n- AI processing (Google Gemini, OpenAI): Article summarization, key point extraction, concept tagging, embedding generation.\n- Payment processing (Paddle): Subscription management, payment processing, tax collection, refund processing.\n- Cloud infrastructure (Google Cloud Platform): Service hosting, data storage, and computational processing.\n- Authentication (Supabase): User authentication, session management, OAuth integration.\n- AI observability (Langfuse): AI call logging and performance monitoring.\n- Error tracking (Sentry): Error reporting, diagnostic data collection.\n- Analytics (Google Analytics): Website usage statistics and user behavior analysis."
+        },
+        "internationalTransfer": {
+          "title": "6. International Transfer of Personal Information",
+          "content": "To provide the Service, your personal information may be transferred to and processed in countries outside your country of residence. We implement appropriate safeguards for all international transfers in accordance with applicable data protection laws.\n\nThe following transfers are currently in effect:\n\n- Google (Gemini API) | United States | AI summarization and analysis | Article content, titles, URLs | Retained for up to 55 days for abuse monitoring (paid API; not used for model training)\n- OpenAI | United States | AI summarization and analysis (alternative provider) | Article content, titles, URLs | Retained for up to 30 days\n- Paddle | United Kingdom / United States | Payment processing | Email, payment information | Retained per Paddle's privacy policy\n- Supabase | United States | User authentication | Email, OAuth tokens | Retained while account is active\n- Langfuse | Germany (EU) | AI observability | AI call logs (may include prompt/response data) | Retained per retention settings\n- Sentry | United States | Error tracking | Error logs, user identifiers | Retained per Sentry's data retention policy\n\nFor transfers from the EU/EEA, we rely on Standard Contractual Clauses (SCCs) or applicable adequacy decisions. For transfers from Korea, we comply with PIPA requirements for cross-border data transfers, including obtaining consent where required."
+        },
+        "destruction": {
+          "title": "7. Destruction Procedures and Methods",
+          "content": "When personal information is no longer needed for its intended purpose or the retention period has expired, it is promptly destroyed according to the following procedures:\n\nProcedure: The information subject to destruction is identified, approved by the person responsible for personal information protection, and then destroyed.\n\nMethods:\n- Electronic files: Permanently deleted using methods that prevent recovery (e.g., cascading database deletion, secure file erasure).\n- Physical documents: Shredded or incinerated.\n- Backup data: Automatically purged upon expiration of the backup retention period (production: 30 days; development: 7 days)."
         },
         "rights": {
-          "content": "You have the right to access, correct, delete, or restrict the processing of your personal data. To exercise these rights, please contact us using the information below.",
-          "title": "5. Your Rights"
+          "title": "8. Data Subject Rights and How to Exercise Them",
+          "content": "You have the following rights regarding your personal information, which you may exercise at any time:\n\n(a) Right of access: Request access to your personal information and details of its processing.\n(b) Right to correction: Request correction of inaccurate or incomplete personal information.\n(c) Right to deletion: Request deletion of your personal information, subject to legal retention requirements.\n(d) Right to suspend processing: Request that we suspend the processing of your personal information.\n(e) Right to data portability: Request a copy of your personal information in a structured, commonly used format (where technically feasible).\n(f) Right to object: Object to the processing of your personal information, including for automated decision-making.\n\nHow to exercise your rights: Send a request to shickcoong777@gmail.com specifying which right you wish to exercise. We will verify your identity and process your request within 10 days. If we cannot comply with your request, we will notify you of the reason within the same period.\n\nYou may exercise these rights directly or through a legally authorized representative. If you use a representative, a power of attorney must be submitted."
+        },
+        "automatedDecisions": {
+          "title": "9. Automated Decision-Making",
+          "content": "The Service uses AI technology to perform automated processing of your saved content. In accordance with Article 37-2 of the Korean Personal Information Protection Act, we disclose the following:\n\nTypes of automated decisions:\n- Content type classification (e.g., news article, technical blog, academic paper)\n- AI-generated summarization and key point extraction\n- Automatic concept extraction and tagging\n- Similarity-based article recommendations via vector embeddings (cosine similarity)\n\nKey personal information used: Article titles, body text, URLs, and content metadata.\n\nThese automated processes are designed to assist your knowledge management and do not produce decisions with legal or similarly significant effects on you. All AI-generated results are provided for reference purposes only.\n\nYour rights: You may request an explanation of how automated decisions were made and may object to such processing. To do so, contact us at shickcoong777@gmail.com."
+        },
+        "cookies": {
+          "title": "10. Cookies and Tracking Technologies",
+          "content": "We use cookies and similar technologies to operate and improve the Service.\n\nTypes of cookies used:\n- Essential cookies: Required for authentication, session management, and security. These cannot be disabled without losing core functionality.\n- Preference cookies: Store your language, theme, and display settings.\n- Analytics cookies: Collect usage statistics through Google Analytics to help us understand how the Service is used and improve it accordingly.\n\nCookie management: You can manage or delete cookies through your browser settings. Please note that disabling essential cookies may prevent you from using the Service. For users in the EU/EEA, non-essential cookies are only set with your prior consent.\n\nDo Not Track: We currently do not respond to Do Not Track (DNT) browser signals, as there is no universally accepted standard for DNT compliance."
+        },
+        "behavioralInfo": {
+          "title": "11. Behavioral Information Collection (Chrome Extension)",
+          "content": "The NOD Chrome extension collects certain behavioral information to provide its core functionality.\n\nInformation collected:\n- URLs and body text of web pages you explicitly choose to save\n- Page metadata (title, author, publication date) of saved pages\n- Extension usage events (e.g., save button clicks)\n\nPurpose: To enable article saving, AI analysis, and content management within the Service.\n\nInformation NOT collected:\n- General browsing history or activity on pages you do not save\n- Data from other browser tabs or windows\n- Keystrokes, form inputs, or credentials on any website\n\nThe extension operates in compliance with Chrome Web Store policies, including the Limited Use Policy. Data collected through the extension is used solely for user-facing features of the Service and is never used for advertising, sold to data brokers, or transferred to third parties for purposes unrelated to the Service."
         },
         "security": {
-          "content": "We implement reasonable security measures to protect your personal data, including access controls, encryption in transit, and secure data storage practices.",
-          "title": "7. Security"
+          "title": "12. Security Measures",
+          "content": "We implement the following technical and organizational measures to protect your personal information:\n\nTechnical measures:\n- Password encryption using bcrypt one-way hashing\n- Authentication token encryption using JWE (A256KW + A256GCM)\n- All data transmitted over HTTPS (TLS encryption in transit)\n- Database access restricted via private VPC with no external access\n- Secrets managed through Google Secret Manager\n- Automated backups with point-in-time recovery\n\nOrganizational measures:\n- Access to personal information restricted to authorized personnel on a need-to-know basis\n- Internal data handling procedures and guidelines\n- Regular review of security practices"
         },
-        "sharing": {
-          "content": "We do not sell your personal data. We use trusted third-party service providers to operate and improve the service.",
-          "items": {
-            "ai": "AI processing: Article content (titles, text) may be sent to AI providers (e.g., OpenAI, Google Gemini) for summarization and embedding generation",
-            "analytics": "Analytics and monitoring: Google Analytics and similar tools",
-            "auth": "Authentication: Social login (OAuth) providers and authentication services",
-            "cloud": "Cloud infrastructure and hosting: Service operation, data storage, and processing",
-            "payment": "Payment processing: Paddle and related payment services"
-          },
-          "title": "3. Sharing"
+        "officer": {
+          "title": "13. Data Protection Officer",
+          "content": "For any inquiries, complaints, or requests related to the processing of your personal information, please contact:\n\nData Protection Contact:\n- Service: NOD\n- Email: shickcoong777@gmail.com\n\nThe Data Protection Contact will respond to your inquiries and process your data subject rights requests."
+        },
+        "changes": {
+          "title": "14. Changes to This Policy",
+          "content": "We may update this Privacy Policy from time to time to reflect changes in our practices, legal requirements, or Service features.\n\nNotification procedures:\n- For general changes: We will post the updated policy on the Service and announce the changes at least 7 days before the effective date.\n- For significant changes that materially affect your rights (e.g., changes to the categories of information collected, purposes of processing, or third-party disclosures): We will provide at least 30 days' prior notice through in-service announcements and, where feasible, individual notification (e.g., email).\n\nThe revised policy takes effect on its stated effective date. Your continued use of the Service after the effective date constitutes acceptance of the updated policy."
+        },
+        "remedies": {
+          "title": "15. Remedies for Rights Violations",
+          "content": "If you believe your personal information rights have been violated, you may seek assistance from the following organizations:\n\nKorean agencies:\n- Personal Information Dispute Mediation Committee: (02) 2100-2499 | https://www.kopico.go.kr\n- Korea Internet & Security Agency (KISA) Privacy Center: 118 | https://privacy.kisa.or.kr\n- Supreme Prosecutors' Office Cyber Investigation Division: (02) 3480-3573\n- Korean National Police Agency Cyber Bureau: 182 | https://ecrm.cyber.go.kr\n\nFor EU/EEA users (GDPR):\nYou have the right to lodge a complaint with your local data protection supervisory authority. You also have the right to access, rectification, erasure, restriction of processing, data portability, and to object to processing. To exercise these rights, contact us at shickcoong777@gmail.com.\n\nFor California users (CCPA/CPRA):\nYou have the right to know what personal information we collect and how it is used, the right to request deletion, and the right to opt out of the sale or sharing of personal information. We do not sell your personal information. To exercise your rights, contact us at shickcoong777@gmail.com. We will not discriminate against you for exercising your CCPA rights."
         }
       },
       "title": "Privacy Policy"
     },
     "refund": {
-      "effectiveDate": "Effective Date: 2026-02-18",
-      "intro": "Our policy regarding refunds and cancellations for NOD's paid plan (Pro). All payments are processed through Paddle.com.",
+      "effectiveDate": "Effective Date: 2026-03-26",
+      "intro": "This Refund and Cancellation Policy applies to NOD's paid subscription plan (Pro). All payments are processed through Paddle.com, which acts as the Merchant of Record. This policy complies with the Korean Act on Consumer Protection in Electronic Commerce, the EU Consumer Rights Directive, and the Content User Protection Guidelines.",
       "sections": {
         "cancellation": {
-          "content": "You can cancel your subscription at any time. Upon cancellation, you will retain access to Pro features until the end of your current billing period. No further charges will be made.",
-          "title": "1. Subscription Cancellation"
+          "title": "1. Subscription Cancellation",
+          "content": "You may cancel your subscription at any time through your account settings or by contacting us at shickcoong777@gmail.com. Upon cancellation:\n\n(a) You will retain access to Pro features until the end of your current billing period.\n(b) No further charges will be made after the current billing period ends.\n(c) Your account will automatically revert to the Free plan at the end of the billing period.\n(d) Your saved content and data will be preserved and remain accessible under the Free plan."
         },
-        "exceptions": {
-          "content": "If the service is unusable due to a critical defect, a full refund will be provided regardless of the time elapsed since purchase.",
-          "title": "4. Exceptions"
+        "withdrawal": {
+          "title": "2. Right of Withdrawal",
+          "content": "You have the right to withdraw from your subscription and receive a full refund, without providing any reason, within the following periods:\n\nKorean users: Within 7 days of the initial purchase date or the most recent auto-renewal date, in accordance with Article 17 of the Act on Consumer Protection in Electronic Commerce.\n\nEU/UK users: Within 14 days of the initial purchase date or the most recent auto-renewal date, in accordance with the EU Consumer Rights Directive.\n\nAll other users: Within 7 days of the initial purchase date or the most recent auto-renewal date.\n\nTo exercise your right of withdrawal, contact us at shickcoong777@gmail.com with your account email and a statement that you wish to withdraw. No specific form is required.\n\nNote: As the Service is a \"divisible service\" (ongoing subscription), even after the withdrawal period has expired, you may still be eligible for a pro-rata refund for the unused portion of your subscription (see Section 3)."
+        },
+        "proRata": {
+          "title": "3. Pro-Rata Refund After Withdrawal Period",
+          "content": "If the withdrawal period specified in Section 2 has expired, you may still request cancellation and receive a pro-rata refund for the unused portion of your current billing period.\n\nThe refund amount is calculated using the following formula:\n\nRefund = Payment Amount - (Payment Amount / Total Days in Billing Period x Days Used)\n\nExample: If you paid $5 for a monthly subscription and request cancellation after 10 days of a 30-day billing period:\nRefund = $5 - ($5 / 30 x 10) = $3.33\n\nFor annual subscriptions, the used portion may be calculated at the standard monthly rate ($5/month) multiplied by the number of full months used, with the remainder refunded.\n\nPro-rata refunds are available upon request and are not automatic."
+        },
+        "autoRenewal": {
+          "title": "4. Auto-Renewal Refund",
+          "content": "NOD subscriptions renew automatically at the end of each billing period. We will take the following measures regarding auto-renewal:\n\n(a) Pre-renewal notice: We will send you a notification at least 7 days before each auto-renewal date, informing you of the renewal date, amount to be charged, and payment method.\n(b) Price increase consent: If the subscription price increases, we will obtain your explicit consent at least 30 days before the new price takes effect. If you do not consent, your subscription will not renew at the new price.\n(c) Cancellation method disclosure: Each renewal notice will include clear instructions on how to cancel.\n\nRefund for auto-renewal charges:\n- If we fail to send the pre-renewal notice, you are entitled to a full refund of the renewal charge.\n- If we sent proper notice, you may still request a refund within 7 days (Korean users) or 14 days (EU/UK users) of the renewal date.\n- After the applicable withdrawal period, a pro-rata refund as described in Section 3 is available."
+        },
+        "serviceDisruption": {
+          "title": "5. Compensation for Service Disruptions",
+          "content": "If the Service becomes unavailable due to reasons attributable to the Company, the following compensation applies to paid subscribers, in accordance with the Content User Protection Guidelines:\n\n(a) Disruption of 10 hours or less per month: The subscription period will be extended by the duration of the disruption at no additional charge.\n(b) Disruption exceeding 10 hours per month: The subscription period will be extended by 10 hours plus twice the excess hours beyond 10 hours.\n(c) Disruption exceeding 72 hours per month: You may terminate the subscription and receive a full refund for the remaining subscription period, plus compensation for any damages incurred.\n\nThis section does not apply to service interruptions caused by scheduled maintenance (with at least 24 hours' advance notice), force majeure events, or circumstances attributable to the user."
         },
         "process": {
-          "content": "Once approved, refunds will be processed to your original payment method within 5-10 business days. You can submit refund requests via shickcoong777@gmail.com or through Paddle's customer support.",
-          "title": "3. Refund Processing"
+          "title": "6. Refund Processing",
+          "content": "Once a refund is approved, we will initiate the refund process within 3 business days.\n\nRefund method: Refunds are processed to your original payment method through Paddle. For credit/debit card payments, we will promptly request the payment processor to cancel or reverse the charge.\n\nProcessing time: While we initiate refunds within 3 business days, the actual time for the refund to appear in your account depends on your payment provider and may take additional time.\n\nLate refund penalty: If we fail to process a refund within the legally required period, we will pay delayed interest at an annual rate of 15% in accordance with the Act on Consumer Protection in Electronic Commerce.\n\nHow to request a refund: Send your request to shickcoong777@gmail.com with your account email address and the reason for your refund request. You may also contact Paddle's customer support directly."
         },
-        "refunds": {
-          "content": "You may request a full refund within 14 days of your subscription renewal date or initial purchase date. After 14 days, refunds are not available; however, you may cancel your subscription at any time. Payments are processed through Paddle, and Paddle's refund policy applies.",
-          "title": "2. Refund Policy"
+        "dispute": {
+          "title": "7. Dispute Resolution",
+          "content": "If you are dissatisfied with our handling of a refund request, you may pursue resolution through the following channels:\n\nStep 1 - Direct resolution: Contact us at shickcoong777@gmail.com. We will respond within 3 business days and endeavor to resolve the matter promptly.\n\nStep 2 - Consumer counseling: Contact the Korea Consumer Counseling Center at 1372 or your local consumer protection agency.\n\nStep 3 - Korea Consumer Agency: File a complaint for damage relief with the Korea Consumer Agency at https://www.consumer.go.kr.\n\nStep 4 - Consumer Dispute Mediation Committee: If no agreement is reached, request mediation from the Consumer Dispute Mediation Committee. An accepted mediation decision has the same effect as a court settlement.\n\nEU/UK users may also contact their local consumer protection authority or use the EU Online Dispute Resolution platform at https://ec.europa.eu/odr."
         }
       },
       "title": "Refund & Cancellation Policy"
     },
     "terms": {
-      "effectiveDate": "Effective Date: 2026-02-19",
+      "effectiveDate": "Effective Date: 2026-03-26",
       "sections": {
+        "purpose": {
+          "title": "1. Purpose",
+          "content": "These Terms of Service (\"Terms\") govern the relationship between NOD (\"Company\", \"we\", \"us\", or \"our\") and users (\"you\" or \"User\") of the NOD service (the \"Service\"). These Terms define the rights and obligations of both parties regarding the use of the Service. By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, you must not use the Service."
+        },
+        "definitions": {
+          "title": "2. Definitions",
+          "content": "The following terms have the meanings set forth below as used in these Terms:\n\n(a) \"Service\" means the NOD web application, Chrome extension, mobile application, and all related features, tools, and APIs provided by the Company.\n(b) \"User\" means any individual who accesses or uses the Service, including both registered members and visitors.\n(c) \"Article\" means any web content (including but not limited to news articles, blog posts, technical documentation, and academic papers) that a User saves to the Service.\n(d) \"AI Analysis Results\" means summaries, key points, concept tags, content classifications, embedding vectors, and any other output generated by the Service's AI processing of Articles.\n(e) \"Paid Service\" means the subscription-based Pro plan and any other premium features offered by the Company for a fee.\n(f) \"Payment Processor\" means Paddle.com Market Limited, which acts as the Merchant of Record for all payment transactions related to the Service."
+        },
+        "termsPosting": {
+          "title": "3. Posting and Amendment of Terms",
+          "content": "The Company posts these Terms on the Service's website so that Users can easily access and review them at any time.\n\nAmendment procedures:\n(a) The Company may amend these Terms to the extent permitted by applicable law.\n(b) For general amendments, the revised Terms will be announced on the Service at least 7 days before the effective date.\n(c) For amendments that are materially adverse to Users (e.g., expansion of user obligations, restriction of user rights, addition of new charges), the Company will provide at least 30 days' prior notice through in-service announcements and, where feasible, individual notification (e.g., email).\n(d) If you do not agree to the amended Terms, you may terminate your account before the effective date. Your continued use of the Service after the effective date constitutes acceptance of the amended Terms."
+        },
+        "serviceDescription": {
+          "title": "4. Service Description and Changes",
+          "content": "The Company provides an AI-powered knowledge management service with the following features:\n\n(a) Article saving from web pages via the Chrome extension or web application\n(b) AI-generated summarization, key point extraction, and content classification\n(c) Automatic concept extraction and tagging\n(d) Semantic search across saved articles using vector embeddings\n(e) Social features including article sharing, comments, and reactions\n(f) Chrome extension for one-click saving and analysis\n\nService changes:\n- The Company may modify, add, or discontinue features of the Service. For changes that materially affect Users, the Company will provide at least 30 days' advance notice.\n- Service may be temporarily interrupted for the following reasons: scheduled maintenance (with advance notice), emergency server maintenance, network or equipment failures, or force majeure events.\n- If the Company permanently discontinues the Service, Users will be given at least 30 days to export their data before the Service is shut down."
+        },
+        "agreementFormation": {
+          "title": "5. Formation of Service Agreement",
+          "content": "The service agreement is formed when a User completes the registration process and the Company accepts the registration.\n\n(a) Registration: You may register using your email address or through a supported social login provider (e.g., Google, GitHub, Facebook, Kakao).\n(b) Acceptance: The Company may decline or defer registration in the following cases: use of false or another person's information, omission of required information, or registration by a person previously terminated for violation of these Terms.\n(c) Age restriction: The Service is intended for users aged 14 and older. If you are under 14, you may not use the Service. By registering, you represent that you are at least 14 years old."
+        },
         "account": {
-          "content": "You may create an account using your email address or a supported social login provider (e.g., Google). You are responsible for providing accurate and up-to-date information and for maintaining the confidentiality and security of your account credentials. You must notify us promptly at shickcoong777@gmail.com if you suspect unauthorized access to your account. Each individual may maintain only one account. Account sharing or transferring access to third parties is not permitted.",
-          "title": "2. Account"
+          "title": "6. Account Management",
+          "content": "You are responsible for maintaining the accuracy of your account information and the security of your account credentials.\n\n(a) Keep your login credentials confidential. You are responsible for all activities that occur under your account.\n(b) Notify us promptly at shickcoong777@gmail.com if you suspect unauthorized access to your account.\n(c) Each individual may maintain only one account. Account sharing or transferring access to third parties is not permitted.\n(d) You must not use another person's account information without their authorization.\n(e) The Company may restrict or suspend accounts that are found to violate these Terms or that show signs of unauthorized use."
         },
-        "contact": {
-          "content": "If you have any questions or concerns regarding these Terms, please contact us at shickcoong777@gmail.com. We aim to respond to all inquiries within 3 business days.",
-          "title": "8. Contact"
-        },
-        "content": {
-          "content": "You retain full ownership and copyright of all content you save to NOD. By saving content to the service, you grant NOD a limited, non-exclusive license to store, process, and analyze that content solely for the purpose of providing the service to you. NOD does not claim ownership of your content and will not use it for any purpose beyond service provision. You are responsible for ensuring you have the necessary rights to save and process any content through NOD. NOD reserves the right to remove content that violates these Terms or applicable law.",
-          "title": "5. Content & Copyright"
-        },
-        "intro": {
-          "content": "These Terms of Service (\"Terms\") govern the legal relationship between NOD (\"we\", \"us\", or \"our\") and users (\"you\") of the NOD service. These Terms define the rights and obligations of both parties. By accessing or using the NOD service, you agree to be bound by these Terms. If you do not agree, please discontinue use of the service.",
-          "title": "1. Purpose"
+        "serviceTiers": {
+          "title": "7. Service Tiers and Usage Limits",
+          "content": "The Service is offered in the following tiers:\n\nFree plan:\n- AI analysis: Up to 20 analyses per month\n- Article saving and AI-powered analysis\n- Semantic search: Unlimited\n- Concept extraction and markdown export\n\nPro plan ($5/month, inclusive of applicable taxes):\n- AI analysis: Unlimited\n- All Free plan features, with no monthly usage limits\n- Additional supported content types (e.g., GitHub repositories, academic papers, video transcripts)\n\nUsage limits reset on the first day of each calendar month. The Company reserves the right to modify plan features and pricing with at least 30 days' advance notice. Existing subscribers will continue under their current terms until their next renewal date."
         },
         "payment": {
-          "content": "Payments for paid services (Pro plan) are processed through Paddle.com. Paddle acts as the Merchant of Record, handling payment processing, tax collection, and refunds. For payment-related inquiries, please contact shickcoong777@gmail.com or Paddle's customer support.",
-          "title": "4. Payment Processing"
+          "title": "8. Paid Services and Payment",
+          "content": "Payments for Paid Services are processed through Paddle.com, which acts as the Merchant of Record.\n\n(a) Paddle handles all payment processing, currency conversion, tax calculation, collection, and remittance on behalf of the Company.\n(b) The displayed price includes applicable taxes (e.g., VAT, sales tax) as determined by Paddle based on your location.\n(c) Payments are charged in the currency presented at checkout. Exchange rates and any associated fees are determined by your payment provider.\n(d) By subscribing to a Paid Service, you authorize Paddle to charge your selected payment method on a recurring basis according to your chosen billing cycle.\n(e) For payment-related inquiries, you may contact us at shickcoong777@gmail.com or Paddle's customer support directly."
+        },
+        "autoRenewal": {
+          "title": "9. Auto-Renewal and Notifications",
+          "content": "Paid Service subscriptions renew automatically at the end of each billing period unless cancelled.\n\n(a) Renewal notice: The Company will send a notification at least 7 days before each auto-renewal date, specifying the renewal date, charge amount, and payment method.\n(b) Price increase: If the subscription price increases, the Company will obtain your explicit consent at least 30 days before the new price takes effect. Without your consent, the subscription will not renew at the increased price.\n(c) Cancellation: You may cancel auto-renewal at any time through your account settings or by contacting us. Cancellation takes effect at the end of the current billing period.\n(d) Each renewal notice will clearly disclose how to cancel the subscription."
+        },
+        "withdrawalRefund": {
+          "title": "10. Right of Withdrawal, Refund, and Cancellation",
+          "content": "Your rights regarding withdrawal, refund, and cancellation of Paid Services are governed by our separate Refund and Cancellation Policy, which is incorporated into these Terms by reference.\n\nKey provisions:\n(a) Korean users may withdraw within 7 days of purchase or renewal in accordance with Article 17 of the Act on Consumer Protection in Electronic Commerce.\n(b) EU/UK users may withdraw within 14 days of purchase or renewal in accordance with the EU Consumer Rights Directive.\n(c) After the withdrawal period, a pro-rata refund for the unused portion of the subscription is available upon request.\n(d) The Company will initiate approved refunds within 3 business days.\n\nFor full details, please refer to the Refund and Cancellation Policy."
+        },
+        "chromeExtension": {
+          "title": "11. Chrome Extension Terms",
+          "content": "The NOD Chrome extension is subject to the following additional terms:\n\n(a) Permissions: The extension requires certain browser permissions (activeTab, storage, scripting) to provide its core functionality. The extension accesses web page content only when you explicitly initiate a save action.\n(b) Data access: When you use the extension to save an article, the extension accesses the current page's URL, body text, and metadata (title, author, publication date). This data is transmitted to the Service for processing and storage.\n(c) Limited Use Policy: The extension complies with the Chrome Web Store Limited Use Policy. Data collected through the extension is used exclusively for user-facing features of the Service and is not used for advertising, sold to data brokers, or transferred to third parties for purposes unrelated to the Service.\n(d) No background collection: The extension does not monitor or collect data from your browsing activity. It operates only in response to your explicit actions.\n(e) Updates: The extension may be updated from time to time. Significant changes to data collection or permissions will be communicated through the Service or Chrome Web Store update notes."
+        },
+        "userContent": {
+          "title": "12. User Content Rights",
+          "content": "You retain full ownership and copyright of all content you save to the Service.\n\n(a) License grant: By saving content to the Service, you grant the Company a limited, non-exclusive, non-transferable license to store, process, analyze, and display that content solely for the purpose of providing the Service to you.\n(b) No ownership claim: The Company does not claim ownership of your content and will not use it for any purpose beyond providing the Service.\n(c) User responsibility: You are responsible for ensuring you have the necessary rights to save and process any content through the Service. You represent that your use of the Service does not infringe upon the intellectual property or other rights of any third party.\n(d) Content removal: The Company reserves the right to remove content that violates these Terms, applicable law, or the rights of third parties.\n(e) Data export: You may export your saved content at any time through the Service's export features."
+        },
+        "aiServices": {
+          "title": "13. AI Services and Generated Content",
+          "content": "The Service uses artificial intelligence technology to process and analyze your saved Articles. In accordance with the Korean Framework Act on Artificial Intelligence, we disclose the following:\n\n(a) AI disclosure: The Service utilizes AI models provided by third parties (including Google Gemini and OpenAI) to generate summaries, extract key points, classify content, generate concept tags, and create embedding vectors.\n(b) Accuracy disclaimer: AI Analysis Results are provided for reference purposes only. The Company does not guarantee the accuracy, completeness, or timeliness of any AI-generated content. You should independently verify any AI Analysis Results before relying on them.\n(c) Data transfer: To perform AI analysis, Article titles, body text, and related metadata may be transmitted to AI service providers (Google, OpenAI) located in the United States. This data is processed solely for the purpose of generating analysis results and is subject to our Privacy Policy.\n(d) Copyright limitations: Under Korean copyright law, content generated solely by AI may not qualify for copyright protection. The Company does not assert copyright over AI Analysis Results.\n(e) No model training: Your data is not used for training AI models. When using paid API tiers, AI providers do not use your data for model improvement.\n(f) Similar outputs: Due to the nature of AI processing, similar Articles may produce similar AI Analysis Results for different Users.\n(g) AI-generated content labeling: AI Analysis Results are labeled as AI-generated within the Service, in compliance with applicable AI transparency requirements."
+        },
+        "intellectualProperty": {
+          "title": "14. Intellectual Property",
+          "content": "All intellectual property rights in the Service (including but not limited to software, design, trademarks, logos, documentation, and proprietary algorithms) are owned by the Company or its licensors.\n\n(a) The Company grants you a limited, non-exclusive, non-transferable, revocable license to use the Service in accordance with these Terms.\n(b) You may not copy, modify, distribute, sell, or create derivative works based on the Service or any part thereof, except as expressly permitted by these Terms or applicable law.\n(c) Feedback: If you provide suggestions, ideas, or feedback about the Service, the Company may use such feedback without obligation to you."
         },
         "prohibited": {
-          "content": "The following activities are strictly prohibited: (a) reverse engineering, decompiling, or attempting to extract the source code of the service; (b) circumventing or attempting to bypass any access controls or security measures; (c) automated scraping or crawling of the service beyond normal use through the official interface or API; (d) sharing account credentials or allowing others to use your account; (e) uploading or transmitting malicious code, viruses, or any harmful content; (f) using the service in violation of any applicable local, national, or international law; (g) taking any action that interferes with or disrupts the normal operation of the service or its infrastructure.",
-          "title": "6. Prohibited Acts"
+          "title": "15. Prohibited Activities",
+          "content": "The following activities are strictly prohibited when using the Service:\n\n(a) Reverse engineering, decompiling, or attempting to extract the source code of the Service.\n(b) Circumventing or attempting to bypass any access controls, security measures, or usage limits.\n(c) Automated scraping, crawling, or data extraction beyond normal use through the official interface.\n(d) Sharing account credentials or allowing others to access your account.\n(e) Uploading or transmitting malicious code, viruses, or any harmful content.\n(f) Using the Service in violation of any applicable local, national, or international law.\n(g) Taking any action that interferes with or disrupts the normal operation of the Service or its infrastructure.\n(h) Infringing upon the intellectual property rights, privacy, or other rights of third parties.\n(i) Using the Service to distribute spam, phishing content, or fraudulent materials.\n(j) Attempting to gain unauthorized access to other users' accounts or data."
         },
-        "service": {
-          "content": "NOD provides an AI-powered knowledge management service including article saving, AI-generated summarization, semantic search, and concept extraction. We may update, modify, or discontinue features of the service at any time with reasonable notice. The service is offered in two tiers: a free Basic plan and a paid Pro plan ($5/month). All use of the service is subject to fair use guidelines; excessive automated use that degrades service performance for other users is not permitted.",
-          "title": "3. Service Use"
+        "serviceRestriction": {
+          "title": "16. Service Restriction and Termination",
+          "content": "Account termination by User:\nYou may terminate your account at any time through the account settings or by contacting us at shickcoong777@gmail.com.\n\nService restriction by Company:\nThe Company may restrict, suspend, or terminate your access to the Service in the following cases:\n(a) Violation of these Terms or applicable law.\n(b) Fraudulent activity or misuse of the Service.\n(c) Non-payment of fees for Paid Services after reasonable notice.\n(d) Actions that threaten the security, integrity, or availability of the Service.\n\nProcedure: Except in urgent cases (e.g., security threats), the Company will provide advance notice and an opportunity to cure the violation before restricting or terminating access.\n\nEffect of termination:\n- Upon termination, your right to use the Service ceases immediately.\n- Your data will be retained for 30 days after termination to allow for data export, after which it will be permanently deleted unless retention is required by law.\n- Provisions that by their nature should survive termination (including ownership provisions, warranty disclaimers, limitations of liability, and dispute resolution) shall survive."
         },
-        "termination": {
-          "content": "You may cancel your account at any time through the account settings or by contacting us. NOD may suspend or terminate your account if you violate these Terms, engage in fraudulent activity, or otherwise misuse the service. Upon termination, your data may be retained for a reasonable period before permanent deletion, unless you request immediate deletion. Provisions of these Terms that by their nature should survive termination (including, without limitation, ownership provisions, warranty disclaimers, and limitations of liability) shall survive termination.",
-          "title": "7. Termination"
+        "disclaimers": {
+          "title": "17. Disclaimers and Liability Limitations",
+          "content": "The Service is provided on an \"as is\" and \"as available\" basis, to the extent permitted by applicable law.\n\n(a) AI accuracy: The Company does not warrant the accuracy, completeness, or reliability of AI Analysis Results. AI-generated content is for reference only and should not be relied upon as a substitute for professional judgment.\n(b) Third-party services: The Service integrates with third-party services (including AI providers, payment processors, and authentication providers). The Company is not liable for disruptions, errors, or data breaches caused by third-party services, except to the extent caused by the Company's own negligence.\n(c) Force majeure: The Company is not liable for service interruptions caused by events beyond its reasonable control, including natural disasters, wars, government actions, pandemics, power failures, or internet outages.\n(d) Liability cap: To the maximum extent permitted by law, the Company's total cumulative liability to you for all claims arising from or related to the Service shall not exceed the total amount you paid to the Company in the 12 months preceding the claim.\n\nIMPORTANT: Under Korean law (Act on the Regulation of Terms and Conditions, Article 7), the Company cannot disclaim liability for damages caused by its own gross negligence or willful misconduct. Nothing in these Terms excludes or limits such liability."
+        },
+        "indemnification": {
+          "title": "18. Indemnification",
+          "content": "You agree to indemnify and hold harmless the Company, its officers, directors, employees, and agents from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable attorney's fees) arising out of or related to:\n\n(a) Your use of the Service in violation of these Terms.\n(b) Your violation of any applicable law or regulation.\n(c) Your infringement of any third party's intellectual property, privacy, or other rights.\n(d) Content you save to or share through the Service.\n\nThis indemnification obligation survives termination of these Terms and your use of the Service."
+        },
+        "disputeResolution": {
+          "title": "19. Dispute Resolution and Jurisdiction",
+          "content": "Governing law: These Terms are governed by and construed in accordance with the laws of the Republic of Korea.\n\nJurisdiction: Any disputes arising from or related to these Terms or the Service shall be subject to the exclusive jurisdiction of the Seoul Central District Court (or the competent court under Korean law based on the Company's principal office location), unless otherwise required by mandatory consumer protection laws of your jurisdiction.\n\nConsumer protection: Notwithstanding the above, if mandatory consumer protection laws of your country of residence provide you with rights that cannot be waived by contract, those laws shall prevail to the extent of any conflict with these Terms.\n\nConsumer assistance:\n- Korea Consumer Agency: 1372 | https://www.consumer.go.kr\n- Personal Information Dispute Mediation Committee: (02) 2100-2499 | https://www.kopico.go.kr\n- Korea Internet & Security Agency: 118 | https://privacy.kisa.or.kr"
+        },
+        "general": {
+          "title": "20. General Provisions",
+          "content": "(a) Severability: If any provision of these Terms is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect. The invalid or unenforceable provision shall be modified to the minimum extent necessary to make it valid and enforceable.\n(b) Entire agreement: These Terms, together with the Privacy Policy, Refund and Cancellation Policy, and any other policies referenced herein, constitute the entire agreement between you and the Company regarding the use of the Service.\n(c) No waiver: The Company's failure to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision.\n(d) Assignment: You may not assign or transfer your rights or obligations under these Terms without the Company's prior written consent. The Company may assign its rights and obligations without restriction.\n(e) Language: These Terms may be provided in multiple languages. In the event of any discrepancy between the Korean version and any translation, the Korean version shall prevail.\n(f) Contact: If you have any questions or concerns regarding these Terms, please contact us at shickcoong777@gmail.com. We aim to respond to all inquiries within 3 business days."
         }
+      },
+      "businessInfo": {
+        "serviceName": "NOD",
+        "operator": "Individual Operator",
+        "email": "shickcoong777@gmail.com",
+        "paymentProcessor": "Paddle.com Market Limited (Merchant of Record)",
+        "paymentProcessorNote": "All paid services for NOD are processed by Paddle.com as the Merchant of Record. Paddle assumes legal responsibility for payment processing, tax collection, and refund handling as the seller of record."
       },
       "title": "Terms of Service"
     }
@@ -834,6 +902,7 @@
       "feedback": "Send Feedback",
       "installExtension": "Install Chrome Extension",
       "manageBilling": "Manage Billing & Subscription",
+      "promoIssuer": "Promo Code Issuer",
       "privacy": "Privacy Policy",
       "refund": "Refund Policy",
       "terms": "Terms of Service",
@@ -945,6 +1014,82 @@
       "semanticSearch": "Unlimited"
     },
     "processing": "Processing...",
+    "promo": {
+      "title": "Promo Code",
+      "placeholder": "Enter promo code",
+      "apply": "Apply Promo",
+      "success": "Promo applied",
+      "errorInvalid": "Invalid promo code",
+      "errorExpired": "This promo code has expired",
+      "errorLimit": "Promo redemption limit reached",
+      "errorGeneric": "Unable to apply promo code",
+      "effectivePro": "Pro active via promo",
+      "activeUntil": "Promo active until: {date}"
+    },
+    "adminPromo": {
+      "title": "Promo Code Issuer",
+      "description": "Issue, review, and disable promo codes for internal campaigns.",
+      "issue": {
+        "title": "Issue a new promo code"
+      },
+      "fields": {
+        "code": "Code",
+        "grantDays": "Grant days",
+        "expiresAt": "Expires at",
+        "maxRedemptions": "Max redemptions",
+        "perUserLimit": "Per-user limit",
+        "campaignTag": "Campaign tag"
+      },
+      "actions": {
+        "issuing": "Issuing...",
+        "issue": "Issue code",
+        "copyLatest": "Copy latest code",
+        "disable": "Disable",
+        "cancel": "Cancel",
+        "disabling": "Disabling...",
+        "confirmDisable": "Confirm disable"
+      },
+      "latestCode": "Latest issued code: {code}",
+      "list": {
+        "title": "Issued promo codes",
+        "empty": "No promo codes found for current filters."
+      },
+      "filters": {
+        "campaignPlaceholder": "Filter by campaign tag",
+        "statusAll": "All statuses",
+        "statusActive": "Active only",
+        "statusInactive": "Inactive only",
+        "apply": "Apply filters"
+      },
+      "table": {
+        "campaign": "Campaign",
+        "status": "Status",
+        "grantDays": "Grant days",
+        "redeemed": "Redeemed",
+        "created": "Created",
+        "actions": "Actions",
+        "none": "(none)",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "disable": {
+        "title": "Disable promo code",
+        "description": "This code will no longer be redeemable.",
+        "reason": "Disable reason",
+        "reasonNote": "Reason is for operator context only and is not sent to API in this MVP."
+      },
+      "success": {
+        "created": "Promo code issued successfully.",
+        "disabled": "Promo code disabled successfully.",
+        "copied": "Latest issued code copied."
+      },
+      "errors": {
+        "duplicate": "Promo code already exists.",
+        "notFound": "Promo code not found.",
+        "generic": "Unable to complete this action right now.",
+        "loadFailed": "Failed to load promo codes."
+      }
+    },
     "summariesRemaining": "{remaining} summaries remaining",
     "summariesUsed": "{used}/{limit} summaries used this month",
     "unlimited": "Unlimited",

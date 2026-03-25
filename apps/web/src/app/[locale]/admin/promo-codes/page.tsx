@@ -1,14 +1,15 @@
+import { notFound } from "next/navigation";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { SettingsProfile } from "@/components/settings/settings-profile";
+import { AdminPromoCodesPage } from "@/components/admin/promo-codes/admin-promo-codes-page";
 import { isAdminUserId } from "@/lib/auth/admin";
 import { createClient } from "@/lib/supabase/server";
 
-interface SettingsPageProps {
+interface PromoCodesAdminPageProps {
   params: Promise<{ locale: string }>;
 }
 
-export default async function SettingsPage({ params }: SettingsPageProps) {
+export default async function PromoCodesAdminPage({ params }: PromoCodesAdminPageProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
@@ -17,11 +18,13 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const showAdminPromoEntry = isAdminUserId(user?.id);
+  if (!user || !isAdminUserId(user.id)) {
+    notFound();
+  }
 
   return (
-    <div className="mx-auto max-w-5xl py-8 px-4">
-      <SettingsProfile showAdminPromoEntry={showAdminPromoEntry} />
+    <div className="mx-auto max-w-6xl px-4 py-8">
+      <AdminPromoCodesPage />
     </div>
   );
 }

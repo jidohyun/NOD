@@ -59,7 +59,7 @@ export function HelpContent({ locale }: HelpContentProps) {
 
       <div className="relative space-y-7">
         <header className="space-y-4">
-          <p className="inline-flex items-center rounded-full border border-cm-text/15 bg-white/75 px-3 py-1 font-creative-body text-sm font-bold text-cm-text/65">
+          <p className="inline-flex items-center rounded-full border border-cm-text/15 bg-white/75 px-3 py-1 font-creative-body text-sm font-bold text-cm-text/65 dark:border-cm-text/25 dark:bg-cm-surface/75">
             {t("centerBadge")}
           </p>
           <h1 className="font-creative-display text-[clamp(2rem,3.2vw,3.3rem)] font-black text-cm-text">
@@ -74,7 +74,10 @@ export function HelpContent({ locale }: HelpContentProps) {
           {quickStart.map((item) => {
             const Icon = item.icon;
             return (
-              <article key={item.title} className="cm-doodle-border bg-white/95 p-5">
+              <article
+                key={item.title}
+                className="cm-doodle-border bg-white/95 p-5 dark:bg-cm-surface/95"
+              >
                 <div className="mb-3 flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-cm-text/15 bg-cm-bg/80">
                     <Icon className="h-4 w-4 text-nod-gold" />
@@ -91,7 +94,7 @@ export function HelpContent({ locale }: HelpContentProps) {
           })}
         </section>
 
-        <section className="cm-doodle-border bg-white/95 p-6">
+        <section className="cm-doodle-border bg-white/95 p-6 dark:bg-cm-surface/95">
           <div className="mb-4 flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-[#8BA888]" />
             <h2 className="font-creative-display text-2xl font-black text-cm-text">
@@ -102,19 +105,19 @@ export function HelpContent({ locale }: HelpContentProps) {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Link
               href="/articles"
-              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
+              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white dark:bg-cm-surface-raised/80 dark:hover:bg-cm-surface"
             >
               {t("shortcuts.articles")}
             </Link>
             <Link
               href="/settings/billing"
-              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
+              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white dark:bg-cm-surface-raised/80 dark:hover:bg-cm-surface"
             >
               {t("shortcuts.billing")}
             </Link>
             <Link
               href="/settings/billing"
-              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
+              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white dark:bg-cm-surface-raised/80 dark:hover:bg-cm-surface"
             >
               {t("shortcuts.pricing")}
             </Link>
@@ -122,14 +125,14 @@ export function HelpContent({ locale }: HelpContentProps) {
               href={extensionInstallUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
+              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 p-4 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white dark:bg-cm-surface-raised/80 dark:hover:bg-cm-surface"
             >
               {t("shortcuts.installExtension")}
             </a>
           </div>
         </section>
 
-        <section className="cm-doodle-border bg-white/95 p-6">
+        <section className="cm-doodle-border bg-white/95 p-6 dark:bg-cm-surface/95">
           <div className="mb-4 flex items-center gap-2">
             <BadgeHelp className="h-5 w-5 text-cm-coral" />
             <h2 className="font-creative-display text-2xl font-black text-cm-text">
@@ -141,7 +144,7 @@ export function HelpContent({ locale }: HelpContentProps) {
             {faq.map((item) => (
               <article
                 key={item.q}
-                className="cm-doodle-border border-cm-text/15 bg-cm-bg/65 px-4 py-3"
+                className="cm-doodle-border border-cm-text/15 bg-cm-bg/65 px-4 py-3 dark:bg-cm-surface/65"
               >
                 <h3 className="font-creative-body text-sm font-black text-cm-text">{item.q}</h3>
                 <p className="mt-2 font-creative-body text-sm leading-relaxed text-cm-text/70">
@@ -152,7 +155,7 @@ export function HelpContent({ locale }: HelpContentProps) {
           </div>
         </section>
 
-        <section className="cm-doodle-border bg-white/95 p-6">
+        <section className="cm-doodle-border bg-white/95 p-6 dark:bg-cm-surface/95">
           <div className="mb-4 flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-cm-text/60" />
             <h2 className="font-creative-display text-2xl font-black text-cm-text">
@@ -165,7 +168,7 @@ export function HelpContent({ locale }: HelpContentProps) {
               href="https://nodarchive.featurebase.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 px-4 py-3 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
+              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 px-4 py-3 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white dark:bg-cm-surface-raised/80 dark:hover:bg-cm-surface"
             >
               <span className="inline-flex items-center gap-1">
                 <Puzzle className="h-4 w-4 text-nod-gold" />
@@ -176,7 +179,7 @@ export function HelpContent({ locale }: HelpContentProps) {
 
             <Link
               href="/settings/billing"
-              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 px-4 py-3 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white"
+              className="cm-doodle-border border-cm-text/20 bg-cm-bg/70 px-4 py-3 font-creative-body text-sm font-black text-cm-text transition-colors hover:bg-white dark:bg-cm-surface-raised/80 dark:hover:bg-cm-surface"
             >
               <span className="inline-flex items-center gap-1">
                 <CreditCard className="h-4 w-4 text-[#8BA888]" />

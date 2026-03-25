@@ -28,7 +28,11 @@ const SETTINGS_BG_STYLE: CSSProperties = {
   backgroundPosition: "0 0, 11px 11px",
 };
 
-export function SettingsProfile() {
+interface SettingsProfileProps {
+  showAdminPromoEntry?: boolean;
+}
+
+export function SettingsProfile({ showAdminPromoEntry = false }: SettingsProfileProps) {
   const locale = useLocale();
   const router = useRouter();
   const t = useTranslations("settings");
@@ -258,6 +262,18 @@ export function SettingsProfile() {
                     {t("links.feedback")}
                   </span>
                 </a>
+
+                {showAdminPromoEntry ? (
+                  <Link
+                    href="/admin/promo-codes"
+                    className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"
+                  >
+                    <Shield className="mx-auto h-8 w-8 text-cm-text/55" />
+                    <span className="mt-3 block font-creative-body text-sm font-bold text-cm-text">
+                      {t("links.promoIssuer")}
+                    </span>
+                  </Link>
+                ) : null}
               </div>
             </section>
 

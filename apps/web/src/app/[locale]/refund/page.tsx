@@ -12,6 +12,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
+const SECTION_KEYS = [
+  "cancellation",
+  "withdrawal",
+  "proRata",
+  "autoRenewal",
+  "serviceDisruption",
+  "process",
+  "dispute",
+] as const;
+
 export default async function RefundPage({ params }: RefundPageProps) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
@@ -31,10 +41,11 @@ export default async function RefundPage({ params }: RefundPageProps) {
         <section className="space-y-2">
           <p>{t("intro")}</p>
         </section>
-        {["cancellation", "refunds", "process", "exceptions"].map((key) => (
+
+        {SECTION_KEYS.map((key) => (
           <section key={key} className="space-y-2">
             <h2 className="text-base font-semibold">{s(`${key}.title`)}</h2>
-            <p>{s(`${key}.content`)}</p>
+            <p className="whitespace-pre-line">{s(`${key}.content`)}</p>
           </section>
         ))}
       </div>
