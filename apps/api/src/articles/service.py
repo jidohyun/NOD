@@ -593,7 +593,7 @@ async def get_shared_article_by_username(
 async def toggle_shared_article_empathy(
     db: AsyncSession,
     share_id: uuid.UUID,
-    token: str,
+    token: str | None,
     user_id: str,
 ) -> SharedArticleEmpathyResponse | None:
     share_link = await _get_valid_share_link(db, share_id, token)
@@ -639,7 +639,7 @@ async def toggle_shared_article_empathy(
 async def list_shared_article_comments(
     db: AsyncSession,
     share_id: uuid.UUID,
-    token: str,
+    token: str | None,
     viewer_user_id: str | None = None,
 ) -> list[SharedArticleCommentResponse] | None:
     share_link = await _get_valid_share_link(db, share_id, token)
@@ -722,7 +722,7 @@ async def list_shared_article_comments(
 async def create_shared_article_comment(
     db: AsyncSession,
     share_id: uuid.UUID,
-    token: str,
+    token: str | None,
     user_id: str,
     payload: SharedArticleCommentCreate,
 ) -> SharedArticleCommentResponse | None:
@@ -782,7 +782,7 @@ async def create_shared_article_comment(
 async def update_shared_article_comment(
     db: AsyncSession,
     share_id: uuid.UUID,
-    token: str,
+    token: str | None,
     comment_id: uuid.UUID,
     user_id: str,
     payload: SharedArticleCommentUpdate,
@@ -838,7 +838,7 @@ async def update_shared_article_comment(
 async def delete_shared_article_comment(
     db: AsyncSession,
     share_id: uuid.UUID,
-    token: str,
+    token: str | None,
     comment_id: uuid.UUID,
     user_id: str,
 ) -> bool:
@@ -867,7 +867,7 @@ async def delete_shared_article_comment(
 async def toggle_shared_article_comment_empathy(
     db: AsyncSession,
     share_id: uuid.UUID,
-    token: str,
+    token: str | None,
     comment_id: uuid.UUID,
     user_id: str,
 ) -> SharedArticleCommentEmpathyResponse | None:
