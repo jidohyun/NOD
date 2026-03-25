@@ -2,7 +2,7 @@ import json
 import uuid
 from typing import cast
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Query, Request, status
 
 from src.lib.config import settings
 from src.lib.dependencies import CurrentUser, DBSession
@@ -20,6 +20,12 @@ from src.subscriptions.paddle_verify import verify_paddle_signature
 from src.subscriptions.schemas import (
     CheckoutResponse,
     PortalUrlResponse,
+    PromoCodeCreateRequest,
+    PromoCodeListResponse,
+    PromoCodeResponse,
+    PromoCurrentResponse,
+    PromoEntitlementResponse,
+    PromoRedeemRequest,
     SubscriptionResponse,
     UsageResponse,
 )
@@ -27,6 +33,18 @@ from src.subscriptions.schemas import (
 logger = get_logger(__name__)
 
 router = APIRouter()
+
+
+def _is_admin_user(user_id: str) -> bool:
+    return user_id in settings.ADMIN_USER_IDS
+
+
+def _require_admin(user_id: str) -> None:
+    if not _is_admin_user(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin permission required",
+        )
 
 
 @router.get("/usage", response_model=UsageResponse)
@@ -46,6 +64,125 @@ async def get_subscription(
     """Get current user's subscription details."""
     subscription = await service.get_or_create_subscription(db, user.id)
     return SubscriptionResponse.model_validate(subscription)
+
+
+@router.post("/promo/redeem", response_model=PromoEntitlementResponse)
+async def redeem_promo_code(
+    payload: PromoRedeemRequest,
+    db: DBSession,
+    user: CurrentUser,
+    request: Request,
+) -> PromoEntitlementResponse:
+    try:
+        response = await service.redeem_promo_code(
+            db=db,
+            user_id=user.id,
+            code=payload.code,
+            request_ip=request.client.host if request.client else None,
+            request_user_agent=request.headers.get("user-agent"),
+        )
+    except service.PromoRedeemError as exc:
+        reason_value = str(exc.reason)
+        reason = (
+            cast(service.PromoRedeemErrorReason, reason_value)
+            if reason_value
+            in {
+                "invalid_code",
+                "inactive_code",
+                "expired_code",
+                "campaign_limit_reached",
+                "per_user_limit_reached",
+            }
+            else "invalid_code"
+        )
+        await service.record_redeem_failure(
+            db=db,
+            user_id=user.id,
+            code=payload.code,
+            reason=reason,
+            request_ip=request.client.host if request.client else None,
+            request_user_agent=request.headers.get("user-agent"),
+        )
+        await db.commit()
+        if reason == "expired_code":
+            raise HTTPException(
+                status_code=status.HTTP_410_GONE, detail=reason
+            ) from exc
+        if reason in {"campaign_limit_reached", "per_user_limit_reached"}:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT, detail=reason
+            ) from exc
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=reason
+        ) from exc
+
+    return response
+
+
+@router.get("/promo/current", response_model=PromoCurrentResponse)
+async def get_current_promo(
+    db: DBSession,
+    user: CurrentUser,
+) -> PromoCurrentResponse:
+    return await service.get_current_promo_entitlement(db, user.id)
+
+
+@router.post("/promo/admin/codes", response_model=PromoCodeResponse)
+async def create_promo_code(
+    payload: PromoCodeCreateRequest,
+    db: DBSession,
+    user: CurrentUser,
+) -> PromoCodeResponse:
+    _require_admin(user.id)
+    try:
+        return await service.create_promo_code(
+            db, actor_user_id=user.id, payload=payload
+        )
+    except ValueError as exc:
+        if str(exc) == "promo_code_already_exists":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT, detail=str(exc)
+            ) from exc
+        raise
+
+
+@router.get("/promo/admin/codes", response_model=PromoCodeListResponse)
+async def list_promo_codes(
+    db: DBSession,
+    user: CurrentUser,
+    campaign_tag: str | None = Query(default=None),
+    is_active: bool | None = Query(default=None),
+) -> PromoCodeListResponse:
+    _require_admin(user.id)
+    items = await service.list_promo_codes(
+        db,
+        campaign_tag=campaign_tag,
+        is_active=is_active,
+    )
+    return PromoCodeListResponse(items=items)
+
+
+@router.post(
+    "/promo/admin/codes/{promo_code_id}/disable", response_model=PromoCodeResponse
+)
+async def disable_promo_code(
+    promo_code_id: uuid.UUID,
+    db: DBSession,
+    user: CurrentUser,
+) -> PromoCodeResponse:
+    _require_admin(user.id)
+    try:
+        return await service.disable_promo_code(
+            db,
+            actor_user_id=user.id,
+            promo_code_id=promo_code_id,
+        )
+    except ValueError as exc:
+        if str(exc) == "promo_code_not_found":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)
+            ) from exc
+        raise
 
 
 @router.post("/checkout", response_model=CheckoutResponse)
