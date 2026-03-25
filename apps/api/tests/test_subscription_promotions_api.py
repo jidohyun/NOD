@@ -159,7 +159,11 @@ def test_admin_create_succeeds_for_admin(monkeypatch: pytest.MonkeyPatch) -> Non
             "created_at": datetime(2026, 3, 24, 12, 0, tzinfo=UTC),
         }
 
-    monkeypatch.setattr(router.service, "create_promo_code", _fake_create_promo_code)
+    monkeypatch.setattr(
+        router.promo_admin_service,
+        "create_promo_code",
+        _fake_create_promo_code,
+    )
     monkeypatch.setattr(router.settings, "ADMIN_USER_IDS", [admin_id])
 
     with TestClient(app) as client:
@@ -192,7 +196,11 @@ def test_admin_create_returns_409_for_duplicate_code(
     async def _fake_create_promo_code(_db: object, **_kwargs: object) -> object:
         raise ValueError("promo_code_already_exists")
 
-    monkeypatch.setattr(router.service, "create_promo_code", _fake_create_promo_code)
+    monkeypatch.setattr(
+        router.promo_admin_service,
+        "create_promo_code",
+        _fake_create_promo_code,
+    )
     monkeypatch.setattr(router.settings, "ADMIN_USER_IDS", [admin_id])
 
     with TestClient(app) as client:
@@ -269,7 +277,9 @@ def test_admin_list_succeeds_for_admin(monkeypatch: pytest.MonkeyPatch) -> None:
             }
         ]
 
-    monkeypatch.setattr(router.service, "list_promo_codes", _fake_list_promo_codes)
+    monkeypatch.setattr(
+        router.promo_admin_service, "list_promo_codes", _fake_list_promo_codes
+    )
     monkeypatch.setattr(router.settings, "ADMIN_USER_IDS", [admin_id])
 
     with TestClient(app) as client:
@@ -318,7 +328,9 @@ def test_admin_disable_succeeds_for_admin(monkeypatch: pytest.MonkeyPatch) -> No
             "created_at": datetime(2026, 3, 24, 12, 0, tzinfo=UTC),
         }
 
-    monkeypatch.setattr(router.service, "disable_promo_code", _fake_disable_promo_code)
+    monkeypatch.setattr(
+        router.promo_admin_service, "disable_promo_code", _fake_disable_promo_code
+    )
     monkeypatch.setattr(router.settings, "ADMIN_USER_IDS", [admin_id])
 
     with TestClient(app) as client:
@@ -350,7 +362,9 @@ def test_admin_disable_returns_404_for_missing_code(
     async def _fake_disable_promo_code(_db: object, **_kwargs: object) -> object:
         raise ValueError("promo_code_not_found")
 
-    monkeypatch.setattr(router.service, "disable_promo_code", _fake_disable_promo_code)
+    monkeypatch.setattr(
+        router.promo_admin_service, "disable_promo_code", _fake_disable_promo_code
+    )
     monkeypatch.setattr(router.settings, "ADMIN_USER_IDS", [admin_id])
 
     with TestClient(app) as client:

@@ -1003,6 +1003,18 @@
       "savedArticles": "Todos los tipos (incl. GitHub, Papers, Videos)",
       "semanticSearch": "Ilimitado"
     },
+    "promo": {
+      "title": "Código promocional",
+      "placeholder": "Introduce el código promocional",
+      "apply": "Aplicar promoción",
+      "success": "Promoción aplicada",
+      "errorInvalid": "Código promocional no válido",
+      "errorExpired": "Este código promocional ha caducado",
+      "errorLimit": "Se alcanzó el límite de uso de esta promoción",
+      "errorGeneric": "No se pudo aplicar el código promocional",
+      "effectivePro": "Pro activo mediante promoción",
+      "activeUntil": "Promoción activa hasta: {date}"
+    },
     "processing": "Procesando...",
     "promo": {
       "title": "Código promocional",

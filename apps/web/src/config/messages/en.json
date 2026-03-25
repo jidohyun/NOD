@@ -1013,6 +1013,18 @@
       "savedArticles": "All types (incl. GitHub, Papers, Videos)",
       "semanticSearch": "Unlimited"
     },
+    "promo": {
+      "title": "Promo Code",
+      "placeholder": "Enter promo code",
+      "apply": "Apply Promo",
+      "success": "Promo applied",
+      "errorInvalid": "Invalid promo code",
+      "errorExpired": "This promo code has expired",
+      "errorLimit": "Promo redemption limit reached",
+      "errorGeneric": "Unable to apply promo code",
+      "effectivePro": "Pro active via promo",
+      "activeUntil": "Promo active until: {date}"
+    },
     "processing": "Processing...",
     "promo": {
       "title": "Promo Code",
