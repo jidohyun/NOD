@@ -139,7 +139,10 @@ export function useCurrentPromoEntitlement() {
 export function useRedeemPromoCode() {
   return useMutation({
     mutationFn: async (payload: PromoRedeemPayload) => {
-      const { data } = await apiClient.post<PromoRedeemInfo>("/api/subscriptions/promo/redeem", payload);
+      const { data } = await apiClient.post<PromoRedeemInfo>(
+        "/api/subscriptions/promo/redeem",
+        payload
+      );
       return data;
     },
   });

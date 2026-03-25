@@ -1003,6 +1003,18 @@
       "savedArticles": "Tous types (dont GitHub, Articles, Vidéos)",
       "semanticSearch": "Illimité"
     },
+    "promo": {
+      "title": "Code promo",
+      "placeholder": "Saisissez le code promo",
+      "apply": "Appliquer la promo",
+      "success": "Promo appliquée",
+      "errorInvalid": "Code promo invalide",
+      "errorExpired": "Ce code promo a expiré",
+      "errorLimit": "La limite d'utilisation de cette promo est atteinte",
+      "errorGeneric": "Impossible d'appliquer le code promo",
+      "effectivePro": "Pro actif via promotion",
+      "activeUntil": "Promo active jusqu'au : {date}"
+    },
     "processing": "Traitement en cours...",
     "promo": {
       "title": "Code promo",

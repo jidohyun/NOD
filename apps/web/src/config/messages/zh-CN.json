@@ -1003,6 +1003,18 @@
       "savedArticles": "所有类型（含 GitHub、论文、视频）",
       "semanticSearch": "无限"
     },
+    "promo": {
+      "title": "优惠码",
+      "placeholder": "输入优惠码",
+      "apply": "应用优惠",
+      "success": "优惠已应用",
+      "errorInvalid": "无效的优惠码",
+      "errorExpired": "该优惠码已过期",
+      "errorLimit": "优惠兑换次数已达上限",
+      "errorGeneric": "无法应用优惠码",
+      "effectivePro": "通过优惠已激活 Pro",
+      "activeUntil": "优惠有效期至: {date}"
+    },
     "processing": "处理中...",
     "promo": {
       "title": "优惠码",
