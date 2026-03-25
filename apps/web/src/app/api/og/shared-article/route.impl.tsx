@@ -161,6 +161,7 @@ function renderSharedImage(shared: SharedArticle) {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* biome-ignore lint/performance/noImgElement: OG image JSX (ImageResponse) doesn't support next/image */}
           <img
             src="https://nod-archive.com/brand/nod-icon.png"
             alt="NOD"

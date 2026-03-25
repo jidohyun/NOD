@@ -12,6 +12,13 @@ const mockUseRedeemPromoCode = vi.fn();
 const mockUseCurrentPromoEntitlement = vi.fn();
 const mockInvalidate = vi.fn();
 
+const RE_PROMO_CODE = /promo code/i;
+const RE_APPLY_PROMO = /apply promo/i;
+const RE_PROMO_APPLIED = /promo applied/i;
+const RE_INVALID_PROMO_CODE = /invalid promo code/i;
+const RE_HAS_EXPIRED = /has expired/i;
+const RE_PRO_ACTIVE_VIA_PROMO = /pro active via promo/i;
+
 vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(""),
 }));
@@ -150,15 +157,15 @@ describe("BillingContent promo code", () => {
   it("shows promo section and applies promo code", async () => {
     renderWithProviders(<BillingContent />);
 
-    const input = screen.getByPlaceholderText(/promo code/i);
-    const applyButton = screen.getByRole("button", { name: /apply promo/i });
+    const input = screen.getByPlaceholderText(RE_PROMO_CODE);
+    const applyButton = screen.getByRole("button", { name: RE_APPLY_PROMO });
 
     fireEvent.change(input, { target: { value: "SPRING2026" } });
     fireEvent.click(applyButton);
 
     await waitFor(() => {
       expect(mockInvalidate).toHaveBeenCalledTimes(1);
-      expect(screen.getByText(/promo applied/i)).toBeTruthy();
+      expect(screen.getByText(RE_PROMO_APPLIED)).toBeTruthy();
     });
   });
 
@@ -170,13 +177,13 @@ describe("BillingContent promo code", () => {
 
     renderWithProviders(<BillingContent />);
 
-    fireEvent.change(screen.getByPlaceholderText(/promo code/i), {
+    fireEvent.change(screen.getByPlaceholderText(RE_PROMO_CODE), {
       target: { value: "BADCODE" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /apply promo/i }));
+    fireEvent.click(screen.getByRole("button", { name: RE_APPLY_PROMO }));
 
     await waitFor(() => {
-      expect(screen.getByText(/invalid promo code/i)).toBeTruthy();
+      expect(screen.getByText(RE_INVALID_PROMO_CODE)).toBeTruthy();
     });
   });
 
@@ -188,13 +195,13 @@ describe("BillingContent promo code", () => {
 
     renderWithProviders(<BillingContent />);
 
-    fireEvent.change(screen.getByPlaceholderText(/promo code/i), {
+    fireEvent.change(screen.getByPlaceholderText(RE_PROMO_CODE), {
       target: { value: "EXPIRED" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /apply promo/i }));
+    fireEvent.click(screen.getByRole("button", { name: RE_APPLY_PROMO }));
 
     await waitFor(() => {
-      expect(screen.getByText(/has expired/i)).toBeTruthy();
+      expect(screen.getByText(RE_HAS_EXPIRED)).toBeTruthy();
     });
   });
 
@@ -219,6 +226,6 @@ describe("BillingContent promo code", () => {
 
     renderWithProviders(<BillingContent />);
 
-    expect(screen.getByText(/pro active via promo/i)).toBeTruthy();
+    expect(screen.getByText(RE_PRO_ACTIVE_VIA_PROMO)).toBeTruthy();
   });
 });
