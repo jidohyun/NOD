@@ -4,6 +4,7 @@ from typing import cast
 
 from fastapi import APIRouter, HTTPException, Query, Request, status
 
+import src.subscriptions.promo_admin_service as promo_admin_service
 from src.lib.config import settings
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.logging import get_logger
@@ -135,7 +136,7 @@ async def create_promo_code(
 ) -> PromoCodeResponse:
     _require_admin(user.id)
     try:
-        return await service.create_promo_code(
+        return await promo_admin_service.create_promo_code(
             db, actor_user_id=user.id, payload=payload
         )
     except ValueError as exc:
@@ -154,7 +155,7 @@ async def list_promo_codes(
     is_active: bool | None = Query(default=None),
 ) -> PromoCodeListResponse:
     _require_admin(user.id)
-    items = await service.list_promo_codes(
+    items = await promo_admin_service.list_promo_codes(
         db,
         campaign_tag=campaign_tag,
         is_active=is_active,
@@ -172,7 +173,7 @@ async def disable_promo_code(
 ) -> PromoCodeResponse:
     _require_admin(user.id)
     try:
-        return await service.disable_promo_code(
+        return await promo_admin_service.disable_promo_code(
             db,
             actor_user_id=user.id,
             promo_code_id=promo_code_id,
