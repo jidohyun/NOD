@@ -803,7 +803,7 @@ async def get_shared_article_comments(
     share_id: uuid.UUID,
     db: DBSession,
     user: OptionalUser,
-    token: str = Query(min_length=1),
+    token: str | None = Query(default=None),
 ) -> list[SharedArticleCommentResponse]:
     comments = await service.list_shared_article_comments(
         db=db,
@@ -829,7 +829,7 @@ async def post_shared_article_comment(
     payload: SharedArticleCommentCreate,
     db: DBSession,
     user: CurrentUser,
-    token: str = Query(min_length=1),
+    token: str | None = Query(default=None),
 ) -> SharedArticleCommentResponse:
     comment = await service.create_shared_article_comment(
         db=db,
@@ -857,7 +857,7 @@ async def patch_shared_article_comment(
     payload: SharedArticleCommentUpdate,
     db: DBSession,
     user: CurrentUser,
-    token: str = Query(min_length=1),
+    token: str | None = Query(default=None),
 ) -> SharedArticleCommentResponse:
     comment = await service.update_shared_article_comment(
         db=db,
@@ -885,7 +885,7 @@ async def delete_shared_article_comment(
     comment_id: uuid.UUID,
     db: DBSession,
     user: CurrentUser,
-    token: str = Query(min_length=1),
+    token: str | None = Query(default=None),
 ) -> None:
     deleted = await service.delete_shared_article_comment(
         db=db,
@@ -911,7 +911,7 @@ async def post_shared_article_comment_empathy(
     comment_id: uuid.UUID,
     db: DBSession,
     user: CurrentUser,
-    token: str = Query(min_length=1),
+    token: str | None = Query(default=None),
 ) -> SharedArticleCommentEmpathyResponse:
     empathy = await service.toggle_shared_article_comment_empathy(
         db=db,
@@ -937,7 +937,7 @@ async def post_shared_article_empathy(
     share_id: uuid.UUID,
     db: DBSession,
     user: CurrentUser,
-    token: str = Query(min_length=1),
+    token: str | None = Query(default=None),
 ) -> SharedArticleEmpathyResponse:
     empathy = await service.toggle_shared_article_empathy(
         db=db,

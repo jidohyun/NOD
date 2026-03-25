@@ -1,17 +1,35 @@
 import uuid as uuid_lib
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
+from hashlib import sha256
+from typing import Literal, cast
 
-from sqlalchemy import select
+from sqlalchemy import and_, func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.lib.config import settings
 from src.lib.content_classifier import ContentType
-from src.subscriptions.model import Subscription, UsageRecord
-from src.subscriptions.schemas import PLAN_LIMITS, UsageResponse
+from src.subscriptions.model import (
+    PromoAuditLog,
+    PromoCode,
+    PromoRedemption,
+    Subscription,
+    UsageRecord,
+    UserPromoEntitlement,
+)
+from src.subscriptions.schemas import (
+    PLAN_LIMITS,
+    PromoCodeCreateRequest,
+    PromoCodeResponse,
+    PromoCurrentResponse,
+    PromoEntitlementResponse,
+    UsageResponse,
+)
 
 
 def _is_admin(user_id: uuid_lib.UUID | str) -> bool:
     return str(user_id) in settings.ADMIN_USER_IDS
+
 
 FREE_ALLOWED_CONTENT_TYPES = {
     ContentType.GENERAL_NEWS,
@@ -22,6 +40,69 @@ FREE_ALLOWED_CONTENT_TYPES = {
 
 def _normalize_user_id(user_id: uuid_lib.UUID | str) -> uuid_lib.UUID:
     return user_id if isinstance(user_id, uuid_lib.UUID) else uuid_lib.UUID(user_id)
+
+
+def _normalize_promo_code(raw_code: str) -> str:
+    return raw_code.strip().upper()
+
+
+def _hash_promo_code(normalized_code: str) -> str:
+    pepper = settings.PROMO_CODE_PEPPER or settings.JWT_SECRET
+    return sha256(f"{pepper}:{normalized_code}".encode()).hexdigest()
+
+
+def _is_subscription_pro_active(subscription: Subscription) -> bool:
+    return subscription.plan == "pro" and subscription.status == "active"
+
+
+def resolve_effective_plan(
+    subscription: Subscription,
+    has_active_promo: bool,
+) -> tuple[str, str]:
+    if _is_subscription_pro_active(subscription) or has_active_promo:
+        return "pro", "active"
+    return subscription.plan, subscription.status
+
+
+async def get_active_promo_entitlement(
+    db: AsyncSession,
+    user_id: uuid_lib.UUID | str,
+) -> UserPromoEntitlement | None:
+    uid = _normalize_user_id(user_id)
+    now = datetime.now(UTC)
+    result = await db.execute(
+        select(UserPromoEntitlement)
+        .where(
+            UserPromoEntitlement.user_id == uid,
+            UserPromoEntitlement.is_active.is_(True),
+            UserPromoEntitlement.ends_at > now,
+        )
+        .order_by(UserPromoEntitlement.ends_at.desc())
+    )
+    return result.scalars().first()
+
+
+async def get_current_promo_entitlement(
+    db: AsyncSession,
+    user_id: uuid_lib.UUID | str,
+) -> PromoCurrentResponse:
+    entitlement = await get_active_promo_entitlement(db, user_id)
+    if not entitlement:
+        return PromoCurrentResponse(has_active_promo=False)
+
+    promo_code_result = await db.execute(
+        select(PromoCode)
+        .join(PromoRedemption, PromoRedemption.promo_code_id == PromoCode.id)
+        .where(PromoRedemption.id == entitlement.promo_redemption_id)
+    )
+    promo_code = promo_code_result.scalar_one_or_none()
+    return PromoCurrentResponse(
+        has_active_promo=True,
+        plan=entitlement.plan,
+        starts_at=entitlement.starts_at,
+        ends_at=entitlement.ends_at,
+        campaign_tag=promo_code.campaign_tag if promo_code else None,
+    )
 
 
 async def get_or_create_subscription(
@@ -99,13 +180,19 @@ async def get_usage_info(
             can_summarize=True,
         )
 
-    limits = PLAN_LIMITS.get(subscription.plan, PLAN_LIMITS["basic"])
+    active_promo = await get_active_promo_entitlement(db, user_id)
+    effective_plan, effective_status = resolve_effective_plan(
+        subscription=subscription,
+        has_active_promo=active_promo is not None,
+    )
+
+    limits = PLAN_LIMITS.get(effective_plan, PLAN_LIMITS["basic"])
     summaries_limit = limits["summaries_per_month"]
     can_summarize = summaries_limit == -1 or usage.summaries_used < summaries_limit
 
     return UsageResponse(
-        plan=subscription.plan,
-        status=subscription.status,
+        plan=effective_plan,
+        status=effective_status,
         summaries_used=usage.summaries_used,
         summaries_limit=summaries_limit,
         can_summarize=can_summarize,
@@ -160,3 +247,319 @@ async def update_subscription_from_paddle(
     subscription.cancel_at = cancel_at
     await db.flush()
     return subscription
+
+
+async def _write_promo_audit_log(
+    db: AsyncSession,
+    *,
+    actor_user_id: uuid_lib.UUID | None,
+    action: str,
+    target_type: str,
+    target_id: uuid_lib.UUID | None,
+    payload: dict[str, object] | None = None,
+) -> None:
+    db.add(
+        PromoAuditLog(
+            actor_user_id=actor_user_id,
+            action=action,
+            target_type=target_type,
+            target_id=target_id,
+            payload=payload,
+        )
+    )
+    await db.flush()
+
+
+PromoRedeemErrorReason = Literal[
+    "invalid_code",
+    "inactive_code",
+    "expired_code",
+    "campaign_limit_reached",
+    "per_user_limit_reached",
+]
+
+
+def normalize_redeem_error_reason(reason: str) -> PromoRedeemErrorReason:
+    if reason in {
+        "invalid_code",
+        "inactive_code",
+        "expired_code",
+        "campaign_limit_reached",
+        "per_user_limit_reached",
+    }:
+        return cast(PromoRedeemErrorReason, reason)
+    return "invalid_code"
+
+
+class PromoRedeemError(ValueError):
+    reason: PromoRedeemErrorReason
+
+    def __init__(self, reason: PromoRedeemErrorReason) -> None:
+        super().__init__(reason)
+        self.reason = reason
+
+
+async def redeem_promo_code(
+    db: AsyncSession,
+    user_id: uuid_lib.UUID | str,
+    code: str,
+    *,
+    request_ip: str | None = None,
+    request_user_agent: str | None = None,
+) -> PromoEntitlementResponse:
+    uid = _normalize_user_id(user_id)
+    normalized = _normalize_promo_code(code)
+    code_hash = _hash_promo_code(normalized)
+    now = datetime.now(UTC)
+
+    promo_result = await db.execute(
+        select(PromoCode).where(PromoCode.code_hash == code_hash).with_for_update()
+    )
+    promo_code = promo_result.scalar_one_or_none()
+
+    if not promo_code:
+        raise PromoRedeemError("invalid_code")
+
+    if not promo_code.is_active:
+        raise PromoRedeemError("inactive_code")
+
+    if promo_code.expires_at and promo_code.expires_at <= now:
+        raise PromoRedeemError("expired_code")
+
+    if (
+        promo_code.max_redemptions is not None
+        and promo_code.redeemed_count >= promo_code.max_redemptions
+    ):
+        raise PromoRedeemError("campaign_limit_reached")
+
+    user_success_count_result = await db.execute(
+        select(func.count(PromoRedemption.id)).where(
+            PromoRedemption.promo_code_id == promo_code.id,
+            PromoRedemption.user_id == uid,
+            PromoRedemption.status == "success",
+        )
+    )
+    user_success_count = user_success_count_result.scalar_one()
+    if user_success_count >= promo_code.per_user_limit:
+        raise PromoRedeemError("per_user_limit_reached")
+
+    redemption = PromoRedemption(
+        promo_code_id=promo_code.id,
+        user_id=uid,
+        status="success",
+        request_ip=request_ip,
+        request_user_agent=request_user_agent,
+    )
+    db.add(redemption)
+    await db.flush()
+
+    current_entitlement = await get_active_promo_entitlement(db, uid)
+    starts_at = now
+    base_end = (
+        current_entitlement.ends_at
+        if current_entitlement and current_entitlement.ends_at > now
+        else now
+    )
+    ends_at = base_end + timedelta(days=promo_code.grant_days)
+    entitlement = UserPromoEntitlement(
+        user_id=uid,
+        promo_redemption_id=redemption.id,
+        plan=promo_code.grant_plan,
+        starts_at=starts_at,
+        ends_at=ends_at,
+        is_active=True,
+    )
+    db.add(entitlement)
+    promo_code.redeemed_count = promo_code.redeemed_count + 1
+    await db.flush()
+
+    await _write_promo_audit_log(
+        db,
+        actor_user_id=uid,
+        action="redeem_success",
+        target_type="promo_redemption",
+        target_id=redemption.id,
+        payload={
+            "promo_code_id": str(promo_code.id),
+            "campaign_tag": promo_code.campaign_tag or "",
+        },
+    )
+
+    return PromoEntitlementResponse(
+        plan=promo_code.grant_plan,
+        starts_at=starts_at,
+        ends_at=ends_at,
+        campaign_tag=promo_code.campaign_tag,
+        message="Promo applied",
+    )
+
+
+def _map_redeem_failure_reason_to_status(reason: PromoRedeemErrorReason) -> str:
+    if reason == "expired_code":
+        return "expired"
+    if reason == "campaign_limit_reached":
+        return "campaign_limit"
+    if reason == "per_user_limit_reached":
+        return "user_limit"
+    if reason == "inactive_code":
+        return "inactive"
+    return "invalid"
+
+
+async def record_redeem_failure(
+    db: AsyncSession,
+    user_id: uuid_lib.UUID | str,
+    code: str,
+    reason: PromoRedeemErrorReason,
+    *,
+    request_ip: str | None = None,
+    request_user_agent: str | None = None,
+) -> None:
+    uid = _normalize_user_id(user_id)
+    normalized = _normalize_promo_code(code)
+    code_hash = _hash_promo_code(normalized)
+    promo_result = await db.execute(
+        select(PromoCode).where(PromoCode.code_hash == code_hash)
+    )
+    promo_code = promo_result.scalar_one_or_none()
+
+    if promo_code:
+        redemption = PromoRedemption(
+            promo_code_id=promo_code.id,
+            user_id=uid,
+            status="rejected",
+            failure_reason=_map_redeem_failure_reason_to_status(reason),
+            request_ip=request_ip,
+            request_user_agent=request_user_agent,
+        )
+        db.add(redemption)
+        await db.flush()
+
+    await _write_promo_audit_log(
+        db,
+        actor_user_id=uid,
+        action="redeem_rejected",
+        target_type="promo_code",
+        target_id=promo_code.id if promo_code else None,
+        payload={"reason": reason},
+    )
+
+
+async def create_promo_code(
+    db: AsyncSession,
+    *,
+    actor_user_id: uuid_lib.UUID | str,
+    payload: PromoCodeCreateRequest,
+) -> PromoCodeResponse:
+    actor_uid = _normalize_user_id(actor_user_id)
+    normalized = _normalize_promo_code(payload.code)
+    code_hash = _hash_promo_code(normalized)
+
+    promo_code = PromoCode(
+        code_hash=code_hash,
+        campaign_tag=payload.campaign_tag,
+        grant_plan="pro",
+        grant_days=payload.grant_days,
+        max_redemptions=payload.max_redemptions,
+        per_user_limit=payload.per_user_limit,
+        expires_at=payload.normalized_expires_at,
+        is_active=True,
+        created_by=actor_uid,
+    )
+    db.add(promo_code)
+    try:
+        await db.flush()
+    except IntegrityError as exc:
+        raise ValueError("promo_code_already_exists") from exc
+    await _write_promo_audit_log(
+        db,
+        actor_user_id=actor_uid,
+        action="code_created",
+        target_type="promo_code",
+        target_id=promo_code.id,
+        payload={"campaign_tag": payload.campaign_tag or ""},
+    )
+    return PromoCodeResponse(
+        id=promo_code.id,
+        campaign_tag=promo_code.campaign_tag,
+        grant_plan=promo_code.grant_plan,
+        grant_days=promo_code.grant_days,
+        max_redemptions=promo_code.max_redemptions,
+        redeemed_count=promo_code.redeemed_count,
+        per_user_limit=promo_code.per_user_limit,
+        expires_at=promo_code.expires_at,
+        is_active=promo_code.is_active,
+        created_at=promo_code.created_at,
+    )
+
+
+async def list_promo_codes(
+    db: AsyncSession,
+    *,
+    campaign_tag: str | None = None,
+    is_active: bool | None = None,
+) -> list[PromoCodeResponse]:
+    conditions = []
+    if campaign_tag:
+        conditions.append(PromoCode.campaign_tag == campaign_tag)
+    if is_active is not None:
+        conditions.append(PromoCode.is_active.is_(is_active))
+
+    query = select(PromoCode).order_by(PromoCode.created_at.desc())
+    if conditions:
+        query = query.where(and_(*conditions))
+
+    result = await db.execute(query)
+    codes = result.scalars().all()
+    return [
+        PromoCodeResponse(
+            id=code.id,
+            campaign_tag=code.campaign_tag,
+            grant_plan=code.grant_plan,
+            grant_days=code.grant_days,
+            max_redemptions=code.max_redemptions,
+            redeemed_count=code.redeemed_count,
+            per_user_limit=code.per_user_limit,
+            expires_at=code.expires_at,
+            is_active=code.is_active,
+            created_at=code.created_at,
+        )
+        for code in codes
+    ]
+
+
+async def disable_promo_code(
+    db: AsyncSession,
+    *,
+    actor_user_id: uuid_lib.UUID | str,
+    promo_code_id: uuid_lib.UUID,
+) -> PromoCodeResponse:
+    actor_uid = _normalize_user_id(actor_user_id)
+    result = await db.execute(select(PromoCode).where(PromoCode.id == promo_code_id))
+    code = result.scalar_one_or_none()
+    if not code:
+        raise ValueError("promo_code_not_found")
+
+    code.is_active = False
+    await db.flush()
+    await _write_promo_audit_log(
+        db,
+        actor_user_id=actor_uid,
+        action="code_disabled",
+        target_type="promo_code",
+        target_id=code.id,
+        payload={"campaign_tag": code.campaign_tag or ""},
+    )
+
+    return PromoCodeResponse(
+        id=code.id,
+        campaign_tag=code.campaign_tag,
+        grant_plan=code.grant_plan,
+        grant_days=code.grant_days,
+        max_redemptions=code.max_redemptions,
+        redeemed_count=code.redeemed_count,
+        per_user_limit=code.per_user_limit,
+        expires_at=code.expires_at,
+        is_active=code.is_active,
+        created_at=code.created_at,
+    )
