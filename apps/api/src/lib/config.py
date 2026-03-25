@@ -75,6 +75,7 @@ class Settings(BaseSettings):
     # Supabase (extension token refresh)
     SUPABASE_URL: str | None = None
     SUPABASE_ANON_KEY: str | None = None
+    SUPABASE_JWT_SECRET: str | None = None
     SUPABASE_JWT_AUDIENCE: str = "authenticated"
     SUPABASE_JWT_ISSUER: str | None = None
     SUPABASE_JWKS_CACHE_TTL_SECONDS: int = 300
