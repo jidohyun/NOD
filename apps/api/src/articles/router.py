@@ -1230,16 +1230,22 @@ def _is_nod_patch_note_url(url: str) -> bool:
         return False
 
     segments = [segment for segment in parsed.path.split("/") if segment]
-    if len(segments) != 3:
-        return False
 
-    locale_segment, changelog_segment, version_segment = segments
-    if changelog_segment.lower() != "changelog":
-        return False
-    if not _LOCALE_SEGMENT_PATTERN.match(locale_segment):
-        return False
+    # /{locale}/changelog/{version} (3 segments)
+    if len(segments) == 3:
+        locale_segment, changelog_segment, version_segment = segments
+        if changelog_segment.lower() == "changelog" and _LOCALE_SEGMENT_PATTERN.match(
+            locale_segment
+        ):
+            return bool(version_segment)
 
-    return bool(version_segment)
+    # /changelog/{version} (2 segments, locale omitted)
+    if len(segments) == 2:
+        changelog_segment, version_segment = segments
+        if changelog_segment.lower() == "changelog":
+            return bool(version_segment)
+
+    return False
 
 
 def _attach_patch_note_tag(
