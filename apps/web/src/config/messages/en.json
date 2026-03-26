@@ -56,35 +56,37 @@
   },
   "changelogPage": {
     "title": "Release Notes",
+    "subtitle": "Explore version-by-version changes from v1 in the sidebar.",
     "sections": {
       "versionListTitle": "Versions"
     },
     "versions": {
       "v1_3_0": {
-        "label": "v1.3.0",
-        "status": "Planned",
-        "tagLabel": "Release target",
-        "tag": "v1.3.0",
-        "publishedAtLabel": "Target",
-        "publishedAt": "Upcoming",
-        "summary": "The v1.3.0 release is planned around article sharing. This update focuses on making summarized content easy to share, view publicly, and engage with.",
+        "label": "v1.3.x",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "web-v1.3.1 (includes v1.3.0)",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-03-25",
+        "summary": "The 1.3 line combines feature expansion in v1.3.0 and authentication stabilization in v1.3.1.\n\nThis release series has two priorities: add a structured admin promo-code operation flow with subscription entitlement foundations, and resolve legacy HS256 authentication regressions introduced after JWT hardening.",
+        "patchNotes": "[v1.3.1 details]\n- Restored production authentication for legacy Supabase HS256 tokens without kid to resolve widespread 401 responses.\n- Replaced the unsafe claims-only fallback with explicit HS256 signature verification using SUPABASE_JWT_SECRET.\n- Added regression tests for HS256 success/failure and missing-secret rejection paths.\n\n[v1.3.0 details]\n- Added internal admin promo code issue/list/disable flows in the web app.\n- Added promo subscription entitlement schema and API contract test coverage.\n- Hardened Supabase JWT validation with JWKS signature verification, claim checks, and key/algorithm safeguards.\n- Improved dark-mode contrast in billing/help/admin promo surfaces.\n- Enforced consistent admin access checks across web route guards and API admin endpoints.\n- Resolved migration drift that caused UndefinedTableError on promo endpoints.",
         "highlightsTitle": "Highlights",
         "highlights": {
           "item1": {
-            "title": "Public share links for articles",
-            "description": "Generate and manage public links for summarized articles directly from the product."
+            "title": "Auth stabilization hotfix (v1.3.1)",
+            "description": "Recovered legacy HS256 compatibility and tightened signature verification to reduce production auth failures."
           },
           "item2": {
-            "title": "Dedicated shared article experience",
-            "description": "Shared pages are optimized for readability with clear metadata and original source context."
+            "title": "Admin promo operations (v1.3.0)",
+            "description": "Added in-product flows for issuing, listing, and disabling promo codes for internal operators."
           },
           "item3": {
-            "title": "Discussion and empathy interactions",
-            "description": "Readers can react and participate through comments, replies, and empathy actions."
+            "title": "JWT validation hardening",
+            "description": "Strengthened JWT trust boundaries with explicit signature/claim/key checks and regression coverage."
           },
           "item4": {
-            "title": "Advanced sharing controls",
-            "description": "Support custom share URL and thumbnail options for cleaner distribution."
+            "title": "Operational consistency and UI polish",
+            "description": "Improved dark-mode readability, admin guard consistency, and migration discipline for runtime stability."
           }
         }
       },
