@@ -1269,7 +1269,7 @@ export function SharedArticleView({
                 width={1200}
                 height={630}
                 unoptimized
-                className="h-auto max-h-[280px] w-full object-cover"
+                className="h-auto w-full object-contain"
                 onError={() => setArticleOgImage(null)}
               />
             </div>
