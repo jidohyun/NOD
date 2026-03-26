@@ -153,3 +153,39 @@ def test_get_article_analysis_content_limit_chars_by_profile() -> None:
         )
         == 6500
     )
+
+
+def test_is_nod_patch_note_url_accepts_changelog_detail_path() -> None:
+    assert router._is_nod_patch_note_url("https://nod-archive.com/ko/changelog/v1-3-x")
+    assert router._is_nod_patch_note_url(
+        "https://www.nod-archive.com/zh-CN/changelog/v1-2-0?ref=share"
+    )
+
+
+def test_is_nod_patch_note_url_rejects_non_detail_nod_paths() -> None:
+    assert not router._is_nod_patch_note_url("https://nod-archive.com/ko/changelog")
+    assert not router._is_nod_patch_note_url("https://nod-archive.com/ko/shared/abc")
+    assert not router._is_nod_patch_note_url("https://example.com/ko/changelog/v1-3-x")
+
+
+def test_attach_patch_note_tag_adds_and_preserves_tags() -> None:
+    metadata = {"foo": "bar", "tags": ["alpha"]}
+
+    tagged = router._attach_patch_note_tag(
+        metadata,
+        "https://nod-archive.com/ko/changelog/v1-3-x",
+    )
+
+    assert tagged["foo"] == "bar"
+    assert tagged["tags"] == ["alpha", "patch-note"]
+
+
+def test_attach_patch_note_tag_noop_for_non_patch_note_url() -> None:
+    metadata = {"foo": "bar"}
+
+    tagged = router._attach_patch_note_tag(
+        metadata,
+        "https://nod-archive.com/ko/shared/abc",
+    )
+
+    assert tagged == {"foo": "bar"}
