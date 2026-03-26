@@ -46,6 +46,7 @@ export interface SharedArticle {
   custom_url?: string | null;
   thumbnail_mode: string;
   thumbnail_url?: string | null;
+  og_image_url?: string | null;
 }
 
 export interface SharedArticleComment {
