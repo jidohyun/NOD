@@ -45,7 +45,11 @@ export function resolveSharedMetadataImage(
   }
 ): string {
   const { shareId, token } = options;
-  void shared;
+
+  // Use original blog og:image directly when available
+  if (shared.og_image_url) {
+    return shared.og_image_url;
+  }
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.nod-archive.com";
   const ogUrl = new URL(`/api/articles/share/og-image/${encodeURIComponent(shareId)}`, apiBase);
