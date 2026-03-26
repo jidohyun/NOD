@@ -338,6 +338,7 @@
     "typePaper": "学术论文",
     "typeTechBlog": "技术博客",
     "typeVideo": "视频/播客",
+    "typePatchNote": "更新日志",
     "shareSectionTitle": "分享此摘要",
     "shareSectionDescription": "生成公开链接，分享该内容的摘要。",
     "shareModalTitle": "要分享此摘要吗？",

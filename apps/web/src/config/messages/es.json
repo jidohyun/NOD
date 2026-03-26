@@ -338,6 +338,7 @@
     "typePaper": "Artículo académico",
     "typeTechBlog": "Blog técnico",
     "typeVideo": "Video/Podcast",
+    "typePatchNote": "Nota de parche",
     "shareSectionTitle": "Comparte este resumen",
     "shareSectionDescription": "Genera un enlace público para compartir el resumen de este contenido.",
     "shareModalTitle": "¿Compartir este resumen?",
