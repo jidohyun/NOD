@@ -33,6 +33,7 @@ FREE_ALLOWED_CONTENT_TYPES = {
     ContentType.GENERAL_NEWS,
     ContentType.TECH_BLOG,
     ContentType.OFFICIAL_DOCS,
+    ContentType.PATCH_NOTE,
 }
 
 

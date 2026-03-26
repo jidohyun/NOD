@@ -105,6 +105,6 @@ class TestClassifyUrl:
 
     def test_all_content_types_exist(self):
         """Verify all enum values are valid strings."""
-        assert len(ContentType) == 6
+        assert len(ContentType) == 7
         for ct in ContentType:
             assert isinstance(ct.value, str)

@@ -24,6 +24,7 @@ def _auto_register() -> None:
         general_news,
         github_repo,
         official_docs,
+        patch_note,
         tech_blog,
         video_podcast,
     )

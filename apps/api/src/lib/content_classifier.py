@@ -15,6 +15,7 @@ class ContentType(StrEnum):
     GITHUB_REPO = "github_repo"
     OFFICIAL_DOCS = "official_docs"
     VIDEO_PODCAST = "video_podcast"
+    PATCH_NOTE = "patch_note"
 
 
 _DOMAIN_RULES: list[tuple[list[str], ContentType]] = [
@@ -159,6 +160,10 @@ def classify_url(url: str) -> ContentType:
     for domains, content_type in _DOMAIN_RULES:
         if any(host == d or host.endswith(f".{d}") for d in domains):
             return content_type
+
+    # NOD changelog / patch notes
+    if host == "nod-archive.com" and "/changelog/" in path:
+        return ContentType.PATCH_NOTE
 
     # Path-based heuristics
     docs_paths = (
