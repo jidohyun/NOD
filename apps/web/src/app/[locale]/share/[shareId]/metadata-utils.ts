@@ -44,25 +44,13 @@ export function resolveSharedMetadataImage(
     token: string;
   }
 ): string {
-  const { siteOrigin, shareId, token } = options;
-  const hasManualThumbnail =
-    shared.thumbnail_mode === "manual" && Boolean(shared.thumbnail_url?.trim());
-  if (!hasManualThumbnail) {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.nod-archive.com";
-    const ogUrl = new URL(`/api/articles/share/og-image/${encodeURIComponent(shareId)}`, apiBase);
-    if (token) {
-      ogUrl.searchParams.set("token", token);
-    }
-    return ogUrl.toString();
-  }
+  const { shareId, token } = options;
+  void shared;
 
-  const thumbnailImageUrl = shared.thumbnail_url!.trim();
-  if (thumbnailImageUrl.startsWith("http://") || thumbnailImageUrl.startsWith("https://")) {
-    return thumbnailImageUrl;
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.nod-archive.com";
+  const ogUrl = new URL(`/api/articles/share/og-image/${encodeURIComponent(shareId)}`, apiBase);
+  if (token) {
+    ogUrl.searchParams.set("token", token);
   }
-
-  const normalizedPath = thumbnailImageUrl.startsWith("/")
-    ? thumbnailImageUrl
-    : `/${thumbnailImageUrl}`;
-  return toAbsoluteUrl(siteOrigin, normalizedPath);
+  return ogUrl.toString();
 }

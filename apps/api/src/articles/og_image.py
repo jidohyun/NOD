@@ -5,14 +5,21 @@ from __future__ import annotations
 import io
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import (
+    Image,
+    ImageDraw,
+    ImageFilter,
+    ImageFont,
+    ImageOps,
+    UnidentifiedImageError,
+)
 
 IMAGE_WIDTH = 1200
 IMAGE_HEIGHT = 630
+OG_MIN_SOURCE_WIDTH = 600
+OG_MIN_SOURCE_HEIGHT = 315
 
-CONTENT_TYPE_GRADIENTS: dict[
-    str, tuple[tuple[int, int, int], tuple[int, int, int]]
-] = {
+CONTENT_TYPE_GRADIENTS: dict[str, tuple[tuple[int, int, int], tuple[int, int, int]]] = {
     "tech_blog": ((37, 99, 235), (55, 48, 163)),
     "general_news": ((75, 85, 99), (30, 41, 59)),
     "academic_paper": ((147, 51, 234), (91, 33, 182)),
@@ -51,7 +58,8 @@ _FONT_NAMES_BOLD = [
 
 
 def _get_font(
-    size: int, bold: bool = False,
+    size: int,
+    bold: bool = False,
 ) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
     names = _FONT_NAMES_BOLD if bold else _FONT_NAMES_REGULAR
     for d in _FONT_DIRS:
@@ -138,9 +146,7 @@ def _wrap_text(
         if total < len(words):
             last = lines[-1]
             while last:
-                tw = draw.textbbox(
-                    (0, 0), last + "...", font=font
-                )[2]
+                tw = draw.textbbox((0, 0), last + "...", font=font)[2]
                 if tw <= max_w:
                     break
                 last = last[:-1]
@@ -166,9 +172,7 @@ def generate_og_image(
     article_url: str | None = None,
 ) -> bytes:
     """Generate a 1200x630 OG image as PNG bytes."""
-    grad = CONTENT_TYPE_GRADIENTS.get(
-        content_type, DEFAULT_GRADIENT
-    )
+    grad = CONTENT_TYPE_GRADIENTS.get(content_type, DEFAULT_GRADIENT)
     label = CONTENT_TYPE_LABELS.get(content_type)
     hostname = _get_host(article_url)
 
@@ -283,3 +287,53 @@ def generate_og_image(
     buf = io.BytesIO()
     img.save(buf, format="PNG", optimize=True)
     return buf.getvalue()
+
+
+def _build_cover_derivative(source: Image.Image) -> Image.Image:
+    return ImageOps.fit(
+        source,
+        (IMAGE_WIDTH, IMAGE_HEIGHT),
+        method=Image.Resampling.LANCZOS,
+        centering=(0.5, 0.5),
+    )
+
+
+def _build_contain_derivative(source: Image.Image) -> Image.Image:
+    background = ImageOps.fit(
+        source,
+        (IMAGE_WIDTH, IMAGE_HEIGHT),
+        method=Image.Resampling.LANCZOS,
+        centering=(0.5, 0.5),
+    ).filter(ImageFilter.GaussianBlur(24))
+    contained = ImageOps.contain(
+        source,
+        (IMAGE_WIDTH, IMAGE_HEIGHT),
+        method=Image.Resampling.LANCZOS,
+    )
+    x = (IMAGE_WIDTH - contained.width) // 2
+    y = (IMAGE_HEIGHT - contained.height) // 2
+    background.paste(contained, (x, y))
+    return background
+
+
+def generate_og_image_from_thumbnail_bytes(source_bytes: bytes) -> bytes | None:
+    try:
+        with Image.open(io.BytesIO(source_bytes)) as loaded:
+            source = ImageOps.exif_transpose(loaded).convert("RGB")
+    except (UnidentifiedImageError, OSError, ValueError):
+        return None
+
+    if source.width < OG_MIN_SOURCE_WIDTH or source.height < OG_MIN_SOURCE_HEIGHT:
+        return None
+
+    ratio = source.width / source.height
+    is_extreme_ratio = ratio < 0.9 or ratio > 2.8
+    output = (
+        _build_contain_derivative(source)
+        if is_extreme_ratio
+        else _build_cover_derivative(source)
+    )
+
+    buffer = io.BytesIO()
+    output.save(buffer, format="PNG", optimize=True)
+    return buffer.getvalue()

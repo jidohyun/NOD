@@ -84,7 +84,7 @@ describe("resolveSharedMetadataImage", () => {
     ).toBe("http://localhost:8000/api/articles/share/og-image/share-id?token=token-value");
   });
 
-  it("uses manual absolute thumbnail_url in manual mode", () => {
+  it("uses derived OG route even in manual thumbnail mode", () => {
     const shared = createSharedArticle({
       thumbnail_mode: "manual",
       thumbnail_url: "https://cdn.example.com/og/custom.png",
@@ -97,10 +97,10 @@ describe("resolveSharedMetadataImage", () => {
         shareId: "share-id",
         token: "token-value",
       })
-    ).toBe("https://cdn.example.com/og/custom.png");
+    ).toBe("http://localhost:8000/api/articles/share/og-image/share-id?token=token-value");
   });
 
-  it("normalizes relative manual thumbnail_url", () => {
+  it("keeps using derived OG route for relative manual thumbnail_url", () => {
     const shared = createSharedArticle({
       thumbnail_mode: "manual",
       thumbnail_url: "og/custom.png",
@@ -113,7 +113,7 @@ describe("resolveSharedMetadataImage", () => {
         shareId: "share-id",
         token: "token-value",
       })
-    ).toBe("https://nod-archive.com/og/custom.png");
+    ).toBe("http://localhost:8000/api/articles/share/og-image/share-id?token=token-value");
   });
 
   it("encodes query params in default dynamic image URL", () => {
