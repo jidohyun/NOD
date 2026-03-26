@@ -13,12 +13,6 @@ resource "google_compute_subnetwork" "main" {
   network       = google_compute_network.main.id
 
   private_ip_google_access = true
-
-  log_config {
-    aggregation_interval = "INTERVAL_10_MIN"
-    flow_sampling        = 0.5
-    metadata             = "INCLUDE_ALL_METADATA"
-  }
 }
 
 # Cloud Router for NAT
@@ -49,7 +43,7 @@ resource "google_vpc_access_connector" "main" {
   network       = google_compute_network.main.name
   ip_cidr_range = "10.8.0.0/28"
 
-  min_instances = 2
+  min_instances = 1
   max_instances = 3
 }
 

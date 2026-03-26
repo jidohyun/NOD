@@ -312,6 +312,14 @@ resource "google_cloud_run_v2_service" "web" {
         value = var.domain != "" ? "https://${var.api_subdomain}.${var.domain}" : google_cloud_run_v2_service.api.uri
       }
 
+      dynamic "env" {
+        for_each = var.ADMIN_USER_IDS != "" ? [1] : []
+        content {
+          name  = "ADMIN_USER_IDS"
+          value = jsonencode(split(",", var.ADMIN_USER_IDS))
+        }
+      }
+
       env {
         name  = "NEXT_PUBLIC_SITE_URL"
         value = var.domain != "" ? "https://${var.domain}" : "https://example.com"
