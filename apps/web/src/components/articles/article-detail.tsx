@@ -122,6 +122,11 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string 
     className:
       "bg-pink-100 text-pink-700 border-pink-300 dark:bg-pink-950/50 dark:text-pink-400 dark:border-pink-700",
   },
+  patch_note: {
+    labelKey: "typePatchNote",
+    className:
+      "bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-950/50 dark:text-amber-400 dark:border-amber-700",
+  },
 };
 
 type DashboardStatusKey =
@@ -223,7 +228,12 @@ export function ArticleDetail({ id }: { id: string }) {
   const statusMeta = STATUS_MAP[effectiveStatus];
   const statusLabel = statusMeta ? t(statusMeta.labelKey as DashboardStatusKey) : effectiveStatus;
 
-  const contentType = article.summary?.content_type || "general_news";
+  const summaryTags = Array.isArray(article.summary?.type_metadata?.tags)
+    ? article.summary.type_metadata.tags
+    : [];
+  const contentType = summaryTags.includes("patch-note")
+    ? "patch_note"
+    : article.summary?.content_type || "general_news";
   const contentTypeMeta = CONTENT_TYPE_STYLES[contentType] || CONTENT_TYPE_STYLES.general_news;
 
   const formattedDate = new Date(article.created_at).toLocaleDateString(dateLocale, {
@@ -388,6 +398,7 @@ export function ArticleDetail({ id }: { id: string }) {
                       | "typeGitHub"
                       | "typeDocs"
                       | "typeVideo"
+                      | "typePatchNote"
                   )}
                 </span>
 
