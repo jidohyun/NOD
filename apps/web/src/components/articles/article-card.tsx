@@ -88,6 +88,11 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string 
     className:
       "bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950/40 dark:text-pink-400 dark:border-pink-800",
   },
+  patch_note: {
+    labelKey: "typePatchNote",
+    className:
+      "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800",
+  },
 };
 
 export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps) {
@@ -151,7 +156,10 @@ export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps
             </span>
 
             {(() => {
-              const ct = article.content_type || "general_news";
+              const rawCt = article.content_type || "general_news";
+              const isNodChangelog =
+                article.url?.includes("nod-archive.com") && article.url?.includes("/changelog/");
+              const ct = isNodChangelog ? "patch_note" : rawCt;
               const ctStyle = CONTENT_TYPE_STYLES[ct] || CONTENT_TYPE_STYLES.general_news;
               return (
                 <span
@@ -165,6 +173,7 @@ export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps
                       | "typeGitHub"
                       | "typeDocs"
                       | "typeVideo"
+                      | "typePatchNote"
                   )}
                 </span>
               );

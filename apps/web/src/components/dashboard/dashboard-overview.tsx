@@ -33,6 +33,7 @@ const CONTENT_TYPE_LABEL_KEYS: Record<string, string> = {
   github_repo: "typeGitHub",
   official_docs: "typeDocs",
   video_podcast: "typeVideo",
+  patch_note: "typePatchNote",
 };
 
 const CANVAS_BG_STYLE: CSSProperties = {
