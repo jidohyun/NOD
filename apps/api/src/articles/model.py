@@ -276,6 +276,9 @@ class ArticleSummary(UUIDMixin, TimestampMixin, Base):
     type_metadata: Mapped[dict[str, object]] = mapped_column(
         JSON, nullable=False, server_default=text("'{}'")
     )
+    og_image_source_url: Mapped[str | None] = mapped_column(
+        String(2048), nullable=True
+    )
     ai_provider: Mapped[str] = mapped_column(String(50), nullable=False)
     ai_model: Mapped[str] = mapped_column(String(100), nullable=False)
 

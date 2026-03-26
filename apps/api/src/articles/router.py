@@ -364,6 +364,17 @@ async def _run_analysis(
             }
             type_metadata = _attach_patch_note_tag(type_metadata, article_url)
 
+            # Extract og:image from source URL (best-effort, non-blocking)
+            og_image_url: str | None = None
+            if article_url:
+                try:
+                    og_image_url = await extract_og_image_url(article_url)
+                except Exception:
+                    logger.debug(
+                        "og:image extraction failed",
+                        article_id=str(article_id),
+                    )
+
             summary = ArticleSummary(
                 article_id=article_id,
                 summary=result.summary,
@@ -376,6 +387,7 @@ async def _run_analysis(
                 language=result.language,
                 content_type=str(content_type),
                 type_metadata=type_metadata,
+                og_image_source_url=og_image_url,
                 ai_provider=provider,
                 ai_model=model_name,
             )
@@ -760,6 +772,7 @@ async def get_shared_article_og_image(
             detail="Shared article not found",
         )
 
+    # 1) Manual thumbnail override (user-specified image)
     thumbnail_mode = getattr(shared, "thumbnail_mode", "default")
     thumbnail_url = getattr(shared, "thumbnail_url", None)
     if thumbnail_mode == "manual" and isinstance(thumbnail_url, str):
@@ -771,6 +784,28 @@ async def get_shared_article_og_image(
                 headers={"Cache-Control": "public, max-age=86400"},
             )
 
+    # 2) Source og:image from original article (auto-extracted)
+    from sqlalchemy import select
+
+    from src.articles.model import ArticleSummary as SummaryModel
+
+    row = await db.execute(
+        select(SummaryModel.og_image_source_url).where(
+            SummaryModel.article_id == shared.article_id
+        )
+    )
+    og_source_url = row.scalar_one_or_none()
+
+    if og_source_url and _is_public_thumbnail_url(og_source_url):
+        from fastapi.responses import RedirectResponse
+
+        return RedirectResponse(
+            url=og_source_url,
+            status_code=302,
+            headers={"Cache-Control": "public, max-age=86400"},
+        )
+
+    # 3) Fallback: generate gradient card with Pillow
     png_bytes = generate_og_image(
         title=shared.title,
         summary=shared.summary,
@@ -1087,6 +1122,72 @@ async def retry_article_analysis(
 _LOCALE_SEGMENT_PATTERN = re.compile(r"^[a-z]{2}(?:-[a-zA-Z]{2})?$")
 _MAX_THUMBNAIL_DOWNLOAD_BYTES = 8 * 1024 * 1024
 _OG_FETCH_TIMEOUT_SECONDS = 8.0
+_OG_META_FETCH_TIMEOUT_SECONDS = 5.0
+_OG_META_MAX_BYTES = 256 * 1024  # Only need <head> section
+
+
+async def extract_og_image_url(article_url: str) -> str | None:
+    """Extract og:image URL from a web page's <head> meta tags."""
+    if not article_url or not _is_public_thumbnail_url(article_url):
+        return None
+
+    try:
+        async with (
+            httpx.AsyncClient(
+                follow_redirects=True,
+                timeout=_OG_META_FETCH_TIMEOUT_SECONDS,
+            ) as client,
+            client.stream("GET", article_url) as response,
+        ):
+                if response.status_code != 200:
+                    return None
+                content_type = response.headers.get("content-type", "").lower()
+                if "html" not in content_type:
+                    return None
+                chunks: list[bytes] = []
+                total = 0
+                async for chunk in response.aiter_bytes(chunk_size=8192):
+                    chunks.append(chunk)
+                    total += len(chunk)
+                    if total >= _OG_META_MAX_BYTES:
+                        break
+        head_html = b"".join(chunks).decode("utf-8", errors="ignore")
+    except (httpx.HTTPError, UnicodeDecodeError):
+        return None
+
+    import re as _re
+
+    match = _re.search(
+        r'<meta\s[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']',
+        head_html,
+        _re.IGNORECASE,
+    )
+    if not match:
+        match = _re.search(
+            r'<meta\s[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']',
+            head_html,
+            _re.IGNORECASE,
+        )
+    if not match:
+        return None
+
+    og_url = match.group(1).strip()
+    if not og_url:
+        return None
+
+    # Resolve relative URLs
+    if og_url.startswith("//"):
+        og_url = "https:" + og_url
+    elif og_url.startswith("/"):
+        from urllib.parse import urlparse as _urlparse
+
+        parsed = _urlparse(article_url)
+        og_url = f"{parsed.scheme}://{parsed.netloc}{og_url}"
+
+    if not og_url.startswith(("http://", "https://")):
+        return None
+
+    return og_url
 
 
 def _normalize_hostname(hostname: str | None) -> str:
