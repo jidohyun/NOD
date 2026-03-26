@@ -386,16 +386,21 @@ export function SharedArticleView({
 
   useEffect(() => {
     if (!data) return;
+    // Use original blog og:image directly if available
     if (data.og_image_url) {
       setArticleOgImage(data.og_image_url);
       return;
     }
-    const params = new URLSearchParams({ locale, shareId });
+    // Fallback: use API OG image endpoint (live extraction + caching)
+    const ogUrl = new URL(
+      `/_proxy/api/articles/share/og-image/${encodeURIComponent(shareId)}`,
+      window.location.origin
+    );
     if (token) {
-      params.set("token", token);
+      ogUrl.searchParams.set("token", token);
     }
-    setArticleOgImage(`/api/og/shared-article?${params.toString()}`);
-  }, [data, locale, shareId, token]);
+    setArticleOgImage(ogUrl.toString());
+  }, [data, shareId, token]);
   const [openCommentMenuId, setOpenCommentMenuId] = useState<string | null>(null);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingCommentContent, setEditingCommentContent] = useState("");

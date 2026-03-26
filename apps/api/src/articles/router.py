@@ -805,6 +805,32 @@ async def get_shared_article_og_image(
             headers={"Cache-Control": "public, max-age=86400"},
         )
 
+    # 2b) Live extraction: fetch og:image from source URL and cache in DB
+    if og_source_url is None and shared.url:
+        try:
+            live_og_url = await extract_og_image_url(shared.url)
+        except Exception:
+            live_og_url = None
+
+        if live_og_url and _is_public_thumbnail_url(live_og_url):
+            # Cache for future requests
+            from sqlalchemy import update as sql_update
+
+            await db.execute(
+                sql_update(SummaryModel)
+                .where(SummaryModel.article_id == shared.article_id)
+                .values(og_image_source_url=live_og_url)
+            )
+            await db.commit()
+
+            from fastapi.responses import RedirectResponse
+
+            return RedirectResponse(
+                url=live_og_url,
+                status_code=302,
+                headers={"Cache-Control": "public, max-age=86400"},
+            )
+
     # 3) Fallback: generate gradient card with Pillow
     png_bytes = generate_og_image(
         title=shared.title,
