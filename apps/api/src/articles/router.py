@@ -1,11 +1,15 @@
 import asyncio
+import ipaddress
 import re
 import time as _time
 import uuid
 from typing import Literal
+from urllib.parse import urlparse
 
+import httpx
 import structlog
 from fastapi import APIRouter, HTTPException, Query, status
+from fastapi.responses import Response
 
 from src.articles import service
 from src.articles.schemas import (
@@ -740,9 +744,7 @@ async def get_shared_article_og_image(
     db: DBSession,
     user: OptionalUser,
     token: str | None = Query(default=None),
-) -> None:
-    from fastapi.responses import Response
-
+) -> Response:
     from src.articles.og_image import generate_og_image
 
     shared = await service.get_shared_article_by_slug(
@@ -758,13 +760,24 @@ async def get_shared_article_og_image(
             detail="Shared article not found",
         )
 
+    thumbnail_mode = getattr(shared, "thumbnail_mode", "default")
+    thumbnail_url = getattr(shared, "thumbnail_url", None)
+    if thumbnail_mode == "manual" and isinstance(thumbnail_url, str):
+        derived = await _generate_og_from_thumbnail_url(thumbnail_url.strip())
+        if derived is not None:
+            return Response(
+                content=derived,
+                media_type="image/png",
+                headers={"Cache-Control": "public, max-age=86400"},
+            )
+
     png_bytes = generate_og_image(
         title=shared.title,
         summary=shared.summary,
         content_type=shared.content_type,
         article_url=shared.url,
     )
-    return Response(  # type: ignore[return-value]
+    return Response(
         content=png_bytes,
         media_type="image/png",
         headers={"Cache-Control": "public, max-age=86400"},
@@ -1072,6 +1085,8 @@ async def retry_article_analysis(
 
 
 _LOCALE_SEGMENT_PATTERN = re.compile(r"^[a-z]{2}(?:-[a-zA-Z]{2})?$")
+_MAX_THUMBNAIL_DOWNLOAD_BYTES = 8 * 1024 * 1024
+_OG_FETCH_TIMEOUT_SECONDS = 8.0
 
 
 def _normalize_hostname(hostname: str | None) -> str:
@@ -1118,6 +1133,64 @@ def _attach_patch_note_tag(
 
     type_metadata["tags"] = tags
     return type_metadata
+
+
+def _is_public_thumbnail_url(url: str) -> bool:
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"}:
+        return False
+
+    hostname = parsed.hostname
+    if not hostname:
+        return False
+
+    normalized = hostname.lower()
+    if normalized in {"localhost", "127.0.0.1", "::1"}:
+        return False
+
+    try:
+        ip_addr = ipaddress.ip_address(normalized)
+        if (
+            ip_addr.is_private
+            or ip_addr.is_loopback
+            or ip_addr.is_link_local
+            or ip_addr.is_reserved
+            or ip_addr.is_multicast
+        ):
+            return False
+    except ValueError:
+        return not normalized.endswith(".local")
+
+    return True
+
+
+async def _generate_og_from_thumbnail_url(thumbnail_url: str) -> bytes | None:
+    if not _is_public_thumbnail_url(thumbnail_url):
+        return None
+
+    from src.articles.og_image import generate_og_image_from_thumbnail_bytes
+
+    try:
+        async with httpx.AsyncClient(
+            follow_redirects=True,
+            timeout=_OG_FETCH_TIMEOUT_SECONDS,
+        ) as client:
+            response = await client.get(thumbnail_url)
+    except httpx.HTTPError:
+        return None
+
+    if response.status_code != status.HTTP_200_OK:
+        return None
+
+    content_type = response.headers.get("content-type", "").lower()
+    if not content_type.startswith("image/"):
+        return None
+
+    body = response.content
+    if not body or len(body) > _MAX_THUMBNAIL_DOWNLOAD_BYTES:
+        return None
+
+    return generate_og_image_from_thumbnail_bytes(body)
 
 
 @router.post(

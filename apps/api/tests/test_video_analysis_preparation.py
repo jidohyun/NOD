@@ -356,3 +356,125 @@ async def test_retry_uses_requested_summary_language_when_summary_missing(
 
     assert response.id == article_id
     assert captured["summary_language"] == "en"
+
+
+@pytest.mark.asyncio
+async def test_shared_og_image_route_uses_manual_thumbnail_derivative_when_available(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    request_token = str(uuid.uuid4())
+    shared = SimpleNamespace(
+        title="Shared title",
+        summary="Shared summary",
+        content_type="general_news",
+        url="https://example.com/article",
+        thumbnail_mode="manual",
+        thumbnail_url="https://cdn.example.com/thumb.png",
+    )
+
+    async def _fake_get_shared_article_by_slug(
+        db: object,
+        share_slug: str,
+        token: str | None,
+        viewer_user_id: str | None,
+        track_view: bool,
+    ) -> SimpleNamespace:
+        assert db is not None
+        assert share_slug == "shared-slug"
+        assert token == request_token
+        assert viewer_user_id is None
+        assert track_view is False
+        return shared
+
+    async def _fake_generate_from_thumbnail(_thumbnail_url: str) -> bytes:
+        return b"derived-og"
+
+    monkeypatch.setattr(
+        router.service,
+        "get_shared_article_by_slug",
+        _fake_get_shared_article_by_slug,
+    )
+    monkeypatch.setattr(
+        router,
+        "_generate_og_from_thumbnail_url",
+        _fake_generate_from_thumbnail,
+    )
+
+    response = await router.get_shared_article_og_image(
+        share_slug="shared-slug",
+        db=_fake_db_session(),
+        user=None,
+        token=request_token,
+    )
+
+    assert response is not None
+    assert response.body == b"derived-og"
+    assert response.headers["content-type"].startswith("image/png")
+
+
+@pytest.mark.asyncio
+async def test_shared_og_image_route_falls_back_to_generated_text_og(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    shared = SimpleNamespace(
+        title="Fallback title",
+        summary="Fallback summary",
+        content_type="general_news",
+        url="https://example.com/article",
+        thumbnail_mode="manual",
+        thumbnail_url="https://cdn.example.com/thumb.png",
+    )
+
+    async def _fake_get_shared_article_by_slug(
+        db: object,
+        share_slug: str,
+        token: str | None,
+        viewer_user_id: str | None,
+        track_view: bool,
+    ) -> SimpleNamespace:
+        assert db is not None
+        assert share_slug == "shared-slug"
+        assert token is None
+        assert viewer_user_id is None
+        assert track_view is False
+        return shared
+
+    async def _fake_generate_from_thumbnail(_thumbnail_url: str) -> None:
+        return None
+
+    def _fake_generate_og_image(
+        title: str,
+        summary: str,
+        content_type: str,
+        article_url: str | None = None,
+    ) -> bytes:
+        assert title == "Fallback title"
+        assert summary == "Fallback summary"
+        assert content_type == "general_news"
+        assert article_url == "https://example.com/article"
+        return b"text-og"
+
+    monkeypatch.setattr(
+        router.service,
+        "get_shared_article_by_slug",
+        _fake_get_shared_article_by_slug,
+    )
+    monkeypatch.setattr(
+        router,
+        "_generate_og_from_thumbnail_url",
+        _fake_generate_from_thumbnail,
+    )
+    monkeypatch.setattr(
+        "src.articles.og_image.generate_og_image", _fake_generate_og_image
+    )
+
+    response = await router.get_shared_article_og_image(
+        share_slug="shared-slug",
+        db=_fake_db_session(),
+        user=None,
+        token=None,
+    )
+
+    assert response is not None
+    assert response.body == b"text-og"
+    assert response.headers["cache-control"] == "public, max-age=86400"
