@@ -19,7 +19,7 @@ export function LegalHeader() {
     <div className="flex items-center justify-between mb-8">
       <button
         type="button"
-        onClick={() => router.back()}
+        onClick={() => router.push("/dashboard")}
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ChevronLeft className="h-4 w-4" />
