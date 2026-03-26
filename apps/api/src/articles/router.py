@@ -1,4 +1,5 @@
 import asyncio
+import re
 import time as _time
 import uuid
 from typing import Literal
@@ -357,6 +358,7 @@ async def _run_analysis(
             type_metadata = {
                 k: v for k, v in result.model_dump().items() if k not in base_fields
             }
+            type_metadata = _attach_patch_note_tag(type_metadata, article_url)
 
             summary = ArticleSummary(
                 article_id=article_id,
@@ -765,9 +767,7 @@ async def get_shared_article_og_image(
     return Response(  # type: ignore[return-value]
         content=png_bytes,
         media_type="image/png",
-        headers={
-            "Cache-Control": "public, max-age=86400"
-        },
+        headers={"Cache-Control": "public, max-age=86400"},
     )
 
 
@@ -1071,7 +1071,53 @@ async def retry_article_analysis(
     return ArticleResponse.model_validate(article)
 
 
-_SELF_DOMAINS = {"nod-archive.com", "www.nod-archive.com"}
+_LOCALE_SEGMENT_PATTERN = re.compile(r"^[a-z]{2}(?:-[a-zA-Z]{2})?$")
+
+
+def _normalize_hostname(hostname: str | None) -> str:
+    if not hostname:
+        return ""
+    return hostname.lower().removeprefix("www.")
+
+
+def _is_nod_patch_note_url(url: str) -> bool:
+    from urllib.parse import urlparse
+
+    parsed = urlparse(url)
+    if _normalize_hostname(parsed.hostname) != "nod-archive.com":
+        return False
+
+    segments = [segment for segment in parsed.path.split("/") if segment]
+    if len(segments) != 3:
+        return False
+
+    locale_segment, changelog_segment, version_segment = segments
+    if changelog_segment.lower() != "changelog":
+        return False
+    if not _LOCALE_SEGMENT_PATTERN.match(locale_segment):
+        return False
+
+    return bool(version_segment)
+
+
+def _attach_patch_note_tag(
+    type_metadata: dict[str, object], article_url: str | None
+) -> dict[str, object]:
+    if not article_url or not _is_nod_patch_note_url(article_url):
+        return type_metadata
+
+    raw_tags = type_metadata.get("tags")
+    tags: list[str] = []
+    if isinstance(raw_tags, list):
+        tags = [tag.strip() for tag in raw_tags if isinstance(tag, str) and tag.strip()]
+    elif isinstance(raw_tags, str) and raw_tags.strip():
+        tags = [raw_tags.strip()]
+
+    if "patch-note" not in tags:
+        tags.append("patch-note")
+
+    type_metadata["tags"] = tags
+    return type_metadata
 
 
 @router.post(
@@ -1087,9 +1133,12 @@ async def analyze_url(
     from urllib.parse import urlparse
 
     parsed = urlparse(data.url)
-    if parsed.hostname and parsed.hostname.lower() in _SELF_DOMAINS:
+    normalized_hostname = _normalize_hostname(parsed.hostname)
+    if normalized_hostname == "nod-archive.com" and not _is_nod_patch_note_url(
+        data.url
+    ):
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="NOD links cannot be analyzed. "
             "Please provide the original article URL.",
         )

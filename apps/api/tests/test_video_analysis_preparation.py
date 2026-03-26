@@ -228,6 +228,65 @@ async def test_analyze_url_checks_plan_gate_before_content_preparation(
 
 
 @pytest.mark.asyncio
+async def test_analyze_url_blocks_non_patch_note_nod_links(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _should_not_run(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("should not hit database lookup for blocked NOD links")
+
+    monkeypatch.setattr(router.service, "get_article_by_url", _should_not_run)
+
+    with pytest.raises(HTTPException) as exc_info:
+        await router.analyze_url(
+            ArticleAnalyzeURL(
+                url="https://nod-archive.com/ko/shared/abc123",
+                title="Blocked self link",
+                content=None,
+                source="web",
+            ),
+            db=_fake_db_session(),
+            user=CurrentUserInfo(id=str(uuid.uuid4())),
+        )
+
+    assert exc_info.value.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+    assert "NOD links cannot be analyzed" in str(exc_info.value.detail)
+
+
+@pytest.mark.asyncio
+async def test_analyze_url_allows_nod_patch_note_detail_links(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    user_id = str(uuid.uuid4())
+    existing = _build_existing_article(user_id)
+
+    async def _fake_get_article_by_url(
+        db: object,
+        user_id_arg: str,
+        url: str,
+    ) -> SimpleNamespace | None:
+        assert db is not None
+        assert user_id_arg == user_id
+        assert url == "https://nod-archive.com/ko/changelog/v1-3-x"
+        return existing
+
+    monkeypatch.setattr(router.service, "get_article_by_url", _fake_get_article_by_url)
+
+    response = await router.analyze_url(
+        ArticleAnalyzeURL(
+            url="https://nod-archive.com/ko/changelog/v1-3-x",
+            title="Patch note",
+            content=None,
+            source="web",
+        ),
+        db=_fake_db_session(),
+        user=CurrentUserInfo(id=user_id),
+    )
+
+    assert response.already_saved is True
+    assert response.id == existing.id
+
+
+@pytest.mark.asyncio
 async def test_retry_uses_requested_summary_language_when_summary_missing(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
