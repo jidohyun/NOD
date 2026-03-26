@@ -191,6 +191,7 @@ export function ArticleList() {
                 <option value="github_repo">{t("typeGitHub")}</option>
                 <option value="official_docs">{t("typeDocs")}</option>
                 <option value="video_podcast">{t("typeVideo")}</option>
+                <option value="patch_note">{t("typePatchNote")}</option>
               </select>
             </div>
 

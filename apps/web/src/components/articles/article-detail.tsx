@@ -529,25 +529,25 @@ export function ArticleDetail({ id }: { id: string }) {
               </section>
             ) : null}
 
-            {article.summary.content_type &&
-            article.summary.type_metadata &&
+            {article.summary.type_metadata &&
             Object.keys(article.summary.type_metadata).length > 0 ? (
               <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
                 <h2 className="font-creative-display text-2xl font-black text-cm-text">
                   {t(
-                    (CONTENT_TYPE_STYLES[article.summary.content_type]?.labelKey || "typeNews") as
+                    (contentTypeMeta.labelKey || "typeNews") as
                       | "typeTechBlog"
                       | "typePaper"
                       | "typeNews"
                       | "typeGitHub"
                       | "typeDocs"
                       | "typeVideo"
+                      | "typePatchNote"
                   )}{" "}
                   {t("details")}
                 </h2>
                 <div className="mt-3">
                   <TypeMetadataSection
-                    contentType={article.summary.content_type}
+                    contentType={contentType}
                     metadata={article.summary.type_metadata}
                   />
                 </div>

@@ -4,6 +4,7 @@ import { AcademicPaperMetadata } from "./academic-paper-metadata";
 import { GeneralNewsMetadata } from "./general-news-metadata";
 import { GitHubRepoMetadata } from "./github-repo-metadata";
 import { OfficialDocsMetadata } from "./official-docs-metadata";
+import { PatchNoteMetadata } from "./patch-note-metadata";
 import { TechBlogMetadata } from "./tech-blog-metadata";
 import { VideoPodcastMetadata } from "./video-podcast-metadata";
 
@@ -17,6 +18,7 @@ const METADATA_COMPONENTS: Record<
   github_repo: GitHubRepoMetadata,
   official_docs: OfficialDocsMetadata,
   video_podcast: VideoPodcastMetadata,
+  patch_note: PatchNoteMetadata,
 };
 
 interface TypeMetadataSectionProps {
