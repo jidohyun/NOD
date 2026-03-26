@@ -21,9 +21,17 @@ from src.lib.video_transcript.errors import (
 from src.lib.video_transcript.schemas import VideoTranscript
 
 
+class _FakeScalarResult:
+    def scalar_one_or_none(self) -> None:
+        return None
+
+
 class _FakeDB:
     async def commit(self) -> None:
         return None
+
+    async def execute(self, _stmt: object) -> _FakeScalarResult:
+        return _FakeScalarResult()
 
 
 def _fake_db_session() -> AsyncSession:
@@ -368,6 +376,7 @@ async def test_shared_og_image_route_uses_manual_thumbnail_derivative_when_avail
         summary="Shared summary",
         content_type="general_news",
         url="https://example.com/article",
+        article_id=uuid.uuid4(),
         thumbnail_mode="manual",
         thumbnail_url="https://cdn.example.com/thumb.png",
     )
@@ -421,6 +430,7 @@ async def test_shared_og_image_route_falls_back_to_generated_text_og(
         summary="Fallback summary",
         content_type="general_news",
         url="https://example.com/article",
+        article_id=uuid.uuid4(),
         thumbnail_mode="manual",
         thumbnail_url="https://cdn.example.com/thumb.png",
     )
