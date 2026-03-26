@@ -1262,14 +1262,14 @@ export function SharedArticleView({
         <section data-testid="shared-title-hero" className={panelClass}>
           {/* OG image from original article */}
           {articleOgImage ? (
-            <div className="mb-4 overflow-hidden rounded-xl border border-cm-text/10">
+            <div className="mb-4 aspect-video overflow-hidden rounded-xl border border-cm-text/10">
               <Image
                 src={articleOgImage}
                 alt={data.title}
                 width={1200}
                 height={630}
                 unoptimized
-                className="h-auto w-full object-contain"
+                className="h-full w-full object-cover"
                 onError={() => setArticleOgImage(null)}
               />
             </div>
