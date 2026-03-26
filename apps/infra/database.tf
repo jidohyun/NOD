@@ -11,7 +11,7 @@ resource "google_sql_database_instance" "main" {
     # support shared-core tiers like db-f1-micro.
     edition           = "ENTERPRISE"
     tier              = var.db_tier
-    availability_type = var.environment == "prod" ? "REGIONAL" : "ZONAL"
+    availability_type = "ZONAL"
     disk_size         = 10
     disk_type         = "PD_SSD"
     disk_autoresize   = true
@@ -203,7 +203,7 @@ resource "google_secret_manager_secret_version" "supabase_jwt_secret" {
 # Redis (Memorystore)
 resource "google_redis_instance" "main" {
   name           = "${local.name_prefix}-redis"
-  tier           = var.environment == "prod" ? "STANDARD_HA" : "BASIC"
+  tier           = "BASIC"
   memory_size_gb = var.redis_memory_size_gb
   region         = var.region
 

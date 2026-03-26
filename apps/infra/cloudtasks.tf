@@ -17,7 +17,7 @@ resource "google_cloud_tasks_queue" "main" {
   }
 
   stackdriver_logging_config {
-    sampling_ratio = 1.0
+    sampling_ratio = 0.1
   }
 }
 
@@ -40,7 +40,7 @@ resource "google_cloud_tasks_queue" "high_priority" {
   }
 
   stackdriver_logging_config {
-    sampling_ratio = 1.0
+    sampling_ratio = 0.1
   }
 }
 
