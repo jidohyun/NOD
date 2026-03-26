@@ -386,6 +386,10 @@ export function SharedArticleView({
 
   useEffect(() => {
     if (!data) return;
+    if (data.og_image_url) {
+      setArticleOgImage(data.og_image_url);
+      return;
+    }
     const params = new URLSearchParams({ locale, shareId });
     if (token) {
       params.set("token", token);

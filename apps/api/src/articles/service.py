@@ -458,7 +458,10 @@ async def _build_shared_article_response(
         thumbnail_mode=share_link.thumbnail_mode or "default",
         thumbnail_url=share_link.thumbnail_url,
         og_mode=share_link.thumbnail_mode or "default",
-        og_image_url=share_link.thumbnail_url,
+        og_image_url=(
+            share_link.thumbnail_url
+            or getattr(summary, "og_image_source_url", None)
+        ),
     )
 
 
