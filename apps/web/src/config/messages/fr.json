@@ -338,6 +338,7 @@
     "typePaper": "Article",
     "typeTechBlog": "Blog Tech",
     "typeVideo": "Vidéo/Podcast",
+    "typePatchNote": "Note de patch",
     "shareSectionTitle": "Partager ce résumé",
     "shareSectionDescription": "Générez un lien public pour partager le résumé de ce contenu.",
     "shareModalTitle": "Partager ce résumé ?",

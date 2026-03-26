@@ -147,6 +147,11 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: ContentTypeLabelKey; class
     className:
       "border-pink-200 bg-pink-50 text-pink-700 dark:border-pink-400/40 dark:bg-pink-500/15 dark:text-pink-200",
   },
+  patch_note: {
+    labelKey: "typePatchNote",
+    className:
+      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/40 dark:bg-amber-500/15 dark:text-amber-200",
+  },
 };
 
 type ContentTypeLabelKey =
@@ -155,7 +160,8 @@ type ContentTypeLabelKey =
   | "typeNews"
   | "typeGitHub"
   | "typeDocs"
-  | "typeVideo";
+  | "typeVideo"
+  | "typePatchNote";
 
 function readMetadataValue(metadata: unknown, key: string): string | null {
   if (typeof metadata !== "object" || metadata === null) {
@@ -567,7 +573,10 @@ export function SharedArticleView({
   const sharerInitial = sharerName.charAt(0).toUpperCase();
   const publishedDate = formatPublishedDate(data.created_at, locale);
 
-  const contentType = data.content_type || "general_news";
+  const tags = Array.isArray(data.type_metadata?.tags) ? data.type_metadata.tags : [];
+  const contentType = tags.includes("patch-note")
+    ? "patch_note"
+    : data.content_type || "general_news";
   const contentTypeStyle = CONTENT_TYPE_STYLES[contentType] || CONTENT_TYPE_STYLES.general_news;
 
   async function handleRevokeShare() {

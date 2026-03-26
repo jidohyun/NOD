@@ -339,6 +339,7 @@
     "typePaper": "Paper",
     "typeTechBlog": "Tech Blog",
     "typeVideo": "Video/Podcast",
+    "typePatchNote": "Patch Note",
     "shareSectionTitle": "Share this summary",
     "shareSectionDescription": "Generate a public link to share this article summary.",
     "shareModalTitle": "Share this summary?",

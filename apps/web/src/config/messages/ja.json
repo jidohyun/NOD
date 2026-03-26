@@ -338,6 +338,7 @@
     "typePaper": "論文",
     "typeTechBlog": "テックブログ",
     "typeVideo": "動画/ポッドキャスト",
+    "typePatchNote": "パッチノート",
     "shareSectionTitle": "この要約を共有",
     "shareSectionDescription": "このコンテンツ要約を共有するための公開リンクを作成します。",
     "shareModalTitle": "この要約を共有しますか？",
