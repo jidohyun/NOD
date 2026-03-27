@@ -8,11 +8,32 @@ import structlog
 
 logger = structlog.get_logger(__name__)
 
+_PDF_URL_PATTERNS = re.compile(
+    r"arxiv\.org/pdf/|"
+    r"openreview\.net/pdf\?|"
+    r"aclanthology\.org/.*\.pdf|"
+    r"/pdf/"
+)
+
+_HTTP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; NODBot/1.0; "
+        "+https://nod-archive.com)"
+    ),
+}
+
 
 @dataclass
 class PDFExtractResult:
     text: str
     title: str | None = None
+
+
+def _looks_like_pdf_url(url: str) -> bool:
+    """Heuristic check: does *url* look like it serves a PDF?"""
+    if url.lower().endswith(".pdf"):
+        return True
+    return bool(_PDF_URL_PATTERNS.search(url))
 
 
 async def extract_text_from_pdf_url(
@@ -25,13 +46,15 @@ async def extract_text_from_pdf_url(
     """
     try:
         async with httpx.AsyncClient(
-            follow_redirects=True, timeout=30.0
+            follow_redirects=True,
+            timeout=60.0,
+            headers=_HTTP_HEADERS,
         ) as client:
             response = await client.get(url)
             response.raise_for_status()
 
             content_type = response.headers.get("content-type", "")
-            if "pdf" not in content_type and not url.lower().endswith(".pdf"):
+            if "pdf" not in content_type and not _looks_like_pdf_url(url):
                 return None
 
             reader = pypdf.PdfReader(io.BytesIO(response.content))
@@ -51,8 +74,22 @@ async def extract_text_from_pdf_url(
                 title = arxiv_title
 
             return PDFExtractResult(text=text, title=title)
-    except Exception:
-        logger.warning("PDF text extraction failed", url=url)
+    except httpx.HTTPStatusError as exc:
+        logger.warning(
+            "PDF download returned error status",
+            url=url,
+            status_code=exc.response.status_code,
+        )
+        return None
+    except httpx.TimeoutException:
+        logger.warning("PDF download timed out", url=url)
+        return None
+    except Exception as exc:
+        logger.warning(
+            "PDF text extraction failed",
+            url=url,
+            error=str(exc),
+        )
         return None
 
 
