@@ -1157,6 +1157,11 @@ async def extract_og_image_url(article_url: str) -> str | None:
     if not article_url or not _is_public_thumbnail_url(article_url):
         return None
 
+    # Skip self-referencing URLs to avoid circular requests
+    host = urlparse(article_url).hostname or ""
+    if host.removeprefix("www.") == "nod-archive.com":
+        return None
+
     try:
         async with (
             httpx.AsyncClient(
