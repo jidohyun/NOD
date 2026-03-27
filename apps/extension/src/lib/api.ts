@@ -1,4 +1,4 @@
-import { getToken, clearToken } from "./auth";
+import { getToken } from "./auth";
 import { API_BASE } from "./constants";
 import { ExtensionError } from "./errors";
 import type { SaveArticleRequest, SaveArticleResponse } from "../types/api";
@@ -67,8 +67,8 @@ async function apiRequest<T>(
           }
         }
 
-        // Refresh failed — clear tokens
-        await clearToken();
+        // Don't clear tokens here — let service worker retry logic
+        // handle the decision to log out after max retries.
       }
 
       let errorMessage: string | undefined;

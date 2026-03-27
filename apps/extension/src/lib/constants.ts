@@ -17,7 +17,9 @@ export const STORAGE_KEYS = {
 
 // Token Refresh
 export const ALARM_TOKEN_REFRESH = "nod_token_refresh";
-export const TOKEN_REFRESH_BUFFER_MINUTES = 5;
+export const TOKEN_REFRESH_BUFFER_MINUTES = 10;
+export const TOKEN_REFRESH_MAX_RETRIES = 3;
+export const TOKEN_REFRESH_RETRY_DELAYS_MINUTES = [1, 5, 15] as const;
 
 // Content Extraction
 export const MAX_CONTENT_LENGTH = 50000;
