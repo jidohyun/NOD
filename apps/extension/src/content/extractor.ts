@@ -287,9 +287,12 @@ function isEligiblePage(): boolean {
     return false;
   }
 
-  // Don't attempt on homepages.
+  // Homepages are usually navigation, not articles.
+  // But allow if the page has enough readable content.
   if (url.pathname === "/") {
-    return false;
+    const mainContent = extractMainContent();
+    const wordCount = countWords(mainContent);
+    return wordCount > 200;
   }
 
   const host = url.hostname.replace(/^www\./, "");
