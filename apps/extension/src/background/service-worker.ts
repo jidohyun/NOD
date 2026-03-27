@@ -9,13 +9,24 @@ import {
   API_BASE,
   ALARM_TOKEN_REFRESH,
   TOKEN_REFRESH_BUFFER_MINUTES,
+  TOKEN_REFRESH_MAX_RETRIES,
+  TOKEN_REFRESH_RETRY_DELAYS_MINUTES,
   STORAGE_KEYS,
 } from "../lib/constants";
 
 // ── Token Refresh ──────────────────────────────────────────────────────
 
+let refreshRetryCount = 0;
+
 function scheduleTokenRefresh(expiresIn: number): void {
   const delayMinutes = Math.max(expiresIn / 60 - TOKEN_REFRESH_BUFFER_MINUTES, 1);
+  chrome.alarms.create(ALARM_TOKEN_REFRESH, { delayInMinutes: delayMinutes });
+}
+
+function scheduleRetry(): void {
+  const delayIndex = Math.min(refreshRetryCount, TOKEN_REFRESH_RETRY_DELAYS_MINUTES.length - 1);
+  const delayMinutes = TOKEN_REFRESH_RETRY_DELAYS_MINUTES[delayIndex];
+  refreshRetryCount += 1;
   chrome.alarms.create(ALARM_TOKEN_REFRESH, { delayInMinutes: delayMinutes });
 }
 
@@ -35,6 +46,12 @@ async function refreshAccessToken(): Promise<boolean> {
     });
 
     if (!resp.ok) {
+      if (refreshRetryCount < TOKEN_REFRESH_MAX_RETRIES) {
+        scheduleRetry();
+        return false;
+      }
+      // All retries exhausted — clear tokens
+      refreshRetryCount = 0;
       await clearToken();
       await updateBadge();
       return false;
@@ -46,13 +63,20 @@ async function refreshAccessToken(): Promise<boolean> {
       expires_in: number;
     };
 
+    refreshRetryCount = 0;
     await setToken(data.access_token, data.expires_in, data.refresh_token);
     scheduleTokenRefresh(data.expires_in);
     await updateBadge();
     return true;
   } catch {
-    // Network failure — retry in 1 minute
-    chrome.alarms.create(ALARM_TOKEN_REFRESH, { delayInMinutes: 1 });
+    // Network or unexpected failure — retry with backoff
+    if (refreshRetryCount < TOKEN_REFRESH_MAX_RETRIES) {
+      scheduleRetry();
+    } else {
+      refreshRetryCount = 0;
+      await clearToken();
+      await updateBadge();
+    }
     return false;
   }
 }
