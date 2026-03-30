@@ -18,7 +18,6 @@ import { type FocusEvent, type FormEvent, useEffect, useMemo, useRef, useState }
 import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
 import {
   type CommentSortOption,
-  type ViewerProfile,
   extractViewerProfile,
   formatCommentDate,
   formatPublishedDate,
@@ -28,6 +27,7 @@ import {
   sortCommentThread,
   toCommentSortOption,
   updateCommentTree,
+  type ViewerProfile,
   withThreadDefaults,
 } from "@/components/articles/shared-article-helpers";
 import { NodWordmark } from "@/components/brand/nod-wordmark";
