@@ -13,6 +13,7 @@ from fastapi.responses import Response
 
 from src.articles import service
 from src.articles.analysis_profiles import (
+    SLOW_ANALYSIS_CONTENT_TYPES,
     get_article_analysis_content_limit_chars,
     get_article_analysis_timeout_seconds,
 )
@@ -226,10 +227,7 @@ async def _run_analysis(
                 timeout=initial_timeout_seconds,
             )
         except TimeoutError:
-            if analysis_content_type not in {
-                ContentType.OFFICIAL_DOCS,
-                ContentType.VIDEO_PODCAST,
-            }:
+            if analysis_content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
                 raise
 
             retry_timeout_seconds = get_article_analysis_timeout_seconds(

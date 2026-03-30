@@ -81,3 +81,58 @@ def test_content_limits_follow_profiles() -> None:
         )
         == 6500
     )
+
+
+def test_official_docs_timeout_uses_slow_profile(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        analysis_profiles,
+        "settings",
+        SimpleNamespace(ARTICLE_ANALYSIS_TIMEOUT_SECONDS=45),
+    )
+
+    assert (
+        analysis_profiles.get_article_analysis_timeout_seconds(
+            ContentType.OFFICIAL_DOCS
+        )
+        == 30
+    )
+
+
+
+def test_academic_paper_profiles_use_large_content_defaults(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        analysis_profiles,
+        "settings",
+        SimpleNamespace(ARTICLE_ANALYSIS_TIMEOUT_SECONDS=45),
+    )
+
+    assert (
+        analysis_profiles.get_article_analysis_timeout_seconds(
+            ContentType.ACADEMIC_PAPER
+        )
+        == 45
+    )
+    assert (
+        analysis_profiles.get_article_analysis_timeout_seconds(
+            ContentType.ACADEMIC_PAPER,
+            retry=True,
+        )
+        == 30
+    )
+    assert (
+        analysis_profiles.get_article_analysis_content_limit_chars(
+            ContentType.ACADEMIC_PAPER
+        )
+        == 30000
+    )
+    assert (
+        analysis_profiles.get_article_analysis_content_limit_chars(
+            ContentType.ACADEMIC_PAPER,
+            retry=True,
+        )
+        == 18000
+    )
