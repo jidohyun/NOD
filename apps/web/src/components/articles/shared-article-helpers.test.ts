@@ -2,9 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   formatCommentDate,
+  insertCommentTree,
   normalizeDisplayName,
+  removeCommentTree,
   sortCommentThread,
   toCommentSortOption,
+  updateCommentTree,
   withThreadDefaults,
 } from "@/components/articles/shared-article-helpers";
 import type { SharedArticleComment } from "@/lib/api/articles";
@@ -57,6 +60,38 @@ describe("shared article helpers", () => {
     expect(comments.map((comment) => comment.id)).toEqual(["top", "newer", "older"]);
   });
 
+  it("sorts latest threads by recency", () => {
+    const comments = sortCommentThread(
+      [
+        makeComment({ id: "older", created_at: "2026-03-29T08:00:00.000Z" }),
+        makeComment({ id: "newer", created_at: "2026-03-30T08:00:00.000Z" }),
+      ],
+      "latest"
+    );
+
+    expect(comments.map((comment) => comment.id)).toEqual(["newer", "older"]);
+  });
+
+  it("updates, inserts, and removes nested comments", () => {
+    const child = makeComment({ id: "child", parent_comment_id: "parent" });
+    const parent = makeComment({ id: "parent", replies: [child] });
+
+    const updated = updateCommentTree([parent], "child", (comment) => ({
+      ...comment,
+      content: "updated",
+    }));
+    expect(updated[0].replies[0].content).toBe("updated");
+
+    const inserted = insertCommentTree(
+      updated,
+      makeComment({ id: "child-2", parent_comment_id: "parent" })
+    );
+    expect(inserted[0].replies.map((comment) => comment.id)).toEqual(["child", "child-2"]);
+
+    const removed = removeCommentTree(inserted, "child");
+    expect(removed[0].replies.map((comment) => comment.id)).toEqual(["child-2"]);
+  });
+
   it("normalizes display names and sort options", () => {
     expect(normalizeDisplayName("  Alice ")).toBe("alice");
     expect(toCommentSortOption("recommended")).toBe("recommended");
@@ -67,6 +102,7 @@ describe("shared article helpers", () => {
     const result = formatCommentDate("2026-03-30T08:00:00.000Z", "en");
 
     expect(result).not.toBeNull();
+    expect(result?.label).toBeTruthy();
     expect(result?.dateTime).toBe("2026-03-30T08:00:00.000Z");
   });
 });
