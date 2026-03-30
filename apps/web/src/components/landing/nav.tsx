@@ -293,7 +293,7 @@ export function LandingNav() {
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-1.5 cm-doodle-border border-cm-text/25 bg-[#f4ecd9] px-5 py-2.5 font-creative-body text-sm font-bold text-cm-text transition-colors hover:bg-[#ead9b2]"
+                className="inline-flex items-center justify-center gap-1.5 cm-doodle-border border-cm-text/25 bg-[#f4ecd9] px-5 py-2.5 font-creative-body text-sm font-bold text-cm-text transition-colors hover:bg-[#ead9b2] dark:bg-nod-gold dark:text-white dark:border-nod-gold/50 dark:hover:bg-nod-gold/85"
               >
                 {t("getStarted")}
                 <ArrowRight className="w-3.5 h-3.5" />
