@@ -21,7 +21,7 @@
     "@gsap/react": "^2.1.2",
     "@next/third-parties": "^16.1.6",
     "@opentelemetry/instrumentation-fetch": "^0.208.0",
-    "@opentelemetry/instrumentation-http": "^0.208.0",
+    "@opentelemetry/instrumentation-http": "^0.214.0",
     "@opentelemetry/resources": "^2.2.0",
     "@opentelemetry/sdk-node": "^0.208.0",
     "@opentelemetry/sdk-trace-base": "^2.2.0",
