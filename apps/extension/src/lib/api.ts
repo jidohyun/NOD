@@ -1,6 +1,11 @@
 import { getToken } from "./auth";
 import { API_BASE } from "./constants";
 import { ExtensionError } from "./errors";
+import {
+  isLikelyFetchNetworkError,
+  parseErrorMessage,
+  toUnknownRequestError,
+} from "./fetch";
 import type { SaveArticleRequest, SaveArticleResponse } from "../types/api";
 
 /**
@@ -71,15 +76,7 @@ async function apiRequest<T>(
         // handle the decision to log out after max retries.
       }
 
-      let errorMessage: string | undefined;
-      try {
-        const payload = (await response.clone().json()) as { detail?: string };
-        if (typeof payload?.detail === "string" && payload.detail.trim().length > 0) {
-          errorMessage = payload.detail;
-        }
-      } catch {
-        errorMessage = undefined;
-      }
+      const errorMessage = await parseErrorMessage(response);
 
       throw ExtensionError.fromResponse(response, errorMessage);
     }
@@ -90,16 +87,11 @@ async function apiRequest<T>(
       throw error;
     }
 
-    // Network error
-    if (error instanceof TypeError && error.message.includes("fetch")) {
+    if (isLikelyFetchNetworkError(error)) {
       throw ExtensionError.networkError();
     }
 
-    throw new ExtensionError(
-      "UNKNOWN",
-      error instanceof Error ? error.message : "Request failed",
-      true
-    );
+    throw toUnknownRequestError(error);
   }
 }
 
