@@ -196,7 +196,9 @@
     "concepts": "핵심 개념",
     "deleteConfirm": "이 콘텐츠를 삭제하시겠습니까?",
     "details": "상세",
-    "downloadMarkdown": ".md 다운로드",
+    "copyAsMarkdown": "Markdown 복사",
+    "copiedMarkdown": "복사됨!",
+    "copyFailed": "복사 실패",
     "graph": {
       "actionClearSelection": "선택 해제",
       "actionPinSelected": "선택 노드 고정",

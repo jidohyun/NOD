@@ -24,6 +24,7 @@ import {
   useState,
 } from "react";
 import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
+import { useCopyMarkdown } from "@/components/articles/hooks/use-copy-markdown";
 import { TypeMetadataSection } from "@/components/articles/type-metadata";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -146,6 +147,8 @@ export function ArticleDetail({ id }: { id: string }) {
   const deleteArticle = useDeleteArticle();
   const updateArticle = useUpdateArticle();
   const createShareLink = useCreateArticleShareLink();
+
+  const { copyState, copyMarkdown } = useCopyMarkdown(article);
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitle, setEditTitle] = useState("");
@@ -282,21 +285,6 @@ export function ArticleDetail({ id }: { id: string }) {
     if (!confirm(t("deleteConfirm"))) return;
     await deleteArticle.mutateAsync(id);
     router.push("/articles");
-  };
-
-  const downloadMarkdown = () => {
-    if (!article.summary?.markdown_note) return;
-    const blob = new Blob([article.summary.markdown_note], {
-      type: "text/markdown;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `article-${article.id}.md`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
   };
 
   const createAbsoluteShareUrl = async () => {
@@ -442,6 +430,29 @@ export function ArticleDetail({ id }: { id: string }) {
                   {t("shareActionLink")}
                 </button>
 
+                {article.summary ? (
+                  <button
+                    type="button"
+                    onClick={copyMarkdown}
+                    disabled={copyState !== "idle"}
+                    className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:hover:bg-cm-surface-raised disabled:opacity-50"
+                  >
+                    {copyState === "copied" ? (
+                      <>
+                        <Check className="h-3 w-3" />
+                        <span className="hidden md:inline">{t("copiedMarkdown")}</span>
+                      </>
+                    ) : copyState === "error" ? (
+                      <span className="hidden md:inline">{t("copyFailed")}</span>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3" />
+                        <span className="hidden md:inline">{t("copyAsMarkdown")}</span>
+                      </>
+                    )}
+                  </button>
+                ) : null}
+
                 <button
                   type="button"
                   onClick={handleDelete}
@@ -495,18 +506,9 @@ export function ArticleDetail({ id }: { id: string }) {
 
             {article.summary.markdown_note ? (
               <section className="cm-doodle-border border-2 border-cm-text/18 bg-white/95 dark:bg-cm-surface/95 p-6">
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="font-creative-display text-2xl font-black text-cm-text">
-                    {t("markdownNote")}
-                  </h2>
-                  <button
-                    type="button"
-                    onClick={downloadMarkdown}
-                    className="inline-flex items-center gap-1.5 cm-doodle-border border-2 border-cm-text/20 bg-white dark:bg-cm-surface px-3 py-1.5 font-creative-body text-xs font-black text-cm-text transition-colors hover:bg-cm-bg dark:hover:bg-cm-surface-raised"
-                  >
-                    {t("downloadMarkdown")}
-                  </button>
-                </div>
+                <h2 className="mb-3 font-creative-display text-2xl font-black text-cm-text">
+                  {t("markdownNote")}
+                </h2>
                 <ArticleMarkdownNote markdownNote={article.summary.markdown_note} />
               </section>
             ) : null}

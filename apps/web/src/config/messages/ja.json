@@ -195,7 +195,9 @@
     "concepts": "キーコンセプト",
     "deleteConfirm": "このコンテンツを削除しますか？",
     "details": "詳細",
-    "downloadMarkdown": ".mdをダウンロード",
+    "copyAsMarkdown": "Markdownをコピー",
+    "copiedMarkdown": "コピー済み！",
+    "copyFailed": "コピー失敗",
     "graph": {
       "actionClearSelection": "選択解除",
       "actionPinSelected": "選択ノードを固定",
