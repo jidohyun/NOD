@@ -21,7 +21,7 @@ export function StepFirstArticle({ onComplete }: StepFirstArticleProps) {
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-black tracking-[0.16em] text-cm-text/45">STEP 3</p>
-          <h1 className="mt-2 font-creative-display text-4xl leading-tight font-black text-cm-text">
+          <h1 className="mt-2 font-creative-display text-2xl leading-tight font-black text-cm-text sm:text-4xl">
             {t("title")}
           </h1>
           <p className="mt-2 ko-keep text-base leading-relaxed text-cm-text/62">{t("subtitle")}</p>

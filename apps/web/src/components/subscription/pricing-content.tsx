@@ -144,10 +144,10 @@ export function PricingContent() {
 
                 <div className="mt-4 flex items-start justify-between gap-3">
                   <div>
-                    <h2 className="font-creative-display text-4xl font-black text-cm-text">
+                    <h2 className="font-creative-display text-2xl font-black text-cm-text sm:text-4xl">
                       {plan.name}
                     </h2>
-                    <p className="mt-3 font-creative-display text-4xl font-black text-cm-text">
+                    <p className="mt-3 font-creative-display text-2xl font-black text-cm-text sm:text-4xl">
                       {price.main}
                     </p>
                     {price.sub ? (

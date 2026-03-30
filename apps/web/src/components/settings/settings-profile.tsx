@@ -110,7 +110,7 @@ export function SettingsProfile({ showAdminPromoEntry = false }: SettingsProfile
                 </div>
 
                 <div className="text-center sm:text-left">
-                  <h2 className="font-creative-display text-3xl font-black text-cm-text">
+                  <h2 className="font-creative-display text-2xl font-black text-cm-text sm:text-3xl">
                     {userName || "-"}
                   </h2>
                   <p className="mt-1 font-creative-body text-cm-text/55">{userEmail || "-"}</p>
@@ -188,7 +188,7 @@ export function SettingsProfile({ showAdminPromoEntry = false }: SettingsProfile
                   <p className="font-creative-body text-sm font-bold text-cm-text/60">
                     {t("usage.currentMonthlyUsage")}
                   </p>
-                  <p className="font-creative-display text-3xl font-black text-cm-text">
+                  <p className="font-creative-display text-2xl font-black text-cm-text sm:text-3xl">
                     {usageLabel}
                   </p>
                 </div>
@@ -218,7 +218,7 @@ export function SettingsProfile({ showAdminPromoEntry = false }: SettingsProfile
                 </h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Link
                   href="/settings/billing"
                   className="cm-doodle-border bg-white p-5 text-center transition-all hover:-translate-y-0.5 hover:cm-sketch-shadow dark:bg-cm-surface"

@@ -254,7 +254,7 @@ export function BillingContent() {
                   <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
                     {t("currentPlan")}
                   </p>
-                  <h2 className="mt-2 font-creative-display text-4xl font-black text-cm-text">
+                  <h2 className="mt-2 font-creative-display text-2xl font-black text-cm-text sm:text-4xl">
                     {planName}
                   </h2>
                   {isPromoEffectivePro ? (
@@ -321,7 +321,7 @@ export function BillingContent() {
                   <p className="font-creative-body text-sm font-bold text-cm-text/60">
                     {t("currentMonthlyAiSummaries")}
                   </p>
-                  <p className="font-creative-display text-3xl font-black text-cm-text">
+                  <p className="font-creative-display text-2xl font-black text-cm-text sm:text-3xl">
                     {isUnlimited ? t("unlimited") : `${summariesUsed}/${summariesLimit}`}
                   </p>
                 </div>

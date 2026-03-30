@@ -14,7 +14,7 @@ const TOTAL_STEPS = 3;
 
 function CompletionCelebration({ message, subtitle }: { message: string; subtitle: string }) {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
+    <div className="flex min-h-[300px] flex-col items-center justify-center text-center md:min-h-[400px]">
       <div className="relative">
         <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-emerald-300/50 bg-emerald-50 animate-fade-up dark:bg-emerald-950/50 dark:border-emerald-700/50">
           <CheckCircle2 className="h-12 w-12 text-emerald-500" />
@@ -108,7 +108,7 @@ export function OnboardingWizard() {
           )}
         </div>
 
-        <div className="grid flex-1 grid-cols-[300px_1fr] gap-8">
+        <div className="grid flex-1 grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
           <aside className="cm-doodle-border cm-sketch-shadow bg-white/95 p-6 animate-fade-up [animation-delay:100ms] dark:bg-cm-surface/95">
             <p className="text-xs font-black tracking-[0.18em] text-cm-text/45">NOD ONBOARDING</p>
             <p className="mt-2 text-sm font-bold text-cm-text/60">

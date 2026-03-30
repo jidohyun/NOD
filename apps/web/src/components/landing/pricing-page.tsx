@@ -136,7 +136,7 @@ export function PricingPage() {
                         </div>
                       </div>
                       <div className="ml-3 shrink-0 text-right">
-                        <div className="font-creative-display text-3xl font-black leading-none text-cm-text">
+                        <div className="font-creative-display text-2xl font-black leading-none text-cm-text sm:text-3xl">
                           {price.main}
                         </div>
                         {price.sub ? (

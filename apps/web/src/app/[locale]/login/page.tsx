@@ -101,7 +101,7 @@ function LoginContent() {
           <p className="inline-flex items-center rounded-full border border-cm-text/15 bg-cm-bg/70 px-3 py-1 font-creative-body text-xs font-black tracking-[0.18em] text-cm-text/55 dark:border-white/15 dark:bg-white/5 dark:text-white/65">
             NOD
           </p>
-          <h1 className="mt-6 font-creative-display text-4xl font-black tracking-tight">
+          <h1 className="mt-6 font-creative-display text-2xl font-black tracking-tight sm:text-4xl">
             {t("loginWelcome")}
           </h1>
           <p className="mt-3 max-w-lg font-creative-body text-base leading-relaxed text-cm-text/70 dark:text-white/70">

@@ -298,7 +298,7 @@ export default function SharedPage() {
 
         {/* Empty state */}
         {shares.length === 0 && !error && (
-          <div className="cm-doodle-border flex flex-col items-center gap-4 bg-white/95 py-16 text-center dark:bg-cm-surface/95">
+          <div className="cm-doodle-border flex flex-col items-center gap-4 bg-white/95 py-8 text-center dark:bg-cm-surface/95 sm:py-16">
             <Share2 className="h-12 w-12 text-cm-text/20" />
             <p className="font-creative-body text-sm text-cm-text/50">
               Share an article from the content detail page to see it here.

@@ -221,7 +221,7 @@ export function DashboardOverview() {
                     <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
                       {t("overview.savedArticles")}
                     </p>
-                    <h3 className="mt-1 font-creative-display text-3xl font-black text-cm-text">
+                    <h3 className="mt-1 font-creative-display text-2xl font-black text-cm-text sm:text-3xl">
                       {articlesLoading ? (
                         <Skeleton className="h-12 w-24" />
                       ) : (
@@ -242,7 +242,7 @@ export function DashboardOverview() {
                     <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
                       {t("overview.aiSummaries")}
                     </p>
-                    <h3 className="mt-1 font-creative-display text-3xl font-black text-cm-text">
+                    <h3 className="mt-1 font-creative-display text-2xl font-black text-cm-text sm:text-3xl">
                       {usageLoading ? (
                         <Skeleton className="h-12 w-24" />
                       ) : usagePercent !== null ? (
@@ -270,7 +270,7 @@ export function DashboardOverview() {
                     <p className="text-xs font-creative-body font-black uppercase tracking-widest text-cm-text/45">
                       {t("overview.currentPlan")}
                     </p>
-                    <h3 className="mt-1 font-creative-display text-3xl font-black uppercase text-cm-text">
+                    <h3 className="mt-1 font-creative-display text-2xl font-black uppercase text-cm-text sm:text-3xl">
                       {usageLoading ? (
                         <Skeleton className="h-12 w-24" />
                       ) : plan === "pro" ? (
