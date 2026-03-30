@@ -24,16 +24,11 @@ async def process_task(
 async def execute_task(payload: TaskPayload) -> None:
     logger.info("Executing task", task_type=payload.task_type, data=payload.data)
 
-    match payload.task_type:
-        case "analysis":
-            from src.jobs.analyze_article import analyze_article
-            article_id = str(payload.data.get("article_id", ""))
-            await analyze_article(article_id)
+    from src.routers.task_registry import TASK_HANDLERS
 
-        case "embedding":
-            from src.jobs.generate_embedding import generate_embedding
-            article_id = str(payload.data.get("article_id", ""))
-            await generate_embedding(article_id)
+    handler = TASK_HANDLERS.get(payload.task_type)
+    if handler is None:
+        logger.warning("Unknown task type", task_type=payload.task_type)
+        return
 
-        case _:
-            logger.warning("Unknown task type", task_type=payload.task_type)
+    await handler(payload)
