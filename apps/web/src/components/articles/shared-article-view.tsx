@@ -16,6 +16,20 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { type FocusEvent, type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
+import {
+  type CommentSortOption,
+  type ViewerProfile,
+  extractViewerProfile,
+  formatCommentDate,
+  formatPublishedDate,
+  insertCommentTree,
+  normalizeDisplayName,
+  removeCommentTree,
+  sortCommentThread,
+  toCommentSortOption,
+  updateCommentTree,
+  withThreadDefaults,
+} from "@/components/articles/shared-article-helpers";
 import { NodWordmark } from "@/components/brand/nod-wordmark";
 import { LandingFooter } from "@/components/landing/footer";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -45,20 +59,6 @@ import {
   useToggleSharedArticleEmpathy,
   useUpdateSharedArticleComment,
 } from "@/lib/api/articles";
-import {
-  type CommentSortOption,
-  type ViewerProfile,
-  extractViewerProfile,
-  formatCommentDate,
-  formatPublishedDate,
-  insertCommentTree,
-  normalizeDisplayName,
-  removeCommentTree,
-  sortCommentThread,
-  toCommentSortOption,
-  updateCommentTree,
-  withThreadDefaults,
-} from "@/components/articles/shared-article-helpers";
 import { apiClient } from "@/lib/api-client";
 import { getSupabase } from "@/lib/auth/auth-client";
 import { locales } from "@/lib/i18n/config";

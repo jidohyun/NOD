@@ -61,6 +61,11 @@ async def test_execute_task_raises_on_invalid_payload(
     monkeypatch.setattr(tasks.logger, "warning", _fake_warning)
 
     with pytest.raises(ValueError, match="valid UUID"):
-        await tasks.execute_task(TaskPayload(task_type="analysis", data={"article_id": "not-a-uuid"}))
+        await tasks.execute_task(
+            TaskPayload(
+                task_type="analysis",
+                data={"article_id": "not-a-uuid"},
+            )
+        )
 
     assert warnings == ["Invalid task payload"]
