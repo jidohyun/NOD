@@ -1,5 +1,5 @@
-from src.lib.content_classifier import ContentType
 from src.lib.config import settings
+from src.lib.content_classifier import ContentType
 
 SLOW_ANALYSIS_CONTENT_TYPES = frozenset(
     {
