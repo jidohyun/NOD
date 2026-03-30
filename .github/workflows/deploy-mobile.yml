@@ -51,7 +51,7 @@ jobs:
         run: bundle exec fastlane test
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         if: github.event_name == 'push'
         with:
           files: apps/mobile/coverage/lcov.info
