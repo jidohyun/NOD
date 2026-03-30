@@ -195,7 +195,9 @@
     "concepts": "Concepts",
     "deleteConfirm": "Supprimer ce contenu ?",
     "details": "Détails",
-    "downloadMarkdown": "Télécharger .md",
+    "copyAsMarkdown": "Copier en Markdown",
+    "copiedMarkdown": "Copié !",
+    "copyFailed": "Échec de la copie",
     "graph": {
       "actionClearSelection": "Effacer la sélection",
       "actionPinSelected": "Épingler la sélection",

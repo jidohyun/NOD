@@ -195,7 +195,9 @@
     "concepts": "概念",
     "deleteConfirm": "删除此内容？",
     "details": "详情",
-    "downloadMarkdown": "下载 .md",
+    "copyAsMarkdown": "复制为 Markdown",
+    "copiedMarkdown": "已复制！",
+    "copyFailed": "复制失败",
     "graph": {
       "actionClearSelection": "清除选择",
       "actionPinSelected": "固定选中",

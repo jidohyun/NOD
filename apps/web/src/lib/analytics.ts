@@ -32,6 +32,13 @@ export const AnalyticsEvents = {
   subscriptionUpgrade: (plan: string) =>
     trackEvent({ action: "subscription_upgrade", category: "billing", label: plan }),
 
+  markdownCopied: (articleId: string, contentType: string) =>
+    trackEvent({
+      action: "article_markdown_copy",
+      category: "articles",
+      label: `${articleId}:${contentType}`,
+    }),
+
   extensionInstalled: () => trackEvent({ action: "extension_installed", category: "onboarding" }),
 
   loginCompleted: (provider: string) =>
