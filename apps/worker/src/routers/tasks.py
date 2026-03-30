@@ -31,4 +31,12 @@ async def execute_task(payload: TaskPayload) -> None:
         logger.warning("Unknown task type", task_type=payload.task_type)
         return
 
-    await handler(payload)
+    try:
+        await handler(payload)
+    except ValueError as exc:
+        logger.warning(
+            "Invalid task payload",
+            task_type=payload.task_type,
+            error=str(exc),
+            data=payload.data,
+        )
