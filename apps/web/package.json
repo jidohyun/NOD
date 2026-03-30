@@ -23,7 +23,7 @@
     "@opentelemetry/instrumentation-fetch": "^0.208.0",
     "@opentelemetry/instrumentation-http": "^0.208.0",
     "@opentelemetry/resources": "^2.2.0",
-    "@opentelemetry/sdk-node": "^0.208.0",
+    "@opentelemetry/sdk-node": "^0.214.0",
     "@opentelemetry/sdk-trace-base": "^2.2.0",
     "@opentelemetry/semantic-conventions": "^1.38.0",
     "@paddle/paddle-js": "^1.6.2",
