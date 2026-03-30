@@ -9,8 +9,8 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html lang="en">
       <body>
-        <main className="flex min-h-screen flex-col items-center justify-center p-24">
-          <h1 className="text-4xl font-bold text-red-600">Something went wrong!</h1>
+        <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
+          <h1 className="text-2xl font-bold text-red-600 sm:text-4xl">Something went wrong!</h1>
           <p className="mt-4 text-gray-600">
             {error.digest ? <span>Error ID: {error.digest}</span> : null}
           </p>

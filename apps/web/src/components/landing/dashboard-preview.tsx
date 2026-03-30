@@ -64,7 +64,7 @@ export function DashboardPreview() {
               </div>
 
               {/* Dashboard mockup content */}
-              <div className="min-h-[400px] bg-white p-6 lg:min-h-[500px] lg:p-10">
+              <div className="min-h-[280px] bg-white p-6 sm:min-h-[400px] lg:min-h-[500px] lg:p-10">
                 {/* Top bar */}
                 <div className="flex items-center justify-between mb-10">
                   <div className="flex items-center gap-4">

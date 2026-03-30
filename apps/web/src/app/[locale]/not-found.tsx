@@ -12,8 +12,8 @@ export default async function NotFoundPage({ params }: NotFoundPageProps) {
   const t = await getTranslations({ locale: locale as Locale, namespace: "errors" });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-6xl font-bold">404</h1>
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
+      <h1 className="text-4xl font-bold sm:text-5xl lg:text-6xl">404</h1>
       <p className="mt-4 text-muted-foreground">{t("notFound")}</p>
       <Link
         href={`/${locale}`}

@@ -16,8 +16,8 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold text-destructive">Error</h1>
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
+      <h1 className="text-2xl font-bold text-destructive sm:text-4xl">Error</h1>
       <p className="mt-4 text-muted-foreground">{t("somethingWrong")}</p>
       <button
         type="button"

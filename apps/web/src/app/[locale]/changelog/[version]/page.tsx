@@ -35,7 +35,7 @@ export default async function ChangelogVersionDetailPage({
         >
           ← {common("back")}
         </a>
-        <h1 className="text-3xl font-bold tracking-tight">{selectedVersion.label}</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{selectedVersion.label}</h1>
       </header>
 
       <div className="mt-8 grid gap-6 md:grid-cols-[240px_minmax(0,1fr)]">
