@@ -1,15 +1,11 @@
 import structlog
 from fastapi import APIRouter, BackgroundTasks
-from pydantic import BaseModel
+
+from src.routers.task_schemas import TaskPayload
 
 logger = structlog.get_logger(__name__)
 
 router = APIRouter(tags=["Tasks"])
-
-
-class TaskPayload(BaseModel):
-    task_type: str
-    data: dict[str, object]
 
 
 @router.post("/process")
@@ -22,7 +18,7 @@ async def process_task(
 
 
 async def execute_task(payload: TaskPayload) -> None:
-    logger.info("Executing task", task_type=payload.task_type, data=payload.data)
+    logger.info("Executing task", task_type=payload.task_type)
 
     from src.routers.task_registry import TASK_HANDLERS
 
@@ -38,5 +34,5 @@ async def execute_task(payload: TaskPayload) -> None:
             "Invalid task payload",
             task_type=payload.task_type,
             error=str(exc),
-            data=payload.data,
         )
+        raise
