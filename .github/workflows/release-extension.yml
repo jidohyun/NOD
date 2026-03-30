@@ -30,7 +30,7 @@ jobs:
       zip_name: ${{ steps.meta.outputs.zip_name }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -73,7 +73,7 @@ jobs:
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_github_release) }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
