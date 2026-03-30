@@ -55,7 +55,7 @@ export function LandingFeatures() {
     <section
       ref={sectionRef}
       id="features"
-      className="relative bg-cm-bg py-32 lg:py-40 ko-keep overflow-hidden"
+      className="relative bg-cm-bg py-32 lg:py-40 ko-keep overflow-hidden scroll-mt-24"
     >
       {/* Decorations */}
       <FloatingCircle

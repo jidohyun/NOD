@@ -59,7 +59,10 @@ export function LandingPricing() {
   ] as const;
 
   return (
-    <section id="pricing" className="relative bg-cm-bg py-32 lg:py-40 ko-keep overflow-hidden">
+    <section
+      id="pricing"
+      className="relative bg-cm-bg py-32 lg:py-40 ko-keep overflow-hidden scroll-mt-24"
+    >
       {/* Decorations */}
       <FloatingCircle
         color="bg-cm-lavender/40"

@@ -164,7 +164,7 @@ export function DashboardOverview() {
                   {t("overview.heroTitleAccent")}
                 </span>
               </h1>
-              <p className="mt-3 whitespace-nowrap font-creative-body text-[1.55rem] italic text-cm-text/68">
+              <p className="mt-3 font-creative-body text-[clamp(1rem,3vw,1.55rem)] italic text-cm-text/68">
                 {t("overview.heroSubtitle")}
               </p>
             </div>
