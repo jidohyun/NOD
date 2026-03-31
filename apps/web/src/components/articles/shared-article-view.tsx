@@ -122,6 +122,44 @@ function isUuidLike(value: string): boolean {
   return UUID_LIKE_RE.test(value);
 }
 
+const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string }> = {
+  tech_blog: {
+    labelKey: "typeTechBlog",
+    className:
+      "bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-950/50 dark:text-blue-400 dark:border-blue-700",
+  },
+  academic_paper: {
+    labelKey: "typePaper",
+    className:
+      "bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-950/50 dark:text-purple-400 dark:border-purple-700",
+  },
+  general_news: {
+    labelKey: "typeNews",
+    className:
+      "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-950/50 dark:text-gray-400 dark:border-gray-700",
+  },
+  github_repo: {
+    labelKey: "typeGitHub",
+    className:
+      "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-950/50 dark:text-slate-400 dark:border-slate-700",
+  },
+  official_docs: {
+    labelKey: "typeDocs",
+    className:
+      "bg-teal-100 text-teal-700 border-teal-300 dark:bg-teal-950/50 dark:text-teal-400 dark:border-teal-700",
+  },
+  video_podcast: {
+    labelKey: "typeVideo",
+    className:
+      "bg-pink-100 text-pink-700 border-pink-300 dark:bg-pink-950/50 dark:text-pink-400 dark:border-pink-700",
+  },
+  patch_note: {
+    labelKey: "typePatchNote",
+    className:
+      "bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-950/50 dark:text-amber-400 dark:border-amber-700",
+  },
+};
+
 export function SharedArticleView({
   shareId = "",
   token = "",
