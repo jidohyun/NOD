@@ -2,10 +2,42 @@ import { Readability } from "@mozilla/readability";
 import type { ExtractedContent } from "../types/article";
 import { MAX_CONTENT_LENGTH, EXCERPT_LENGTH, WORDS_PER_MINUTE } from "../lib/constants";
 
+interface RedditListingChild {
+  kind?: string;
+  data?: {
+    title?: string;
+    selftext?: string;
+    author?: string;
+    subreddit_name_prefixed?: string;
+    permalink?: string;
+    score?: number;
+    num_comments?: number;
+    created_utc?: number;
+    body?: string;
+    replies?: RedditListing | "";
+    children?: RedditListingChild[];
+    depth?: number;
+  };
+}
+
+interface RedditListing {
+  data?: {
+    children?: RedditListingChild[];
+  };
+}
+
+const REDDIT_DISCUSSION_HOSTS = [
+  "reddit.com",
+  "old.reddit.com",
+  "new.reddit.com",
+  "np.reddit.com",
+  "sh.reddit.com",
+] as const;
+
 /**
  * Extract article content from the current page
  */
-export function extractContent(): ExtractedContent {
+export async function extractContent(): Promise<ExtractedContent> {
   // PDF: send minimal content, let server extract
   if (document.contentType === "application/pdf") {
     return extractPDFContent();
@@ -18,6 +50,10 @@ export function extractContent(): ExtractedContent {
 
   if (isYouTubeVideoPage(window.location.href)) {
     return extractYouTubeContent();
+  }
+
+  if (isRedditDiscussionPage(window.location.href)) {
+    return extractRedditContent();
   }
 
   // Try Readability first
@@ -231,7 +267,7 @@ function truncateContent(content: string): string {
 /**
  * Check if current page is likely an article
  */
-export function isArticlePage(): boolean {
+export async function isArticlePage(): Promise<boolean> {
   // PDF pages: always treat as article (server-side extraction)
   if (document.contentType === "application/pdf") {
     return true;
@@ -247,6 +283,10 @@ export function isArticlePage(): boolean {
   }
 
   if (isYouTubeVideoPage(window.location.href)) {
+    return true;
+  }
+
+  if (isRedditDiscussionPage(window.location.href)) {
     return true;
   }
 
@@ -341,6 +381,95 @@ function isYouTubeVideoPage(url: string): boolean {
   }
 }
 
+function isRedditDiscussionPage(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "redd.it") {
+      return parsed.pathname.length > 1;
+    }
+
+    if (!REDDIT_DISCUSSION_HOSTS.includes(host as (typeof REDDIT_DISCUSSION_HOSTS)[number])) {
+      return false;
+    }
+
+    const canonicalUrl = getRedditCanonicalUrl();
+    if (canonicalUrl) {
+      return true;
+    }
+
+    const normalizedPath = parsed.pathname.toLowerCase();
+    if (normalizedPath.includes("/comments/")) {
+      return true;
+    }
+
+    if (/^\/r\/[^/]+\/s\/[^/]+\/?$/.test(normalizedPath) || /^\/s\/[^/]+\/?$/.test(normalizedPath)) {
+      return true;
+    }
+
+    return hasRedditDiscussionDom(getSourceDocument());
+  } catch {
+    return false;
+  }
+}
+
+function getRedditCanonicalUrl(): string | null {
+  const sourceDocument = getSourceDocument();
+  const candidates = [
+    sourceDocument.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href,
+    sourceDocument.querySelector<HTMLMetaElement>('meta[property="og:url"]')?.content,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+
+    try {
+      const parsed = new URL(candidate, window.location.href);
+      const host = parsed.hostname.replace(/^www\./, "");
+      if (host === "redd.it" || REDDIT_DISCUSSION_HOSTS.includes(host as (typeof REDDIT_DISCUSSION_HOSTS)[number])) {
+        return parsed.toString();
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
+function hasRedditDiscussionDom(doc: Document): boolean {
+  const hasSinglePostMarker = !!doc.querySelector(
+    'shreddit-post, [data-testid="post-container"], [data-testid="post-content"]'
+  );
+  const hasCommentTree = !!doc.querySelector(
+    'shreddit-comment-tree, faceplate-comment-tree, [data-testid="comment-tree-container"]'
+  );
+
+  return hasSinglePostMarker && hasCommentTree;
+}
+
+function resolveRedditSourceUrl(url: string): string {
+  const canonicalUrl = getRedditCanonicalUrl();
+  if (canonicalUrl) {
+    return canonicalUrl;
+  }
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "redd.it") {
+      const postId = parsed.pathname.split("/").filter(Boolean)[0];
+      if (postId) {
+        return `https://www.reddit.com/comments/${postId}`;
+      }
+    }
+  } catch {
+    return url;
+  }
+
+  return url;
+}
+
 function extractGitHubContent(): ExtractedContent {
   const sourceDocument = getSourceDocument();
 
@@ -400,6 +529,118 @@ function extractYouTubeContent(): ExtractedContent {
   };
 }
 
+function buildRedditJsonUrl(url: string): string {
+  const parsed = new URL(resolveRedditSourceUrl(url));
+  parsed.hash = "";
+  parsed.search = "";
+
+  const pathname = parsed.pathname.replace(/\/+$/, "");
+  parsed.pathname = `${pathname || parsed.pathname}.json`;
+  parsed.searchParams.set("raw_json", "1");
+  parsed.searchParams.set("limit", "12");
+  parsed.searchParams.set("depth", "3");
+  parsed.searchParams.set("sort", "top");
+  return parsed.toString();
+}
+
+function flattenRedditComments(
+  children: RedditListingChild[],
+  into: string[],
+  limit = 8
+): void {
+  for (const child of children) {
+    if (into.length >= limit || child.kind !== "t1" || !child.data?.body) {
+      continue;
+    }
+
+    const score = typeof child.data.score === "number" ? ` (${child.data.score}↑)` : "";
+    const author = child.data.author ? `u/${child.data.author}` : "unknown";
+    into.push(`- ${author}${score}: ${child.data.body.replace(/\s+/g, " ").trim()}`);
+
+    const replies = child.data.replies;
+    if (typeof replies === "object" && replies?.data?.children) {
+      flattenRedditComments(replies.data.children, into, limit);
+    }
+  }
+}
+
+function buildRedditFallbackContent(url = window.location.href): ExtractedContent {
+  const title = extractTitle();
+  const content = extractMainContent();
+  const wordCount = countWords(content);
+
+  return {
+    title,
+    content: truncateContent(content),
+    excerpt: createExcerpt(content || title),
+    url,
+    siteName: "Reddit",
+    author: extractAuthor(),
+    publishedAt: extractPublishedDate(),
+    wordCount,
+    readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+  };
+}
+
+async function extractRedditContent(): Promise<ExtractedContent> {
+  try {
+    const sourceUrl = resolveRedditSourceUrl(window.location.href);
+    const response = await fetch(buildRedditJsonUrl(sourceUrl), {
+      credentials: "omit",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      return buildRedditFallbackContent(sourceUrl);
+    }
+
+    const payload = (await response.json()) as RedditListing[];
+    const post = payload[0]?.data?.children?.[0]?.data;
+    const commentChildren = payload[1]?.data?.children ?? [];
+    if (!post?.title) {
+      return buildRedditFallbackContent(sourceUrl);
+    }
+
+    const discussionPoints: string[] = [];
+    flattenRedditComments(commentChildren, discussionPoints);
+
+    const sections = [
+      post.subreddit_name_prefixed ? `Community: ${post.subreddit_name_prefixed}` : "",
+      post.author ? `Original poster: u/${post.author}` : "",
+      typeof post.score === "number" ? `Post score: ${post.score}` : "",
+      typeof post.num_comments === "number" ? `Comment count: ${post.num_comments}` : "",
+      post.selftext?.trim() ? `Original post:\n${post.selftext.trim()}` : "",
+      discussionPoints.length > 0
+        ? `Top discussion points:\n${discussionPoints.join("\n")}`
+        : "",
+    ].filter(Boolean);
+
+    const content = `${post.title}\n\n${sections.join("\n\n")}`.trim();
+    const excerptSource = post.selftext?.trim() || discussionPoints[0] || post.title;
+    const wordCount = countWords(content);
+
+    return {
+      title: post.title,
+      content: truncateContent(content),
+      excerpt: createExcerpt(excerptSource),
+      url: post.permalink
+        ? new URL(post.permalink, "https://www.reddit.com").toString()
+        : sourceUrl,
+      siteName: "Reddit",
+      author: post.author ? `u/${post.author}` : extractAuthor(),
+      publishedAt: post.created_utc
+        ? new Date(post.created_utc * 1000).toISOString()
+        : extractPublishedDate(),
+      wordCount,
+      readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+    };
+  } catch {
+    return buildRedditFallbackContent(resolveRedditSourceUrl(window.location.href));
+  }
+}
+
 function extractPDFContent(): ExtractedContent {
   const url = window.location.href;
   const title =
@@ -425,8 +666,11 @@ function isDocumentationSite(doc: Document): boolean {
   const host = url.hostname.replace(/^www\./, "");
   const path = url.pathname;
 
-  // Hostname patterns: docs.*, developer.*, wiki.*
+  // Hostname patterns: docs.*, developer.*, wiki.*, wikidocs.net
   if (/^(docs|developer|wiki|devdocs|reference|api)\./.test(host)) {
+    return true;
+  }
+  if (host === "wikidocs.net") {
     return true;
   }
 
@@ -440,7 +684,8 @@ function isDocumentationSite(doc: Document): boolean {
     !!doc.querySelector('[class*="docusaurus" i], [class*="gitbook" i], [class*="mkdocs" i]') ||
     !!doc.querySelector('[data-docusaurus], [data-nextra], [class*="vitepress" i]') ||
     !!doc.querySelector('[class*="docs-content" i], [class*="doc-content" i]') ||
-    !!doc.querySelector('[role="main"][class*="content" i]');
+    !!doc.querySelector('[role="main"][class*="content" i]') ||
+    !!doc.querySelector('[class*="wiki-content" i], [class*="wiki_content" i]');
 
   return hasDocsFramework;
 }
@@ -452,7 +697,6 @@ function isBlockedHost(host: string): boolean {
     "amazon.com",
     "mail.google.com",
     "pinterest.com",
-    "reddit.com",
     "twitter.com",
     "x.com",
     "app.slack.com",
