@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added dedicated discussion summarization support for Reddit threads, including a new `discussion` content type and discussion-aware analysis prompts that preserve the thread's core question, insider takeaways, disagreements, and evidence signals.
+- Added discussion metadata panels to article detail and shared article views so discussion-specific structure stays visible after save.
+
+### Changed
+
+- Markdown copy/export now includes discussion metadata sections for discussion content instead of dropping the extra structure outside the UI.
+- Shared article badges, OG labels, and content-type surfaces now recognize discussion content alongside existing article types.
+
+### Fixed
+
+- Improved Reddit thread detection in the extension save flow so async extraction can handle Reddit canonical, shortlink, and share-link entry points more reliably.
+- Stabilized a promo entitlement test that had started failing after April 1, 2026 due to wall-clock time assumptions in the fixture.
+
 ## [1.3.1] - 2026-03-25
 
 ### Fixed
