@@ -26,7 +26,7 @@ def test_timeout_clamps_minimum(monkeypatch: pytest.MonkeyPatch) -> None:
     assert analysis_profiles.get_article_analysis_timeout_seconds() == 1
 
 
-def test_video_timeout_uses_shorter_profile(
+def test_video_timeout_uses_more_generous_profile(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(
@@ -39,11 +39,11 @@ def test_video_timeout_uses_shorter_profile(
         analysis_profiles.get_article_analysis_timeout_seconds(
             ContentType.VIDEO_PODCAST
         )
-        == 30
+        == 60
     )
 
 
-def test_video_retry_uses_compact_profile(
+def test_video_retry_preserves_configured_timeout(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(
@@ -57,7 +57,7 @@ def test_video_retry_uses_compact_profile(
             ContentType.VIDEO_PODCAST,
             retry=True,
         )
-        == 18
+        == 45
     )
 
 
@@ -96,7 +96,7 @@ def test_official_docs_timeout_uses_slow_profile(
         analysis_profiles.get_article_analysis_timeout_seconds(
             ContentType.OFFICIAL_DOCS
         )
-        == 30
+        == 60
     )
 
 

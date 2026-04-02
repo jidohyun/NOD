@@ -77,6 +77,34 @@ async def test_run_analysis_async_does_not_mark_failed_if_usage_increment_fails(
     assert updates == []
 
 
+
+
+class _FakeServerError(Exception):
+    def __init__(self, code: int = 503, status: str = "UNAVAILABLE") -> None:
+        super().__init__(status)
+        self.code = code
+        self.status = status
+
+
+def test_should_retry_analysis_with_compact_input_for_timeout() -> None:
+    assert router._should_retry_analysis_with_compact_input(TimeoutError()) is True
+
+
+def test_should_retry_analysis_with_compact_input_for_server_error() -> None:
+    assert (
+        router._should_retry_analysis_with_compact_input(_FakeServerError()) is True
+    )
+
+
+def test_should_retry_analysis_with_compact_input_rejects_validation_errors() -> None:
+    assert (
+        router._should_retry_analysis_with_compact_input(
+            ValueError("bad schema")
+        )
+        is False
+    )
+
+
 def test_is_nod_patch_note_url_accepts_changelog_detail_path() -> None:
     assert router._is_nod_patch_note_url("https://nod-archive.com/ko/changelog/v1-3-x")
     assert router._is_nod_patch_note_url(

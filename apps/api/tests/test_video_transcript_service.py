@@ -50,6 +50,44 @@ class _TransientFailureProvider(TranscriptProvider):
         raise RuntimeError("upstream temporary failure")
 
 
+class _FlakyProvider(TranscriptProvider):
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def fetch_transcript(
+        self,
+        *,
+        video_id: str,
+        languages: tuple[str, ...],
+        timeout_seconds: float,
+    ) -> list[TranscriptSegment]:
+        self.calls += 1
+        if self.calls == 1:
+            raise TranscriptProviderError("temporary upstream issue", is_transient=True)
+
+        assert video_id == "abc123"
+        assert languages == ("ko", "en")
+        assert timeout_seconds == 4.0
+        return [
+            TranscriptSegment(text="retry succeeded", start=0.0, duration=1.0),
+        ]
+
+
+class _AlwaysTransientProvider(TranscriptProvider):
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def fetch_transcript(
+        self,
+        *,
+        video_id: str,
+        languages: tuple[str, ...],
+        timeout_seconds: float,
+    ) -> list[TranscriptSegment]:
+        self.calls += 1
+        raise TranscriptProviderError("still unavailable", is_transient=True)
+
+
 @pytest.mark.asyncio
 async def test_extract_transcript_from_youtube_url() -> None:
     service = VideoTranscriptService(
@@ -99,3 +137,38 @@ async def test_extract_transcript_disabled_feature_raises_unavailable() -> None:
 
     with pytest.raises(TranscriptUnavailableError):
         await service.extract_transcript("https://youtu.be/abc123")
+
+
+@pytest.mark.asyncio
+async def test_extract_transcript_retries_transient_provider_error() -> None:
+    provider = _FlakyProvider()
+    service = VideoTranscriptService(
+        provider=provider,
+        enabled=True,
+        fallback_languages=("ko", "en"),
+        timeout_seconds=4.0,
+        transient_retries=2,
+        retry_base_delay_seconds=0.0,
+    )
+
+    result = await service.extract_transcript("https://youtu.be/abc123")
+
+    assert result.text == "retry succeeded"
+    assert provider.calls == 2
+
+
+@pytest.mark.asyncio
+async def test_extract_transcript_raises_after_transient_retries_exhausted() -> None:
+    provider = _AlwaysTransientProvider()
+    service = VideoTranscriptService(
+        provider=provider,
+        enabled=True,
+        transient_retries=2,
+        retry_base_delay_seconds=0.0,
+    )
+
+    with pytest.raises(TranscriptProviderError) as exc_info:
+        await service.extract_transcript("https://youtu.be/abc123")
+
+    assert exc_info.value.is_transient is True
+    assert provider.calls == 3
