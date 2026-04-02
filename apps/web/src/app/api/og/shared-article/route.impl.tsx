@@ -59,6 +59,7 @@ function renderFallbackImage() {
       style={{
         width: "100%",
         height: "100%",
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -93,9 +94,10 @@ function renderSharedImage(shared: SharedArticle) {
       style={{
         width: "100%",
         height: "100%",
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        padding: "40px 48px 36px",
+        padding: "48px 48px 44px",
         background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
         color: "#ffffff",
       }}
@@ -106,10 +108,12 @@ function renderSharedImage(shared: SharedArticle) {
           <div
             style={{
               display: "flex",
-              padding: "6px 18px",
+              alignItems: "center",
+              padding: "8px 18px",
               borderRadius: "9999px",
               background: "rgba(255,255,255,0.15)",
-              fontSize: 20,
+              fontSize: 19,
+              lineHeight: 1.1,
               fontWeight: 700,
               color: "rgba(255,255,255,0.75)",
             }}
@@ -119,77 +123,85 @@ function renderSharedImage(shared: SharedArticle) {
         </div>
       ) : null}
 
-      {/* Spacer */}
-      <div style={{ display: "flex", flex: 1 }} />
-
-      {/* Title */}
       <div
         style={{
           display: "flex",
-          fontSize: 52,
-          lineHeight: 1.15,
-          fontWeight: 900,
-          maxWidth: "1100px",
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
-        {headline}
-      </div>
-
-      {/* Summary */}
-      <div
-        style={{
-          display: "flex",
-          marginTop: "20px",
-          fontSize: 24,
-          lineHeight: 1.55,
-          fontWeight: 400,
-          maxWidth: "1080px",
-          color: "rgba(255, 255, 255, 0.55)",
-        }}
-      >
-        {description}
-      </div>
-
-      {/* Bottom bar */}
-      <div
-        style={{
-          display: "flex",
-          marginTop: "28px",
-          paddingTop: "16px",
-          borderTop: "1.5px solid rgba(255,255,255,0.1)",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {/* biome-ignore lint/performance/noImgElement: OG image JSX (ImageResponse) doesn't support next/image */}
-          <img
-            src="https://nod-archive.com/brand/nod-icon.png"
-            alt="NOD"
-            width={32}
-            height={32}
-            style={{ borderRadius: 4, opacity: 0.8 }}
-          />
-          <div
-            style={{
-              display: "flex",
-              fontSize: 22,
-              fontWeight: 700,
-              color: "rgba(255,255,255,0.55)",
-            }}
-          >
-            NOD
-          </div>
-        </div>
+        {/* Title */}
         <div
           style={{
             display: "flex",
-            fontSize: 20,
-            color: "rgba(255,255,255,0.35)",
+            fontSize: 52,
+            lineHeight: 1.15,
+            fontWeight: 900,
+            maxWidth: "1100px",
           }}
         >
-          {articleHost ?? "nod-archive.com"}
+          {headline}
+        </div>
+
+        {/* Summary */}
+        <div
+          style={{
+            display: "flex",
+            marginTop: "20px",
+            fontSize: 24,
+            lineHeight: 1.55,
+            fontWeight: 400,
+            maxWidth: "1080px",
+            color: "rgba(255, 255, 255, 0.55)",
+          }}
+        >
+          {description}
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          style={{
+            display: "flex",
+            marginTop: "30px",
+            paddingTop: "18px",
+            borderTop: "1.5px solid rgba(255,255,255,0.1)",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {/* biome-ignore lint/performance/noImgElement: OG image JSX (ImageResponse) doesn't support next/image */}
+            <img
+              src="https://nod-archive.com/brand/nod-icon.png"
+              alt="NOD"
+              width={32}
+              height={32}
+              style={{ borderRadius: 4, opacity: 0.8 }}
+            />
+            <div
+              style={{
+                display: "flex",
+                fontSize: 22,
+                lineHeight: 1.1,
+                fontWeight: 700,
+                color: "rgba(255,255,255,0.55)",
+              }}
+            >
+              NOD
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 20,
+              lineHeight: 1.1,
+              color: "rgba(255,255,255,0.35)",
+            }}
+          >
+            {articleHost ?? "nod-archive.com"}
+          </div>
         </div>
       </div>
     </div>,
