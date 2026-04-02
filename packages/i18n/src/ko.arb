@@ -35,5 +35,21 @@
   "extLanguage": "언어",
   "@extLanguage": {
     "description": "Extension language selector label"
+  },
+  "extManifestName": "NOD - 아티클 분석기",
+  "@extManifestName": {
+    "description": "Production manifest name for the Chrome extension"
+  },
+  "extManifestDescription": "웹 콘텐츠를 저장하고 AI로 요약해 다시 찾게 도와주는 Chrome 확장 프로그램입니다.",
+  "@extManifestDescription": {
+    "description": "Production manifest description for the Chrome extension"
+  },
+  "extManifestNameDev": "NOD - 아티클 분석기 (Dev)",
+  "@extManifestNameDev": {
+    "description": "Development manifest name for the Chrome extension"
+  },
+  "extManifestDescriptionDev": "[DEV] 웹 콘텐츠를 저장하고 AI로 요약해 다시 찾게 도와주는 Chrome 확장 프로그램입니다.",
+  "@extManifestDescriptionDev": {
+    "description": "Development manifest description for the Chrome extension"
   }
 }

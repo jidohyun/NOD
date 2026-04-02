@@ -59,6 +59,10 @@ const EXTENSION_KEYS = [
   "extUpgradePrompt",
   "extUsageUnlimited",
   "extLanguage",
+  "extManifestName",
+  "extManifestDescription",
+  "extManifestNameDev",
+  "extManifestDescriptionDev",
 ];
 
 function isArbMetadataKey(key: string): boolean {
