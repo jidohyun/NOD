@@ -120,6 +120,34 @@ def enforce_content_type_access(plan: str, content_type: ContentType) -> None:
     )
 
 
+def _should_retry_analysis_with_compact_input(exc: Exception) -> bool:
+    if isinstance(exc, TimeoutError):
+        return True
+
+    error_name = type(exc).__name__
+    if error_name in {
+        "ServerError",
+        "RateLimitError",
+        "InternalServerError",
+        "APIConnectionError",
+        "APITimeoutError",
+    }:
+        return True
+
+    code = getattr(exc, "code", None)
+    if isinstance(code, int) and code >= 500:
+        return True
+
+    status_value = getattr(exc, "status", None)
+    return isinstance(status_value, str) and status_value.upper() in {
+        "UNAVAILABLE",
+        "INTERNAL",
+        "INTERNAL_SERVER_ERROR",
+        "RESOURCE_EXHAUSTED",
+        "DEADLINE_EXCEEDED",
+    }
+
+
 async def prepare_analyze_url_content(
     *,
     url: str,
@@ -226,8 +254,11 @@ async def _run_analysis(
                 ),
                 timeout=initial_timeout_seconds,
             )
-        except TimeoutError:
-            if analysis_content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
+        except Exception as exc:
+            if (
+                analysis_content_type not in SLOW_ANALYSIS_CONTENT_TYPES
+                or not _should_retry_analysis_with_compact_input(exc)
+            ):
                 raise
 
             retry_timeout_seconds = get_article_analysis_timeout_seconds(
@@ -240,12 +271,14 @@ async def _run_analysis(
             )
 
             logger.warning(
-                "Article analysis timed out, retrying with compact input",
+                "Article analysis attempt failed, retrying with compact input",
                 article_id=str(article_id),
                 content_type=str(analysis_content_type),
                 initial_timeout_seconds=initial_timeout_seconds,
                 retry_timeout_seconds=retry_timeout_seconds,
                 retry_content_limit=retry_content_limit,
+                error_type=type(exc).__name__,
+                error_message=str(exc),
             )
 
             result, content_type = await asyncio.wait_for(

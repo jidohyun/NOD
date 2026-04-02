@@ -31,11 +31,13 @@ def get_article_analysis_timeout_seconds(
     if content_type not in SLOW_ANALYSIS_CONTENT_TYPES:
         return timeout
 
-    first_attempt_timeout = max(timeout - 15, 10)
+    # Slow content types like official docs and video transcripts need more
+    # model wall-clock budget than general articles, not less.
+    first_attempt_timeout = max(timeout + 15, 30)
     if not retry:
         return first_attempt_timeout
 
-    return max(first_attempt_timeout - 12, 6)
+    return max(timeout, 30)
 
 
 def get_article_analysis_content_limit_chars(

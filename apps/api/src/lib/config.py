@@ -59,6 +59,14 @@ class Settings(BaseSettings):
     GEMINI_MODEL: str = "gemini-2.5-flash"
     OPENAI_API_KEY: str | None = None
 
+    # Video transcript extraction
+    VIDEO_TRANSCRIPT_ENABLED: bool = True
+    VIDEO_TRANSCRIPT_LANGUAGES: str = "ko,en"
+    VIDEO_TRANSCRIPT_TIMEOUT_SECONDS: float = 20.0
+    VIDEO_TRANSCRIPT_MAX_CHARS: int = 20_000
+    VIDEO_TRANSCRIPT_TRANSIENT_RETRIES: int = 2
+    VIDEO_TRANSCRIPT_RETRY_BASE_DELAY_SECONDS: float = 0.75
+
     # Storage (optional)
     STORAGE_BACKEND: Literal["gcs", "s3", "minio"] = "minio"
     GCS_BUCKET_NAME: str | None = None
