@@ -13,6 +13,7 @@ from src.lib.video_transcript.errors import (
 )
 from src.lib.video_transcript.provider import (
     YouTubeTranscriptProvider,
+    build_youtube_proxy_config,
     extract_youtube_video_id,
 )
 from src.lib.video_transcript.schemas import TranscriptSegment, VideoTranscript
@@ -152,8 +153,9 @@ def get_video_transcript_service() -> VideoTranscriptService:
         languages = _parse_languages(settings.VIDEO_TRANSCRIPT_LANGUAGES)
         timeout_seconds = settings.VIDEO_TRANSCRIPT_TIMEOUT_SECONDS
         max_chars = settings.VIDEO_TRANSCRIPT_MAX_CHARS
+        proxy_config = build_youtube_proxy_config()
         _service_instance = VideoTranscriptService(
-            provider=YouTubeTranscriptProvider(),
+            provider=YouTubeTranscriptProvider(proxy_config=proxy_config),
             enabled=enabled,
             fallback_languages=languages,
             timeout_seconds=timeout_seconds,
