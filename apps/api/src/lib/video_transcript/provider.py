@@ -3,6 +3,13 @@ from __future__ import annotations
 import asyncio
 from urllib.parse import parse_qs, urlparse
 
+from youtube_transcript_api.proxies import (
+    GenericProxyConfig,
+    ProxyConfig,
+    WebshareProxyConfig,
+)
+
+from src.lib.config import settings
 from src.lib.video_transcript.errors import (
     TranscriptProviderError,
     TranscriptUnavailableError,
@@ -59,7 +66,44 @@ def extract_youtube_video_id(url: str) -> str | None:
     return None
 
 
+def _parse_proxy_locations(raw_locations: str) -> list[str]:
+    return [
+        location.strip()
+        for location in raw_locations.split(",")
+        if location.strip()
+    ]
+
+
+def build_youtube_proxy_config() -> ProxyConfig | None:
+    if (
+        settings.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME
+        and settings.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD
+    ):
+        return WebshareProxyConfig(
+            proxy_username=settings.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME,
+            proxy_password=settings.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD,
+            filter_ip_locations=_parse_proxy_locations(
+                settings.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_LOCATIONS
+            ),
+            retries_when_blocked=settings.VIDEO_TRANSCRIPT_PROXY_RETRIES_WHEN_BLOCKED,
+        )
+
+    if (
+        settings.VIDEO_TRANSCRIPT_PROXY_HTTP_URL
+        or settings.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL
+    ):
+        return GenericProxyConfig(
+            http_url=settings.VIDEO_TRANSCRIPT_PROXY_HTTP_URL,
+            https_url=settings.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL,
+        )
+
+    return None
+
+
 class YouTubeTranscriptProvider:
+    def __init__(self, *, proxy_config: ProxyConfig | None = None) -> None:
+        self._proxy_config = proxy_config
+
     async def fetch_transcript(
         self,
         *,
@@ -116,7 +160,7 @@ class YouTubeTranscriptProvider:
     ) -> list[dict[str, object]]:
         from youtube_transcript_api import YouTubeTranscriptApi
 
-        api = YouTubeTranscriptApi()
+        api = YouTubeTranscriptApi(proxy_config=self._proxy_config)
         transcript = api.fetch(video_id, languages=list(languages))
         return [
             {

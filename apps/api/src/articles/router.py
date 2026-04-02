@@ -176,6 +176,7 @@ async def prepare_analyze_url_content(
                 "Transcript provider failed",
                 url=url,
                 is_transient=exc.is_transient,
+                error_message=str(exc),
             )
             if normalized_content:
                 return title, normalized_content
