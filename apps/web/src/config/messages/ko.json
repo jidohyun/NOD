@@ -61,6 +61,35 @@
       "versionListTitle": "버전"
     },
     "versions": {
+      "v1_3_3": {
+        "label": "v1.3.3",
+        "status": "릴리즈됨",
+        "tagLabel": "태그",
+        "tag": "extension-v1.3.3",
+        "publishedAtLabel": "배포일",
+        "publishedAt": "2026-04-02",
+        "summary": "v1.3.3은 Reddit 스레드를 NOD의 정식 discussion 워크플로우로 끌어올린 릴리즈입니다.\n\n이번 릴리즈에서는 Reddit 저장 시 discussion 전용 요약 경로를 추가했고, 토론 메타데이터를 상세/공유/마크다운 내보내기 surface까지 유지하며, 익스텐션의 Reddit 스레드 감지를 강화해 분석 진입 실패를 줄였습니다.",
+        "patchNotes": "[1.3.3 상세]\n- central question, insider takeaway, disagreement, evidence signal을 보존하는 Reddit discussion 전용 `discussion` content type과 분석 프롬프트를 추가했습니다.\n- 아티클 상세와 공유 보기에서 discussion metadata 섹션을 노출합니다.\n- 마크다운 복사/내보내기에도 discussion metadata를 포함하도록 확장했습니다.\n- canonical, shortlink, share-link 등 다양한 Reddit 진입 URL을 더 안정적으로 감지하도록 익스텐션 저장 흐름을 개선했습니다.",
+        "highlightsTitle": "핵심 변경사항",
+        "highlights": {
+          "item1": {
+            "title": "Reddit discussion 요약 지원",
+            "description": "Reddit 스레드를 generic news가 아니라 discussion 전용 분석 경로로 처리합니다."
+          },
+          "item2": {
+            "title": "토론 메타데이터 노출",
+            "description": "central question, insider takeaway, disagreement, evidence signal을 상세/공유 화면에서 바로 확인할 수 있습니다."
+          },
+          "item3": {
+            "title": "마크다운 내보내기 보강",
+            "description": "복사/내보내기한 마크다운에도 discussion metadata 섹션이 포함되어 토론 맥락이 유지됩니다."
+          },
+          "item4": {
+            "title": "Reddit 저장 성공률 개선",
+            "description": "익스텐션이 더 많은 Reddit 스레드 진입 URL을 인식해 분석 시작 전 차단될 가능성을 낮췄습니다."
+          }
+        }
+      },
       "v1_3_0": {
         "label": "v1.3.x",
         "status": "릴리즈됨",

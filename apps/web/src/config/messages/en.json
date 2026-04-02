@@ -61,6 +61,35 @@
       "versionListTitle": "Versions"
     },
     "versions": {
+      "v1_3_3": {
+        "label": "v1.3.3",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "extension-v1.3.3",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-04-02",
+        "summary": "v1.3.3 makes Reddit threads a first-class discussion workflow in NOD.\n\nThis release adds dedicated discussion summarization for Reddit saves, keeps discussion metadata visible in detail/shared/export surfaces, and improves extension thread detection so Reddit save attempts reach analysis more reliably.",
+        "patchNotes": "[v1.3.3 details]\n- Added a dedicated `discussion` content type and Reddit-focused analysis prompts that preserve central questions, insider takeaways, disagreements, and evidence signals.\n- Added discussion metadata sections to article detail and shared article views.\n- Included discussion metadata in markdown copy/export output.\n- Improved Reddit thread detection in the extension save flow for canonical, shortlink, and share-link entry points.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Reddit discussion summaries",
+            "description": "Reddit threads now use a discussion-specific analysis path instead of generic news summarization."
+          },
+          "item2": {
+            "title": "Discussion metadata surfaces",
+            "description": "Central question, insider takeaways, disagreements, and evidence signals now appear in article detail and shared views."
+          },
+          "item3": {
+            "title": "Markdown export keeps nuance",
+            "description": "Copied/exported markdown now includes discussion metadata sections for discussion content."
+          },
+          "item4": {
+            "title": "More reliable Reddit saves",
+            "description": "The extension now recognizes more Reddit thread entry points so save attempts are less likely to stop before analysis starts."
+          }
+        }
+      },
       "v1_3_0": {
         "label": "v1.3.x",
         "status": "Released",

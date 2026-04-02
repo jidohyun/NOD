@@ -1,7 +1,8 @@
-const VERSION_IDS = ["v1_3_0", "v1_2_0", "v1_1_0", "v1_0_0"] as const;
+const VERSION_IDS = ["v1_3_3", "v1_3_0", "v1_2_0", "v1_1_0", "v1_0_0"] as const;
 const HIGHLIGHT_IDS = ["item1", "item2", "item3", "item4"] as const;
 
 const VERSION_SLUG_BY_ID: Record<(typeof VERSION_IDS)[number], string> = {
+  v1_3_3: "v1-3-3",
   v1_3_0: "v1-3-x",
   v1_2_0: "v1-2-0",
   v1_1_0: "v1-1-0",
