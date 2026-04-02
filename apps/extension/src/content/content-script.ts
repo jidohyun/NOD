@@ -10,36 +10,40 @@ chrome.runtime.onMessage.addListener(
     sendResponse: (response: ContentScriptResponse) => void
   ) => {
     if (message.type === "EXTRACT_CONTENT") {
-      try {
-        const content = extractContent();
-        sendResponse({ success: true, data: content });
-      } catch (error) {
-        sendResponse({
-          success: false,
-          error: error instanceof Error ? error.message : "Unknown error",
-        });
-      }
+      void (async () => {
+        try {
+          const content = await extractContent();
+          sendResponse({ success: true, data: content });
+        } catch (error) {
+          sendResponse({
+            success: false,
+            error: error instanceof Error ? error.message : "Unknown error",
+          });
+        }
+      })();
       return true; // Keep message channel open for async
     }
 
     if (message.type === "CHECK_ARTICLE") {
-      try {
-        const isArticle = isArticlePage();
-        if (isArticle) {
-          const content = extractContent();
-          sendResponse({ success: true, data: content });
-        } else {
+      void (async () => {
+        try {
+          const isArticle = await isArticlePage();
+          if (isArticle) {
+            const content = await extractContent();
+            sendResponse({ success: true, data: content });
+          } else {
+            sendResponse({
+              success: false,
+              error: "This page does not appear to be an article",
+            });
+          }
+        } catch (error) {
           sendResponse({
             success: false,
-            error: "This page does not appear to be an article",
+            error: error instanceof Error ? error.message : "Unknown error",
           });
         }
-      } catch (error) {
-        sendResponse({
-          success: false,
-          error: error instanceof Error ? error.message : "Unknown error",
-        });
-      }
+      })();
       return true;
     }
   }

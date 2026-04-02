@@ -36,6 +36,7 @@ function getArticleHost(articleUrl: string | null | undefined): string | null {
 const CONTENT_TYPE_GRADIENTS: Record<string, { from: string; to: string }> = {
   tech_blog: { from: "#2563eb", to: "#3730a3" },
   general_news: { from: "#4b5563", to: "#1e293b" },
+  discussion: { from: "#f97316", to: "#c2410c" },
   academic_paper: { from: "#9333ea", to: "#5b21b6" },
   official_docs: { from: "#0d9488", to: "#065f46" },
   video_podcast: { from: "#db2777", to: "#9f1239" },
@@ -45,6 +46,7 @@ const CONTENT_TYPE_GRADIENTS: Record<string, { from: string; to: string }> = {
 const CONTENT_TYPE_LABELS: Record<string, string> = {
   tech_blog: "Tech Blog",
   general_news: "News",
+  discussion: "Discussion",
   academic_paper: "Paper",
   official_docs: "Docs",
   video_podcast: "Video",

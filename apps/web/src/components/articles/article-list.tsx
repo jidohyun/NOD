@@ -188,6 +188,7 @@ export function ArticleList() {
                 <option value="tech_blog">{t("typeTechBlog")}</option>
                 <option value="academic_paper">{t("typePaper")}</option>
                 <option value="general_news">{t("typeNews")}</option>
+                <option value="discussion">{t("typeDiscussion")}</option>
                 <option value="github_repo">{t("typeGitHub")}</option>
                 <option value="official_docs">{t("typeDocs")}</option>
                 <option value="video_podcast">{t("typeVideo")}</option>

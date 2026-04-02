@@ -22,6 +22,7 @@ OG_MIN_SOURCE_HEIGHT = 315
 CONTENT_TYPE_GRADIENTS: dict[str, tuple[tuple[int, int, int], tuple[int, int, int]]] = {
     "tech_blog": ((37, 99, 235), (55, 48, 163)),
     "general_news": ((75, 85, 99), (30, 41, 59)),
+    "discussion": ((249, 115, 22), (194, 65, 12)),
     "academic_paper": ((147, 51, 234), (91, 33, 182)),
     "official_docs": ((13, 148, 136), (6, 95, 70)),
     "video_podcast": ((219, 39, 119), (159, 18, 57)),
@@ -31,6 +32,7 @@ CONTENT_TYPE_GRADIENTS: dict[str, tuple[tuple[int, int, int], tuple[int, int, in
 CONTENT_TYPE_LABELS: dict[str, str] = {
     "tech_blog": "Tech Blog",
     "general_news": "News",
+    "discussion": "Discussion",
     "academic_paper": "Paper",
     "official_docs": "Docs",
     "video_podcast": "Video",

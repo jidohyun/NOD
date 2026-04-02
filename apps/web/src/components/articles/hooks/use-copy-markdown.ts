@@ -14,6 +14,7 @@ interface ArticleData {
     concepts: string[];
     reading_time_minutes: number | null;
     content_type?: string;
+    type_metadata?: Record<string, unknown>;
   } | null;
 }
 
@@ -53,6 +54,7 @@ export function useCopyMarkdown(article: ArticleData | undefined) {
       concepts: article.summary.concepts,
       reading_time_minutes: article.summary.reading_time_minutes,
       content_type: contentType,
+      type_metadata: article.summary.type_metadata,
       created_at: article.created_at,
     });
 

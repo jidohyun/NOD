@@ -30,6 +30,7 @@ const CONTENT_TYPE_LABEL_KEYS: Record<string, string> = {
   tech_blog: "typeTechBlog",
   academic_paper: "typePaper",
   general_news: "typeNews",
+  discussion: "typeDiscussion",
   github_repo: "typeGitHub",
   official_docs: "typeDocs",
   video_podcast: "typeVideo",

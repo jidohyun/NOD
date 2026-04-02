@@ -10,6 +10,7 @@ const baseArticle = {
   concepts: ["React", "TypeScript"],
   reading_time_minutes: 5,
   content_type: "tech_blog",
+  type_metadata: {},
   created_at: "2026-03-30T12:00:00Z",
 };
 
@@ -64,5 +65,40 @@ describe("formatArticleAsMarkdown", () => {
     });
 
     expect(result).toContain("#Machine_Learning #Web_Dev");
+  });
+
+  it("B7: appends discussion metadata sections for discussion exports", () => {
+    const result = formatArticleAsMarkdown({
+      ...baseArticle,
+      content_type: "discussion",
+      type_metadata: {
+        central_question: "Should teams optimize for latency or correctness first?",
+        insider_takeaways: [
+          "Infra teams often regret cache-first rollouts without invalidation ownership.",
+        ],
+        disagreement_points: [
+          "Some engineers prioritize responsiveness while others prioritize stale-read safety.",
+        ],
+        evidence_signals: [
+          "One operator cited a production billing incident caused by stale cache data.",
+        ],
+      },
+    });
+
+    expect(result).toContain("## Discussion Details");
+    expect(result).toContain("### Central Question");
+    expect(result).toContain("Should teams optimize for latency or correctness first?");
+    expect(result).toContain("### Insider Takeaways");
+    expect(result).toContain(
+      "- Infra teams often regret cache-first rollouts without invalidation ownership."
+    );
+    expect(result).toContain("### Main Disagreements");
+    expect(result).toContain(
+      "- Some engineers prioritize responsiveness while others prioritize stale-read safety."
+    );
+    expect(result).toContain("### Evidence Signals");
+    expect(result).toContain(
+      "- One operator cited a production billing incident caused by stale cache data."
+    );
   });
 });

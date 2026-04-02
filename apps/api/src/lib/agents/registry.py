@@ -21,6 +21,7 @@ def _auto_register() -> None:
     """Import all agent modules to trigger registration."""
     from src.lib.agents import (  # noqa: F401
         academic_paper,
+        discussion,
         general_news,
         github_repo,
         official_docs,

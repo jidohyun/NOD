@@ -73,6 +73,11 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string 
     className:
       "bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800/40 dark:text-gray-400 dark:border-gray-700",
   },
+  discussion: {
+    labelKey: "typeDiscussion",
+    className:
+      "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-400 dark:border-orange-800",
+  },
   github_repo: {
     labelKey: "typeGitHub",
     className:
@@ -170,6 +175,7 @@ export function ArticleCard({ article, onRetry, isRefreshing }: ArticleCardProps
                       | "typeTechBlog"
                       | "typePaper"
                       | "typeNews"
+                      | "typeDiscussion"
                       | "typeGitHub"
                       | "typeDocs"
                       | "typeVideo"
