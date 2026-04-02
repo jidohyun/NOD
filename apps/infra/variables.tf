@@ -265,6 +265,64 @@ variable "GOOGLE_AI_API_KEY" {
   default     = ""
 }
 
+# Video transcript reliability
+variable "VIDEO_TRANSCRIPT_TIMEOUT_SECONDS" {
+  description = "Timeout in seconds for transcript provider requests"
+  type        = number
+  default     = 20
+}
+
+variable "VIDEO_TRANSCRIPT_TRANSIENT_RETRIES" {
+  description = "How many times to retry transient transcript provider failures"
+  type        = number
+  default     = 2
+}
+
+variable "VIDEO_TRANSCRIPT_RETRY_BASE_DELAY_SECONDS" {
+  description = "Base backoff delay in seconds between transcript retries"
+  type        = number
+  default     = 0.75
+}
+
+variable "VIDEO_TRANSCRIPT_PROXY_HTTP_URL" {
+  description = "Optional generic HTTP proxy URL for YouTube transcript requests"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "VIDEO_TRANSCRIPT_PROXY_HTTPS_URL" {
+  description = "Optional generic HTTPS proxy URL for YouTube transcript requests"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME" {
+  description = "Optional Webshare username for rotating residential transcript proxies"
+  type        = string
+  default     = ""
+}
+
+variable "VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD" {
+  description = "Optional Webshare password for rotating residential transcript proxies"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "VIDEO_TRANSCRIPT_PROXY_WEBSHARE_LOCATIONS" {
+  description = "Optional comma-separated Webshare location filters, e.g. kr,jp"
+  type        = string
+  default     = ""
+}
+
+variable "VIDEO_TRANSCRIPT_PROXY_RETRIES_WHEN_BLOCKED" {
+  description = "How many times the proxy provider should rotate/retry when blocked"
+  type        = number
+  default     = 10
+}
+
 # Observability
 variable "LANGFUSE_PUBLIC_KEY" {
   description = "Langfuse public key for LLM observability"

@@ -40,6 +40,26 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       env {
+        name  = "VIDEO_TRANSCRIPT_TIMEOUT_SECONDS"
+        value = tostring(var.VIDEO_TRANSCRIPT_TIMEOUT_SECONDS)
+      }
+
+      env {
+        name  = "VIDEO_TRANSCRIPT_TRANSIENT_RETRIES"
+        value = tostring(var.VIDEO_TRANSCRIPT_TRANSIENT_RETRIES)
+      }
+
+      env {
+        name  = "VIDEO_TRANSCRIPT_RETRY_BASE_DELAY_SECONDS"
+        value = tostring(var.VIDEO_TRANSCRIPT_RETRY_BASE_DELAY_SECONDS)
+      }
+
+      env {
+        name  = "VIDEO_TRANSCRIPT_PROXY_RETRIES_WHEN_BLOCKED"
+        value = tostring(var.VIDEO_TRANSCRIPT_PROXY_RETRIES_WHEN_BLOCKED)
+      }
+
+      env {
         name  = "CORS_ORIGINS"
         value = var.domain != "" ? jsonencode(["https://${var.domain}"]) : jsonencode(["http://localhost:3000"])
       }
@@ -156,6 +176,61 @@ resource "google_cloud_run_v2_service" "api" {
               version = "latest"
             }
           }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.VIDEO_TRANSCRIPT_PROXY_HTTP_URL != "" ? [1] : []
+        content {
+          name = "VIDEO_TRANSCRIPT_PROXY_HTTP_URL"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.video_transcript_proxy_http_url[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL != "" ? [1] : []
+        content {
+          name = "VIDEO_TRANSCRIPT_PROXY_HTTPS_URL"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.video_transcript_proxy_https_url[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME != "" ? [1] : []
+        content {
+          name  = "VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME"
+          value = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD != "" ? [1] : []
+        content {
+          name = "VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.video_transcript_proxy_webshare_password[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_LOCATIONS != "" ? [1] : []
+        content {
+          name  = "VIDEO_TRANSCRIPT_PROXY_WEBSHARE_LOCATIONS"
+          value = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_LOCATIONS
         }
       }
 

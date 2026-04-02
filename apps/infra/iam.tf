@@ -104,6 +104,27 @@ resource "google_secret_manager_secret_iam_member" "api_google_ai_api_key" {
   member    = "serviceAccount:${google_service_account.api.email}"
 }
 
+resource "google_secret_manager_secret_iam_member" "api_video_transcript_proxy_http_url" {
+  count     = var.VIDEO_TRANSCRIPT_PROXY_HTTP_URL != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.video_transcript_proxy_http_url[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "api_video_transcript_proxy_https_url" {
+  count     = var.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.video_transcript_proxy_https_url[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "api_video_transcript_proxy_webshare_password" {
+  count     = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD != "" ? 1 : 0
+  secret_id = google_secret_manager_secret.video_transcript_proxy_webshare_password[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
 resource "google_secret_manager_secret_iam_member" "api_langfuse_secret_key" {
   count     = var.LANGFUSE_SECRET_KEY != "" ? 1 : 0
   secret_id = google_secret_manager_secret.langfuse_secret_key[0].id
