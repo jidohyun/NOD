@@ -1,3 +1,5 @@
+import { ArticleMarkdownNote } from "@/components/articles/article-markdown-note";
+
 interface Props {
   metadata: Record<string, unknown>;
 }
@@ -31,7 +33,7 @@ export function GitHubRepoMetadata({ metadata }: Props) {
           <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">
             Architecture
           </h4>
-          <p className="text-sm leading-relaxed">{architectureOverview}</p>
+          <ArticleMarkdownNote markdownNote={architectureOverview} />
         </div>
       ) : null}
       {gettingStarted ? (
@@ -39,7 +41,7 @@ export function GitHubRepoMetadata({ metadata }: Props) {
           <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">
             Getting Started
           </h4>
-          <p className="text-sm leading-relaxed">{gettingStarted}</p>
+          <ArticleMarkdownNote markdownNote={gettingStarted} />
         </div>
       ) : null}
       {useCases.length > 0 && (
