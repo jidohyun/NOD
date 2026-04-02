@@ -165,6 +165,58 @@ resource "google_secret_manager_secret_version" "google_ai_api_key" {
   secret_data = var.GOOGLE_AI_API_KEY
 }
 
+# Video transcript proxy secrets
+resource "google_secret_manager_secret" "video_transcript_proxy_http_url" {
+  count     = var.VIDEO_TRANSCRIPT_PROXY_HTTP_URL != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-video-transcript-proxy-http-url"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "video_transcript_proxy_http_url" {
+  count       = var.VIDEO_TRANSCRIPT_PROXY_HTTP_URL != "" ? 1 : 0
+  secret      = google_secret_manager_secret.video_transcript_proxy_http_url[0].id
+  secret_data = var.VIDEO_TRANSCRIPT_PROXY_HTTP_URL
+}
+
+resource "google_secret_manager_secret" "video_transcript_proxy_https_url" {
+  count     = var.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-video-transcript-proxy-https-url"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "video_transcript_proxy_https_url" {
+  count       = var.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL != "" ? 1 : 0
+  secret      = google_secret_manager_secret.video_transcript_proxy_https_url[0].id
+  secret_data = var.VIDEO_TRANSCRIPT_PROXY_HTTPS_URL
+}
+
+resource "google_secret_manager_secret" "video_transcript_proxy_webshare_password" {
+  count     = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD != "" ? 1 : 0
+  secret_id = "${local.name_prefix}-video-transcript-proxy-webshare-password"
+
+  replication {
+    auto {}
+  }
+
+  labels = local.labels
+}
+
+resource "google_secret_manager_secret_version" "video_transcript_proxy_webshare_password" {
+  count       = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD != "" ? 1 : 0
+  secret      = google_secret_manager_secret.video_transcript_proxy_webshare_password[0].id
+  secret_data = var.VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD
+}
+
 # Langfuse Secret Key
 resource "google_secret_manager_secret" "langfuse_secret_key" {
   count     = var.LANGFUSE_SECRET_KEY != "" ? 1 : 0
