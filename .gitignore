@@ -68,6 +68,7 @@ apps/mobile/ios/Flutter/Generated.xcconfig
 # Tooling (local state)
 docs/.bkit-memory.json
 .claude/checkpoints.log
+.omx/
 
 # AI agent/context artifacts
 .agent/
@@ -93,3 +94,7 @@ docs/.bkit-memory.json
 
 # MCP config (contains API tokens)
 .mcp.json
+
+# Local extension packaging artifacts
+apps/extension/release/
+.gstack/

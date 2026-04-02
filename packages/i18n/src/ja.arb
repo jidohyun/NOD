@@ -35,5 +35,21 @@
   "extLanguage": "言語",
   "@extLanguage": {
     "description": "Extension language selector label"
+  },
+  "extManifestName": "NOD - 記事アナライザー",
+  "@extManifestName": {
+    "description": "Production manifest name for the Chrome extension"
+  },
+  "extManifestDescription": "Webコンテンツを保存し、AIで要約して後から見つけやすくするChrome拡張機能です。",
+  "@extManifestDescription": {
+    "description": "Production manifest description for the Chrome extension"
+  },
+  "extManifestNameDev": "NOD - 記事アナライザー (Dev)",
+  "@extManifestNameDev": {
+    "description": "Development manifest name for the Chrome extension"
+  },
+  "extManifestDescriptionDev": "[DEV] Webコンテンツを保存し、AIで要約して後から見つけやすくするChrome拡張機能です。",
+  "@extManifestDescriptionDev": {
+    "description": "Development manifest description for the Chrome extension"
   }
 }

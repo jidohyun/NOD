@@ -27,8 +27,9 @@ bun run --cwd apps/extension release:prep
 This runs:
 
 1. Type check (`bun run typecheck`)
-2. Production build (`bun run build:prod`)
-3. Zip packaging (`bun run package:prod`)
+2. Manifest localization generation (`bun run build:manifest-i18n`, included inside `build:prod`)
+3. Production build (`bun run build:prod`)
+4. Zip packaging (`bun run package:prod`)
 
 Artifact output:
 
@@ -85,7 +86,10 @@ git push origin extension-vX.Y.Z
 ```
 
 5. Confirm workflow completion and GitHub release asset.
-6. Upload generated zip to Chrome Web Store dashboard.
+6. Update the Chrome Web Store localized listing copy before publish:
+   - Korean source of truth: `apps/extension/store-listing/ko.md`
+   - Confirm the dashboard Korean detailed description matches the markdown exactly.
+7. Upload generated zip to Chrome Web Store dashboard.
 
 ## Manual Run Notes
 
@@ -99,7 +103,14 @@ If the tag does not exist, the workflow creates and pushes it at the selected co
 ## Verification Checklist
 
 - `apps/extension/package.json` version matches target release.
+- `apps/extension/dist/.generated/_locales/en/messages.json` exists before packaging.
+- `apps/extension/dist/.generated/_locales/ko/messages.json` exists before packaging.
+- `apps/extension/dist/.generated/_locales/ja/messages.json` exists before packaging.
 - `apps/extension/dist/prod/manifest.json` version matches package version.
+- `apps/extension/dist/prod/manifest.json` contains `default_locale`.
+- `apps/extension/dist/prod/manifest.json` uses `__MSG_` references for `name` and `description`.
+- `apps/extension/dist/prod/_locales/` exists in the packaged build output.
 - Zip exists under `apps/extension/dist/release/`.
+- Korean dashboard copy matches `apps/extension/store-listing/ko.md`.
 - GitHub Actions `Release Extension` run is green.
 - GitHub Release includes zip asset.

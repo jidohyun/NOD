@@ -35,15 +35,18 @@ function generateManifest(mode: string) {
   const commit = getGitCommit();
   const packageVersion = getPackageVersion();
   const versionName = isDev ? `${packageVersion}-dev-${commit}` : packageVersion;
+  const nameKey = isDev ? "__MSG_extManifestNameDev__" : "__MSG_extManifestName__";
+  const descriptionKey = isDev
+    ? "__MSG_extManifestDescriptionDev__"
+    : "__MSG_extManifestDescription__";
 
   const manifest: Record<string, unknown> = {
     manifest_version: 3,
-    name: isDev ? "NOD - Article Analyzer (Dev)" : "NOD - Article Analyzer",
+    default_locale: "en",
+    name: nameKey,
     version: packageVersion,
     version_name: versionName,
-    description: isDev
-      ? "[DEV] Save and analyze articles with AI-powered summarization"
-      : "Save and analyze articles with AI-powered summarization",
+    description: descriptionKey,
     permissions: ["activeTab", "storage", "scripting", "alarms"],
     host_permissions: isDev
       ? ["http://localhost:8000/*"]
@@ -105,6 +108,17 @@ function generateManifestPlugin(mode: string) {
       if (fs.existsSync(configSrc)) {
         fs.copyFileSync(configSrc, configDest);
       }
+
+      const generatedLocalesSrc = resolve(__dirname, "dist/.generated/_locales");
+      if (!fs.existsSync(generatedLocalesSrc)) {
+        throw new Error(
+          "Missing generated manifest locales. Run `bun run --cwd apps/extension build:manifest-i18n` before building."
+        );
+      }
+
+      const generatedLocalesDest = resolve(__dirname, outDir, "_locales");
+      fs.rmSync(generatedLocalesDest, { recursive: true, force: true });
+      fs.cpSync(generatedLocalesSrc, generatedLocalesDest, { recursive: true });
     },
   };
 }

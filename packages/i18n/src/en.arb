@@ -131,5 +131,21 @@
   "extLanguage": "Language",
   "@extLanguage": {
     "description": "Extension language selector label"
+  },
+  "extManifestName": "NOD - Article Analyzer",
+  "@extManifestName": {
+    "description": "Production manifest name for the Chrome extension"
+  },
+  "extManifestDescription": "Save web content, summarize it with AI, and find it later.",
+  "@extManifestDescription": {
+    "description": "Production manifest description for the Chrome extension"
+  },
+  "extManifestNameDev": "NOD - Article Analyzer (Dev)",
+  "@extManifestNameDev": {
+    "description": "Development manifest name for the Chrome extension"
+  },
+  "extManifestDescriptionDev": "[DEV] Save web content, summarize it with AI, and find it later.",
+  "@extManifestDescriptionDev": {
+    "description": "Development manifest description for the Chrome extension"
   }
 }
