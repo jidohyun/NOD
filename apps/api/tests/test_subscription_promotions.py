@@ -151,6 +151,7 @@ def test_promo_redemption_status_constraint_exists() -> None:
 async def test_redeem_extends_existing_active_entitlement(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    fixed_now = datetime(2026, 3, 15, 0, 0, tzinfo=UTC)
     user_id = uuid.uuid4()
     promo_code = PromoCode(
         id=uuid.uuid4(),
@@ -211,6 +212,12 @@ async def test_redeem_extends_existing_active_entitlement(
     async def _fake_write_promo_audit_log(_db: object, **_kwargs: object) -> None:
         return None
 
+    class _FixedDateTime:
+        @staticmethod
+        def now(_tz: object = None) -> datetime:
+            return fixed_now
+
+    monkeypatch.setattr(service, "datetime", _FixedDateTime)
     monkeypatch.setattr(service, "_write_promo_audit_log", _fake_write_promo_audit_log)
 
     await service.redeem_promo_code(
