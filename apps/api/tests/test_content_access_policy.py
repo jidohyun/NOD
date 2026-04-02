@@ -16,6 +16,7 @@ from src.subscriptions.service import can_access_content_type
     ("plan", "content_type", "expected"),
     [
         ("basic", ContentType.GENERAL_NEWS, True),
+        ("basic", ContentType.DISCUSSION, True),
         ("basic", ContentType.TECH_BLOG, True),
         ("basic", ContentType.GITHUB_REPO, False),
         ("basic", ContentType.ACADEMIC_PAPER, False),

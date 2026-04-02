@@ -201,6 +201,56 @@ describe("SharedArticleView", () => {
     expect(screen.queryByText(RE_DELETE)).not.toBeInTheDocument();
   });
 
+  it("renders discussion-specific metadata when shared content is a discussion", async () => {
+    mockUseSharedArticle.mockReturnValue({
+      data: {
+        ...defaultSharedData,
+        content_type: "discussion",
+        type_metadata: {
+          central_question: "Should infra teams favor latency or correctness first?",
+          insider_takeaways: [
+            "Teams that do not own invalidation policy usually regret adding aggressive caches.",
+          ],
+          disagreement_points: [
+            "Some engineers optimize for responsiveness while others optimize for stale-read safety.",
+          ],
+          evidence_signals: [
+            "An operator cited a production incident where stale cache data broke billing flows.",
+          ],
+        },
+      },
+      isLoading: false,
+      isError: false,
+    });
+
+    renderWithProviders(<SharedArticleView shareId="share-id" token="token-value" />);
+    await waitForAuthToResolve();
+
+    expect(screen.getByRole("heading", { name: "Discussion Details" })).toBeInTheDocument();
+    expect(screen.getByText("Central Question")).toBeInTheDocument();
+    expect(
+      screen.getByText("Should infra teams favor latency or correctness first?")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Insider Takeaways")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Teams that do not own invalidation policy usually regret adding aggressive caches."
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText("Main Disagreements")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Some engineers optimize for responsiveness while others optimize for stale-read safety."
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText("Evidence Signals")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "An operator cited a production incident where stale cache data broke billing flows."
+      )
+    ).toBeInTheDocument();
+  });
+
   it("opens comments side panel in read-only mode and shows sign-in prompt", async () => {
     mockUseSharedArticle.mockReturnValue({
       data: defaultSharedData,

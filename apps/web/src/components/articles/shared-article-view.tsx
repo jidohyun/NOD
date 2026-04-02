@@ -30,6 +30,7 @@ import {
   type ViewerProfile,
   withThreadDefaults,
 } from "@/components/articles/shared-article-helpers";
+import { TypeMetadataSection } from "@/components/articles/type-metadata";
 import { NodWordmark } from "@/components/brand/nod-wordmark";
 import { LandingFooter } from "@/components/landing/footer";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -137,6 +138,11 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string 
     labelKey: "typeNews",
     className:
       "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-950/50 dark:text-gray-400 dark:border-gray-700",
+  },
+  discussion: {
+    labelKey: "typeDiscussion",
+    className:
+      "bg-orange-100 text-orange-700 border-orange-300 dark:bg-orange-950/50 dark:text-orange-400 dark:border-orange-700",
   },
   github_repo: {
     labelKey: "typeGitHub",
@@ -1223,6 +1229,28 @@ export function SharedArticleView({
                 </li>
               ))}
             </ul>
+          </section>
+        ) : null}
+
+        {data.type_metadata && Object.keys(data.type_metadata).length > 0 ? (
+          <section className={panelClass}>
+            <h2 className="font-creative-display text-2xl font-black text-cm-text">
+              {t(
+                contentTypeStyle.labelKey as
+                  | "typeTechBlog"
+                  | "typePaper"
+                  | "typeNews"
+                  | "typeDiscussion"
+                  | "typeGitHub"
+                  | "typeDocs"
+                  | "typeVideo"
+                  | "typePatchNote"
+              )}{" "}
+              {t("details")}
+            </h2>
+            <div className="mt-3">
+              <TypeMetadataSection contentType={contentType} metadata={data.type_metadata} />
+            </div>
           </section>
         ) : null}
 

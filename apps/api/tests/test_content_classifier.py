@@ -31,6 +31,23 @@ class TestClassifyUrl:
     def test_medium(self):
         assert classify_url("https://medium.com/some-article") == ContentType.TECH_BLOG
 
+    def test_reddit_thread(self):
+        assert (
+            classify_url(
+                "https://www.reddit.com/r/programming/comments/abc123/example_thread/"
+            )
+            == ContentType.DISCUSSION
+        )
+
+    def test_reddit_shortlink(self):
+        assert classify_url("https://redd.it/abc123") == ContentType.DISCUSSION
+
+    def test_reddit_share_link(self):
+        assert (
+            classify_url("https://www.reddit.com/r/programming/s/abc123")
+            == ContentType.DISCUSSION
+        )
+
     def test_velog(self):
         assert classify_url("https://velog.io/@user/post") == ContentType.TECH_BLOG
 
@@ -105,6 +122,6 @@ class TestClassifyUrl:
 
     def test_all_content_types_exist(self):
         """Verify all enum values are valid strings."""
-        assert len(ContentType) == 7
+        assert len(ContentType) == 8
         for ct in ContentType:
             assert isinstance(ct.value, str)

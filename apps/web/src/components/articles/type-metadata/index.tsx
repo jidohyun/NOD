@@ -1,6 +1,7 @@
 "use client";
 
 import { AcademicPaperMetadata } from "./academic-paper-metadata";
+import { DiscussionMetadata } from "./discussion-metadata";
 import { GeneralNewsMetadata } from "./general-news-metadata";
 import { GitHubRepoMetadata } from "./github-repo-metadata";
 import { OfficialDocsMetadata } from "./official-docs-metadata";
@@ -15,6 +16,7 @@ const METADATA_COMPONENTS: Record<
   tech_blog: TechBlogMetadata,
   academic_paper: AcademicPaperMetadata,
   general_news: GeneralNewsMetadata,
+  discussion: DiscussionMetadata,
   github_repo: GitHubRepoMetadata,
   official_docs: OfficialDocsMetadata,
   video_podcast: VideoPodcastMetadata,

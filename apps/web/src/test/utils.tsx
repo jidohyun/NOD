@@ -120,6 +120,7 @@ const TEST_MESSAGES = {
     typeTechBlog: "Tech Blog",
     typePaper: "Paper",
     typeNews: "News",
+    typeDiscussion: "Discussion",
     typeGitHub: "GitHub",
     typeDocs: "Docs",
     typeVideo: "Video/Podcast",

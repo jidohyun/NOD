@@ -12,6 +12,7 @@ class ContentType(StrEnum):
     TECH_BLOG = "tech_blog"
     ACADEMIC_PAPER = "academic_paper"
     GENERAL_NEWS = "general_news"
+    DISCUSSION = "discussion"
     GITHUB_REPO = "github_repo"
     OFFICIAL_DOCS = "official_docs"
     VIDEO_PODCAST = "video_podcast"
@@ -150,12 +151,38 @@ _DOMAIN_RULES: list[tuple[list[str], ContentType]] = [
 ]
 
 
+def _is_reddit_discussion_url(host: str, path: str) -> bool:
+    if host == "redd.it":
+        return path.strip("/") != ""
+
+    if host not in {
+        "reddit.com",
+        "old.reddit.com",
+        "new.reddit.com",
+        "np.reddit.com",
+        "sh.reddit.com",
+    }:
+        return False
+
+    normalized_path = path.lower()
+    if "/comments/" in normalized_path:
+        return True
+
+    if normalized_path.startswith("/r/") and "/s/" in normalized_path:
+        return True
+
+    return normalized_path.startswith("/s/")
+
+
 def classify_url(url: str) -> ContentType:
     """Classify content type from URL pattern."""
     parsed = urlparse(url)
     host = parsed.hostname or ""
     host = host.removeprefix("www.")
     path = parsed.path.lower()
+
+    if _is_reddit_discussion_url(host, path):
+        return ContentType.DISCUSSION
 
     for domains, content_type in _DOMAIN_RULES:
         if any(host == d or host.endswith(f".{d}") for d in domains):

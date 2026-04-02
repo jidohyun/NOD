@@ -36,6 +36,14 @@ class TestAgentRegistry:
         assert "sentiment" in schema.model_fields
         assert "bias_indicators" in schema.model_fields
 
+    def test_discussion_agent(self):
+        agent = get_agent(ContentType.DISCUSSION)
+        assert agent.content_type == ContentType.DISCUSSION
+        schema = agent.get_result_schema()
+        assert "central_question" in schema.model_fields
+        assert "insider_takeaways" in schema.model_fields
+        assert "disagreement_points" in schema.model_fields
+
     def test_github_repo_agent(self):
         agent = get_agent(ContentType.GITHUB_REPO)
         assert agent.content_type == ContentType.GITHUB_REPO

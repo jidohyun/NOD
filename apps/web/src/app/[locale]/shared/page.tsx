@@ -64,6 +64,11 @@ const CONTENT_TYPE_STYLES: Record<string, { label: string; className: string }> 
     className:
       "bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800/40 dark:text-gray-400 dark:border-gray-700",
   },
+  discussion: {
+    label: "Discussion",
+    className:
+      "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-400 dark:border-orange-800",
+  },
   academic_paper: {
     label: "Paper",
     className:
@@ -89,6 +94,7 @@ const CONTENT_TYPE_STYLES: Record<string, { label: string; className: string }> 
 const CONTENT_TYPE_GRADIENTS: Record<string, string> = {
   tech_blog: "from-blue-600 to-indigo-800",
   general_news: "from-gray-600 to-slate-800",
+  discussion: "from-orange-500 to-red-700",
   academic_paper: "from-purple-600 to-violet-800",
   official_docs: "from-teal-600 to-emerald-800",
   video_podcast: "from-pink-600 to-rose-800",

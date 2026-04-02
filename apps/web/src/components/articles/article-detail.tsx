@@ -108,6 +108,11 @@ const CONTENT_TYPE_STYLES: Record<string, { labelKey: string; className: string 
     className:
       "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-950/50 dark:text-gray-400 dark:border-gray-700",
   },
+  discussion: {
+    labelKey: "typeDiscussion",
+    className:
+      "bg-orange-100 text-orange-700 border-orange-300 dark:bg-orange-950/50 dark:text-orange-400 dark:border-orange-700",
+  },
   github_repo: {
     labelKey: "typeGitHub",
     className:
@@ -383,6 +388,7 @@ export function ArticleDetail({ id }: { id: string }) {
                       | "typeTechBlog"
                       | "typePaper"
                       | "typeNews"
+                      | "typeDiscussion"
                       | "typeGitHub"
                       | "typeDocs"
                       | "typeVideo"
@@ -540,6 +546,7 @@ export function ArticleDetail({ id }: { id: string }) {
                       | "typeTechBlog"
                       | "typePaper"
                       | "typeNews"
+                      | "typeDiscussion"
                       | "typeGitHub"
                       | "typeDocs"
                       | "typeVideo"

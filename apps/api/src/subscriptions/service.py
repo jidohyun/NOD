@@ -31,6 +31,7 @@ def _is_admin(user_id: uuid_lib.UUID | str) -> bool:
 
 FREE_ALLOWED_CONTENT_TYPES = {
     ContentType.GENERAL_NEWS,
+    ContentType.DISCUSSION,
     ContentType.TECH_BLOG,
     ContentType.OFFICIAL_DOCS,
     ContentType.PATCH_NOTE,
