@@ -51,7 +51,24 @@ describe("shared article OG image layout", () => {
     vi.restoreAllMocks();
   });
 
-  it("keeps padded content inside the frame and centers the main content stack", async () => {
+  it("keeps the fallback OG layout unchanged", async () => {
+    await GET(new Request("http://localhost/api/og/shared-article"));
+
+    const image = capturedImages.at(-1);
+    expect(image?.options).toEqual({ width: 1200, height: 630 });
+
+    const root = image?.element;
+    expect(root.props.style.padding).toBe("64px");
+    expect(root.props.style.justifyContent).toBe("center");
+    expect(root.props.style.background).toBe("linear-gradient(135deg, #334155 0%, #111827 100%)");
+
+    const [brandRow, titleRow] = getChildren(root);
+    expect(brandRow.props.style.fontSize).toBe(70);
+    expect(titleRow.props.style.marginTop).toBe(18);
+    expect(titleRow.props.style.fontSize).toBe(40);
+  });
+
+  it("rebalances the shared article layout upward without changing the OG frame size", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
@@ -73,7 +90,7 @@ describe("shared article OG image layout", () => {
 
     const root = image?.element;
     expect(root.props.style.boxSizing).toBe("border-box");
-    expect(root.props.style.padding).toBe("48px 48px 44px");
+    expect(root.props.style.padding).toBe("42px 48px 62px");
 
     const [badgeRow, contentStack] = getChildren(root);
     const [badgePill] = getChildren(badgeRow);
@@ -81,9 +98,11 @@ describe("shared article OG image layout", () => {
     expect(badgePill.props.style.alignItems).toBe("center");
     expect(badgePill.props.style.lineHeight).toBe(1.1);
     expect(contentStack.props.style.justifyContent).toBe("center");
+    expect(contentStack.props.style.paddingBottom).toBe("18px");
 
-    const [, , footerRow] = getChildren(contentStack);
-    expect(footerRow.props.style.marginTop).toBe("30px");
-    expect(footerRow.props.style.paddingTop).toBe("18px");
+    const [, summaryRow, footerRow] = getChildren(contentStack);
+    expect(summaryRow.props.style.marginTop).toBe("18px");
+    expect(footerRow.props.style.marginTop).toBe("26px");
+    expect(footerRow.props.style.paddingTop).toBe("16px");
   });
 });
