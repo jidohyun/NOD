@@ -1341,6 +1341,14 @@ async def analyze_url(
 
     existing_article = await service.get_article_by_url(db, user.id, data.url)
     if existing_article:
+        # Re-classify content type for articles saved before type-aware classification
+        current_type = classify_url(data.url)
+        if (
+            existing_article.summary
+            and existing_article.summary.content_type != str(current_type)
+        ):
+            existing_article.summary.content_type = str(current_type)
+            await db.commit()
         existing_response = ArticleSaveResponse.model_validate(existing_article)
         existing_response.already_saved = True
         return existing_response
