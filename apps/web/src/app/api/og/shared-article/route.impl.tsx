@@ -97,7 +97,7 @@ function renderSharedImage(shared: SharedArticle) {
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        padding: "48px 48px 44px",
+        padding: "42px 48px 62px",
         background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
         color: "#ffffff",
       }}
@@ -129,6 +129,7 @@ function renderSharedImage(shared: SharedArticle) {
           flex: 1,
           flexDirection: "column",
           justifyContent: "center",
+          paddingBottom: "18px",
         }}
       >
         {/* Title */}
@@ -148,7 +149,7 @@ function renderSharedImage(shared: SharedArticle) {
         <div
           style={{
             display: "flex",
-            marginTop: "20px",
+            marginTop: "18px",
             fontSize: 24,
             lineHeight: 1.55,
             fontWeight: 400,
@@ -163,8 +164,8 @@ function renderSharedImage(shared: SharedArticle) {
         <div
           style={{
             display: "flex",
-            marginTop: "30px",
-            paddingTop: "18px",
+            marginTop: "26px",
+            paddingTop: "16px",
             borderTop: "1.5px solid rgba(255,255,255,0.1)",
             justifyContent: "space-between",
             alignItems: "center",
