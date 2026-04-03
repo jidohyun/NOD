@@ -90,19 +90,28 @@ describe("shared article OG image layout", () => {
 
     const root = image?.element;
     expect(root.props.style.boxSizing).toBe("border-box");
-    expect(root.props.style.padding).toBe("42px 48px 62px");
+    expect(root.props.style.justifyContent).toBe("space-between");
+    expect(root.props.style.padding).toBe("36px 48px 32px");
 
     const [badgeRow, contentStack] = getChildren(root);
     const [badgePill] = getChildren(badgeRow);
 
     expect(badgePill.props.style.alignItems).toBe("center");
     expect(badgePill.props.style.lineHeight).toBe(1.1);
-    expect(contentStack.props.style.justifyContent).toBe("center");
-    expect(contentStack.props.style.paddingBottom).toBe("18px");
+    expect(contentStack.props.style.justifyContent).toBe("space-between");
+    expect(contentStack.props.style.marginTop).toBe("18px");
 
-    const [, summaryRow, footerRow] = getChildren(contentStack);
-    expect(summaryRow.props.style.marginTop).toBe("18px");
-    expect(footerRow.props.style.marginTop).toBe("26px");
-    expect(footerRow.props.style.paddingTop).toBe("16px");
+    const [bodyBlock, footerRow] = getChildren(contentStack);
+    expect(bodyBlock.props.style.justifyContent).toBe("center");
+    expect(bodyBlock.props.style.paddingTop).toBe("8px");
+    expect(bodyBlock.props.style.paddingBottom).toBe("12px");
+
+    const [titleRow, summaryRow] = getChildren(bodyBlock);
+    expect(titleRow.props.style.lineHeight).toBe(1.12);
+    expect(summaryRow.props.style.marginTop).toBe("16px");
+    expect(summaryRow.props.style.fontSize).toBe(22);
+    expect(summaryRow.props.style.lineHeight).toBe(1.45);
+    expect(footerRow.props.style.marginTop).toBe("18px");
+    expect(footerRow.props.style.paddingTop).toBe("12px");
   });
 });

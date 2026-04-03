@@ -81,7 +81,7 @@ function renderFallbackImage() {
 
 function renderSharedImage(shared: SharedArticle) {
   const headline = formatOgHeadline(shared.title);
-  const description = formatOgDescription(shared.summary);
+  const description = formatOgDescription(shared.summary, 170);
   const articleHost = getArticleHost(shared.url);
   const gradient = CONTENT_TYPE_GRADIENTS[shared.content_type] ?? {
     from: "#334155",
@@ -97,7 +97,8 @@ function renderSharedImage(shared: SharedArticle) {
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        padding: "42px 48px 62px",
+        justifyContent: "space-between",
+        padding: "36px 48px 32px",
         background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
         color: "#ffffff",
       }}
@@ -128,44 +129,55 @@ function renderSharedImage(shared: SharedArticle) {
           display: "flex",
           flex: 1,
           flexDirection: "column",
-          justifyContent: "center",
-          paddingBottom: "18px",
+          justifyContent: "space-between",
+          marginTop: "18px",
         }}
       >
-        {/* Title */}
         <div
           style={{
             display: "flex",
-            fontSize: 52,
-            lineHeight: 1.15,
-            fontWeight: 900,
-            maxWidth: "1100px",
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "center",
+            paddingTop: "8px",
+            paddingBottom: "12px",
           }}
         >
-          {headline}
-        </div>
+          {/* Title */}
+          <div
+            style={{
+              display: "flex",
+              fontSize: 52,
+              lineHeight: 1.12,
+              fontWeight: 900,
+              maxWidth: "1100px",
+            }}
+          >
+            {headline}
+          </div>
 
-        {/* Summary */}
-        <div
-          style={{
-            display: "flex",
-            marginTop: "18px",
-            fontSize: 24,
-            lineHeight: 1.55,
-            fontWeight: 400,
-            maxWidth: "1080px",
-            color: "rgba(255, 255, 255, 0.55)",
-          }}
-        >
-          {description}
+          {/* Summary */}
+          <div
+            style={{
+              display: "flex",
+              marginTop: "16px",
+              fontSize: 22,
+              lineHeight: 1.45,
+              fontWeight: 400,
+              maxWidth: "1080px",
+              color: "rgba(255, 255, 255, 0.55)",
+            }}
+          >
+            {description}
+          </div>
         </div>
 
         {/* Bottom bar */}
         <div
           style={{
             display: "flex",
-            marginTop: "26px",
-            paddingTop: "16px",
+            marginTop: "18px",
+            paddingTop: "12px",
             borderTop: "1.5px solid rgba(255,255,255,0.1)",
             justifyContent: "space-between",
             alignItems: "center",
