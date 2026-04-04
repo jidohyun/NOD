@@ -96,6 +96,7 @@ describe("shared article OG image layout", () => {
     const [badgeRow, contentStack] = getChildren(root);
     const [badgePill] = getChildren(badgeRow);
 
+    expect(badgeRow.props.style.paddingTop).toBe("4px");
     expect(badgePill.props.style.alignItems).toBe("center");
     expect(badgePill.props.style.lineHeight).toBe(1.1);
     expect(contentStack.props.style.justifyContent).toBe("space-between");
@@ -109,7 +110,7 @@ describe("shared article OG image layout", () => {
     const [titleRow, summaryRow] = getChildren(bodyBlock);
     expect(titleRow.props.style.lineHeight).toBe(1.12);
     expect(summaryRow.props.style.marginTop).toBe("16px");
-    expect(summaryRow.props.style.fontSize).toBe(22);
+    expect(summaryRow.props.style.fontSize).toBe(21);
     expect(summaryRow.props.style.lineHeight).toBe(1.45);
     expect(footerRow.props.style.marginTop).toBe("18px");
     expect(footerRow.props.style.paddingTop).toBe("12px");
