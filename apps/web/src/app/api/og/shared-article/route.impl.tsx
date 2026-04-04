@@ -105,7 +105,7 @@ function renderSharedImage(shared: SharedArticle) {
     >
       {/* Content type badge */}
       {contentLabel ? (
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "4px" }}>
           <div
             style={{
               display: "flex",
@@ -161,7 +161,7 @@ function renderSharedImage(shared: SharedArticle) {
             style={{
               display: "flex",
               marginTop: "16px",
-              fontSize: 22,
+              fontSize: 21,
               lineHeight: 1.45,
               fontWeight: 400,
               maxWidth: "1080px",
