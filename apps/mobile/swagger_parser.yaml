@@ -1,0 +1,10 @@
+swagger_parser:
+  output_directory: lib/core/network/api
+  schema_path: ../api/openapi.json
+  root_client: true
+  root_client_name: ApiClient
+  client_postfix: Service
+  json_serializer: freezed
+  put_clients_in_folder: true
+  export_file: true
+  use_freezed3: true

@@ -1,0 +1,68 @@
+# Required
+project_id        = "your-gcp-project-id"
+github_repository = "your-org/your-repo"
+
+# Optional - customize as needed
+region      = "asia-northeast3"
+environment = "dev"
+app_name    = "fullstack-starter"
+
+# Network
+vpc_cidr = "10.0.0.0/16"
+
+# Database
+db_tier = "db-f1-micro"
+db_name = "app"
+db_user = "app"
+
+# Redis
+redis_memory_size_gb = 1
+
+# Cloud Run - API
+api_cpu           = "1"
+api_memory        = "512Mi"
+api_min_instances = 0
+api_max_instances = 10
+
+# Cloud Run - Web
+web_cpu           = "1"
+web_memory        = "512Mi"
+web_min_instances = 0
+web_max_instances = 10
+
+# Cloud Run - Worker
+worker_cpu           = "1"
+worker_memory        = "512Mi"
+worker_min_instances = 0
+worker_max_instances = 5
+
+# Domain (optional - leave empty for Cloud Run default URLs)
+domain        = ""
+api_subdomain = "api"
+
+# Secrets (injected via Infisical - do not commit real values)
+# JWT_SECRET           = ""
+# BETTER_AUTH_SECRET   = ""
+# SUPABASE_URL         = ""
+# SUPABASE_ANON_KEY    = ""
+# SUPABASE_JWT_SECRET  = ""
+# GOOGLE_CLIENT_ID     = ""
+# GOOGLE_CLIENT_SECRET = ""
+# OPENAI_API_KEY       = ""
+# GOOGLE_AI_API_KEY    = ""
+
+# Video transcript reliability (recommended for YouTube on Cloud Run)
+VIDEO_TRANSCRIPT_TIMEOUT_SECONDS          = 20
+VIDEO_TRANSCRIPT_TRANSIENT_RETRIES        = 2
+VIDEO_TRANSCRIPT_RETRY_BASE_DELAY_SECONDS = 0.75
+VIDEO_TRANSCRIPT_PROXY_RETRIES_WHEN_BLOCKED = 10
+
+# Choose one proxy mode:
+# 1) Generic proxy
+# VIDEO_TRANSCRIPT_PROXY_HTTP_URL  = ""
+# VIDEO_TRANSCRIPT_PROXY_HTTPS_URL = ""
+
+# 2) Webshare rotating residential proxy
+# VIDEO_TRANSCRIPT_PROXY_WEBSHARE_USERNAME  = ""
+# VIDEO_TRANSCRIPT_PROXY_WEBSHARE_PASSWORD  = ""
+# VIDEO_TRANSCRIPT_PROXY_WEBSHARE_LOCATIONS = "kr,jp"

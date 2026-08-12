@@ -1,0 +1,77 @@
+"use client";
+
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSimilarArticles } from "@/lib/api/articles";
+
+export function SimilarArticles({ articleId }: { articleId: string }) {
+  const t = useTranslations("dashboard");
+  const { data: similar, isLoading } = useSimilarArticles(articleId);
+
+  if (isLoading) {
+    return (
+      <div className="rounded-lg border bg-card p-4">
+        <Skeleton className="h-5 w-32 mb-3" />
+        <div className="space-y-3">
+          {[1, 2].map((i) => (
+            <div key={i} className="rounded-md border p-3 space-y-2">
+              <div className="flex items-start justify-between gap-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-12" />
+              </div>
+              <Skeleton className="h-3 w-full" />
+              <div className="flex gap-1">
+                <Skeleton className="h-5 w-14 rounded" />
+                <Skeleton className="h-5 w-14 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!similar || similar.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-lg border bg-card p-4">
+      <h2 className="text-lg font-semibold mb-3">{t("similarArticles")}</h2>
+      <div className="space-y-3">
+        {similar.map((item) => (
+          <Link
+            key={item.id}
+            href={`/articles/${item.id}`}
+            className="block rounded-md border p-3 hover:bg-accent/50 transition-colors"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-sm font-medium line-clamp-1">{item.title}</h3>
+              <span className="shrink-0 text-xs font-medium text-primary">
+                {t("similarity", { percent: Math.round(item.similarity * 100) })}
+              </span>
+            </div>
+            {item.summary_preview ? (
+              <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                {item.summary_preview}
+              </p>
+            ) : null}
+            {item.shared_concepts.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {item.shared_concepts.map((concept) => (
+                  <span
+                    key={concept}
+                    className="rounded bg-primary/10 px-1.5 py-0.5 text-xs text-primary"
+                  >
+                    {concept}
+                  </span>
+                ))}
+              </div>
+            )}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}

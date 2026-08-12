@@ -1,0 +1,725 @@
+import { Readability } from "@mozilla/readability";
+import type { ExtractedContent } from "../types/article";
+import { MAX_CONTENT_LENGTH, EXCERPT_LENGTH, WORDS_PER_MINUTE } from "../lib/constants";
+
+interface RedditListingChild {
+  kind?: string;
+  data?: {
+    title?: string;
+    selftext?: string;
+    author?: string;
+    subreddit_name_prefixed?: string;
+    permalink?: string;
+    score?: number;
+    num_comments?: number;
+    created_utc?: number;
+    body?: string;
+    replies?: RedditListing | "";
+    children?: RedditListingChild[];
+    depth?: number;
+  };
+}
+
+interface RedditListing {
+  data?: {
+    children?: RedditListingChild[];
+  };
+}
+
+const REDDIT_DISCUSSION_HOSTS = [
+  "reddit.com",
+  "old.reddit.com",
+  "new.reddit.com",
+  "np.reddit.com",
+  "sh.reddit.com",
+] as const;
+
+/**
+ * Extract article content from the current page
+ */
+export async function extractContent(): Promise<ExtractedContent> {
+  // PDF: send minimal content, let server extract
+  if (document.contentType === "application/pdf") {
+    return extractPDFContent();
+  }
+
+  // GitHub repository: use specialized extractor
+  if (isGitHubRepo(window.location.href)) {
+    return extractGitHubContent();
+  }
+
+  if (isYouTubeVideoPage(window.location.href)) {
+    return extractYouTubeContent();
+  }
+
+  if (isRedditDiscussionPage(window.location.href)) {
+    return extractRedditContent();
+  }
+
+  // Try Readability first
+  const readabilityResult = tryReadability();
+  if (readabilityResult) {
+    return readabilityResult;
+  }
+
+  // Fallback to heuristic extraction
+  return heuristicExtraction();
+}
+
+/**
+ * Extract using Mozilla Readability
+ */
+function tryReadability(): ExtractedContent | null {
+  try {
+    const sourceDocument = getSourceDocument();
+    const documentClone = sourceDocument.cloneNode(true) as Document;
+    const reader = new Readability(documentClone);
+    const article = reader.parse();
+
+    if (!article || !article.textContent) {
+      return null;
+    }
+
+    const content = article.textContent.trim();
+    const wordCount = countWords(content);
+
+    return {
+      title: article.title || sourceDocument.title || "Untitled",
+      content: truncateContent(content),
+      excerpt: createExcerpt(content),
+      url: window.location.href,
+      siteName: extractSiteName(),
+      author: extractAuthor(),
+      publishedAt: extractPublishedDate(),
+      wordCount,
+      readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fallback heuristic extraction
+ */
+function heuristicExtraction(): ExtractedContent {
+  const title = extractTitle();
+  const content = extractMainContent();
+  const wordCount = countWords(content);
+
+  return {
+    title,
+    content: truncateContent(content),
+    excerpt: createExcerpt(content),
+    url: window.location.href,
+    siteName: extractSiteName(),
+    author: extractAuthor(),
+    publishedAt: extractPublishedDate(),
+    wordCount,
+    readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+  };
+}
+
+/**
+ * Extract page title
+ */
+function extractTitle(): string {
+  const sourceDocument = getSourceDocument();
+  // Try Open Graph title
+  const ogTitle = sourceDocument.querySelector<HTMLMetaElement>(
+    'meta[property="og:title"]'
+  )?.content;
+  if (ogTitle) return ogTitle;
+
+  // Try h1
+  const h1 = sourceDocument.querySelector("h1")?.textContent?.trim();
+  if (h1) return h1;
+
+  // Fallback to document title
+  return sourceDocument.title || "Untitled";
+}
+
+/**
+ * Extract main content using heuristics
+ */
+function extractMainContent(): string {
+  const sourceDocument = getSourceDocument();
+  // Priority: article > main > [role="main"] > body
+  const contentElement =
+    sourceDocument.querySelector("article") ||
+    sourceDocument.querySelector("main") ||
+    sourceDocument.querySelector('[role="main"]') ||
+    sourceDocument.body;
+
+  const clone = contentElement.cloneNode(true) as HTMLElement;
+
+  // Remove non-content elements
+  const removeSelectors = [
+    "script",
+    "style",
+    "nav",
+    "footer",
+    "header",
+    "aside",
+    "form",
+    "iframe",
+    ".ad",
+    ".ads",
+    ".advertisement",
+    ".sidebar",
+    ".comments",
+    ".comment",
+    ".social-share",
+    ".related-posts",
+    '[role="navigation"]',
+    '[role="banner"]',
+    '[role="complementary"]',
+    '[aria-hidden="true"]',
+  ];
+
+  for (const selector of removeSelectors) {
+    clone.querySelectorAll(selector).forEach((el) => el.remove());
+  }
+
+  return clone.textContent?.replace(/\s+/g, " ").trim() || "";
+}
+
+/**
+ * Extract site name from meta tags
+ */
+function extractSiteName(): string {
+  const sourceDocument = getSourceDocument();
+  const ogSiteName = sourceDocument.querySelector<HTMLMetaElement>(
+    'meta[property="og:site_name"]'
+  )?.content;
+  if (ogSiteName) return ogSiteName;
+
+  // Try hostname
+  return window.location.hostname.replace("www.", "");
+}
+
+/**
+ * Extract author from meta tags
+ */
+function extractAuthor(): string | undefined {
+  const sourceDocument = getSourceDocument();
+  const metaAuthor =
+    sourceDocument.querySelector<HTMLMetaElement>('meta[name="author"]')?.content;
+  if (metaAuthor) return metaAuthor;
+
+  const articleAuthor = sourceDocument.querySelector<HTMLMetaElement>(
+    'meta[property="article:author"]'
+  )?.content;
+  if (articleAuthor) return articleAuthor;
+
+  return undefined;
+}
+
+/**
+ * Extract published date from meta tags
+ */
+function extractPublishedDate(): string | undefined {
+  const sourceDocument = getSourceDocument();
+  const articleTime = sourceDocument.querySelector<HTMLMetaElement>(
+    'meta[property="article:published_time"]'
+  )?.content;
+  if (articleTime) return articleTime;
+
+  const datePublished = sourceDocument.querySelector<HTMLMetaElement>(
+    'meta[property="datePublished"]'
+  )?.content;
+  if (datePublished) return datePublished;
+
+  // Try time element
+  const timeElement = sourceDocument.querySelector<HTMLTimeElement>("time[datetime]");
+  if (timeElement?.dateTime) return timeElement.dateTime;
+
+  return undefined;
+}
+
+/**
+ * Count words in text
+ */
+function countWords(text: string): number {
+  return text.split(/\s+/).filter((word) => word.length > 0).length;
+}
+
+/**
+ * Create excerpt from content
+ */
+function createExcerpt(content: string): string {
+  if (content.length <= EXCERPT_LENGTH) {
+    return content;
+  }
+  return content.slice(0, EXCERPT_LENGTH).trim() + "...";
+}
+
+/**
+ * Truncate content to max length
+ */
+function truncateContent(content: string): string {
+  if (content.length <= MAX_CONTENT_LENGTH) {
+    return content;
+  }
+  return content.slice(0, MAX_CONTENT_LENGTH);
+}
+
+/**
+ * Check if current page is likely an article
+ */
+export async function isArticlePage(): Promise<boolean> {
+  // PDF pages: always treat as article (server-side extraction)
+  if (document.contentType === "application/pdf") {
+    return true;
+  }
+
+  if (!isEligiblePage()) {
+    return false;
+  }
+
+  // GitHub repositories: allow if README-like content exists
+  if (isGitHubRepo(window.location.href)) {
+    return !!document.querySelector('article, [class*="markdown" i]');
+  }
+
+  if (isYouTubeVideoPage(window.location.href)) {
+    return true;
+  }
+
+  if (isRedditDiscussionPage(window.location.href)) {
+    return true;
+  }
+
+  const sourceDocument = getSourceDocument();
+  // Check for article-like elements
+  const hasArticle = !!sourceDocument.querySelector("article");
+  const hasMain = !!sourceDocument.querySelector("main");
+
+  // Check for article meta tags
+  const hasOgArticle =
+    sourceDocument.querySelector('meta[property="og:type"]')?.getAttribute("content") === "article";
+
+  // Check for documentation site patterns (often lack <article>/<main> tags)
+  const isDocsSite = isDocumentationSite(sourceDocument);
+
+  // Check content length
+  const mainContent = extractMainContent();
+  const wordCount = countWords(mainContent);
+  const hasEnoughContent = wordCount > 100;
+
+  return (hasArticle || hasMain || hasOgArticle || isDocsSite) && hasEnoughContent;
+}
+
+function isEligiblePage(): boolean {
+  // PDF documents are handled separately via isArticlePage() + extractPDFContent()
+  if (document.contentType === "application/pdf") {
+    return true;
+  }
+
+  let url: URL;
+  try {
+    url = new URL(window.location.href);
+  } catch {
+    return false;
+  }
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return false;
+  }
+
+  // Homepages are usually navigation, not articles.
+  // But allow if the page has enough readable content.
+  if (url.pathname === "/") {
+    const mainContent = extractMainContent();
+    const wordCount = countWords(mainContent);
+    return wordCount > 200;
+  }
+
+  const host = url.hostname.replace(/^www\./, "");
+  if (isBlockedHost(host)) {
+    return false;
+  }
+
+  return true;
+}
+
+function isGitHubRepo(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host !== "github.com") return false;
+    // /{owner}/{repo} pattern (minimum 2 segments)
+    const segments = parsed.pathname.split("/").filter(Boolean);
+    return segments.length >= 2;
+  } catch {
+    return false;
+  }
+}
+
+function isYouTubeVideoPage(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") {
+      return parsed.pathname.length > 1;
+    }
+
+    if (host !== "youtube.com" && host !== "m.youtube.com") {
+      return false;
+    }
+
+    if (parsed.pathname === "/watch") {
+      return parsed.searchParams.has("v");
+    }
+
+    return (
+      parsed.pathname.startsWith("/shorts/") ||
+      parsed.pathname.startsWith("/live/")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isRedditDiscussionPage(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "redd.it") {
+      return parsed.pathname.length > 1;
+    }
+
+    if (!REDDIT_DISCUSSION_HOSTS.includes(host as (typeof REDDIT_DISCUSSION_HOSTS)[number])) {
+      return false;
+    }
+
+    const canonicalUrl = getRedditCanonicalUrl();
+    if (canonicalUrl) {
+      return true;
+    }
+
+    const normalizedPath = parsed.pathname.toLowerCase();
+    if (normalizedPath.includes("/comments/")) {
+      return true;
+    }
+
+    if (/^\/r\/[^/]+\/s\/[^/]+\/?$/.test(normalizedPath) || /^\/s\/[^/]+\/?$/.test(normalizedPath)) {
+      return true;
+    }
+
+    return hasRedditDiscussionDom(getSourceDocument());
+  } catch {
+    return false;
+  }
+}
+
+function getRedditCanonicalUrl(): string | null {
+  const sourceDocument = getSourceDocument();
+  const candidates = [
+    sourceDocument.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href,
+    sourceDocument.querySelector<HTMLMetaElement>('meta[property="og:url"]')?.content,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+
+    try {
+      const parsed = new URL(candidate, window.location.href);
+      const host = parsed.hostname.replace(/^www\./, "");
+      if (host === "redd.it" || REDDIT_DISCUSSION_HOSTS.includes(host as (typeof REDDIT_DISCUSSION_HOSTS)[number])) {
+        return parsed.toString();
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
+function hasRedditDiscussionDom(doc: Document): boolean {
+  const hasSinglePostMarker = !!doc.querySelector(
+    'shreddit-post, [data-testid="post-container"], [data-testid="post-content"]'
+  );
+  const hasCommentTree = !!doc.querySelector(
+    'shreddit-comment-tree, faceplate-comment-tree, [data-testid="comment-tree-container"]'
+  );
+
+  return hasSinglePostMarker && hasCommentTree;
+}
+
+function resolveRedditSourceUrl(url: string): string {
+  const canonicalUrl = getRedditCanonicalUrl();
+  if (canonicalUrl) {
+    return canonicalUrl;
+  }
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "redd.it") {
+      const postId = parsed.pathname.split("/").filter(Boolean)[0];
+      if (postId) {
+        return `https://www.reddit.com/comments/${postId}`;
+      }
+    }
+  } catch {
+    return url;
+  }
+
+  return url;
+}
+
+function extractGitHubContent(): ExtractedContent {
+  const sourceDocument = getSourceDocument();
+
+  // GitHub repo description
+  const aboutSection =
+    sourceDocument.querySelector('[class*="About"] p, .f4.my-3')?.textContent?.trim() || "";
+
+  // README content - GitHub uses article tag or markdown class elements
+  const readmeElement =
+    sourceDocument.querySelector("article") ||
+    sourceDocument.querySelector('[class*="markdown" i]');
+  const readmeContent = readmeElement?.textContent?.replace(/\s+/g, " ").trim() || "";
+
+  // Topics/tags
+  const topics = Array.from(
+    sourceDocument.querySelectorAll('a[data-octo-click="topic_click"]')
+  )
+    .map((el) => el.textContent?.trim())
+    .filter(Boolean)
+    .join(", ");
+
+  const content = [aboutSection, topics ? `Topics: ${topics}` : "", readmeContent]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const title = extractTitle();
+  const wordCount = countWords(content);
+
+  return {
+    title,
+    content: truncateContent(content),
+    excerpt: createExcerpt(aboutSection || content),
+    url: window.location.href,
+    siteName: "GitHub",
+    author: extractAuthor(),
+    publishedAt: undefined,
+    wordCount,
+    readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+  };
+}
+
+function extractYouTubeContent(): ExtractedContent {
+  const url = window.location.href;
+  const title = extractTitle();
+  const siteName = new URL(url).hostname.replace("www.", "");
+
+  return {
+    title,
+    content: "",
+    excerpt: "YouTube video",
+    url,
+    siteName,
+    author: extractAuthor(),
+    publishedAt: extractPublishedDate(),
+    wordCount: 0,
+    readingTime: 0,
+  };
+}
+
+function buildRedditJsonUrl(url: string): string {
+  const parsed = new URL(resolveRedditSourceUrl(url));
+  parsed.hash = "";
+  parsed.search = "";
+
+  const pathname = parsed.pathname.replace(/\/+$/, "");
+  parsed.pathname = `${pathname || parsed.pathname}.json`;
+  parsed.searchParams.set("raw_json", "1");
+  parsed.searchParams.set("limit", "12");
+  parsed.searchParams.set("depth", "3");
+  parsed.searchParams.set("sort", "top");
+  return parsed.toString();
+}
+
+function flattenRedditComments(
+  children: RedditListingChild[],
+  into: string[],
+  limit = 8
+): void {
+  for (const child of children) {
+    if (into.length >= limit || child.kind !== "t1" || !child.data?.body) {
+      continue;
+    }
+
+    const score = typeof child.data.score === "number" ? ` (${child.data.score}↑)` : "";
+    const author = child.data.author ? `u/${child.data.author}` : "unknown";
+    into.push(`- ${author}${score}: ${child.data.body.replace(/\s+/g, " ").trim()}`);
+
+    const replies = child.data.replies;
+    if (typeof replies === "object" && replies?.data?.children) {
+      flattenRedditComments(replies.data.children, into, limit);
+    }
+  }
+}
+
+function buildRedditFallbackContent(url = window.location.href): ExtractedContent {
+  const title = extractTitle();
+  const content = extractMainContent();
+  const wordCount = countWords(content);
+
+  return {
+    title,
+    content: truncateContent(content),
+    excerpt: createExcerpt(content || title),
+    url,
+    siteName: "Reddit",
+    author: extractAuthor(),
+    publishedAt: extractPublishedDate(),
+    wordCount,
+    readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+  };
+}
+
+async function extractRedditContent(): Promise<ExtractedContent> {
+  try {
+    const sourceUrl = resolveRedditSourceUrl(window.location.href);
+    const response = await fetch(buildRedditJsonUrl(sourceUrl), {
+      credentials: "omit",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      return buildRedditFallbackContent(sourceUrl);
+    }
+
+    const payload = (await response.json()) as RedditListing[];
+    const post = payload[0]?.data?.children?.[0]?.data;
+    const commentChildren = payload[1]?.data?.children ?? [];
+    if (!post?.title) {
+      return buildRedditFallbackContent(sourceUrl);
+    }
+
+    const discussionPoints: string[] = [];
+    flattenRedditComments(commentChildren, discussionPoints);
+
+    const sections = [
+      post.subreddit_name_prefixed ? `Community: ${post.subreddit_name_prefixed}` : "",
+      post.author ? `Original poster: u/${post.author}` : "",
+      typeof post.score === "number" ? `Post score: ${post.score}` : "",
+      typeof post.num_comments === "number" ? `Comment count: ${post.num_comments}` : "",
+      post.selftext?.trim() ? `Original post:\n${post.selftext.trim()}` : "",
+      discussionPoints.length > 0
+        ? `Top discussion points:\n${discussionPoints.join("\n")}`
+        : "",
+    ].filter(Boolean);
+
+    const content = `${post.title}\n\n${sections.join("\n\n")}`.trim();
+    const excerptSource = post.selftext?.trim() || discussionPoints[0] || post.title;
+    const wordCount = countWords(content);
+
+    return {
+      title: post.title,
+      content: truncateContent(content),
+      excerpt: createExcerpt(excerptSource),
+      url: post.permalink
+        ? new URL(post.permalink, "https://www.reddit.com").toString()
+        : sourceUrl,
+      siteName: "Reddit",
+      author: post.author ? `u/${post.author}` : extractAuthor(),
+      publishedAt: post.created_utc
+        ? new Date(post.created_utc * 1000).toISOString()
+        : extractPublishedDate(),
+      wordCount,
+      readingTime: Math.ceil(wordCount / WORDS_PER_MINUTE),
+    };
+  } catch {
+    return buildRedditFallbackContent(resolveRedditSourceUrl(window.location.href));
+  }
+}
+
+function extractPDFContent(): ExtractedContent {
+  const url = window.location.href;
+  const title =
+    document.title ||
+    url.split("/").pop()?.replace(".pdf", "") ||
+    "PDF Document";
+
+  return {
+    title,
+    content: "",
+    excerpt: "PDF document",
+    url,
+    siteName: new URL(url).hostname.replace("www.", ""),
+    author: undefined,
+    publishedAt: undefined,
+    wordCount: 0,
+    readingTime: 0,
+  };
+}
+
+function isDocumentationSite(doc: Document): boolean {
+  const url = window.location;
+  const host = url.hostname.replace(/^www\./, "");
+  const path = url.pathname;
+
+  // Hostname patterns: docs.*, developer.*, wiki.*, wikidocs.net
+  if (/^(docs|developer|wiki|devdocs|reference|api)\./.test(host)) {
+    return true;
+  }
+  if (host === "wikidocs.net") {
+    return true;
+  }
+
+  // Path patterns: /docs/, /documentation/, /guide/, /concepts/, /reference/
+  if (/\/(docs|documentation|guide|guides|concepts|reference|api-reference|handbook|manual|tutorial|tutorials|learn|wiki)(\/|$)/.test(path)) {
+    return true;
+  }
+
+  // Common documentation frameworks: Docusaurus, GitBook, ReadTheDocs, MkDocs, Nextra, VitePress
+  const hasDocsFramework =
+    !!doc.querySelector('[class*="docusaurus" i], [class*="gitbook" i], [class*="mkdocs" i]') ||
+    !!doc.querySelector('[data-docusaurus], [data-nextra], [class*="vitepress" i]') ||
+    !!doc.querySelector('[class*="docs-content" i], [class*="doc-content" i]') ||
+    !!doc.querySelector('[role="main"][class*="content" i]') ||
+    !!doc.querySelector('[class*="wiki-content" i], [class*="wiki_content" i]');
+
+  return hasDocsFramework;
+}
+
+function isBlockedHost(host: string): boolean {
+  // Based on Firefox Reader Mode blocked hosts.
+  // https://raw.githubusercontent.com/mozilla/firefox/main/toolkit/components/reader/Readerable.js
+  const blockedHosts = [
+    "amazon.com",
+    "mail.google.com",
+    "pinterest.com",
+    "twitter.com",
+    "x.com",
+    "app.slack.com",
+  ];
+
+  return blockedHosts.some((blocked) => host === blocked || host.endsWith(`.${blocked}`));
+}
+
+function getSourceDocument(): Document {
+  const hostname = window.location.hostname;
+  const isNaverBlog = hostname === "blog.naver.com" || hostname.endsWith(".blog.naver.com");
+  if (!isNaverBlog) return document;
+
+  const iframe = document.querySelector<HTMLIFrameElement>("iframe#mainFrame");
+  if (!iframe) return document;
+
+  try {
+    const iframeDoc = iframe.contentDocument;
+    if (!iframeDoc?.body) return document;
+
+    const text = iframeDoc.body.textContent?.replace(/\s+/g, " ").trim() || "";
+    return text.length > 200 ? iframeDoc : document;
+  } catch {
+    return document;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "env": "production",
+  "apiBase": "https://api.nod-archive.com",
+  "webBase": "https://nod-archive.com",
+  "features": {
+    "verboseLogging": false,
+    "debugPanel": false,
+    "mockData": false
+  }
+}
