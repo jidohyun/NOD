@@ -1,0 +1,55 @@
+{
+  "@@locale": "ko",
+  "appTitle": "풀스택 스타터",
+  "loading": "로딩 중...",
+  "error": "오류가 발생했습니다",
+  "retry": "재시도",
+  "save": "저장",
+  "cancel": "취소",
+  "confirm": "확인",
+  "delete": "삭제",
+  "extHeaderTitle": "NOD",
+  "extHeaderSubtitle": "아티클 세이버",
+  "extLoginTitle": "AI 분석으로 아티클을 저장하세요",
+  "extLoginSubtitle": "NOD 계정에 로그인하여 시작하세요",
+  "extLoginFeature1": "아티클에서 핵심 인사이트 추출",
+  "extLoginFeature2": "나만의 지식 라이브러리 구축",
+  "extLoginFeature3": "어디서든 접근 가능",
+  "extLoginButton": "NOD 로그인",
+  "extLoadingAuth": "인증 확인 중...",
+  "extLoadingExtract": "아티클 분석 중...",
+  "extSaveButton": "저장 및 분석",
+  "extSaving": "저장 중...",
+  "extSaveSuccessTitle": "저장 완료!",
+  "extSaveSuccessSubtitle": "AI 분석이 진행 중입니다",
+  "extViewDashboard": "대시보드에서 보기",
+  "extErrorTitle": "문제가 발생했습니다",
+  "extRefreshHint": "문제가 계속되면 페이지를 새로고침한 뒤 다시 시도해 주세요.",
+  "extTryAgain": "다시 시도",
+  "extMinRead": "분 소요",
+  "extLogout": "로그아웃",
+  "extUsageInfo": "요약 {used}/{limit}건 사용",
+  "extLimitReached": "이번 달 사용량 초과",
+  "extUpgradePrompt": "Pro로 업그레이드",
+  "extUsageUnlimited": "무제한 요약 (Pro)",
+  "extLanguage": "언어",
+  "@extLanguage": {
+    "description": "Extension language selector label"
+  },
+  "extManifestName": "NOD - 아티클 분석기",
+  "@extManifestName": {
+    "description": "Production manifest name for the Chrome extension"
+  },
+  "extManifestDescription": "웹 콘텐츠를 저장하고 AI로 요약해 다시 찾게 도와주는 Chrome 확장 프로그램입니다.",
+  "@extManifestDescription": {
+    "description": "Production manifest description for the Chrome extension"
+  },
+  "extManifestNameDev": "NOD - 아티클 분석기 (Dev)",
+  "@extManifestNameDev": {
+    "description": "Development manifest name for the Chrome extension"
+  },
+  "extManifestDescriptionDev": "[DEV] 웹 콘텐츠를 저장하고 AI로 요약해 다시 찾게 도와주는 Chrome 확장 프로그램입니다.",
+  "@extManifestDescriptionDev": {
+    "description": "Development manifest description for the Chrome extension"
+  }
+}

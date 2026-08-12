@@ -1,0 +1,1126 @@
+{
+  "common": {
+    "back": "Back",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "continue": "Continue",
+    "delete": "削除",
+    "edit": "編集",
+    "email": "Email",
+    "error": "エラーが発生しました",
+    "loading": "読み込み中...",
+    "dashboard": "ダッシュボード",
+    "ok": "OK",
+    "password": "Password",
+    "refresh": "Refresh",
+    "restoreOriginal": "元に戻す",
+    "retry": "再試行",
+    "save": "保存",
+    "skip": "Skip for now"
+  },
+  "auth": {
+    "forgotPassword": {
+      "backToLogin": "Back to login",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailPlaceholder": "Email address",
+      "send": "Send reset link",
+      "sent": "Password reset link sent. Please check your inbox.",
+      "subtitle": "Enter your email address and we'll send you a password reset link.",
+      "title": "Forgot password"
+    },
+    "resetPassword": {
+      "confirmPassword": "Confirm password",
+      "goToLogin": "Go to login",
+      "newPassword": "New password",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "submit": "Change password",
+      "subtitle": "Enter your new password below.",
+      "success": "Your password has been changed.",
+      "title": "Set new password"
+    },
+    "verifyEmail": {
+      "backToLogin": "Back to login",
+      "description": "We sent a verification link to {email}. Please check your inbox.",
+      "resend": "Resend verification email",
+      "resent": "Verification email sent again.",
+      "title": "Verify your email"
+    }
+  },
+  "blog": {
+    "home": "ホーム",
+    "readArticle": "記事を読む →",
+    "readTime": "{minutes}分で読める",
+    "subtitle": "ナレッジ管理と生産性に関するヒント、ガイド、インサイトを共有します。",
+    "title": "ブログ"
+  },
+  "changelogPage": {
+    "title": "Release Notes",
+    "subtitle": "Explore version-by-version changes from v1 in the sidebar.",
+    "sections": {
+      "versionListTitle": "Versions"
+    },
+    "versions": {
+      "v1_3_3": {
+        "label": "v1.3.3",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "extension-v1.3.3",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-04-02",
+        "summary": "v1.3.3 makes Reddit threads a first-class discussion workflow in NOD.\n\nThis release adds dedicated discussion summarization for Reddit saves, keeps discussion metadata visible in detail/shared/export surfaces, and improves extension thread detection so Reddit save attempts reach analysis more reliably.",
+        "patchNotes": "[v1.3.3 details]\n- Added a dedicated `discussion` content type and Reddit-focused analysis prompts that preserve central questions, insider takeaways, disagreements, and evidence signals.\n- Added discussion metadata sections to article detail and shared article views.\n- Included discussion metadata in markdown copy/export output.\n- Improved Reddit thread detection in the extension save flow for canonical, shortlink, and share-link entry points.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Reddit discussion summaries",
+            "description": "Reddit threads now use a discussion-specific analysis path instead of generic news summarization."
+          },
+          "item2": {
+            "title": "Discussion metadata surfaces",
+            "description": "Central question, insider takeaways, disagreements, and evidence signals now appear in article detail and shared views."
+          },
+          "item3": {
+            "title": "Markdown export keeps nuance",
+            "description": "Copied/exported markdown now includes discussion metadata sections for discussion content."
+          },
+          "item4": {
+            "title": "More reliable Reddit saves",
+            "description": "The extension now recognizes more Reddit thread entry points so save attempts are less likely to stop before analysis starts."
+          }
+        }
+      },
+      "v1_3_0": {
+        "label": "v1.3.0",
+        "status": "Planned",
+        "tagLabel": "Release target",
+        "tag": "v1.3.0",
+        "publishedAtLabel": "Target",
+        "publishedAt": "Upcoming",
+        "summary": "The v1.3.0 release is planned around article sharing. This update focuses on making summarized content easy to share, view publicly, and engage with.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Public share links for articles",
+            "description": "Generate and manage public links for summarized articles directly from the product."
+          },
+          "item2": {
+            "title": "Dedicated shared article experience",
+            "description": "Shared pages are optimized for readability with clear metadata and original source context."
+          },
+          "item3": {
+            "title": "Discussion and empathy interactions",
+            "description": "Readers can react and participate through comments, replies, and empathy actions."
+          },
+          "item4": {
+            "title": "Advanced sharing controls",
+            "description": "Support custom share URL and thumbnail options for cleaner distribution."
+          }
+        }
+      },
+      "v1_2_0": {
+        "label": "v1.2.0",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "extension-v1.2.0",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-03-03",
+        "summary": "Latest extension release in the published sequence. This release follows extension-v1.1.0 and represents the current stable extension baseline.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Extension release progression",
+            "description": "Published as part of the extension-v1.0.0 → v1.1.0 → v1.2.0 sequence."
+          },
+          "item2": {
+            "title": "Traceable release comparison",
+            "description": "GitHub compare links provide transparent change tracking between extension versions."
+          },
+          "item3": {
+            "title": "Stable extension baseline",
+            "description": "Serves as the latest stable extension tag before the next planned milestone."
+          },
+          "item4": {
+            "title": "Release metadata alignment",
+            "description": "Version naming and publish timing are aligned with GitHub release records."
+          }
+        }
+      },
+      "v1_1_0": {
+        "label": "v1.1.0",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "extension-v1.1.0",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-03-03",
+        "summary": "Incremental extension release preceding v1.2.0, used as the comparison base for the latest extension update.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Intermediate extension milestone",
+            "description": "Acts as the stepping stone between extension-v1.0.0 and extension-v1.2.0."
+          },
+          "item2": {
+            "title": "Version continuity",
+            "description": "Maintains release continuity and semantic upgrade flow for extension users."
+          },
+          "item3": {
+            "title": "Comparable release boundary",
+            "description": "Provides a clear boundary for comparing changes into extension-v1.2.0."
+          },
+          "item4": {
+            "title": "Published release trace",
+            "description": "Recorded in GitHub releases to keep extension history auditable."
+          }
+        }
+      },
+      "v1_0_0": {
+        "label": "v1.0.0",
+        "status": "Released",
+        "tagLabel": "Tag",
+        "tag": "web-v1.0.0 / extension-v1.0.0",
+        "publishedAtLabel": "Published",
+        "publishedAt": "2026-02-20",
+        "summary": "First production baseline of NOD web, with extension v1.0.0 released later the same day as the initial extension line start.",
+        "highlightsTitle": "Highlights",
+        "highlights": {
+          "item1": {
+            "title": "Production web baseline",
+            "description": "Shipped dashboard, article list/detail, and AI summary workflow for web."
+          },
+          "item2": {
+            "title": "Search and export capabilities",
+            "description": "Included semantic search, markdown export, and localized UI support."
+          },
+          "item3": {
+            "title": "Billing integration",
+            "description": "Integrated pricing and billing management flow in the web product."
+          },
+          "item4": {
+            "title": "Extension line kickoff",
+            "description": "extension-v1.0.0 established the first extension release track."
+          }
+        }
+      }
+    },
+    "links": {
+      "githubReleases": "View all releases on GitHub",
+      "backToDashboard": "Back to dashboard"
+    }
+  },
+  "continueWithGoogle": "Googleで続ける",
+  "dashboard": {
+    "allContentTypes": "すべてのタイプ",
+    "allStatus": "すべてのステータス",
+    "analysisDescription": "AIがコンテンツを読み、主要な概念を抽出し、構造化された要約を生成します。通常30秒〜1分かかります。",
+    "analysisStepAnalyzing": "AI分析中",
+    "analysisStepReading": "コンテンツ読み取り",
+    "analysisStepSummary": "要約生成",
+    "analyzingArticle": "AIがコンテンツを分析しています...",
+    "articleInfo": "コンテンツ情報",
+    "articleListSubtitle": "保存したコンテンツを探索し、必要なインサイトを素早く見つけましょう。",
+    "articleNotFound": "コンテンツが見つかりません。",
+    "checkStatus": "ステータス確認",
+    "concepts": "キーコンセプト",
+    "deleteConfirm": "このコンテンツを削除しますか？",
+    "details": "詳細",
+    "copyAsMarkdown": "Markdownをコピー",
+    "copiedMarkdown": "コピー済み！",
+    "copyFailed": "コピー失敗",
+    "graph": {
+      "actionClearSelection": "選択解除",
+      "actionPinSelected": "選択ノードを固定",
+      "actionUnpinAll": "すべて固定解除",
+      "actionUnpinSelected": "選択ノードの固定解除",
+      "depthLabel": "深さ",
+      "empty": "まだグラフデータがありません。コンテンツを保存して要約してください。",
+      "filterMinConnections": "最小接続数",
+      "loadError": "グラフデータの読み込みに失敗しました。",
+      "localCenterFilteredMessage": "現在のフィルターで基準ノードが除外されています。",
+      "localReselectBase": "基準を再選択",
+      "localSwitchGlobal": "グローバルへ切替",
+      "lockedDescription": "Proにアップグレードすると概念グラフを利用できます。",
+      "lockedTitle": "グラフビューはPro機能です",
+      "menuPin": "固定",
+      "menuPinSelected": "選択ノードを固定",
+      "menuUnpin": "固定解除",
+      "menuUnpinAll": "すべて固定解除",
+      "modeGlobal": "グローバル",
+      "modeLocal": "ローカル",
+      "no": "いいえ",
+      "openFull": "フルグラフを開く",
+      "pageDescription": "要約したコンテンツのコア概念のつながりを可視化します。",
+      "pageTitle": "グラフビュー",
+      "panelFilters": "フィルター",
+      "panelSearch": "検索",
+      "panelSelection": "選択",
+      "previewDescription": "ダッシュボード下部で読み取り専用プレビューを表示します。",
+      "previewTitle": "グラフビュー プレビュー",
+      "searchPlaceholder": "概念を検索...",
+      "sectionLabel": "ナレッジグラフ",
+      "selectionCount": "{count}件選択中",
+      "selectionEmpty": "選択中のノードはありません",
+      "selectionPinned": "固定",
+      "statsArticles": "コンテンツ",
+      "statsConcepts": "ユニーク概念",
+      "statsEdges": "接続",
+      "statsNodes": "ノード",
+      "upgrade": "Proにアップグレード",
+      "yes": "はい"
+    },
+    "installExtensionCta": "Chromeに追加",
+    "keyPoints": "主要ポイント",
+    "language": "言語",
+    "loadError": "コンテンツの読み込みに失敗しました。",
+    "loadMore": "もっと見る",
+    "loadingArticles": "コンテンツを読み込み中...",
+    "loadingSimilar": "類似コンテンツを読み込み中...",
+    "markdownNote": "ノート",
+    "minuteRead": "{minutes}分",
+    "myArticles": "マイコンテンツ",
+    "noArticles": "まだコンテンツがありません。Chrome拡張機能でコンテンツを保存してください。",
+    "noSummary": "要約なし",
+    "openContent": "コンテンツを開く",
+    "original": "原文を見る",
+    "overview": {
+      "aiSummaries": "AI要約",
+      "closeBanner": "バナーを閉じる",
+      "contentTypes": "コンテンツタイプ",
+      "currentPlan": "現在のプラン",
+      "description": "ナレッジライブラリの概要です。",
+      "getSupport": "ヘルプ",
+      "heroSubtitle": "保存したコンテンツをAIで要約し、主要インサイトをすばやくつなげましょう。",
+      "heroTitleAccent": "ワークスペース",
+      "heroTitlePrimary": "コンテンツインサイト",
+      "installExtensionDescription": "ブラウジング中のコンテンツをワンクリックで保存します。",
+      "installExtensionTitle": "Chrome拡張機能をインストール",
+      "justNow": "たった今",
+      "keyMetrics": "主要指標",
+      "manageBillingDescription": "プランと使用状況を確認します。",
+      "manageBillingTitle": "請求管理",
+      "modified": "更新",
+      "noRecentArticles": "まだコンテンツがありません。",
+      "onboardingDescription": "ブラウザ拡張機能を接続して、すぐにインサイト収集を始めましょう。",
+      "onboardingSetupNow": "今すぐ設定",
+      "onboardingTitle": "オンボーディングを完了しましょう！",
+      "openUsageGuide": "利用ガイドを開く",
+      "planFreeActive": "Freeプラン利用中",
+      "planProActive": "Proプラン利用中",
+      "quickActions": "クイックアクション",
+      "recentArticlesDescription": "最近保存したコンテンツです。",
+      "recentArticlesTitle": "最近のコンテンツ",
+      "savedArticles": "保存したコンテンツ",
+      "storageUnlimited": "コンテンツ保存は無制限",
+      "title": "ダッシュボード",
+      "usageCalculating": "使用量を計算中...",
+      "viewAll": "すべて見る",
+      "viewArticlesDescription": "保存したコンテンツを閲覧・検索します。",
+      "viewArticlesTitle": "コンテンツを見る",
+      "welcomeMessage": "NODへようこそ",
+      "workflowStepAnalyze": "要約分析",
+      "workflowStepCapture": "コンテンツ収集",
+      "workflowStepRefine": "主要インサイト整理",
+      "workflowTitle": "今日のワークフロー"
+    },
+    "pendingAnalysis": "分析待機中...",
+    "readTime": "約{minutes}分",
+    "readingTime": "読了時間",
+    "refreshing": "更新中...",
+    "retryAnalysis": "再試行",
+    "savedDate": "保存日",
+    "searchArticles": "コンテンツを検索...",
+    "searchMinChars": "2文字以上入力してください",
+    "searchPlaceholder": "検索...",
+    "semanticSearch": "AI検索",
+    "sidebar": {
+      "nav": {
+        "articles": "コンテンツ",
+        "billing": "請求管理",
+        "changelog": "リリースノート",
+        "dashboard": "ダッシュボード",
+        "graph": "グラフビュー",
+        "pricing": "料金プラン",
+        "settings": "設定",
+        "shared": "共有済み"
+      },
+      "user": {
+        "billing": "請求管理",
+        "feedback": "フィードバック",
+        "help": "ヘルプ",
+        "logout": "ログアウト",
+        "profile": "プロフィール",
+        "settings": "設定"
+      }
+    },
+    "similarArticles": "類似コンテンツ",
+    "similarity": "{percent}%一致",
+    "sourceLabel": "ソース",
+    "statusAnalyzing": "分析中",
+    "statusCompleted": "完了",
+    "statusFailed": "失敗",
+    "statusLabel": "ステータス",
+    "statusPending": "待機中",
+    "statusProcessing": "処理中",
+    "summary": "要約",
+    "summaryInProgress": "要約中...",
+    "typeDocs": "ドキュメント",
+    "typeGitHub": "GitHub",
+    "typeNews": "ニュース",
+    "typeDiscussion": "ディスカッション",
+    "typePaper": "論文",
+    "typeTechBlog": "テックブログ",
+    "typeVideo": "動画/ポッドキャスト",
+    "typePatchNote": "パッチノート",
+    "shareSectionTitle": "この要約を共有",
+    "shareSectionDescription": "このコンテンツ要約を共有するための公開リンクを作成します。",
+    "shareModalTitle": "この要約を共有しますか？",
+    "shareModalDescription": "公開リンクを通じて、他の人がこのコンテンツのAI要約を閲覧できます。",
+    "shareModalIncludedTitle": "この共有リンクに含まれる内容",
+    "shareModalIncludedSummary": "AI生成の要約",
+    "shareModalIncludedConcepts": "主要な概念",
+    "shareModalIncludedKeyPoints": "重要ポイント",
+    "shareModalHint": "信頼できる相手にのみ共有してください。リンクを知っている人は誰でもこの要約を閲覧できます。",
+    "shareGenerateLink": "共有リンクを作成",
+    "shareRegenerateLink": "共有リンクを再作成",
+    "shareActionLink": "共有",
+    "shareCopyLink": "リンクをコピー",
+    "shareRevokeLink": "リンクを無効化",
+    "shareCopied": "リンクをコピーしました",
+    "shareOpenPanel": "共有パネルを開く",
+    "shareAdvanced": "共有の詳細オプション",
+    "shareAlreadySharedTitle": "共有リンクが作成されました！",
+    "shareAlreadySharedDescription": "下のリンクをコピーして共有してください。",
+    "sharedTrustSummarizedBy": "要約作成者",
+    "sharedTrustFallbackName": "NODユーザー",
+    "sharedTrustOriginalLink": "原文を見る",
+    "sharedCommentsTitle": "コメント",
+    "sharedCommentsAuthorLabel": "名前",
+    "sharedCommentsAuthorPlaceholder": "名前を入力",
+    "sharedCommentsContentLabel": "コメント",
+    "sharedCommentsContentPlaceholder": "感想を入力してください",
+    "sharedCommentsSubmit": "コメントを追加",
+    "sharedCommentsReplyAction": "返信を書く",
+    "sharedCommentsAddReplyAction": "返信する",
+    "sharedCommentsActionMenuLabel": "コメント操作",
+    "sharedCommentsActionReport": "報告",
+    "sharedCommentsEditSave": "保存",
+    "sharedCommentsReplySubmit": "返信",
+    "sharedCommentsReplyPlaceholder": "返信を入力",
+    "sharedCommentsSharerBadge": "共有者",
+    "sharedCommentsHideReplies": "返信を隠す",
+    "sharedCommentsReplyCountSingle": "返信",
+    "sharedCommentsReplyCountPlural": "返信",
+    "sharedCommentsEmpty": "まだコメントはありません。",
+    "sharedCommentsSignInRequired": "コメントを投稿するにはサインインしてください。",
+    "sharedQuickActionEmpathy": "共感",
+    "sharedQuickActionComments": "コメント",
+    "sharedQuickActionShare": "共有",
+    "sharedShareCopyLink": "リンクをコピー",
+    "sharedShareCopied": "コピー済み",
+    "sharedCommentsPanelTitle": "返信 ({count})",
+    "sharedCommentsPanelDescription": "この共有要約のコメントを閲覧・投稿できます。",
+    "sharedCommentsSortLabel": "並び替え",
+    "sharedCommentsSortLatest": "新しい順",
+    "sharedCommentsSortRecommended": "おすすめ順",
+    "sharedAuthSectionTitle": "アカウントで続行",
+    "sharedAuthSectionDescription": "ログインまたは新規登録して、この共有要約を自分のワークスペースに保存できます。",
+    "viewOriginal": "原文を見る"
+  },
+  "errors": {
+    "goHome": "ホームへ戻る",
+    "notFound": "ページが見つかりません",
+    "somethingWrong": "エラーが発生しました！",
+    "tryAgain": "再試行"
+  },
+  "help": {
+    "billingHelp": "請求に関するヘルプ",
+    "centerBadge": "NOD ヘルプセンター",
+    "faq": {
+      "item1": {
+        "a": "長い文書や混雑したキューでは処理が遅れることがあります。少し待ってから更新し、記事の状態を再確認してください。",
+        "q": "要約に時間がかかります。"
+      },
+      "item2": {
+        "a": "Chrome拡張機能がインストールされているか確認し、ログイン状態を維持したままページを一度更新してください。",
+        "q": "拡張機能が動作しません。"
+      },
+      "item3": {
+        "a": "支払い情報は「設定 > 請求管理」で管理でき、プランの詳細は料金ページで確認できます。",
+        "q": "請求はどこで管理できますか？"
+      }
+    },
+    "faqTitle": "よくある質問",
+    "heading": "NOD スタートガイド",
+    "quickShortcutsTitle": "よく使うショートカット",
+    "quickStart": {
+      "item1": {
+        "description": "拡張機能で記事を保存して、すべてを1つのアーカイブにまとめましょう。",
+        "title": "1) コンテンツを保存"
+      },
+      "item2": {
+        "description": "保存した各コンテンツに、主要ポイントと構造化ノート付きのAI要約が付きます。",
+        "title": "2) AI要約を確認"
+      },
+      "item3": {
+        "description": "関連トピックをまとめて、必要な知識をより速く取り出せます。",
+        "title": "3) インサイトを接続"
+      }
+    },
+    "sendFeedback": "フィードバックを送る",
+    "shortcuts": {
+      "articles": "コンテンツ",
+      "billing": "請求管理",
+      "installExtension": "拡張機能をインストール",
+      "pricing": "料金プラン"
+    },
+    "subtitle": "コンテンツ保存からAI要約確認、プラン管理まで、主要な流れをまとめました。",
+    "supportTitle": "サポートとフィードバック"
+  },
+  "landing": {
+    "cta": {
+      "button": "無料で始める",
+      "description": "NODでコンテンツを保存・分析・想起する数千人の読者と一緒に。",
+      "headline": "ナレッジライブラリの構築を始めましょう",
+      "note": "クレジットカード不要"
+    },
+    "dashboardPreview": {
+      "articles": {
+        "0": {
+          "summary": "RSCはインタラクティブ性を維持しながら、サーバーレンダリングコンポーネントでストリーミングUIを実現します。",
+          "title": "React Server Componentsを理解する"
+        },
+        "1": {
+          "summary": "エンベディングはテキストをベクトルに変換し、類似検索はキーワードを超えて関連ノートを取得します。",
+          "title": "ベクトルデータベース解説"
+        },
+        "2": {
+          "summary": "ASGIの基礎、依存性注入パターン、型付きAPIを素早くデプロイする方法を学びます。",
+          "title": "FastAPIで構築する"
+        }
+      },
+      "itemCount": "{count}件",
+      "savedReads": "保存した記事",
+      "searchPlaceholder": "検索: RSC",
+      "similar": {
+        "0": "Reactパターン深掘り",
+        "1": "Next.js 16移行ガイド",
+        "2": "TypeScript 5.9の新機能",
+        "3": "エッジコンピューティング入門"
+      },
+      "similarReads": "類似記事",
+      "statusAnalyzing": "分析中",
+      "statusCompleted": "完了"
+    },
+    "features": {
+      "headline": "ナレッジ管理に必要なすべて",
+      "items": {
+        "aiSummary": {
+          "description": "あらゆるコンテンツのキーポイントとインサイトを強調するAI生成要約を即座に取得できます。",
+          "title": "AI要約"
+        },
+        "chromeExtension": {
+          "description": "ブラウザからワンクリックでコンテンツを保存。コピー＆ペースト不要です。",
+          "title": "Chrome拡張機能"
+        },
+        "concepts": {
+          "description": "コンテンツから主要なコンセプト、テーマ、トピックを自動的に識別しタグ付けします。",
+          "title": "コンセプト抽出"
+        },
+        "multiPlatform": {
+          "description": "Web、モバイル、ブラウザ拡張機能からナレッジライブラリにアクセスできます。",
+          "title": "マルチプラットフォーム"
+        },
+        "multilingual": {
+          "description": "あらゆる言語のコンテンツを保存・分析できます。AI要約はお好みの言語で提供されます。",
+          "title": "多言語対応"
+        },
+        "vectorSearch": {
+          "description": "キーワードではなく意味でコンテンツを検索。ベクトル検索があなたの探しているものを理解します。",
+          "title": "セマンティック検索"
+        }
+      },
+      "label": "機能"
+    },
+    "footer": {
+      "api": "API",
+      "blog": "ブログ",
+      "changelog": "変更履歴",
+      "copyright": "All rights reserved.",
+      "dashboard": "ダッシュボード",
+      "docs": "ドキュメント",
+      "extension": "Chrome拡張機能",
+      "github": "GitHub",
+      "legal": "法的情報",
+      "mobile": "モバイルアプリ",
+      "pricing": "料金プラン",
+      "privacy": "プライバシーポリシー",
+      "product": "製品",
+      "refund": "返金ポリシー",
+      "resources": "リソース",
+      "tagline": "AI搭載のコンテンツ保存とナレッジ管理。",
+      "terms": "利用規約"
+    },
+    "hero": {
+      "badge": "AI搭載ナレッジ管理",
+      "cta": "無料で始める",
+      "ctaExtension": "Chromeに追加",
+      "ctaSecondary": "詳しく見る",
+      "description": "NODはAIを活用してコンテンツを分析・要約し、いつでも検索・参照できる個人ナレッジライブラリを構築します。",
+      "headline": "コンテンツを保存し、インサイトを発見",
+      "trustedBy": "世界中のナレッジワーカーに信頼されています"
+    },
+    "howItWorks": {
+      "headline": "スマートな読書のための3ステップ",
+      "label": "使い方",
+      "steps": {
+        "analyze": {
+          "description": "AIが自動でコンテンツを要約し、キーコンセプトを抽出し、ライブラリに整理します。",
+          "number": "02",
+          "title": "分析"
+        },
+        "recall": {
+          "description": "セマンティック検索で必要なものを正確に見つけましょう。",
+          "number": "03",
+          "title": "想起"
+        },
+        "save": {
+          "description": "Chrome拡張機能でWebのコンテンツを保存するか、URLを貼り付けてください。",
+          "number": "01",
+          "title": "保存"
+        }
+      }
+    },
+    "nav": {
+      "blog": "ブログ",
+      "changelog": "リリースノート",
+      "changeLanguage": "言語を変更",
+      "features": "機能",
+      "getStarted": "始める",
+      "howItWorks": "使い方",
+      "login": "ログイン",
+      "pricing": "料金プラン"
+    },
+    "pricing": {
+      "basicAnalyzableTypes": "分析可能タイプ: ニュース・技術ブログ・公式ドキュメント",
+      "cta": "料金を見る",
+      "description": "まずはBasic。要約無制限や高品質モデルが必要になったらProへアップグレード。",
+      "headline": "読書フローに合うプランを選択",
+      "label": "料金プラン",
+      "note": "いつでも変更可能",
+      "proAnalyzableTypes": "分析可能タイプ: 全タイプ（GitHub・論文・動画を含む）"
+    },
+    "stackingCards": {
+      "headline": "積み重なるカードで読書パイプラインを追跡",
+      "items": {
+        "card1": {
+          "description": "ドキュメント、動画、リポジトリ、スレッドを一つのストリームに統合し、出典コンテキストを保ちます。",
+          "kicker": "収集",
+          "metrics": {
+            "first": "13フィード同期",
+            "second": "新規クリップ47件",
+            "third": "遅延210ms"
+          },
+          "title": "あらゆる面からシグナルを取得"
+        },
+        "card2": {
+          "description": "各カードが主要インサイト・パターン・実行可能な断片を抽出し、数秒で再確認できます。",
+          "kicker": "分析",
+          "metrics": {
+            "first": "モデル: Gemini 3.1 Pro Preview",
+            "second": "品質 97",
+            "third": "セマンティッククラスタ 3"
+          },
+          "title": "要約はリアルタイムで生成"
+        },
+        "card3": {
+          "description": "セマンティックメモリが全ノートを接続し、次の検索で根拠付きの答えを返します。",
+          "kicker": "想起",
+          "metrics": {
+            "first": "想起速度 0.8秒",
+            "second": "概念エッジ 112",
+            "third": "信頼度 94%"
+          },
+          "title": "必要な瞬間に正確な文脈を取得"
+        }
+      },
+      "label": "シネマティックスクロール",
+      "pinLabel": "ScrollTrigger 固定"
+    },
+    "typewriterFeed": {
+      "label": "ライブフィード",
+      "line1": "[09:12:11] ブラウザキューから新規記事を4件取り込みました。",
+      "line2": "[09:12:16] AIが'React 19 Compiler'を9秒で要約しました。",
+      "line3": "[09:12:23] 概念リンクを更新: RSC、ストリーミング、エッジランタイム。",
+      "line4": "[09:12:28] 今週の読書セットの想起スコアが92%まで上がりました。"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "effectiveDate": "Effective Date: 2026-03-26",
+      "intro": "NOD (the \"Service\") values your privacy and is committed to protecting your personal information in compliance with applicable laws, including the Korean Personal Information Protection Act (PIPA), the EU General Data Protection Regulation (GDPR), and the California Consumer Privacy Act (CCPA). This Privacy Policy explains what personal information we collect, how we use it, who we share it with, and how you can exercise your rights.",
+      "sections": {
+        "purpose": {
+          "title": "1. Purpose of Processing Personal Information",
+          "content": "We process personal information for the following purposes:\n\n(a) Member management: User identification, login authentication, session management, and account administration.\n(b) Core service delivery: Article saving, AI-powered summarization, key point extraction, concept tagging, content classification, semantic search, and embedding generation.\n(c) Subscription and payment management: Subscription status management, payment processing via Paddle, billing history, and promotional code administration.\n(d) Service improvement: Service quality enhancement, error analysis and diagnosis, usage statistics, security monitoring, and fraud prevention.\n(e) Communication: Service notices, policy change notifications, and responses to user inquiries.\n(f) Legal compliance: Fulfillment of obligations under applicable laws and regulations."
+        },
+        "collection": {
+          "title": "2. Personal Information Collected and Collection Methods",
+          "content": "We collect the following categories of personal information. Items marked as required are necessary for service provision; optional items may be declined without affecting core functionality.\n\nRequired information (Account):\n- Email address, name, profile image (as provided by your social login provider), password hash (for email registration), authentication tokens.\n\nRequired information (Service):\n- Article URLs, titles, extracted body text, and related metadata saved through the web application or Chrome extension.\n\nAutomatically generated information:\n- AI-generated summaries, key points, concept tags, content classifications, and embedding vectors produced by processing your saved content.\n\nService usage information:\n- Usage records (e.g., save counts, AI analysis counts), subscription information, promotional code redemption records.\n\nSocial activity information (optional):\n- Shared links, comments, likes, and display names created through the social features of the Service.\n\nDevice and access information:\n- IP address, User-Agent string, browser type, Chrome extension version, access timestamps.\n\nOAuth information:\n- Social login provider (Google, GitHub, Facebook, Kakao) identifiers, email addresses, names, and profile images as authorized by you during the OAuth flow.\n\nAnalytics information:\n- Website usage data collected through Google Analytics (e.g., page views, events, session duration).\n\nCollection methods: Direct input during registration; automatic collection through the web application, Chrome extension, cookies, and analytics tools; information received from third-party OAuth providers upon your authorization.",
+          "note": "When using the Chrome extension, the URL and body text of web pages you choose to save are extracted and transmitted to the Service. The extension operates only upon your explicit action and does not collect browsing data in the background."
+        },
+        "retention": {
+          "title": "3. Retention Periods",
+          "content": "We retain personal information only for as long as necessary to fulfill the purposes for which it was collected, or as required by applicable law. When the retention period expires, personal information is promptly destroyed.\n\nService usage period:\n- Account information, saved content, and AI-generated data are retained while your account remains active. Upon account deletion, data is destroyed within 30 days, except as required by law.\n\nStatutory retention periods (Korean law):\n- Records of contracts and withdrawal of offers (Act on Consumer Protection in Electronic Commerce): 5 years\n- Records of payment and supply of goods/services: 5 years\n- Records of consumer complaints and dispute resolution: 3 years\n- Login and access logs (Protection of Communications Secrets Act): 3 months\n\nBackup retention:\n- Production database backups are retained for 30 days and development backups for 7 days, after which they are automatically purged."
+        },
+        "thirdParty": {
+          "title": "4. Disclosure to Third Parties",
+          "content": "We do not sell, rent, or trade your personal information. We may disclose personal information to third parties only in the following circumstances:\n\n(a) With your explicit consent.\n(b) Where required by applicable law, regulation, or legal process.\n(c) To protect the rights, property, or safety of the Company, our users, or the public.\n(d) In connection with a merger, acquisition, or sale of all or a portion of our assets, with notice to affected users."
+        },
+        "delegation": {
+          "title": "5. Delegation of Processing",
+          "content": "We use the following trusted service providers to operate and improve the Service. These providers process personal information only within the scope of their delegated tasks and under contractual data protection obligations.\n\n- AI processing (Google Gemini, OpenAI): Article summarization, key point extraction, concept tagging, embedding generation.\n- Payment processing (Paddle): Subscription management, payment processing, tax collection, refund processing.\n- Cloud infrastructure (Google Cloud Platform): Service hosting, data storage, and computational processing.\n- Authentication (Supabase): User authentication, session management, OAuth integration.\n- AI observability (Langfuse): AI call logging and performance monitoring.\n- Error tracking (Sentry): Error reporting, diagnostic data collection.\n- Analytics (Google Analytics): Website usage statistics and user behavior analysis."
+        },
+        "internationalTransfer": {
+          "title": "6. International Transfer of Personal Information",
+          "content": "To provide the Service, your personal information may be transferred to and processed in countries outside your country of residence. We implement appropriate safeguards for all international transfers in accordance with applicable data protection laws.\n\nThe following transfers are currently in effect:\n\n- Google (Gemini API) | United States | AI summarization and analysis | Article content, titles, URLs | Retained for up to 55 days for abuse monitoring (paid API; not used for model training)\n- OpenAI | United States | AI summarization and analysis (alternative provider) | Article content, titles, URLs | Retained for up to 30 days\n- Paddle | United Kingdom / United States | Payment processing | Email, payment information | Retained per Paddle's privacy policy\n- Supabase | United States | User authentication | Email, OAuth tokens | Retained while account is active\n- Langfuse | Germany (EU) | AI observability | AI call logs (may include prompt/response data) | Retained per retention settings\n- Sentry | United States | Error tracking | Error logs, user identifiers | Retained per Sentry's data retention policy\n\nFor transfers from the EU/EEA, we rely on Standard Contractual Clauses (SCCs) or applicable adequacy decisions. For transfers from Korea, we comply with PIPA requirements for cross-border data transfers, including obtaining consent where required."
+        },
+        "destruction": {
+          "title": "7. Destruction Procedures and Methods",
+          "content": "When personal information is no longer needed for its intended purpose or the retention period has expired, it is promptly destroyed according to the following procedures:\n\nProcedure: The information subject to destruction is identified, approved by the person responsible for personal information protection, and then destroyed.\n\nMethods:\n- Electronic files: Permanently deleted using methods that prevent recovery (e.g., cascading database deletion, secure file erasure).\n- Physical documents: Shredded or incinerated.\n- Backup data: Automatically purged upon expiration of the backup retention period (production: 30 days; development: 7 days)."
+        },
+        "rights": {
+          "title": "8. Data Subject Rights and How to Exercise Them",
+          "content": "You have the following rights regarding your personal information, which you may exercise at any time:\n\n(a) Right of access: Request access to your personal information and details of its processing.\n(b) Right to correction: Request correction of inaccurate or incomplete personal information.\n(c) Right to deletion: Request deletion of your personal information, subject to legal retention requirements.\n(d) Right to suspend processing: Request that we suspend the processing of your personal information.\n(e) Right to data portability: Request a copy of your personal information in a structured, commonly used format (where technically feasible).\n(f) Right to object: Object to the processing of your personal information, including for automated decision-making.\n\nHow to exercise your rights: Send a request to shickcoong777@gmail.com specifying which right you wish to exercise. We will verify your identity and process your request within 10 days. If we cannot comply with your request, we will notify you of the reason within the same period.\n\nYou may exercise these rights directly or through a legally authorized representative. If you use a representative, a power of attorney must be submitted."
+        },
+        "automatedDecisions": {
+          "title": "9. Automated Decision-Making",
+          "content": "The Service uses AI technology to perform automated processing of your saved content. In accordance with Article 37-2 of the Korean Personal Information Protection Act, we disclose the following:\n\nTypes of automated decisions:\n- Content type classification (e.g., news article, technical blog, academic paper)\n- AI-generated summarization and key point extraction\n- Automatic concept extraction and tagging\n- Similarity-based article recommendations via vector embeddings (cosine similarity)\n\nKey personal information used: Article titles, body text, URLs, and content metadata.\n\nThese automated processes are designed to assist your knowledge management and do not produce decisions with legal or similarly significant effects on you. All AI-generated results are provided for reference purposes only.\n\nYour rights: You may request an explanation of how automated decisions were made and may object to such processing. To do so, contact us at shickcoong777@gmail.com."
+        },
+        "cookies": {
+          "title": "10. Cookies and Tracking Technologies",
+          "content": "We use cookies and similar technologies to operate and improve the Service.\n\nTypes of cookies used:\n- Essential cookies: Required for authentication, session management, and security. These cannot be disabled without losing core functionality.\n- Preference cookies: Store your language, theme, and display settings.\n- Analytics cookies: Collect usage statistics through Google Analytics to help us understand how the Service is used and improve it accordingly.\n\nCookie management: You can manage or delete cookies through your browser settings. Please note that disabling essential cookies may prevent you from using the Service. For users in the EU/EEA, non-essential cookies are only set with your prior consent.\n\nDo Not Track: We currently do not respond to Do Not Track (DNT) browser signals, as there is no universally accepted standard for DNT compliance."
+        },
+        "behavioralInfo": {
+          "title": "11. Behavioral Information Collection (Chrome Extension)",
+          "content": "The NOD Chrome extension collects certain behavioral information to provide its core functionality.\n\nInformation collected:\n- URLs and body text of web pages you explicitly choose to save\n- Page metadata (title, author, publication date) of saved pages\n- Extension usage events (e.g., save button clicks)\n\nPurpose: To enable article saving, AI analysis, and content management within the Service.\n\nInformation NOT collected:\n- General browsing history or activity on pages you do not save\n- Data from other browser tabs or windows\n- Keystrokes, form inputs, or credentials on any website\n\nThe extension operates in compliance with Chrome Web Store policies, including the Limited Use Policy. Data collected through the extension is used solely for user-facing features of the Service and is never used for advertising, sold to data brokers, or transferred to third parties for purposes unrelated to the Service."
+        },
+        "security": {
+          "title": "12. Security Measures",
+          "content": "We implement the following technical and organizational measures to protect your personal information:\n\nTechnical measures:\n- Password encryption using bcrypt one-way hashing\n- Authentication token encryption using JWE (A256KW + A256GCM)\n- All data transmitted over HTTPS (TLS encryption in transit)\n- Database access restricted via private VPC with no external access\n- Secrets managed through Google Secret Manager\n- Automated backups with point-in-time recovery\n\nOrganizational measures:\n- Access to personal information restricted to authorized personnel on a need-to-know basis\n- Internal data handling procedures and guidelines\n- Regular review of security practices"
+        },
+        "officer": {
+          "title": "13. Data Protection Officer",
+          "content": "For any inquiries, complaints, or requests related to the processing of your personal information, please contact:\n\nData Protection Contact:\n- Service: NOD\n- Email: shickcoong777@gmail.com\n\nThe Data Protection Contact will respond to your inquiries and process your data subject rights requests."
+        },
+        "changes": {
+          "title": "14. Changes to This Policy",
+          "content": "We may update this Privacy Policy from time to time to reflect changes in our practices, legal requirements, or Service features.\n\nNotification procedures:\n- For general changes: We will post the updated policy on the Service and announce the changes at least 7 days before the effective date.\n- For significant changes that materially affect your rights (e.g., changes to the categories of information collected, purposes of processing, or third-party disclosures): We will provide at least 30 days' prior notice through in-service announcements and, where feasible, individual notification (e.g., email).\n\nThe revised policy takes effect on its stated effective date. Your continued use of the Service after the effective date constitutes acceptance of the updated policy."
+        },
+        "remedies": {
+          "title": "15. Remedies for Rights Violations",
+          "content": "If you believe your personal information rights have been violated, you may seek assistance from the following organizations:\n\nKorean agencies:\n- Personal Information Dispute Mediation Committee: (02) 2100-2499 | https://www.kopico.go.kr\n- Korea Internet & Security Agency (KISA) Privacy Center: 118 | https://privacy.kisa.or.kr\n- Supreme Prosecutors' Office Cyber Investigation Division: (02) 3480-3573\n- Korean National Police Agency Cyber Bureau: 182 | https://ecrm.cyber.go.kr\n\nFor EU/EEA users (GDPR):\nYou have the right to lodge a complaint with your local data protection supervisory authority. You also have the right to access, rectification, erasure, restriction of processing, data portability, and to object to processing. To exercise these rights, contact us at shickcoong777@gmail.com.\n\nFor California users (CCPA/CPRA):\nYou have the right to know what personal information we collect and how it is used, the right to request deletion, and the right to opt out of the sale or sharing of personal information. We do not sell your personal information. To exercise your rights, contact us at shickcoong777@gmail.com. We will not discriminate against you for exercising your CCPA rights."
+        }
+      },
+      "title": "Privacy Policy"
+    },
+    "refund": {
+      "effectiveDate": "Effective Date: 2026-03-26",
+      "intro": "This Refund and Cancellation Policy applies to NOD's paid subscription plan (Pro). All payments are processed through Paddle.com, which acts as the Merchant of Record. This policy complies with the Korean Act on Consumer Protection in Electronic Commerce, the EU Consumer Rights Directive, and the Content User Protection Guidelines.",
+      "sections": {
+        "cancellation": {
+          "title": "1. Subscription Cancellation",
+          "content": "You may cancel your subscription at any time through your account settings or by contacting us at shickcoong777@gmail.com. Upon cancellation:\n\n(a) You will retain access to Pro features until the end of your current billing period.\n(b) No further charges will be made after the current billing period ends.\n(c) Your account will automatically revert to the Free plan at the end of the billing period.\n(d) Your saved content and data will be preserved and remain accessible under the Free plan."
+        },
+        "withdrawal": {
+          "title": "2. Right of Withdrawal",
+          "content": "You have the right to withdraw from your subscription and receive a full refund, without providing any reason, within the following periods:\n\nKorean users: Within 7 days of the initial purchase date or the most recent auto-renewal date, in accordance with Article 17 of the Act on Consumer Protection in Electronic Commerce.\n\nEU/UK users: Within 14 days of the initial purchase date or the most recent auto-renewal date, in accordance with the EU Consumer Rights Directive.\n\nAll other users: Within 7 days of the initial purchase date or the most recent auto-renewal date.\n\nTo exercise your right of withdrawal, contact us at shickcoong777@gmail.com with your account email and a statement that you wish to withdraw. No specific form is required.\n\nNote: As the Service is a \"divisible service\" (ongoing subscription), even after the withdrawal period has expired, you may still be eligible for a pro-rata refund for the unused portion of your subscription (see Section 3)."
+        },
+        "proRata": {
+          "title": "3. Pro-Rata Refund After Withdrawal Period",
+          "content": "If the withdrawal period specified in Section 2 has expired, you may still request cancellation and receive a pro-rata refund for the unused portion of your current billing period.\n\nThe refund amount is calculated using the following formula:\n\nRefund = Payment Amount - (Payment Amount / Total Days in Billing Period x Days Used)\n\nExample: If you paid $5 for a monthly subscription and request cancellation after 10 days of a 30-day billing period:\nRefund = $5 - ($5 / 30 x 10) = $3.33\n\nFor annual subscriptions, the used portion may be calculated at the standard monthly rate ($5/month) multiplied by the number of full months used, with the remainder refunded.\n\nPro-rata refunds are available upon request and are not automatic."
+        },
+        "autoRenewal": {
+          "title": "4. Auto-Renewal Refund",
+          "content": "NOD subscriptions renew automatically at the end of each billing period. We will take the following measures regarding auto-renewal:\n\n(a) Pre-renewal notice: We will send you a notification at least 7 days before each auto-renewal date, informing you of the renewal date, amount to be charged, and payment method.\n(b) Price increase consent: If the subscription price increases, we will obtain your explicit consent at least 30 days before the new price takes effect. If you do not consent, your subscription will not renew at the new price.\n(c) Cancellation method disclosure: Each renewal notice will include clear instructions on how to cancel.\n\nRefund for auto-renewal charges:\n- If we fail to send the pre-renewal notice, you are entitled to a full refund of the renewal charge.\n- If we sent proper notice, you may still request a refund within 7 days (Korean users) or 14 days (EU/UK users) of the renewal date.\n- After the applicable withdrawal period, a pro-rata refund as described in Section 3 is available."
+        },
+        "serviceDisruption": {
+          "title": "5. Compensation for Service Disruptions",
+          "content": "If the Service becomes unavailable due to reasons attributable to the Company, the following compensation applies to paid subscribers, in accordance with the Content User Protection Guidelines:\n\n(a) Disruption of 10 hours or less per month: The subscription period will be extended by the duration of the disruption at no additional charge.\n(b) Disruption exceeding 10 hours per month: The subscription period will be extended by 10 hours plus twice the excess hours beyond 10 hours.\n(c) Disruption exceeding 72 hours per month: You may terminate the subscription and receive a full refund for the remaining subscription period, plus compensation for any damages incurred.\n\nThis section does not apply to service interruptions caused by scheduled maintenance (with at least 24 hours' advance notice), force majeure events, or circumstances attributable to the user."
+        },
+        "process": {
+          "title": "6. Refund Processing",
+          "content": "Once a refund is approved, we will initiate the refund process within 3 business days.\n\nRefund method: Refunds are processed to your original payment method through Paddle. For credit/debit card payments, we will promptly request the payment processor to cancel or reverse the charge.\n\nProcessing time: While we initiate refunds within 3 business days, the actual time for the refund to appear in your account depends on your payment provider and may take additional time.\n\nLate refund penalty: If we fail to process a refund within the legally required period, we will pay delayed interest at an annual rate of 15% in accordance with the Act on Consumer Protection in Electronic Commerce.\n\nHow to request a refund: Send your request to shickcoong777@gmail.com with your account email address and the reason for your refund request. You may also contact Paddle's customer support directly."
+        },
+        "dispute": {
+          "title": "7. Dispute Resolution",
+          "content": "If you are dissatisfied with our handling of a refund request, you may pursue resolution through the following channels:\n\nStep 1 - Direct resolution: Contact us at shickcoong777@gmail.com. We will respond within 3 business days and endeavor to resolve the matter promptly.\n\nStep 2 - Consumer counseling: Contact the Korea Consumer Counseling Center at 1372 or your local consumer protection agency.\n\nStep 3 - Korea Consumer Agency: File a complaint for damage relief with the Korea Consumer Agency at https://www.consumer.go.kr.\n\nStep 4 - Consumer Dispute Mediation Committee: If no agreement is reached, request mediation from the Consumer Dispute Mediation Committee. An accepted mediation decision has the same effect as a court settlement.\n\nEU/UK users may also contact their local consumer protection authority or use the EU Online Dispute Resolution platform at https://ec.europa.eu/odr."
+        }
+      },
+      "title": "Refund & Cancellation Policy"
+    },
+    "terms": {
+      "effectiveDate": "Effective Date: 2026-03-26",
+      "sections": {
+        "purpose": {
+          "title": "1. Purpose",
+          "content": "These Terms of Service (\"Terms\") govern the relationship between NOD (\"Company\", \"we\", \"us\", or \"our\") and users (\"you\" or \"User\") of the NOD service (the \"Service\"). These Terms define the rights and obligations of both parties regarding the use of the Service. By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, you must not use the Service."
+        },
+        "definitions": {
+          "title": "2. Definitions",
+          "content": "The following terms have the meanings set forth below as used in these Terms:\n\n(a) \"Service\" means the NOD web application, Chrome extension, mobile application, and all related features, tools, and APIs provided by the Company.\n(b) \"User\" means any individual who accesses or uses the Service, including both registered members and visitors.\n(c) \"Article\" means any web content (including but not limited to news articles, blog posts, technical documentation, and academic papers) that a User saves to the Service.\n(d) \"AI Analysis Results\" means summaries, key points, concept tags, content classifications, embedding vectors, and any other output generated by the Service's AI processing of Articles.\n(e) \"Paid Service\" means the subscription-based Pro plan and any other premium features offered by the Company for a fee.\n(f) \"Payment Processor\" means Paddle.com Market Limited, which acts as the Merchant of Record for all payment transactions related to the Service."
+        },
+        "termsPosting": {
+          "title": "3. Posting and Amendment of Terms",
+          "content": "The Company posts these Terms on the Service's website so that Users can easily access and review them at any time.\n\nAmendment procedures:\n(a) The Company may amend these Terms to the extent permitted by applicable law.\n(b) For general amendments, the revised Terms will be announced on the Service at least 7 days before the effective date.\n(c) For amendments that are materially adverse to Users (e.g., expansion of user obligations, restriction of user rights, addition of new charges), the Company will provide at least 30 days' prior notice through in-service announcements and, where feasible, individual notification (e.g., email).\n(d) If you do not agree to the amended Terms, you may terminate your account before the effective date. Your continued use of the Service after the effective date constitutes acceptance of the amended Terms."
+        },
+        "serviceDescription": {
+          "title": "4. Service Description and Changes",
+          "content": "The Company provides an AI-powered knowledge management service with the following features:\n\n(a) Article saving from web pages via the Chrome extension or web application\n(b) AI-generated summarization, key point extraction, and content classification\n(c) Automatic concept extraction and tagging\n(d) Semantic search across saved articles using vector embeddings\n(e) Social features including article sharing, comments, and reactions\n(f) Chrome extension for one-click saving and analysis\n\nService changes:\n- The Company may modify, add, or discontinue features of the Service. For changes that materially affect Users, the Company will provide at least 30 days' advance notice.\n- Service may be temporarily interrupted for the following reasons: scheduled maintenance (with advance notice), emergency server maintenance, network or equipment failures, or force majeure events.\n- If the Company permanently discontinues the Service, Users will be given at least 30 days to export their data before the Service is shut down."
+        },
+        "agreementFormation": {
+          "title": "5. Formation of Service Agreement",
+          "content": "The service agreement is formed when a User completes the registration process and the Company accepts the registration.\n\n(a) Registration: You may register using your email address or through a supported social login provider (e.g., Google, GitHub, Facebook, Kakao).\n(b) Acceptance: The Company may decline or defer registration in the following cases: use of false or another person's information, omission of required information, or registration by a person previously terminated for violation of these Terms.\n(c) Age restriction: The Service is intended for users aged 14 and older. If you are under 14, you may not use the Service. By registering, you represent that you are at least 14 years old."
+        },
+        "account": {
+          "title": "6. Account Management",
+          "content": "You are responsible for maintaining the accuracy of your account information and the security of your account credentials.\n\n(a) Keep your login credentials confidential. You are responsible for all activities that occur under your account.\n(b) Notify us promptly at shickcoong777@gmail.com if you suspect unauthorized access to your account.\n(c) Each individual may maintain only one account. Account sharing or transferring access to third parties is not permitted.\n(d) You must not use another person's account information without their authorization.\n(e) The Company may restrict or suspend accounts that are found to violate these Terms or that show signs of unauthorized use."
+        },
+        "serviceTiers": {
+          "title": "7. Service Tiers and Usage Limits",
+          "content": "The Service is offered in the following tiers:\n\nFree plan:\n- AI analysis: Up to 20 analyses per month\n- Article saving and AI-powered analysis\n- Semantic search: Unlimited\n- Concept extraction and markdown export\n\nPro plan ($5/month, inclusive of applicable taxes):\n- AI analysis: Unlimited\n- All Free plan features, with no monthly usage limits\n- Additional supported content types (e.g., GitHub repositories, academic papers, video transcripts)\n\nUsage limits reset on the first day of each calendar month. The Company reserves the right to modify plan features and pricing with at least 30 days' advance notice. Existing subscribers will continue under their current terms until their next renewal date."
+        },
+        "payment": {
+          "title": "8. Paid Services and Payment",
+          "content": "Payments for Paid Services are processed through Paddle.com, which acts as the Merchant of Record.\n\n(a) Paddle handles all payment processing, currency conversion, tax calculation, collection, and remittance on behalf of the Company.\n(b) The displayed price includes applicable taxes (e.g., VAT, sales tax) as determined by Paddle based on your location.\n(c) Payments are charged in the currency presented at checkout. Exchange rates and any associated fees are determined by your payment provider.\n(d) By subscribing to a Paid Service, you authorize Paddle to charge your selected payment method on a recurring basis according to your chosen billing cycle.\n(e) For payment-related inquiries, you may contact us at shickcoong777@gmail.com or Paddle's customer support directly."
+        },
+        "autoRenewal": {
+          "title": "9. Auto-Renewal and Notifications",
+          "content": "Paid Service subscriptions renew automatically at the end of each billing period unless cancelled.\n\n(a) Renewal notice: The Company will send a notification at least 7 days before each auto-renewal date, specifying the renewal date, charge amount, and payment method.\n(b) Price increase: If the subscription price increases, the Company will obtain your explicit consent at least 30 days before the new price takes effect. Without your consent, the subscription will not renew at the increased price.\n(c) Cancellation: You may cancel auto-renewal at any time through your account settings or by contacting us. Cancellation takes effect at the end of the current billing period.\n(d) Each renewal notice will clearly disclose how to cancel the subscription."
+        },
+        "withdrawalRefund": {
+          "title": "10. Right of Withdrawal, Refund, and Cancellation",
+          "content": "Your rights regarding withdrawal, refund, and cancellation of Paid Services are governed by our separate Refund and Cancellation Policy, which is incorporated into these Terms by reference.\n\nKey provisions:\n(a) Korean users may withdraw within 7 days of purchase or renewal in accordance with Article 17 of the Act on Consumer Protection in Electronic Commerce.\n(b) EU/UK users may withdraw within 14 days of purchase or renewal in accordance with the EU Consumer Rights Directive.\n(c) After the withdrawal period, a pro-rata refund for the unused portion of the subscription is available upon request.\n(d) The Company will initiate approved refunds within 3 business days.\n\nFor full details, please refer to the Refund and Cancellation Policy."
+        },
+        "chromeExtension": {
+          "title": "11. Chrome Extension Terms",
+          "content": "The NOD Chrome extension is subject to the following additional terms:\n\n(a) Permissions: The extension requires certain browser permissions (activeTab, storage, scripting) to provide its core functionality. The extension accesses web page content only when you explicitly initiate a save action.\n(b) Data access: When you use the extension to save an article, the extension accesses the current page's URL, body text, and metadata (title, author, publication date). This data is transmitted to the Service for processing and storage.\n(c) Limited Use Policy: The extension complies with the Chrome Web Store Limited Use Policy. Data collected through the extension is used exclusively for user-facing features of the Service and is not used for advertising, sold to data brokers, or transferred to third parties for purposes unrelated to the Service.\n(d) No background collection: The extension does not monitor or collect data from your browsing activity. It operates only in response to your explicit actions.\n(e) Updates: The extension may be updated from time to time. Significant changes to data collection or permissions will be communicated through the Service or Chrome Web Store update notes."
+        },
+        "userContent": {
+          "title": "12. User Content Rights",
+          "content": "You retain full ownership and copyright of all content you save to the Service.\n\n(a) License grant: By saving content to the Service, you grant the Company a limited, non-exclusive, non-transferable license to store, process, analyze, and display that content solely for the purpose of providing the Service to you.\n(b) No ownership claim: The Company does not claim ownership of your content and will not use it for any purpose beyond providing the Service.\n(c) User responsibility: You are responsible for ensuring you have the necessary rights to save and process any content through the Service. You represent that your use of the Service does not infringe upon the intellectual property or other rights of any third party.\n(d) Content removal: The Company reserves the right to remove content that violates these Terms, applicable law, or the rights of third parties.\n(e) Data export: You may export your saved content at any time through the Service's export features."
+        },
+        "aiServices": {
+          "title": "13. AI Services and Generated Content",
+          "content": "The Service uses artificial intelligence technology to process and analyze your saved Articles. In accordance with the Korean Framework Act on Artificial Intelligence, we disclose the following:\n\n(a) AI disclosure: The Service utilizes AI models provided by third parties (including Google Gemini and OpenAI) to generate summaries, extract key points, classify content, generate concept tags, and create embedding vectors.\n(b) Accuracy disclaimer: AI Analysis Results are provided for reference purposes only. The Company does not guarantee the accuracy, completeness, or timeliness of any AI-generated content. You should independently verify any AI Analysis Results before relying on them.\n(c) Data transfer: To perform AI analysis, Article titles, body text, and related metadata may be transmitted to AI service providers (Google, OpenAI) located in the United States. This data is processed solely for the purpose of generating analysis results and is subject to our Privacy Policy.\n(d) Copyright limitations: Under Korean copyright law, content generated solely by AI may not qualify for copyright protection. The Company does not assert copyright over AI Analysis Results.\n(e) No model training: Your data is not used for training AI models. When using paid API tiers, AI providers do not use your data for model improvement.\n(f) Similar outputs: Due to the nature of AI processing, similar Articles may produce similar AI Analysis Results for different Users.\n(g) AI-generated content labeling: AI Analysis Results are labeled as AI-generated within the Service, in compliance with applicable AI transparency requirements."
+        },
+        "intellectualProperty": {
+          "title": "14. Intellectual Property",
+          "content": "All intellectual property rights in the Service (including but not limited to software, design, trademarks, logos, documentation, and proprietary algorithms) are owned by the Company or its licensors.\n\n(a) The Company grants you a limited, non-exclusive, non-transferable, revocable license to use the Service in accordance with these Terms.\n(b) You may not copy, modify, distribute, sell, or create derivative works based on the Service or any part thereof, except as expressly permitted by these Terms or applicable law.\n(c) Feedback: If you provide suggestions, ideas, or feedback about the Service, the Company may use such feedback without obligation to you."
+        },
+        "prohibited": {
+          "title": "15. Prohibited Activities",
+          "content": "The following activities are strictly prohibited when using the Service:\n\n(a) Reverse engineering, decompiling, or attempting to extract the source code of the Service.\n(b) Circumventing or attempting to bypass any access controls, security measures, or usage limits.\n(c) Automated scraping, crawling, or data extraction beyond normal use through the official interface.\n(d) Sharing account credentials or allowing others to access your account.\n(e) Uploading or transmitting malicious code, viruses, or any harmful content.\n(f) Using the Service in violation of any applicable local, national, or international law.\n(g) Taking any action that interferes with or disrupts the normal operation of the Service or its infrastructure.\n(h) Infringing upon the intellectual property rights, privacy, or other rights of third parties.\n(i) Using the Service to distribute spam, phishing content, or fraudulent materials.\n(j) Attempting to gain unauthorized access to other users' accounts or data."
+        },
+        "serviceRestriction": {
+          "title": "16. Service Restriction and Termination",
+          "content": "Account termination by User:\nYou may terminate your account at any time through the account settings or by contacting us at shickcoong777@gmail.com.\n\nService restriction by Company:\nThe Company may restrict, suspend, or terminate your access to the Service in the following cases:\n(a) Violation of these Terms or applicable law.\n(b) Fraudulent activity or misuse of the Service.\n(c) Non-payment of fees for Paid Services after reasonable notice.\n(d) Actions that threaten the security, integrity, or availability of the Service.\n\nProcedure: Except in urgent cases (e.g., security threats), the Company will provide advance notice and an opportunity to cure the violation before restricting or terminating access.\n\nEffect of termination:\n- Upon termination, your right to use the Service ceases immediately.\n- Your data will be retained for 30 days after termination to allow for data export, after which it will be permanently deleted unless retention is required by law.\n- Provisions that by their nature should survive termination (including ownership provisions, warranty disclaimers, limitations of liability, and dispute resolution) shall survive."
+        },
+        "disclaimers": {
+          "title": "17. Disclaimers and Liability Limitations",
+          "content": "The Service is provided on an \"as is\" and \"as available\" basis, to the extent permitted by applicable law.\n\n(a) AI accuracy: The Company does not warrant the accuracy, completeness, or reliability of AI Analysis Results. AI-generated content is for reference only and should not be relied upon as a substitute for professional judgment.\n(b) Third-party services: The Service integrates with third-party services (including AI providers, payment processors, and authentication providers). The Company is not liable for disruptions, errors, or data breaches caused by third-party services, except to the extent caused by the Company's own negligence.\n(c) Force majeure: The Company is not liable for service interruptions caused by events beyond its reasonable control, including natural disasters, wars, government actions, pandemics, power failures, or internet outages.\n(d) Liability cap: To the maximum extent permitted by law, the Company's total cumulative liability to you for all claims arising from or related to the Service shall not exceed the total amount you paid to the Company in the 12 months preceding the claim.\n\nIMPORTANT: Under Korean law (Act on the Regulation of Terms and Conditions, Article 7), the Company cannot disclaim liability for damages caused by its own gross negligence or willful misconduct. Nothing in these Terms excludes or limits such liability."
+        },
+        "indemnification": {
+          "title": "18. Indemnification",
+          "content": "You agree to indemnify and hold harmless the Company, its officers, directors, employees, and agents from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable attorney's fees) arising out of or related to:\n\n(a) Your use of the Service in violation of these Terms.\n(b) Your violation of any applicable law or regulation.\n(c) Your infringement of any third party's intellectual property, privacy, or other rights.\n(d) Content you save to or share through the Service.\n\nThis indemnification obligation survives termination of these Terms and your use of the Service."
+        },
+        "disputeResolution": {
+          "title": "19. Dispute Resolution and Jurisdiction",
+          "content": "Governing law: These Terms are governed by and construed in accordance with the laws of the Republic of Korea.\n\nJurisdiction: Any disputes arising from or related to these Terms or the Service shall be subject to the exclusive jurisdiction of the Seoul Central District Court (or the competent court under Korean law based on the Company's principal office location), unless otherwise required by mandatory consumer protection laws of your jurisdiction.\n\nConsumer protection: Notwithstanding the above, if mandatory consumer protection laws of your country of residence provide you with rights that cannot be waived by contract, those laws shall prevail to the extent of any conflict with these Terms.\n\nConsumer assistance:\n- Korea Consumer Agency: 1372 | https://www.consumer.go.kr\n- Personal Information Dispute Mediation Committee: (02) 2100-2499 | https://www.kopico.go.kr\n- Korea Internet & Security Agency: 118 | https://privacy.kisa.or.kr"
+        },
+        "general": {
+          "title": "20. General Provisions",
+          "content": "(a) Severability: If any provision of these Terms is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect. The invalid or unenforceable provision shall be modified to the minimum extent necessary to make it valid and enforceable.\n(b) Entire agreement: These Terms, together with the Privacy Policy, Refund and Cancellation Policy, and any other policies referenced herein, constitute the entire agreement between you and the Company regarding the use of the Service.\n(c) No waiver: The Company's failure to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision.\n(d) Assignment: You may not assign or transfer your rights or obligations under these Terms without the Company's prior written consent. The Company may assign its rights and obligations without restriction.\n(e) Language: These Terms may be provided in multiple languages. In the event of any discrepancy between the Korean version and any translation, the Korean version shall prevail.\n(f) Contact: If you have any questions or concerns regarding these Terms, please contact us at shickcoong777@gmail.com. We aim to respond to all inquiries within 3 business days."
+        }
+      },
+      "businessInfo": {
+        "serviceName": "NOD",
+        "operator": "Individual Operator",
+        "email": "shickcoong777@gmail.com",
+        "paymentProcessor": "Paddle.com Market Limited (Merchant of Record)",
+        "paymentProcessorNote": "All paid services for NOD are processed by Paddle.com as the Merchant of Record. Paddle assumes legal responsibility for payment processing, tax collection, and refund handling as the seller of record."
+      },
+      "title": "Terms of Service"
+    }
+  },
+  "login": {
+    "backToHome": "ホームに戻る",
+    "emailNotVerified": "Please verify your email first.",
+    "emailPlaceholder": "Email address",
+    "forgotPassword": "Forgot password?",
+    "highlightAnalyze": "AIが自動で重要なインサイトを分析",
+    "highlightSave": "ワンクリックでウェブ記事を保存",
+    "highlightSearch": "セマンティック検索ですぐに見つかる",
+    "loginFailed": "Invalid email or password.",
+    "noAccount": "Don't have an account?",
+    "or": "または",
+    "passwordPlaceholder": "Password",
+    "secureNote": "Googleアカウントで安全にログイン",
+    "signInSubtitle": "ログインしてナレッジライブラリを続けましょう",
+    "signInTitle": "ログイン",
+    "signInWithEmail": "Sign in with email",
+    "signUpLink": "Sign up",
+    "signingIn": "ログイン中..."
+  },
+  "loginSubtitle": "NODアカウントにログイン",
+  "loginWelcome": "おかえりなさい",
+  "onboarding": {
+    "completionSubtitle": "ダッシュボードへ移動します。NODでナレッジを蓄えましょう。",
+    "completionTitle": "準備完了！",
+    "firstArticle": {
+      "cta": "ダッシュボードへ",
+      "step1": "任意の記事やブログを開く",
+      "step2": "ブラウザのツールバーでNODアイコンをクリック",
+      "step3": "Save & Analyzeをクリック",
+      "subtitle": "以下の3つのステップで始められます",
+      "title": "最初の記事を保存しましょう"
+    },
+    "install": {
+      "benefitAllSites": "すべてのウェブサイトで利用可能",
+      "benefitAutoAnalyze": "保存と同時にAIが自動分析",
+      "benefitOneClick": "ワンクリックで記事を即座に保存",
+      "confirmButton": "インストールしました",
+      "installButton": "Chrome Web Storeからインストール",
+      "skipLink": "後でやります",
+      "subtitle": "どのページからもワンクリックで記事を保存できます",
+      "title": "Chrome拡張機能をインストール"
+    },
+    "progress": "{step}/3",
+    "resumeBanner": {
+      "cta": "続ける",
+      "message": "オンボーディングを完了してNODを始めましょう"
+    },
+    "skip": "スキップ",
+    "welcome": {
+      "cta": "始める",
+      "featureAnalyze": "AIが自動で重要なインサイトを分析",
+      "featureSave": "ワンクリックでウェブ記事を保存",
+      "featureSearch": "セマンティック検索でいつでも検索",
+      "subtitle": "AIが分析するあなただけのナレッジライブラリ",
+      "title": "NODへようこそ"
+    }
+  },
+  "settings": {
+    "actions": {
+      "changePlan": "プラン変更",
+      "signOut": "ログアウト"
+    },
+    "description": "アカウント設定を管理します。",
+    "fields": {
+      "authProvider": "認証プロバイダー",
+      "email": "メール",
+      "emailProviderName": "メール",
+      "subscription": "サブスクリプション"
+    },
+    "footerTagline": "NOD Labs · クリエイターのためのワークスペース",
+    "links": {
+      "feedback": "フィードバックを送る",
+      "installExtension": "Chrome拡張機能をインストール",
+      "manageBilling": "請求とサブスクリプションを管理",
+      "promoIssuer": "Promo Code Issuer",
+      "privacy": "プライバシーポリシー",
+      "refund": "返金ポリシー",
+      "terms": "利用規約",
+      "viewPricing": "料金プランを見る"
+    },
+    "sections": {
+      "account": "アカウント",
+      "legal": "法的情報",
+      "profile": "プロフィール",
+      "quickLinks": "クイックリンク"
+    },
+    "status": {
+      "active": "有効"
+    },
+    "title": "設定",
+    "usage": {
+      "currentMonthlyUsage": "今月の使用量",
+      "resetHint": "月次使用量は毎月1日にリセットされます。",
+      "title": "AI分析の使用量"
+    }
+  },
+  "signup": {
+    "confirmPasswordPlaceholder": "Confirm password",
+    "continueWithGoogle": "Sign up with Google",
+    "createAccount": "Create account",
+    "creating": "Creating account...",
+    "duplicateEmail": "This email is already registered.",
+    "emailInvalid": "Please enter a valid email address.",
+    "emailPlaceholder": "Email address",
+    "hasAccount": "Already have an account?",
+    "namePlaceholder": "Name",
+    "nameRequired": "Please enter your name.",
+    "orDivider": "or",
+    "passwordMin": "Password must be at least 8 characters.",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordPlaceholder": "Password (8+ characters)",
+    "signInLink": "Sign in",
+    "subtitle": "Create your NOD account and start building your knowledge library",
+    "title": "Sign up"
+  },
+  "subscription": {
+    "activeSince": "{date}から有効",
+    "backToSettings": "設定に戻る",
+    "basic": "Free",
+    "basicPrice": "$0",
+    "basicValue": {
+      "aiSummaries": "月20回",
+      "conceptExtraction": "対応",
+      "markdownExport": "対応",
+      "savedArticles": "ニュース・技術ブログ・公式ドキュメント",
+      "semanticSearch": "無制限"
+    },
+    "billingControls": "請求コントロール",
+    "billingHistory": "請求履歴",
+    "billingStatus": "請求ステータス",
+    "billingSubtitle": "サブスクリプション、支払い方法、使用量を一箇所で管理できます。",
+    "cancel": "サブスクリプションをキャンセル",
+    "cancelConfirm": "サブスクリプションをキャンセルしますか？",
+    "cancelDescription": "キャンセルすると、現在の請求期間の終了までPro機能をご利用いただけます。",
+    "checkoutSuccess": "お支払いが完了しました！Proサブスクリプションが有効になりました。",
+    "comparisonTitle": "プラン比較",
+    "currentMonthlyAiSummaries": "今月のAI要約使用量",
+    "currentPlan": "現在のプラン",
+    "faq": "よくある質問",
+    "faqItems": {
+      "a1": "無制限のAI分析、無制限のコンテンツ保存が利用可能になります。",
+      "a2": "はい、いつでもキャンセルできます。現在の請求期間の終了までPro機能をご利用いただけます。",
+      "a3": "クレジットカード、デビットカードなどに対応しています。Paddleにより安全に処理されます。",
+      "q1": "Proにすると何が変わりますか？",
+      "q2": "いつでもキャンセルできますか？",
+      "q3": "どの支払い方法に対応していますか？"
+    },
+    "featureComparison": {
+      "aiSummaries": "AI分析",
+      "conceptExtraction": "コンセプト抽出",
+      "markdownExport": "マークダウンエクスポート",
+      "savedArticles": "分析可能なコンテンツタイプ",
+      "semanticSearch": "セマンティック検索"
+    },
+    "features": {
+      "basicArticles": "保存時に自動AI分析",
+      "basicSearch": "無制限 セマンティック検索",
+      "basicSummaries": "月20回 AI分析",
+      "proArticles": "無制限保存・分析",
+      "proSearch": "無制限セマンティック検索",
+      "proSummaries": "無制限 AI分析"
+    },
+    "includedInPlan": "現在のプランに含まれる機能",
+    "limitReached": "今月の上限に達しました",
+    "manageBilling": "請求管理",
+    "managePayment": "お支払い方法の管理",
+    "nextBilling": "次回請求日: {date}",
+    "nextBillingLabel": "次回請求",
+    "planDescription": {
+      "basic": "AI搭載のコンテンツ管理を試したいカジュアルな読者に最適です。",
+      "pro": "毎日コンテンツを保存・分析するパワーユーザー向けのプランです。"
+    },
+    "planStatus": "プランの状態",
+    "pricing": "料金プラン",
+    "pricingSubtitle": "あなたの知的ワークフローに合ったプランを選びましょう。",
+    "pro": "Pro",
+    "proPrice": "$5/月（税込）",
+    "proUpgradeDescription": "より高い月間上限と高度な機能のためにProへアップグレードしましょう。",
+    "proValue": {
+      "aiSummaries": "無制限",
+      "conceptExtraction": "対応",
+      "markdownExport": "対応",
+      "savedArticles": "全タイプ（GitHub・論文・動画を含む）",
+      "semanticSearch": "無制限"
+    },
+    "processing": "処理中...",
+    "promo": {
+      "title": "プロモコード",
+      "placeholder": "プロモコードを入力",
+      "apply": "プロモを適用",
+      "success": "プロモが適用されました",
+      "errorInvalid": "無効なプロモコードです",
+      "errorExpired": "このプロモコードは期限切れです",
+      "errorLimit": "プロモコードの利用上限に達しました",
+      "errorGeneric": "プロモコードを適用できませんでした",
+      "effectivePro": "プロモ適用によりProが有効です",
+      "activeUntil": "プロモ有効期限: {date}"
+    },
+    "adminPromo": {
+      "title": "Promo Code Issuer",
+      "description": "Issue, review, and disable promo codes for internal campaigns.",
+      "issue": {
+        "title": "Issue a new promo code"
+      },
+      "fields": {
+        "code": "Code",
+        "grantDays": "Grant days",
+        "expiresAt": "Expires at",
+        "maxRedemptions": "Max redemptions",
+        "perUserLimit": "Per-user limit",
+        "campaignTag": "Campaign tag"
+      },
+      "actions": {
+        "issuing": "Issuing...",
+        "issue": "Issue code",
+        "copyLatest": "Copy latest code",
+        "disable": "Disable",
+        "cancel": "Cancel",
+        "disabling": "Disabling...",
+        "confirmDisable": "Confirm disable"
+      },
+      "latestCode": "Latest issued code: {code}",
+      "list": {
+        "title": "Issued promo codes",
+        "empty": "No promo codes found for current filters."
+      },
+      "filters": {
+        "campaignPlaceholder": "Filter by campaign tag",
+        "statusAll": "All statuses",
+        "statusActive": "Active only",
+        "statusInactive": "Inactive only",
+        "apply": "Apply filters"
+      },
+      "table": {
+        "campaign": "Campaign",
+        "status": "Status",
+        "grantDays": "Grant days",
+        "redeemed": "Redeemed",
+        "created": "Created",
+        "actions": "Actions",
+        "none": "(none)",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "disable": {
+        "title": "Disable promo code",
+        "description": "This code will no longer be redeemable.",
+        "reason": "Disable reason",
+        "reasonNote": "Reason is for operator context only and is not sent to API in this MVP."
+      },
+      "success": {
+        "created": "Promo code issued successfully.",
+        "disabled": "Promo code disabled successfully.",
+        "copied": "Latest issued code copied."
+      },
+      "errors": {
+        "duplicate": "Promo code already exists.",
+        "notFound": "Promo code not found.",
+        "generic": "Unable to complete this action right now.",
+        "loadFailed": "Failed to load promo codes."
+      }
+    },
+    "summariesRemaining": "要約 残り{remaining}件",
+    "summariesUsed": "今月の要約 {used}/{limit}件使用",
+    "unlimited": "無制限",
+    "upgrade": "Proにアップグレード",
+    "upgradePrompt": "Proにアップグレードしてより多くの要約を利用",
+    "upgradeUnavailable": "決済サービスを準備中です。しばらくしてからもう一度お試しください。",
+    "usage": "使用量"
+  },
+  "title": "NOD"
+}

@@ -1,0 +1,245 @@
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api-client";
+
+// Re-export share types & hooks from separate file (survives Orval cleanup)
+export {
+  type ArticleShareLink,
+  type SharedArticle,
+  type SharedArticleComment,
+  useCreateArticleShareLink,
+  useSharedArticle,
+  useSharedArticleByUsername,
+  useSharedArticleComments,
+  useCreateSharedArticleComment,
+  useUpdateSharedArticleComment,
+  useDeleteSharedArticleComment,
+  useToggleSharedArticleEmpathy,
+  useToggleSharedArticleCommentEmpathy,
+  createArticleShareLink,
+  revokeArticleShareLink,
+  fetchSharedArticle,
+  fetchSharedArticleBySlug,
+} from "@/lib/api/article-shares";
+
+export interface ArticleSummary {
+  id: string;
+  summary: string;
+  markdown_note?: string | null;
+  concepts: string[];
+  key_points: string[];
+  reading_time_minutes: number | null;
+  language: string | null;
+  ai_provider: string;
+  ai_model: string;
+  created_at: string;
+  content_type?: string;
+  type_metadata?: Record<string, unknown>;
+}
+
+export interface Article {
+  id: string;
+  user_id: string;
+  url: string | null;
+  title: string;
+  original_title: string | null;
+  source: string;
+  status: string;
+  created_at: string;
+  updated_at: string | null;
+  summary: ArticleSummary | null;
+}
+
+export interface ArticleListItem {
+  id: string;
+  url: string | null;
+  title: string;
+  source: string;
+  status: string;
+  created_at: string;
+  summary_preview: string | null;
+  content_type?: string;
+}
+
+export interface SimilarArticle {
+  id: string;
+  title: string;
+  url: string | null;
+  source: string;
+  similarity: number;
+  shared_concepts: string[];
+  summary_preview: string | null;
+}
+
+export interface ConceptGraphNode {
+  id: string;
+  label: string;
+  value: number;
+}
+
+export interface ConceptGraphEdge {
+  source: string;
+  target: string;
+  weight: number;
+}
+
+interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+  };
+}
+
+export function useArticles(params: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+}) {
+  return useQuery({
+    queryKey: ["articles", params],
+    queryFn: async () => {
+      const { data } = await apiClient.get<PaginatedResponse<ArticleListItem>>(
+        "/api/articles",
+        { params }
+      );
+      return data;
+    },
+  });
+}
+
+export function useInfiniteArticles(params: {
+  limit?: number;
+  search?: string;
+  status?: string;
+  content_type?: string;
+}) {
+  return useInfiniteQuery({
+    queryKey: ["articles", "infinite", params],
+    queryFn: async ({ pageParam = 1 }) => {
+      const { data } = await apiClient.get<PaginatedResponse<ArticleListItem>>(
+        "/api/articles",
+        { params: { ...params, page: pageParam } }
+      );
+      return data;
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage.meta.has_next ? lastPage.meta.page + 1 : undefined,
+    initialPageParam: 1,
+  });
+}
+
+export function useArticle(id: string) {
+  return useQuery({
+    queryKey: ["articles", id],
+    queryFn: async () => {
+      const { data } = await apiClient.get<Article>(`/api/articles/${id}`, {
+        headers: { "Cache-Control": "no-cache" },
+      });
+      return data;
+    },
+    enabled: !!id,
+    staleTime: 0,
+    refetchInterval: (query) => {
+      const article = query.state.data;
+      if (article && (article.status === "pending" || article.status === "processing" || article.status === "analyzing")) {
+        return 3000;
+      }
+      return 30000;
+    },
+  });
+}
+
+export function useSimilarArticles(id: string) {
+  return useQuery({
+    queryKey: ["articles", id, "similar"],
+    queryFn: async () => {
+      const { data } = await apiClient.get<SimilarArticle[]>(
+        `/api/articles/${id}/similar`
+      );
+      return data;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useSemanticSearch(params: {
+  q: string;
+  limit?: number;
+  status?: string;
+  content_type?: string;
+  enabled?: boolean;
+}) {
+  return useQuery({
+    queryKey: ["articles", "semantic-search", params.q, params.status, params.content_type, params.limit],
+    queryFn: async () => {
+      const { data } = await apiClient.get<PaginatedResponse<ArticleListItem>>(
+        "/api/articles/search",
+        { params: { q: params.q, limit: params.limit, status: params.status, content_type: params.content_type } }
+      );
+      return data;
+    },
+    enabled: params.enabled !== false && params.q.length >= 2,
+  });
+}
+
+export interface ContentTypeStats {
+  counts: Record<string, number>;
+  total: number;
+}
+
+export function useContentTypeStats() {
+  return useQuery({
+    queryKey: ["articles", "stats", "content-types"],
+    queryFn: async () => {
+      const { data } = await apiClient.get<ContentTypeStats>(
+        "/api/articles/stats/content-types"
+      );
+      return data;
+    },
+  });
+}
+
+export function useDeleteArticle() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await apiClient.delete(`/api/articles/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+}
+
+export function useRetryArticle() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await apiClient.post<Article>(`/api/articles/${id}/retry`);
+      return data;
+    },
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ["articles", id] });
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+}
+
+export function useUpdateArticle() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: { title?: string } }) => {
+      const { data: result } = await apiClient.patch<Article>(`/api/articles/${id}`, data);
+      return result;
+    },
+    onSuccess: (result) => {
+      queryClient.setQueryData(["articles", result.id], result);
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+}

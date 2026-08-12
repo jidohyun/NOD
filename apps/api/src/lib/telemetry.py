@@ -1,0 +1,122 @@
+"""OpenTelemetry configuration for distributed tracing and metrics."""
+
+import contextlib
+import logging
+
+from fastapi import FastAPI
+from opentelemetry import metrics, trace
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
+
+from src.lib.config import settings
+
+_logger = logging.getLogger(__name__)
+
+
+def configure_telemetry() -> None:
+    """Configure OpenTelemetry tracing and metrics with OTLP exporter."""
+    resource = Resource.create(
+        {
+            "service.name": settings.OTEL_SERVICE_NAME or settings.PROJECT_NAME,
+            "service.version": "0.1.0",
+            "deployment.environment": settings.PROJECT_ENV,
+        }
+    )
+
+    # --- Tracing ---
+    provider = TracerProvider(resource=resource)
+
+    # Configure exporter based on environment
+    if settings.OTEL_EXPORTER_OTLP_ENDPOINT:
+        # OTLP exporter for production (e.g., Jaeger, Tempo, Grafana Cloud)
+        headers = (
+            _parse_otlp_headers(settings.OTEL_EXPORTER_OTLP_HEADERS)
+            if settings.OTEL_EXPORTER_OTLP_HEADERS
+            else None
+        )
+        otlp_endpoint = f"{settings.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces"
+        _logger.info(
+            "Configuring OTLP exporter: endpoint=%s, headers_present=%s",
+            otlp_endpoint,
+            bool(headers),
+        )
+        otlp_exporter = OTLPSpanExporter(
+            endpoint=otlp_endpoint,
+            headers=headers,
+        )
+        provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+
+        # --- Metrics ---
+        metrics_endpoint = f"{settings.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/metrics"
+        _logger.info("Configuring OTLP metrics exporter: endpoint=%s", metrics_endpoint)
+        metric_exporter = OTLPMetricExporter(
+            endpoint=metrics_endpoint,
+            headers=headers,
+        )
+        metric_reader = PeriodicExportingMetricReader(
+            metric_exporter,
+            export_interval_millis=60_000,
+        )
+        meter_provider = MeterProvider(
+            resource=resource, metric_readers=[metric_reader]
+        )
+        metrics.set_meter_provider(meter_provider)
+
+    elif settings.PROJECT_ENV == "local":
+        # Console exporter for local development
+        provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
+    else:
+        _logger.warning(
+            "No OTLP endpoint configured; traces will not be exported. "
+            "Set OTEL_EXPORTER_OTLP_ENDPOINT to enable."
+        )
+
+    trace.set_tracer_provider(provider)
+
+
+def instrument_app(app: FastAPI) -> None:
+    """Instrument FastAPI and other libraries for tracing."""
+    from src.lib.database import engine
+
+    # Instrument FastAPI
+    FastAPIInstrumentor.instrument_app(
+        app,
+        excluded_urls="health,health/live,health/ready",
+    )
+
+    # Instrument SQLAlchemy
+    SQLAlchemyInstrumentor().instrument(
+        engine=engine.sync_engine,
+        enable_commenter=True,
+    )
+
+    # Instrument HTTPX (for outgoing HTTP requests)
+    HTTPXClientInstrumentor().instrument()
+
+    # Instrument Redis (if available)
+    with contextlib.suppress(Exception):
+        RedisInstrumentor().instrument()
+
+
+def get_tracer(name: str = __name__) -> trace.Tracer:
+    """Get a tracer instance for manual instrumentation."""
+    return trace.get_tracer(name)
+
+
+def _parse_otlp_headers(header_str: str) -> dict[str, str]:
+    """Parse 'Key=Value,Key2=Value2' format OTLP headers."""
+    headers: dict[str, str] = {}
+    for item in header_str.split(","):
+        if "=" in item:
+            key, value = item.split("=", 1)
+            headers[key.strip()] = value.strip()
+    return headers

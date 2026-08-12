@@ -1,0 +1,55 @@
+{
+  "@@locale": "ja",
+  "appTitle": "フルスタックスターター",
+  "loading": "読み込み中...",
+  "error": "エラーが発生しました",
+  "retry": "再試行",
+  "save": "保存",
+  "cancel": "キャンセル",
+  "confirm": "確認",
+  "delete": "削除",
+  "extHeaderTitle": "NOD",
+  "extHeaderSubtitle": "記事セーバー",
+  "extLoginTitle": "AI分析で記事を保存",
+  "extLoginSubtitle": "NODアカウントにサインインして開始",
+  "extLoginFeature1": "記事から主要なインサイトを抽出",
+  "extLoginFeature2": "ナレッジライブラリを構築",
+  "extLoginFeature3": "どこからでもアクセス可能",
+  "extLoginButton": "NODにサインイン",
+  "extLoadingAuth": "認証を確認中...",
+  "extLoadingExtract": "記事を分析中...",
+  "extSaveButton": "保存して分析",
+  "extSaving": "保存中...",
+  "extSaveSuccessTitle": "保存完了！",
+  "extSaveSuccessSubtitle": "AI分析が進行中です",
+  "extViewDashboard": "ダッシュボードで表示",
+  "extErrorTitle": "問題が発生しました",
+  "extRefreshHint": "問題が続く場合は、ページを再読み込みしてからもう一度お試しください。",
+  "extTryAgain": "再試行",
+  "extMinRead": "分",
+  "extLogout": "ログアウト",
+  "extUsageInfo": "要約 {used}/{limit}件使用",
+  "extLimitReached": "月間上限に達しました",
+  "extUpgradePrompt": "Proにアップグレード",
+  "extUsageUnlimited": "無制限要約 (Pro)",
+  "extLanguage": "言語",
+  "@extLanguage": {
+    "description": "Extension language selector label"
+  },
+  "extManifestName": "NOD - 記事アナライザー",
+  "@extManifestName": {
+    "description": "Production manifest name for the Chrome extension"
+  },
+  "extManifestDescription": "Webコンテンツを保存し、AIで要約して後から見つけやすくするChrome拡張機能です。",
+  "@extManifestDescription": {
+    "description": "Production manifest description for the Chrome extension"
+  },
+  "extManifestNameDev": "NOD - 記事アナライザー (Dev)",
+  "@extManifestNameDev": {
+    "description": "Development manifest name for the Chrome extension"
+  },
+  "extManifestDescriptionDev": "[DEV] Webコンテンツを保存し、AIで要約して後から見つけやすくするChrome拡張機能です。",
+  "@extManifestDescriptionDev": {
+    "description": "Development manifest description for the Chrome extension"
+  }
+}

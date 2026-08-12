@@ -1,0 +1,36 @@
+# syntax=docker/dockerfile:1
+FROM python:3.12-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Production stage
+FROM base AS production
+
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
+
+# Install system fonts for OG image generation
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install dependencies
+RUN uv sync --frozen --no-dev --no-install-project
+
+# Copy application code
+COPY . .
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash appuser
+USER appuser
+
+EXPOSE 8080
+
+CMD ["sh", "-c", ".venv/bin/alembic upgrade head || echo 'Migration failed, starting anyway'; .venv/bin/fastapi run src/main.py --host 0.0.0.0 --port ${PORT:-8080}"]
