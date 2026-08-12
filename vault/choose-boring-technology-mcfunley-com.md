@@ -10,7 +10,7 @@ relations:
   - claim: c1
     type: supports
     target: null
-    note: "brains 설계에서 스택을 CLI+마크다운+SQLite로 잡은 결정과 일치"
+    note: "NOD 설계에서 스택을 CLI+마크다운+SQLite로 잡은 결정과 일치"
   - claim: c2
     type: new
     target: null
@@ -19,7 +19,7 @@ relations:
 
 ## Context
 
-작성 예시. brains 설계 중 기술 선택 근거를 다지려고 다시 읽음. A0 검증용 첫 자산 — 실제 자산 작성 시 이 파일을 참고하고 삭제해도 됨.
+작성 예시. NOD 설계 중 기술 선택 근거를 다지려고 다시 읽음. A0 검증용 첫 자산 — 실제 자산 작성 시 이 파일을 참고하고 삭제해도 됨.
 
 ## Evidence
 
