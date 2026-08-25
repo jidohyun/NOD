@@ -1,6 +1,6 @@
 # AGENTS.md - Root Agent Guidance for NOD Monorepo
 
-This document provides foundational guidance for AI agents operating within the NOD monorepo. It outlines the project's structure, available commands, and critical guardrails to ensure efficient safe development.
+This document owns **execution knowledge** for the NOD monorepo: structure, commands, hooks. Operating policy (reversible/irreversible boundary, standing approvals) is owned by [docs/agent-north-star.md](./docs/agent-north-star.md); session routing is owned by [CLAUDE.md](./CLAUDE.md). On conflict, the north star wins.
 
 ## 1. Project Overview
 
@@ -11,11 +11,9 @@ NOD is a Chrome extension and web app designed to transform web content into sea
 When operating within this monorepo, agents MUST adhere to the following principles:
 
 *   **Command-First**: Always prioritize using `mise` commands or per-app package.json scripts for development tasks.
-*   **Contextual Awareness**: Understand the specific application or package context before executing commands.
 *   **Deterministic Output**: Avoid introducing volatile data (e.g., timestamps) into generated content.
-*   **Non-Destructive**: Prefer modifying existing files over creating new ones unless explicitly instructed.
 *   **Security**: NEVER handle or expose sensitive information (API keys, credentials, secrets).
-*   **Verification**: Always verify changes through linting, type-checking, and testing before claiming completion.
+*   **Verification**: Always verify changes through linting, type-checking, and testing before claiming completion. At irreversible boundaries (main push → CI deploy, DB migration, proof-surface edits) a single green is not completion — follow the confirmation rules in [docs/agent-north-star.md](./docs/agent-north-star.md).
 *   **Schema Discipline**: For any feature touching DB schema objects (new tables/columns/indexes, or code paths that query them), run migrations before runtime verification. Required preflight: `mise run db:migrate`. If a runtime error includes `UndefinedTableError` or `relation ... does not exist`, treat it as migration drift first, apply migrations, then re-test before changing application code.
 
 ## 3. Global Commands (via `mise run`)
@@ -28,16 +26,20 @@ The `mise` tool orchestrates tasks across the monorepo. Use `mise run <task>` fr
 | `dev:web`         | Start API and Web services                    |
 | `dev:mobile`      | Start API and Mobile services                 |
 | `install`         | Install all dependencies                      |
-| `format`          | Format all apps                               |
-| `lint`            | Lint all apps                                 |
-| `test`            | Test all apps                                 |
-| `typecheck`       | Type check all apps                           |
+| `format`          | Format API, Web, and Worker                   |
+| `lint`            | Lint API, Web, and Worker                     |
+| `test`            | Test API, Web, and Worker                     |
+| `typecheck`       | Type check API and Web                        |
 | `db:migrate`      | Run database migrations                       |
 | `gen:api`         | Generate OpenAPI schema and API clients       |
 | `i18n:build`      | Build i18n files                              |
 | `infra:up`        | Start local infrastructure (Docker Compose)   |
 | `infra:down`      | Stop local infrastructure (Docker Compose)    |
 | `tokens:build`    | Build design tokens                           |
+
+Root `mise` validation tasks do not include the Extension. Use
+`apps/extension/package.json` scripts for its typecheck/build/release flow. Mobile
+lint/test runs through its app-local task and CI workflow.
 
 ## 4. Where to Look by Task
 

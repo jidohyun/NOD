@@ -30,7 +30,7 @@ EOF
   # pre-push
   cat > .git/hooks/pre-push <<'EOF'
 #!/bin/sh
-exec mise run git:pre-push
+exec mise run git:pre-push -- "$@"
 EOF
   chmod +x .git/hooks/pre-push
 '''
@@ -43,6 +43,7 @@ uv = "latest"
 flutter = "3.38.9"
 terraform = "1"
 hadolint = "latest"
+trufflehog = "3.97.0"
 "github:Infisical/cli" = "latest"
 
 [tasks]
@@ -65,69 +66,197 @@ typecheck = { depends = ["//apps/api:typecheck", "//apps/web:typecheck"], descri
 description = "Validate commit message using commitlint"
 run = "bunx @commitlint/cli@20 --edit $1"
 
-[tasks."git:pre-commit"]
-description = "Run conditional checks for staging files"
+[tasks."git:doctor"]
+description = "Validate generated Git hooks without repairing them"
 run = '''
 #!/usr/bin/env bash
-changed=$(git diff --cached --name-only)
+exec python3 scripts/quality/hook_doctor.py "$@"
+'''
 
-if echo "$changed" | grep -q "^apps/api/"; then
-    echo "[pre-commit] apps/api detected, running lint..."
-    mise //apps/api:lint || exit 1
-fi
+[tasks."git:plan"]
+description = "Print the deterministic local quality plan"
+run = '''
+#!/usr/bin/env bash
+exec python3 scripts/quality/plan.py "$@"
+'''
 
-if echo "$changed" | grep -q "^apps/web/"; then
-    echo "[pre-commit] apps/web detected, running lint..."
-    mise //apps/web:lint || exit 1
-fi
+[tasks."quality:contracts"]
+description = "Validate local quality contracts and fixture behavior"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
+jq -e . scripts/quality/contracts/plan.schema.json >/dev/null
+jq -e . scripts/quality/contracts/receipt.schema.json >/dev/null
+jq -e . scripts/quality/trufflehog.lock >/dev/null
+python3 -m unittest discover -s scripts/quality/tests -v
+'''
 
-if echo "$changed" | grep -q "^apps/worker/"; then
-    echo "[pre-commit] apps/worker detected, running lint..."
-    mise //apps/worker:lint || exit 1
-fi
-
-if echo "$changed" | grep -q "^apps/mobile/"; then
-    echo "[pre-commit] apps/mobile detected, running lint..."
-    mise //apps/mobile:lint || exit 1
-fi
-
-if echo "$changed" | grep -qE "Dockerfile$"; then
-    echo "[pre-commit] Dockerfile detected, running hadolint..."
-    echo "$changed" | grep -E "Dockerfile$" | xargs hadolint || exit 1
-fi
+[tasks."git:pre-commit"]
+description = "Plan staged changes and run selected local gates"
+run = '''
+#!/usr/bin/env bash
+exec mise run git:quality -- pre-commit
 '''
 
 [tasks."git:pre-push"]
-description = "Validate branch name and run tests before push"
+description = "Plan every pushed ref and run selected local gates"
 run = '''
 #!/usr/bin/env bash
-branch=$(git branch --show-current)
-if [[ "$branch" == release-please--* ]]; then
-    echo "[pre-push] release-please branch detected, skipping validation"
+set -euo pipefail
+if [[ "$#" -ne 2 ]]; then
+    echo "git:pre-push requires the remote name and URL" >&2
+    exit 2
+fi
+exec mise run git:quality -- pre-push "$1" "$2"
+'''
+
+[tasks."git:quality"]
+description = "Execute a planned local gate sequence with atomic receipts"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
+# Git exports these to hooks; gates spawn their own fixture repos, so leaking
+# them makes every child git command target this repo instead of the fixture.
+unset GIT_DIR GIT_INDEX_FILE GIT_WORK_TREE GIT_PREFIX GIT_QUARANTINE_PATH GIT_REFLOG_ACTION
+
+phase=${1:-}
+if [[ "$phase" == "pre-commit" ]]; then
+    [[ "$#" -eq 1 ]] || { echo "git:quality pre-commit takes no hook arguments" >&2; exit 2; }
+    remote=""
+    push_input=""
+elif [[ "$phase" == "pre-push" ]]; then
+    [[ "$#" -eq 3 ]] || { echo "git:quality pre-push requires the remote name and URL" >&2; exit 2; }
+    remote=$2
+    remote_url=$3
+    push_input=$(cat)
 else
-    bunx @gracefullight/validate-branch || exit 1
+    echo "usage: mise run git:quality -- {pre-commit|pre-push} [remote remote-url]" >&2
+    exit 2
 fi
 
-# Get changed files compared to origin
-changed=$(git diff --name-only origin/main...HEAD 2>/dev/null || git diff --name-only HEAD~1)
+runtime_dir=".omo/quality/$phase/$$"
+mkdir -p "$runtime_dir"
+if [[ "$phase" == "pre-push" ]]; then
+    set +e
+    plan_json=$(printf '%s' "$push_input" | python3 scripts/quality/plan.py --phase pre-push --remote "$remote" --json)
+    plan_exit=$?
+    set -e
+else
+    set +e
+    plan_json=$(python3 scripts/quality/plan.py --phase pre-commit --json)
+    plan_exit=$?
+    set -e
+fi
+printf '%s\n' "$plan_json" >"$runtime_dir/plan.json"
+classification=$(jq -r '.classification' <<<"$plan_json")
 
-if echo "$changed" | grep -q "^apps/api/"; then
-    echo "[pre-push] apps/api detected, running test..."
-    mise //apps/api:test || exit 1
+all_labels="contract_validation,api_lint,api_test,worker_lint,worker_test,web_lint,web_test,mobile_lint,mobile_test,dockerfile_lint,secret_scan,handoff,generated_drift,mutation_check"
+if [[ "$plan_exit" -ne 0 ]]; then
+    selected="contract_validation,mutation_check"
+    skipped=$(tr ',' '\n' <<<"$all_labels" | grep -vE '^(contract_validation|mutation_check)$' | paste -sd, -)
+    set +e
+    python3 scripts/quality/receipt.py \
+        --repo . --output "$runtime_dir/00-plan-failure.json" --phase "$phase" \
+        --classification "$classification" --selected "$selected" --skipped "$skipped" \
+        --gate contract_validation -- false
+    receipt_exit=$?
+    set -e
+    printf '%s\n' "$plan_json"
+    echo "receipt=$runtime_dir/00-plan-failure.json" >&2
+    [[ "$receipt_exit" -ne 0 ]] || exit 1
+    exit "$plan_exit"
 fi
 
-if echo "$changed" | grep -q "^apps/web/"; then
-    echo "[pre-push] apps/web detected, running test..."
-    mise //apps/web:test || exit 1
+original_selected=$(jq -r '.selected | join(",")' <<<"$plan_json")
+selected=$(jq -r --arg phase "$phase" '
+    .selected
+    | if $phase == "pre-push" and index("contract_validation") == null then ["contract_validation"] + . else . end
+    | if index("mutation_check") == null then . + ["mutation_check"] else . end
+    | join(",")
+' <<<"$plan_json")
+skipped=$(tr ',' '\n' <<<"$all_labels" | while IFS= read -r label; do
+    [[ ",$selected," == *",$label,"* ]] || printf '%s\n' "$label"
+done | paste -sd, -)
+
+run_gate() {
+    local label=$1
+    local sequence=$2
+    shift 2
+    local receipt="$runtime_dir/$sequence-$label.json"
+    set +e
+    python3 scripts/quality/receipt.py \
+        --repo . --output "$receipt" --phase "$phase" --classification "$classification" \
+        --selected "$selected" --skipped "$skipped" --gate "$label" -- "$@"
+    local status=$?
+    set -e
+    echo "receipt=$receipt" >&2
+    return "$status"
+}
+
+if [[ "$classification" == "no_ref_updates" || ( "$classification" == "tree_noop" && -z "$original_selected" ) ]]; then
+    run_gate mutation_check 00 true
+    printf '%s\n' "$plan_json"
+    exit 0
 fi
 
-if echo "$changed" | grep -q "^apps/worker/"; then
-    echo "[pre-push] apps/worker detected, running test..."
-    mise //apps/worker:test || exit 1
-fi
-
-if echo "$changed" | grep -q "^apps/mobile/"; then
-    echo "[pre-push] apps/mobile detected, running test..."
-    mise //apps/mobile:test || exit 1
-fi
+gate_order=(
+    "contract_validation" "api_lint" "api_test" "worker_lint" "worker_test"
+    "web_lint" "web_test" "mobile_lint" "mobile_test" "dockerfile_lint"
+    "secret_scan" "handoff" "generated_drift"
+)
+sequence=0
+for label in "${gate_order[@]}"; do
+    [[ ",$selected," == *",$label,"* ]] || continue
+    sequence=$((sequence + 1))
+    printf -v ordinal '%02d' "$sequence"
+    case "$label" in
+        "contract_validation")
+            if [[ "$phase" == "pre-push" ]]; then
+                run_contracts=false
+                [[ ",$original_selected," == *",contract_validation,"* ]] && run_contracts=true
+                command=(bash -c '
+                    branch=$(git branch --show-current)
+                    if [[ "$branch" == release-please--* ]]; then
+                        echo "[pre-push] release-please branch detected, skipping branch validation"
+                    else
+                        bunx @gracefullight/validate-branch
+                    fi
+                    [[ "$1" == false ]] || mise run quality:contracts
+                ' _ "$run_contracts")
+            else
+                command=(mise run quality:contracts)
+            fi
+            ;;
+        "api_lint") command=(mise run //apps/api:lint) ;;
+        "api_test") command=(mise run //apps/api:test) ;;
+        "worker_lint") command=(mise run //apps/worker:lint) ;;
+        "worker_test") command=(mise run //apps/worker:test) ;;
+        "web_lint") command=(mise run //apps/web:lint) ;;
+        "web_test") command=(mise run //apps/web:test) ;;
+        "mobile_lint") command=(mise run //apps/mobile:lint) ;;
+        "mobile_test") command=(mise run //apps/mobile:test) ;;
+        "dockerfile_lint")
+            dockerfiles=()
+            while IFS= read -r path; do dockerfiles+=("$path"); done \
+                < <(jq -r '.affected_paths[] | select(split("/")[-1] == "Dockerfile")' <<<"$plan_json")
+            command=(hadolint "${dockerfiles[@]}")
+            ;;
+        "secret_scan")
+            command=(bash -c 'printf "%s" "$1" | python3 scripts/quality/secret_scan.py --json' _ "$push_input")
+            ;;
+        "handoff")
+            command=(bash -c 'printf "%s" "$1" | python3 scripts/quality/handoff.py --json' _ "$push_input")
+            ;;
+        "generated_drift")
+            revisions=()
+            while IFS= read -r revision; do revisions+=("$revision"); done \
+                < <(jq -r '.refs[] | select(.update_type != "delete") | .local_oid' <<<"$plan_json" | sort -u)
+            command=(bash -c 'for revision do python3 scripts/quality/generated_drift.py --repo . --revision "$revision" --json || exit; done' _ "${revisions[@]}")
+            ;;
+    esac
+    run_gate "$label" "$ordinal" "${command[@]}" || exit $?
+done
+printf '%s\n' "$plan_json"
 '''

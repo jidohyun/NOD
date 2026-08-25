@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nod.local/contracts/quality-plan-v1.schema.json",
+  "title": "NOD quality change-set plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "phase", "classification", "refs", "affected_paths", "surfaces", "selected", "skipped", "blockers"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "phase": {"enum": ["pre-commit", "pre-push"]},
+    "classification": {
+      "enum": ["planned", "no_ref_updates", "malformed_input", "dirty_worktree", "stale_state", "history_base_unavailable", "unmapped_path", "tree_noop"]
+    },
+    "refs": {"type": "array", "items": {"$ref": "#/$defs/refUpdate"}},
+    "affected_paths": {"type": "array", "items": {"$ref": "#/$defs/path"}, "uniqueItems": true},
+    "surfaces": {"type": "array", "items": {"$ref": "#/$defs/surface"}, "uniqueItems": true},
+    "selected": {"$ref": "#/$defs/labels"},
+    "skipped": {"$ref": "#/$defs/labels"},
+    "blockers": {"type": "array", "items": {"$ref": "#/$defs/blocker"}}
+  },
+  "$defs": {
+    "oid": {"type": "string", "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$"},
+    "path": {"type": "string", "minLength": 1, "pattern": "[^\\u0000]+"},
+    "surface": {"enum": ["api", "worker", "web", "mobile", "extension", "packages", "quality", "root"]},
+    "label": {
+      "enum": ["contract_validation", "api_lint", "api_test", "worker_lint", "worker_test", "web_lint", "web_test", "mobile_lint", "mobile_test", "dockerfile_lint", "secret_scan", "handoff", "generated_drift", "mutation_check"]
+    },
+    "labels": {"type": "array", "items": {"$ref": "#/$defs/label"}, "uniqueItems": true},
+    "refUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local_ref", "local_oid", "remote_ref", "remote_oid", "update_type"],
+      "properties": {
+        "local_ref": {"type": "string", "minLength": 1},
+        "local_oid": {"$ref": "#/$defs/oid"},
+        "remote_ref": {"type": "string", "minLength": 1},
+        "remote_oid": {"$ref": "#/$defs/oid"},
+        "update_type": {"enum": ["create", "update", "force_update", "delete"]}
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code"],
+      "properties": {
+        "code": {"enum": ["MALFORMED_INPUT", "DIRTY_WORKTREE", "STALE_STATE", "HISTORY_BASE_UNAVAILABLE", "UNMAPPED_PATH"]},
+        "ref": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"classification": {"const": "malformed_input"}}}, "then": {"properties": {"blockers": {"contains": {"type": "object", "required": ["code"], "properties": {"code": {"const": "MALFORMED_INPUT"}}}}}}},
+    {"if": {"properties": {"classification": {"const": "dirty_worktree"}}}, "then": {"properties": {"blockers": {"contains": {"type": "object", "required": ["code"], "properties": {"code": {"const": "DIRTY_WORKTREE"}}}}}}},
+    {"if": {"properties": {"classification": {"const": "stale_state"}}}, "then": {"properties": {"blockers": {"contains": {"type": "object", "required": ["code"], "properties": {"code": {"const": "STALE_STATE"}}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "contract_validation"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "contract_validation"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "api_lint"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "api_lint"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "api_test"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "api_test"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "worker_lint"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "worker_lint"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "worker_test"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "worker_test"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "web_lint"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "web_lint"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "web_test"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "web_test"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "mobile_lint"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "mobile_lint"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "mobile_test"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "mobile_test"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "dockerfile_lint"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "dockerfile_lint"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "secret_scan"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "secret_scan"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "handoff"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "handoff"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "generated_drift"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "generated_drift"}}}}}},
+    {"if": {"properties": {"selected": {"contains": {"const": "mutation_check"}}}}, "then": {"properties": {"skipped": {"not": {"contains": {"const": "mutation_check"}}}}}}
+  ]
+}

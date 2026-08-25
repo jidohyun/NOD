@@ -69,6 +69,7 @@ apps/mobile/ios/Flutter/Generated.xcconfig
 docs/.bkit-memory.json
 .claude/checkpoints.log
 .omx/
+.omo/
 
 # AI agent/context artifacts
 .agent/
