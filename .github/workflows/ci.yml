@@ -1,0 +1,105 @@
+name: CI
+
+# Restores the lint/typecheck/test coverage that used to live inside the
+# deploy-* workflows. Those were disabled with the GCP deploy path (see
+# docs/decisions.md, 2026-08-29), which took their cloud-free test jobs down
+# with them. This workflow carries no cloud dependency, so it survives a
+# change of deploy platform.
+#
+# Each job runs the same entry point as the local pre-push gate
+# (mise //apps/<app>:<task> -> uv run poe <task> / bun run <task>), so a green
+# local gate and a green CI run mean the same thing.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "apps/web/**"
+      - "apps/worker/**"
+      - "packages/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "apps/web/**"
+      - "apps/worker/**"
+      - "packages/**"
+      - ".github/workflows/ci.yml"
+
+permissions:
+  contents: read
+
+# A superseded push or PR update has nothing left to prove.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "latest"
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install dependencies
+        run: uv sync --frozen
+      - name: Lint
+        run: uv run poe lint
+      - name: Typecheck
+        run: uv run poe typecheck
+      - name: Test
+        run: uv run poe test
+
+  worker:
+    name: Worker
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/worker
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "latest"
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install dependencies
+        run: uv sync --frozen
+      - name: Lint
+        run: uv run poe lint
+      - name: Typecheck
+        run: uv run poe typecheck
+      - name: Test
+        run: uv run poe test
+
+  web:
+    name: Web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Lint
+        run: bun run lint
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Test
+        run: bun run test
