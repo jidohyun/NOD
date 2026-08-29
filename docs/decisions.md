@@ -4,6 +4,8 @@
 
 | 날짜 | 결정 | 근거 |
 |---|---|---|
+| 2026-08-29 | 배포 플랫폼 GCP → Cloudflare 이전 | 사용자 결정. GCP 프로젝트 #89230550200의 결제가 꺼져 `deploy-worker`가 이미지 push 단계에서 실패 중이며, 결제를 되살릴 이유가 없음. GCP 의존 workflow는 4개 (`deploy-api`, `deploy-web`, `deploy-worker`, `deploy-mobile`) 전부. 이전까지 4개 비활성 |
+| 2026-08-29 | `apps/mobile` 알파 운영 제외 | 사용자 결정. Mobile CI는 성공 이력 0회(4/4 실패)이고 현재 실패 원인은 `dart format` 미포맷 3파일. 알파에서 운영하지 않으므로 지금 고치지 않음 |
 | 2026-08-09 | GitHub 저장소/README v1 미지원 (gist 장문 텍스트는 지원) | A0 중 사용자 판단 — README는 아티클과 결이 다름. 추후 지원 예정 |
 | 2026-08-09 | 의견·토론 콘텐츠(오피니언 에세이, GeekNews/Reddit 스레드) 미지원 | A0 실측: 의견글은 기준 통과 claim이 2개뿐, 가치가 스키마 밖(논쟁 프레임)에 있음 |
 | 2026-08-09 | 제품명 NOD (Priors 기각) | 사용자의 과거 동주제 프로젝트 이름 승계. Priors는 npm 선점(인접 분야 MCP 메모리 패키지) + Prior* 스타트업 혼잡 |
