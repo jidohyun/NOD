@@ -40,9 +40,11 @@ run stops with the gate named, and no commit is made.
 commit aborts”, “no commit made”, “both changes restored”, and “no stash left
 after abort”.
 
-## Known trap the skill exists to prevent
+## Known traps the skill exists to prevent
 
 `git stash push -- <pathspec>` records the **index** as well as the worktree.
 Staging a group and then stashing the remainder pushes the staged tree into the
 stash, and popping after the commit conflicts with what was just committed. The
 script always stashes before staging; do not reorder those two steps.
+
+A deleted submodule gitlink cannot be stashed by pathspec at all: `git stash push -- <path>` reports nothing and silently leaves the deletion in place, which then trips `DIRTY_WORKTREE` on its surface. Put such a deletion in the **first** group, the one position that never needs the remainder stashed.
