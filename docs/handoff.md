@@ -1,6 +1,6 @@
 # NOD Handoff
 
-<!-- nod-handoff-base: 48be05f1d985b8be993cb2f42059dab9c0e9952d -->
+<!-- nod-handoff-base: d8f9bbdfea6703ba038f1e6ca00afa850938bf8f -->
 
 세션 간 상태 인수인계 파일. 새 세션은 CLAUDE.md 라우팅을 거쳐 여기부터 읽는다.
 갱신 규칙: 세션이 유의미한 상태 변화를 만들면 이 파일을 갱신하고 커밋한다.
@@ -13,15 +13,16 @@ Current State에는 커밋 해시를 박는다. 증명 안 된 것은 Non-claims
   슬러그, frontmatter 직렬화, 테스트+eval이 P1/P2).
 - 스키마를 건드리기 전 `docs/a0-retrospective.md`의 v1.1 결정 대기 5건 확인
   (structures 필드가 최우선).
-- main이 origin 대비 ahead 7. push는 north-star standing approval 조건(로컬 게이트
+- push는 north-star standing approval 조건(로컬 게이트
   통과 + 관련 CI/배포 workflow를 별도 채널에서 확인)을 따른다. push 시 pre-push
   게이트가 이 파일 상단 HTML 주석의 base 마커와 원격 main OID의 일치를 검사하므로,
-  마커는 push 직전의 원격 main OID로 유지한다 (현재 `48be05f`와 일치). 게이트는
+  마커는 push 직전의 원격 main OID로 유지한다 (현재 `d8f9bbd`와 일치). push 할
+  때마다 원격 main이 움직이므로 다음 세션은 이 값을 먼저 갱신해야 한다. 게이트는
   마커 이름의 등장 횟수도 세므로 본문에서 그 이름을 그대로 적으면 중복으로 거부된다.
 
 ## Current State
 
-- 기준 커밋: `99be1fc` (docs(root): split-commit 스킬 추가)
+- 기준 커밋: `d8f9bbd` (docs(root): 하네스 랜딩 결과로 핸드오프 갱신) — origin/main과 동일
 - A0(수동 검증) 완료 — vault 자산 6개, 스키마 v1 생존 판정.
 - 2026-08-25: 미커밋 상태로 남아 있던 하네스·문서 작업을 6개 커밋으로 분리해
   랜딩했다. 전부 실제 훅(commitlint + 로컬 게이트)을 통과했고 `--no-verify`는
