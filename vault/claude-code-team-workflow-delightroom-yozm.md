@@ -1,5 +1,5 @@
 ---
-url: https://yozm.wishket.com/magazine/detail/3863/
+url: https://yozm.wishket.com/magazine/detail/3863
 captured_at: 2026-08-09
 claims:
   - id: c1
