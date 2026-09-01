@@ -1,6 +1,6 @@
 # NOD Handoff
 
-<!-- nod-handoff-base: 84a335956e9636e780fd5b8415dde0bf1e85d093 -->
+<!-- nod-handoff-base: dc329ab92fedca3661821a63b9b1b1a4013102b5 -->
 
 세션 간 상태 인수인계 파일. 새 세션은 CLAUDE.md 라우팅을 거쳐 여기부터 읽는다.
 갱신 규칙: 세션이 유의미한 상태 변화를 만들면 이 파일을 갱신하고 커밋한다.
@@ -16,13 +16,16 @@ Current State에는 커밋 해시를 박는다. 증명 안 된 것은 Non-claims
 - push는 north-star standing approval 조건(로컬 게이트
   통과 + 관련 CI/배포 workflow를 별도 채널에서 확인)을 따른다. push 시 pre-push
   게이트가 이 파일 상단 HTML 주석의 base 마커와 원격 main OID의 일치를 검사하므로,
-  마커는 push 직전의 원격 main OID로 유지한다 (현재 `84a3359`와 일치). push 할
+  마커는 push 직전의 원격 main OID로 유지한다 (현재 `dc329ab`와 일치). push 할
   때마다 원격 main이 움직이므로 다음 세션은 이 값을 먼저 갱신해야 한다. 게이트는
   마커 이름의 등장 횟수도 세므로 본문에서 그 이름을 그대로 적으면 중복으로 거부된다.
 
 ## Current State
 
-- 기준 커밋: `84a3359` (docs(root): 핸드오프 base 마커를 원격 main으로 갱신) — origin/main과 동일
+- 기준 커밋: `bea1129` (build(root): vault 자산 스키마 v1 검증기를 contracts 게이트에 추가)
+- 2026-09-01: vault 자산 스키마 v1 검증기(`scripts/quality/asset_schema.py` + 테스트 18개)를
+  `quality:contracts` 게이트에 편입. vault 전수(6개) 검증에서 URL trailing slash 위반
+  2건을 잡아 수정(`dd2b394`). v1.1 미결 5건 보호를 위해 미지 frontmatter 키는 거부한다.
 - 2026-08-29: GCP 배포 workflow 4개를 비활성화하면서(결정 기록 참조) 그 안에 있던
   cloud-free `test` job까지 함께 죽어 CI 쪽 동적 검증이 공백이 됐다. `.github/workflows/ci.yml`로
   api·worker·web의 lint·typecheck·test를 복구했다. CI는 로컬 게이트와 같은 진입점
