@@ -50,6 +50,9 @@ printf '%s\n' '<local-ref> <local-oid> <remote-ref> <remote-oid>' \
 mise run git:pre-commit
 printf '%s\n' '<local-ref> <local-oid> <remote-ref> <remote-oid>' \
   | mise run git:pre-push -- origin '<remote-url>'
+
+# vault 자산 스키마 v1 검증 (quality:contracts 게이트에 포함되어 자동 실행됨)
+python3 scripts/quality/asset_schema.py --json
 ```
 
 앱별 직접 실행이 필요하면 다음을 사용한다.
@@ -175,9 +178,13 @@ code는 Actions 결과가 아니다. main push 후에는 관련 workflow run을 
 
 ## 6. 현재 하네스의 남은 공백
 
-- PR 단계에서 앱별 test/typecheck를 일괄 수행하는 단일 workflow는 없다.
+- ~~PR 단계에서 앱별 test/typecheck를 일괄 수행하는 단일 workflow는 없다.~~
+  2026-08-29 `ci.yml`이 push·PR에서 api·worker·web의 lint·typecheck·test를 수행한다
+  (로컬 게이트와 같은 진입점). GCP 배포 workflow 4개는 비활성 (docs/decisions.md).
 - Extension 변경을 PR에서 자동 검증하는 workflow가 없다.
 - root `mise` task 범위와 CI 범위가 완전히 같지 않다.
+- vault 자산은 로컬 게이트(`quality:contracts` 내 `test_asset_schema`)로만 검증되고
+  CI의 트리거 경로에 `vault/**`가 없다.
 
 이 공백을 해결하는 CI 변경은 이번 로컬 harness 범위에 포함되지 않는다. 별도 계획과
 승인 전까지 CI parity는 deferred 상태이며, 이후 proof-surface 변경은
