@@ -47,6 +47,11 @@ For local extension use, load `apps/nod/extension` as an unpacked extension in a
 - The previous GitHub Pages shutdown notice (`jidohyun/nod-shutdown`, Pages disabled 2026-09-17) no longer serves the domain; its A/CNAME records were deleted. SES mail records (MX/TXT) were preserved. The `nod-shutdown` repo itself still exists — deleting it needs `delete_repo` scope on the `jidohyun` gh token.
 - Verified on production: `/`, `/app.js`, `/styles.css` → 200; `/api/me` → 401; `/api/extension/exchange` POST and cross-origin OPTIONS → 403; `/auth/google` → 302 to Google with the production redirect URI.
 
+## Delivery
+
+- Pushing to `main` auto-deploys: `.github/workflows/ci.yml` runs the `nod` check job, then a `deploy` job (remote D1 migrations → `wrangler deploy` → production smoke check on `/`, `/api/me`, `/auth/google`). Auth is the `CLOUDFLARE_API_TOKEN` repo secret scoped to this account and the `nod-archive.com` zone.
+- D1 migrations are additive-only (see AGENTS.md). Rollback: revert the commit and let CD redeploy, or `wrangler rollback` in `apps/nod`.
+
 ## Not done
 
 - No verification has been recorded in a separate Google Chrome application.

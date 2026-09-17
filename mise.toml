@@ -25,3 +25,13 @@ run = "bun run build"
 description = "Apply Nod D1 migrations to local state"
 dir = "apps/nod"
 run = "bun run db:local"
+
+[tasks."db:remote"]
+description = "Apply Nod D1 migrations to the remote database"
+dir = "apps/nod"
+run = "bunx wrangler d1 migrations apply nod-links --remote"
+
+[tasks.deploy]
+description = "Deploy the Nod Worker to production"
+dir = "apps/nod"
+run = "bunx wrangler deploy"

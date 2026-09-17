@@ -46,3 +46,42 @@ jobs:
         run: bun run db:local
       - name: Dry-run Worker build
         run: bun run build
+
+  deploy:
+    name: Deploy
+    needs: nod
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: apps/nod
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: 307e231ed540969f16722a6bba5311ae
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Apply remote D1 migrations
+        run: bunx wrangler d1 migrations apply nod-links --remote
+      - name: Deploy Worker
+        run: bunx wrangler deploy
+      - name: Smoke check production
+        run: |
+          set -e
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://nod-archive.com/)
+          [ "$code" = "200" ] || { echo "GET / -> $code"; exit 1; }
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://nod-archive.com/api/me)
+          [ "$code" = "401" ] || { echo "GET /api/me -> $code"; exit 1; }
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://nod-archive.com/auth/google)
+          [ "$code" = "302" ] || { echo "GET /auth/google -> $code"; exit 1; }
+          echo "smoke ok"

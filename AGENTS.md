@@ -24,6 +24,12 @@ bun run build
 
 `check` performs JavaScript syntax checks. `build` is `wrangler deploy --dry-run` and does not deploy remotely.
 
+## Deployment
+
+Pushing to `main` deploys automatically: the `deploy` job in `.github/workflows/ci.yml` applies remote D1 migrations, runs `wrangler deploy`, then smoke-checks `https://nod-archive.com`. It authenticates with the `CLOUDFLARE_API_TOKEN` repository secret (scoped to this account and the `nod-archive.com` zone).
+
+D1 migrations must be additive-only — new tables and columns, never drops or renames — because migrations run before the new Worker version goes live. Roll back a bad deploy with `mise run deploy` after reverting the commit, or `wrangler rollback` in `apps/nod`.
+
 ## Product and operational truth
 
 Read [docs/decisions.md](docs/decisions.md) for the current product contract and [docs/handoff.md](docs/handoff.md) for verified behavior and outstanding remote work. The browser verification recorded there used Aside (Chromium), not a separate Google Chrome app.
