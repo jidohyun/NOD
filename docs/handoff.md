@@ -40,10 +40,17 @@ The real local Google configuration is in ignored `.dev.vars`. Do not read, comm
 
 For local extension use, load `apps/nod/extension` as an unpacked extension in a Chromium-based browser and set its service URL to `http://localhost:8787`.
 
+## Deployed
+
+- 2026-09-17: `nod-links` Worker is live at `https://nod-archive.com` (custom domain) and `https://nod-links.nod-api.workers.dev`. Remote D1 `nod-links` (id `b687a3d4-5016-44fa-8ee1-74afcaa3a6fe`, APAC) has migration `0001_initial` applied. `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` secrets are set from `.dev.vars` values.
+- The OAuth client "NOD Links Local" (GCP project `89230550200`) now allows both `http://localhost:8787/auth/callback` and `https://nod-archive.com/auth/callback`. The consent screen remains in Testing mode — only listed test users can sign in.
+- The previous GitHub Pages shutdown notice (`jidohyun/nod-shutdown`, Pages disabled 2026-09-17) no longer serves the domain; its A/CNAME records were deleted. SES mail records (MX/TXT) were preserved. The `nod-shutdown` repo itself still exists — deleting it needs `delete_repo` scope on the `jidohyun` gh token.
+- Verified on production: `/`, `/app.js`, `/styles.css` → 200; `/api/me` → 401; `/api/extension/exchange` POST and cross-origin OPTIONS → 403; `/auth/google` → 302 to Google with the production redirect URI.
+
 ## Not done
 
-- No remote Cloudflare deployment or D1 migration has been performed.
-- No DNS change has been performed.
 - No verification has been recorded in a separate Google Chrome application.
+- The OAuth consent screen is still in Testing mode; publishing it for non-test users has not been decided.
+- The extension has not been re-tested against production; its default origin is already `https://nod-archive.com`.
 
 Commit, push, deployment, DNS, and remote-resource changes require explicit user or repository-owner approval. Local changes and successful checks do not grant standing approval.

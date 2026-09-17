@@ -13,10 +13,17 @@
     {
       "binding": "DB",
       "database_name": "nod-links",
+      "database_id": "b687a3d4-5016-44fa-8ee1-74afcaa3a6fe",
       "migrations_dir": "migrations"
     }
   ],
   "vars": {
-    "SITE_ORIGIN": "http://localhost:8787"
-  }
+    "SITE_ORIGIN": "https://nod-archive.com"
+  },
+  "routes": [
+    {
+      "pattern": "nod-archive.com",
+      "custom_domain": true
+    }
+  ]
 }
