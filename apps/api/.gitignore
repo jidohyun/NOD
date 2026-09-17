@@ -1,8 +1,0 @@
-# Python
-__pycache__/
-*.pyc
-.venv/
-venv/
-.env
-.mypy_cache/
-.pytest_cache/

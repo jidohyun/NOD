@@ -1,48 +1,16 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/apps/web"
+  - package-ecosystem: npm
+    directory: /apps/nod
     schedule:
-      interval: "monthly"
+      interval: monthly
     labels:
-      - "dependencies"
-    open-pull-requests-limit: 3
-    groups:
-      minor-and-patch:
-        update-types:
-          - "minor"
-          - "patch"
+      - dependencies
 
-  - package-ecosystem: "npm"
-    directory: "/apps/extension"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "monthly"
+      interval: monthly
     labels:
-      - "dependencies"
-    open-pull-requests-limit: 3
-    groups:
-      minor-and-patch:
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "pip"
-    directory: "/apps/api"
-    schedule:
-      interval: "monthly"
-    labels:
-      - "dependencies"
-    open-pull-requests-limit: 3
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    labels:
-      - "dependencies"
-      - "ci"
-    open-pull-requests-limit: 3
-    groups:
-      actions:
-        patterns:
-          - "*"
+      - dependencies
+      - ci

@@ -1,24 +1,16 @@
 name: Feature Request
-description: Suggest a new feature or improvement for NOD
+description: Suggest an improvement to Nod
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for suggesting a feature! We appreciate your input.
-
   - type: dropdown
-    id: app
+    id: surface
     attributes:
-      label: App
-      description: Which part of NOD does this relate to?
+      label: Surface
       options:
-        - Web (nod-archive.com)
-        - Chrome Extension
-        - API
-        - Mobile
-        - General
+        - Nod web app
+        - Chrome extension
+        - Worker or D1
     validations:
       required: true
 
@@ -26,8 +18,7 @@ body:
     id: problem
     attributes:
       label: Problem
-      description: Is your feature request related to a problem? Describe it.
-      placeholder: I'm always frustrated when...
+      description: Describe the problem this would solve.
     validations:
       required: true
 
@@ -35,7 +26,7 @@ body:
     id: solution
     attributes:
       label: Proposed solution
-      description: Describe the solution you'd like.
+      description: Describe the behavior you would like.
     validations:
       required: true
 
@@ -43,10 +34,3 @@ body:
     id: alternatives
     attributes:
       label: Alternatives considered
-      description: Describe any alternative solutions or features you've considered.
-
-  - type: textarea
-    id: additional
-    attributes:
-      label: Additional context
-      description: Add any other context, mockups, or screenshots about the feature request.

@@ -1,0 +1,8 @@
+Mode: built-in image_gen
+Use case: logo-brand
+Asset type: primary logo for NOD, a personal saved-link library and browser extension.
+Create one polished original horizontal logo lockup, a compact distinctive symbol followed by the exact uppercase word "NOD". Symbol: a simple rounded folded bookmark shape subtly forming an N, with a gently irregular hand-drawn charcoal outline and solid mustard yellow fill. Custom bold rounded lettering, friendly Fredoka-like character, excellent readability, carefully balanced spacing. Warm, creative, tactile sketchbook personality, restrained enough for a useful everyday app.
+Palette strictly mustard #E8B931 and charcoal #4A4A4A. Flat solid shapes, clean vector-like edges, subtle intentional organic asymmetry, no distressed texture.
+Genuinely transparent background with alpha, no checkerboard drawn in. Centered horizontal logo with reasonable clear space; logo occupies most of image width.
+Text verbatim: "NOD", three letters N O D, charcoal.
+Avoid slogans, extra text, mockups, presentation boards, multiple variants, 3D, gradients, glow, drop shadows, generic lightbulbs, palettes, plants, decorative doodles. Output one finished logo asset.

@@ -1,0 +1,15 @@
+{
+  "name": "nod-links",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8787",
+    "db:local": "wrangler d1 migrations apply nod-links --local",
+    "check": "node --check src/worker.js && node --check public/app.js && node --check extension/background.js && node --check extension/options.js",
+    "build": "wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "wrangler": "4.131.1"
+  }
+}

@@ -1,29 +1,8 @@
-# 결정 기록
+# NOD Decisions
 
-> 되돌리려면 여기 근거부터 반박할 것. 최신이 위.
-
-| 날짜 | 결정 | 근거 |
+| Date | Decision | Rationale |
 |---|---|---|
-| 2026-08-29 | 배포 플랫폼 GCP → Cloudflare 이전 | 사용자 결정. GCP 프로젝트 #89230550200의 결제가 꺼져 `deploy-worker`가 이미지 push 단계에서 실패 중이며, 결제를 되살릴 이유가 없음. GCP 의존 workflow는 4개 (`deploy-api`, `deploy-web`, `deploy-worker`, `deploy-mobile`) 전부. 이전까지 4개 비활성 |
-| 2026-08-29 | `apps/mobile` 알파 운영 제외 | 사용자 결정. Mobile CI는 성공 이력 0회(4/4 실패)이고 현재 실패 원인은 `dart format` 미포맷 3파일. 알파에서 운영하지 않으므로 지금 고치지 않음 |
-| 2026-08-09 | GitHub 저장소/README v1 미지원 (gist 장문 텍스트는 지원) | A0 중 사용자 판단 — README는 아티클과 결이 다름. 추후 지원 예정 |
-| 2026-08-09 | 의견·토론 콘텐츠(오피니언 에세이, GeekNews/Reddit 스레드) 미지원 | A0 실측: 의견글은 기준 통과 claim이 2개뿐, 가치가 스키마 밖(논쟁 프레임)에 있음 |
-| 2026-08-09 | 제품명 NOD (Priors 기각) | 사용자의 과거 동주제 프로젝트 이름 승계. Priors는 npm 선점(인접 분야 MCP 메모리 패키지) + Prior* 스타트업 혼잡 |
-| 2026-08-09 | A 앞에 A0(수동 검증 2일) 삽입 | Codex 반론 절충 — 파이프라인 코드보다 스키마 검증이 먼저. 실제로 v1.1 이슈 5건을 코드 없이 발견 |
-| 2026-08-09 | relations는 target을 가진 객체 배열 | eng-review T2 — 대상 없는 relation은 장식. B의 충돌 비교 뷰가 전제하는 구조 |
-| 2026-08-09 | B 진입 기준 = 재열람 주3회 AND 결정 변화 사례 2건 | eng-review T3 — 빈도만으로는 습관을, 사례만으로는 자기합리화를 측정하게 됨 |
-| 2026-08-09 | 캐처는 절대 실패하지 않는다 (pending/ 폴백) | eng-review 1A — 추출/LLM 실패 시 입력 유실되면 도구 신뢰가 첫 주에 죽음 |
-| 2026-08-09 | 파일명 = URL 정규화 슬러그, 재캐처는 append | eng-review 3A — B의 시맨틱 매칭이 안정적 자산 ID를 전제 |
-| 2026-08-09 | 구조 필드는 YAML frontmatter, 산문은 본문 | eng-review 4A — B가 파싱 로직 없이 읽도록. Obsidian 호환 |
-| 2026-08-09 | 회상/리마인더는 명시적 후순위 — 설계 금지 | 사용자 리프레이밍(D8) — 핵심 루프는 "조우→요약→자산화". 부가 단계를 지금 설계하면 핵심이 흐려짐 |
-| 2026-08-09 | 대상 매체 v1 = 정보 전달형 테크 아티클+블로그, 논문/PDF는 2단계 | D9 — 매체를 좁혀야 스키마를 날카롭게 검증 가능 |
-| 2026-08-09 | Karakeep 기반 채택 기각, 자체 마크다운→SQLite 스토어 | 스키마 실험 속도가 남의 데이터 모델에 묶임. Karakeep은 참조만 |
-| 2026-08-09 | 확신도(Confidence) 필드 v1 보류 | canonical 4필드만 확정, A 도그푸딩 후 재검토 |
-
-## v1.1 결정 대기 (미결 — [a0-retrospective.md](a0-retrospective.md) 상세)
-
-1. `structures` 필드 추가 (5개 중 4개 자산에서 패턴 확인 — 유력)
-2. 메타 claim 정책 ("저자의 X는 Y" 우회 허용 조건)
-3. relation target 범위 (자산↔자산 외에 자산↔설계 결정 허용?)
-4. "정보 페이로드" 필터를 규칙 6으로 명문화
-5. "기준 적용 메모" 섹션 템플릿 승격
+| 2026-09-13 | Phase 1 is one-click extension link saving and a personal link library. | Store only URL, title, source, and saved time. Signed-in users can list, search, open, and delete their own links. Body collection, AI summaries, and claim/relation extraction are excluded. |
+| 2026-09-13 | The implementation lives only in `apps/nod`. | It is a new Cloudflare Worker + D1 application with a vanilla public web app and a Manifest V3 extension. Legacy applications, dependencies, infrastructure, and data models are not part of Phase 1. |
+| 2026-09-13 | Defer visual investment and keep the web UI simple. | Preserve separate HTML, CSS, and JavaScript. Do not add a UI framework or needless abstraction until a design decision requires it. |
+| 2026-09-13 | Remote operations require explicit approval. | Deployment, DNS, remote Cloudflare changes, commits, and pushes are not implied by local work or verification. |

@@ -1,51 +1,23 @@
 # Security Policy
 
-## Supported Versions
+## Supported surface
 
-| Version | Supported |
-|---------|-----------|
-| Latest  | Yes       |
+The active NOD surface is `apps/nod`: its Cloudflare Worker + D1 application and Manifest V3 browser extension. No remote deployment is currently declared complete.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-If you discover a security vulnerability in NOD, please report it responsibly.
+Please do **not** open a public issue for a security vulnerability. Report it through [GitHub Private Vulnerability Reporting](https://github.com/jidohyun/NOD/security/advisories/new) with:
 
-**Please do NOT open a public GitHub issue for security vulnerabilities.**
+- a clear description and affected surface;
+- reproducible steps or a proof of concept;
+- the potential impact; and
+- suggested mitigation, if known.
 
-Instead, please report them via [GitHub Private Vulnerability Reporting](https://github.com/jidohyun/NOD/security/advisories/new).
+Do not include production credentials, OAuth secrets, or private user data in a report.
 
-### What to include
+## Contributor practices
 
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact
-- Suggested fix (if any)
-
-### Response Timeline
-
-- **Acknowledgment**: Within 48 hours
-- **Initial Assessment**: Within 1 week
-- **Fix & Disclosure**: We aim to resolve critical issues within 30 days
-
-### Scope
-
-The following are in scope:
-
-- NOD web application (`nod-archive.com`)
-- NOD Chrome extension
-- NOD API endpoints
-
-### Out of Scope
-
-- Third-party services and dependencies (please report to their maintainers)
-- Issues that require physical access to a user's device
-- Social engineering attacks
-
-## Security Best Practices for Contributors
-
-- Never commit secrets, API keys, or credentials
-- Use environment variables for sensitive configuration
-- Validate and sanitize all user inputs
-- Follow the principle of least privilege
-
-Thank you for helping keep NOD and its users safe!
+- Never commit secrets, API keys, tokens, or credentials.
+- Keep sensitive configuration in ignored environment files such as `apps/nod/.dev.vars`.
+- Request explicit approval before remote deployment, DNS changes, or remote-resource changes.
+- Handle user data with least privilege and validate untrusted input.

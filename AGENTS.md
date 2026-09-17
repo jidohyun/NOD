@@ -1,79 +1,31 @@
-# AGENTS.md - Root Agent Guidance for NOD Monorepo
+# NOD Agent Guide
 
-This document owns **execution knowledge** for the NOD monorepo: structure, commands, hooks. Operating policy (reversible/irreversible boundary, standing approvals) is owned by [docs/agent-north-star.md](./docs/agent-north-star.md); session routing is owned by [CLAUDE.md](./CLAUDE.md). On conflict, the north star wins.
+## Scope
 
-## 1. Project Overview
+The sole active product is `apps/nod`: a Cloudflare Worker + D1 personal link library, a vanilla public web app, and a Manifest V3 extension. Phase 1 saves and manages link metadata only: URL, title, source, and saved time. Do not add article-body collection, AI processing, or legacy application paths.
 
-NOD is a Chrome extension and web app designed to transform web content into searchable knowledge. It's built as a monorepo containing several applications and shared packages.
+## Working conventions
 
-## 2. Core Principles for Agents
+- Keep HTML for structure, CSS for style, and JavaScript for behavior.
+- Do not invest in styling or add a UI framework/abstraction before a product design decision requires it.
+- Treat `apps/nod/.dev.vars` as secret and ignored. Do not read it, commit it, or document its values.
 
-When operating within this monorepo, agents MUST adhere to the following principles:
+## Commands
 
-*   **Command-First**: Always prioritize using `mise` commands or per-app package.json scripts for development tasks.
-*   **Deterministic Output**: Avoid introducing volatile data (e.g., timestamps) into generated content.
-*   **Security**: NEVER handle or expose sensitive information (API keys, credentials, secrets).
-*   **Verification**: Always verify changes through linting, type-checking, and testing before claiming completion. At irreversible boundaries (main push → CI deploy, DB migration, proof-surface edits) a single green is not completion — follow the confirmation rules in [docs/agent-north-star.md](./docs/agent-north-star.md).
-*   **Schema Discipline**: For any feature touching DB schema objects (new tables/columns/indexes, or code paths that query them), run migrations before runtime verification. Required preflight: `mise run db:migrate`. If a runtime error includes `UndefinedTableError` or `relation ... does not exist`, treat it as migration drift first, apply migrations, then re-test before changing application code.
+Run commands from `apps/nod`:
 
-## 3. Global Commands (via `mise run`)
+```bash
+bun install --frozen-lockfile
+bun run db:local
+bun run dev
+bun run check
+bun run build
+```
 
-The `mise` tool orchestrates tasks across the monorepo. Use `mise run <task>` from the root.
+`check` performs JavaScript syntax checks. `build` is `wrangler deploy --dry-run` and does not deploy remotely.
 
-| Command           | Description                                   |
-| :---------------- | :-------------------------------------------- |
-| `dev`             | Start all services (API, Web, Worker)         |
-| `dev:web`         | Start API and Web services                    |
-| `dev:mobile`      | Start API and Mobile services                 |
-| `install`         | Install all dependencies                      |
-| `format`          | Format API, Web, and Worker                   |
-| `lint`            | Lint API, Web, and Worker                     |
-| `test`            | Test API, Web, and Worker                     |
-| `typecheck`       | Type check API and Web                        |
-| `db:migrate`      | Run database migrations                       |
-| `gen:api`         | Generate OpenAPI schema and API clients       |
-| `i18n:build`      | Build i18n files                              |
-| `infra:up`        | Start local infrastructure (Docker Compose)   |
-| `infra:down`      | Stop local infrastructure (Docker Compose)    |
-| `tokens:build`    | Build design tokens                           |
+## Product and operational truth
 
-Root `mise` validation tasks do not include the Extension. Use
-`apps/extension/package.json` scripts for its typecheck/build/release flow. Mobile
-lint/test runs through its app-local task and CI workflow.
+Read [docs/decisions.md](docs/decisions.md) for the current product contract and [docs/handoff.md](docs/handoff.md) for verified behavior and outstanding remote work. The browser verification recorded there used Aside (Chromium), not a separate Google Chrome app.
 
-## 4. Where to Look by Task
-
-This monorepo is structured into `apps/` and `packages/`.
-
-*   **Web Application**: `apps/web/`
-    *   Routing/Pages: `apps/web/src/app`
-    *   UI Components: `apps/web/src/components`
-*   **API Services**: `apps/api/`
-    *   Domain Logic: `apps/api/src/` (pattern for domain logic)
-*   **Worker Services**: `apps/worker/`
-*   **Chrome Extension**: `apps/extension/`
-    *   Split Logic: `apps/extension/src/` (pattern for split logic)
-*   **Mobile Application**: `apps/mobile/` (Flutter)
-*   **Infrastructure**: `apps/infra/` (Terraform for GCP)
-*   **Shared Libraries**: `packages/`
-
-## 5. Git Hooks and Automated Checks
-
-The repository enforces pre-commit and pre-push hooks via `mise`. These hooks run conditional checks based on staged or changed files.
-
-*   **`commit-msg`**: Validates commit messages using `commitlint`.
-*   **`pre-commit`**:
-    *   Runs `lint` for `apps/api`, `apps/web`, `apps/worker`, `apps/mobile` if relevant files are staged.
-    *   Runs `hadolint` for `Dockerfile` changes.
-*   **`pre-push`**:
-    *   Validates branch names.
-    *   Runs `test` for `apps/api`, `apps/web`, `apps/worker`, `apps/mobile` if relevant files have changed compared to origin/main.
-
-Agents MUST ensure their changes pass these checks.
-
-## 6. Child `AGENTS.md` Files
-
-This root `AGENTS.md` provides general guidance. More specific `AGENTS.md` files exist within subdirectories (e.g., `apps/web/AGENTS.md`, `apps/api/AGENTS.md`).
-
-*   **Supplement, Not Duplicate**: Child `AGENTS.md` files extend and supplement the guidance provided here. They focus on local conventions, commands, and caveats specific to their context.
-*   **Local Scope**: Always consult the nearest `AGENTS.md` file for the most relevant and granular instructions for your current task.
+Do not commit, push, deploy, change DNS, or alter remote Cloudflare resources without explicit approval from the user or repository owner. Local work and successful verification never create standing approval.

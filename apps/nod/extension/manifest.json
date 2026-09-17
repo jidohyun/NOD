@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "NOD Save",
+  "version": "0.1.0",
+  "description": "Save the current page to your NOD library.",
+  "permissions": ["activeTab", "storage", "identity"],
+  "host_permissions": [
+    "http://localhost:8787/*",
+    "https://nod-archive.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Save this page to NOD"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
