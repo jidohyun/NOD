@@ -30,6 +30,10 @@ Pushing to `main` deploys automatically: the `deploy` job in `.github/workflows/
 
 D1 migrations must be additive-only — new tables and columns, never drops or renames — because migrations run before the new Worker version goes live. Roll back a bad deploy with `mise run deploy` after reverting the commit, or `wrangler rollback` in `apps/nod`.
 
+## Task management
+
+Work is tracked in GitHub issues — see [CONTRIBUTING.md](CONTRIBUTING.md) for the issue lifecycle, label scheme, branch/commit conventions, and the merge-to-deploy contract.
+
 ## Product and operational truth
 
 Read [docs/decisions.md](docs/decisions.md) for the current product contract and [docs/handoff.md](docs/handoff.md) for verified behavior and outstanding remote work. The browser verification recorded there used Aside (Chromium), not a separate Google Chrome app.
