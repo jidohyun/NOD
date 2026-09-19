@@ -32,7 +32,7 @@ D1 migrations must be additive-only — new tables and columns, never drops or r
 
 ## Task management
 
-Work is tracked in GitHub issues — see [CONTRIBUTING.md](CONTRIBUTING.md) for the issue lifecycle, label scheme, branch/commit conventions, and the merge-to-deploy contract. Project skills under `.agents/skills/` carry the per-stage runbooks: `nod-triage` (issue), `nod-work` (worktree + implementation), `nod-ship` (PR → merge → deploy), `nod-ops` (production, secrets, rollback).
+Work is tracked in GitHub issues — see [CONTRIBUTING.md](CONTRIBUTING.md) for the issue lifecycle, label scheme, branch/commit conventions, and the merge-to-deploy contract. Project skills under `.agents/skills/` carry the per-stage runbooks: `nod-triage` (issue), `nod-work` (worktree + env setup only), `nod-ship` (PR → merge → deploy), `nod-ops` (production, secrets, rollback).
 
 ## Product and operational truth
 
