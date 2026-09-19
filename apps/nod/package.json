@@ -7,6 +7,7 @@
     "dev": "wrangler dev --port 8787",
     "db:local": "wrangler d1 migrations apply nod-links --local",
     "check": "node --check src/worker.js && node --check public/app.js && node --check extension/background.js && node --check extension/options.js",
+    "test": "bun test",
     "build": "wrangler deploy --dry-run"
   },
   "devDependencies": {

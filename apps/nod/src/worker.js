@@ -12,7 +12,7 @@ const MAX_TITLE_LENGTH = 500;
 const MAX_QUERY_LENGTH = 200;
 const PAGE_SIZE = 30;
 
-class HttpError extends Error {
+export class HttpError extends Error {
   constructor(status, code) {
     super(code);
     this.status = status;
@@ -213,7 +213,7 @@ async function readJson(request) {
   }
 }
 
-function normalizeUrl(value) {
+export function normalizeUrl(value) {
   if (typeof value !== "string" || value.length === 0 || value.length > MAX_URL_LENGTH) throw new HttpError(400, "invalid_url");
   let parsed;
   try {
