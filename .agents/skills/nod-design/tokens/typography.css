@@ -1,0 +1,32 @@
+:root {
+  /* Families — DESIGN.md §3 + repo webfont. Latin: Fredoka/Quicksand; Korean glyphs fall through to NanumSquareRound. */
+  --font-brand: "Fredoka", "NanumSquareRound", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-body: "Quicksand", "NanumSquareRound", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* Weights (web font range 300–700; font-black is clamped to 700) */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  /* Sizes — mobile / wide */
+  --text-hero-mobile: 48px;   --text-hero-wide: 80px;      /* 48–60 / 72–96 */
+  --text-section-mobile: 36px; --text-section-wide: 52px;  /* 36 / 48–60 */
+  --text-page-mobile: 36px;    --text-page-wide: 44px;     /* 32–40 / 40–48 */
+  --text-component-title: 22px;                            /* 20–24 */
+  --text-link-title: 18px;
+  --text-body: 16px;
+  --text-body-lg: 20px;
+  --text-meta: 14px;
+  --text-meta-sm: 12px;
+  /* Line heights */
+  --leading-hero: 1.15;
+  --leading-heading: 1.2;
+  --leading-component: 1.3;
+  --leading-link: 1.4;
+  --leading-body: 1.6;
+  --leading-meta: 1.5;
+  /* Fluid composites */
+  --text-hero: clamp(var(--text-hero-mobile), 3rem + 3vw, var(--text-hero-wide));
+  --text-section: clamp(var(--text-section-mobile), 2rem + 1.5vw, var(--text-section-wide));
+  --text-page: clamp(var(--text-page-mobile), 2rem + 0.8vw, var(--text-page-wide));
+}

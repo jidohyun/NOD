@@ -1,0 +1,24 @@
+:root {
+  /* Radii — DESIGN.md §4 */
+  --radius-control: 12px;
+  --radius-panel: 24px;
+  --radius-creative: 32px;
+  --radius-pill: 999px;
+  --radius-organic: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  --radius-blob: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  --radius-doodle: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-doodle-thick: 255px 25px 225px 25px / 25px 225px 25px 255px;
+  /* Borders */
+  --border-doodle: 2px solid var(--color-ink);
+  --border-doodle-emphasis: 3px solid var(--color-ink);
+  --border-hairline: 1px solid var(--border-subtle);
+  --border-dashed: 2px dashed var(--color-ink);
+  /* Shadows — flat sketch offsets, no blur */
+  --shadow-sketch: 4px 4px 0 rgba(74, 74, 74, 0.1);
+  --shadow-sketch-large: 8px 8px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sketch-hover: 6px 6px 0 var(--color-brand);
+  /* Tilt allowances */
+  --tilt-card: 1.25deg;   /* ±1–1.5° decorative cards */
+  --tilt-frame: 3deg;     /* ±3° large image frames */
+  --tilt-note: 6deg;      /* max ±6° small notes */
+}

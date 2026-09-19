@@ -1,0 +1,16 @@
+<!-- @dsCard group="Components" viewport="700x300" name="Actions" subtitle="Button variants, sizes, states · IconButton" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body style="padding:20px;background:var(--surface-page)"><div id="root"></div>
+<script type="text/plain" id="card">
+<div style={{display:"grid",gap:16}}>
+    <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}><Button icon="login">Google로 시작하기</Button><Button variant="secondary">더 보기</Button><Button variant="mint" icon="extension">확장 연결</Button><Button variant="plain">취소</Button><Button variant="text">연결 해제</Button></div>
+    <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}><Button size="sm">저장</Button><Button size="md">저장</Button><Button size="lg">저장</Button></div>
+    <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}><Button loading>저장 중</Button><Button disabled>비활성</Button><Button variant="secondary" disabled>비활성</Button></div>
+    <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}><IconButton icon="search" label="검색" /><IconButton icon="logout" label="로그아웃" /><IconButton icon="delete" label="삭제" tone="danger" /><IconButton icon="close" label="닫기" size={36} /></div>
+  </div>
+</script>
+<script type="module">
+import { mount } from "../../_cards/load.js";
+mount("#root", {Button: "../actions/Button.jsx", IconButton: "../actions/IconButton.jsx"}, document.getElementById("card").textContent);
+</script></body></html>

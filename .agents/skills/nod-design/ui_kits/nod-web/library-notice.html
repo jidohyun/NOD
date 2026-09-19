@@ -1,0 +1,9 @@
+<!-- @dsCard group="NOD Web App" viewport="1280x800" name="Library — getting started" subtitle="시작 안내(세이지) 표시" -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>NOD — 저장한 링크</title><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head><body><div id="root"></div>
+<script type="module">
+import { load, REACT_URL, REACT_DOM_CLIENT_URL } from "../../_cards/load.js?v=5";
+const React = (await import(REACT_URL)).default; const { createRoot } = await import(REACT_DOM_CLIENT_URL);
+const { App } = await load(["./App.jsx"]);
+createRoot(document.getElementById("root")).render(React.createElement(App, { initialScreen: "library", initialState: "notice" }));
+</script></body></html>

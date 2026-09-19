@@ -1,0 +1,16 @@
+<!-- @dsCard group="Components" viewport="700x300" name="Forms" subtitle="TextInput — search, labelled, hint, error" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body style="padding:20px;background:var(--surface-page)"><div id="root"></div>
+<script type="text/plain" id="card">
+<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
+    <TextInput label="저장한 링크 검색" hideLabel icon="search" placeholder="제목이나 출처로 검색" trailing={<IconButton icon="search" label="검색" size={36} />} />
+    <TextInput label="NOD service origin" type="url" defaultValue="https://nod-archive.com" hint="Use HTTPS, or http://localhost:8787 for local development." />
+    <TextInput label="이름" placeholder="입력" />
+    <TextInput label="URL" defaultValue="nod-archive" error="주소 형식을 확인해 주세요." />
+  </div>
+</script>
+<script type="module">
+import { mount } from "../../_cards/load.js";
+mount("#root", {TextInput: "../forms/TextInput.jsx", IconButton: "../actions/IconButton.jsx"}, document.getElementById("card").textContent);
+</script></body></html>

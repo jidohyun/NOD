@@ -1,0 +1,54 @@
+:root {
+  color-scheme: light;
+  /* Base palette — DESIGN.md §2 원본 팔레트 */
+  --color-creme: #FFFDFA;
+  --color-white: #FFFFFF;
+  --color-ink: #4A4A4A;
+  --color-brand: #E8B931;
+  --color-mint: #E0F2F1;
+  --color-lavender: #F3E5F5;
+  --color-coral: #FF8A80;
+  --color-sage: #8BA888;
+  --color-soft-grey: #F2F2F2;
+  /* Supplementary values for readability (DESIGN.md §2 보완값) */
+  --color-ink-secondary: #6B665C;
+  --color-accent-text: #80620B;
+
+  /* Semantic — surfaces */
+  --surface-page: var(--color-creme);
+  --surface-card: var(--color-white);
+  --surface-subtle: var(--color-soft-grey);
+  --surface-selected: color-mix(in srgb, var(--color-brand) 20%, var(--color-creme));
+  --surface-mint: var(--color-mint);
+  --surface-lavender: var(--color-lavender);
+  /* Semantic — text */
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-ink-secondary);
+  --text-accent: var(--color-accent-text);
+  --text-on-brand: var(--color-ink);
+  --text-on-ink: var(--color-white);
+  /* Semantic — actions */
+  --action-primary-bg: var(--color-brand);
+  --action-primary-text: var(--color-ink);
+  --action-primary-hover-bg: var(--color-ink);
+  --action-primary-hover-text: var(--color-white);
+  --action-secondary-bg: var(--color-white);
+  --action-secondary-alt-bg: var(--color-mint);
+  --action-secondary-text: var(--color-ink);
+  /* Semantic — borders & focus */
+  --border-strong: var(--color-ink);
+  --border-subtle: rgba(74, 74, 74, 0.2);
+  --border-sage: var(--color-sage);
+  --focus-ring: var(--color-ink);
+  /* Status (bg / text) — DESIGN.md §2 상태색 초기 제안 */
+  --status-success-bg: #DCFCE7;
+  --status-success-text: #15803D;
+  --status-warning-bg: #FEF9C3;
+  --status-warning-text: #854D0E;
+  --status-error-bg: #FEE2E2;
+  --status-error-text: #B91C1C;
+  /* Dot background (20px grid + 10px offset layer, low opacity) — DESIGN.md §5 */
+  --pattern-dots: radial-gradient(rgba(74,74,74,0.10) 1px, transparent 1px), radial-gradient(rgba(74,74,74,0.06) 1px, transparent 1px);
+  --pattern-dots-size: 20px 20px, 20px 20px;
+  --pattern-dots-position: 0 0, 10px 10px;
+}

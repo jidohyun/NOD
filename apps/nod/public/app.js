@@ -60,11 +60,15 @@
     return (name || "N").trim().slice(0, 1).toUpperCase() || "N";
   }
 
+  function icon(name, size = 24) {
+    const node = element("span", { className: "material-symbols-outlined", text: name, attributes: { "aria-hidden": "true" } });
+    node.style.fontSize = `${size}px`;
+    return node;
+  }
+
   function header(user) {
-    const brand = element("a", { className: "brand", href: "/", ariaLabel: "NOD 홈" }, [
-      element("span", { className: "brand-mark", text: "N" }),
-      element("span", { text: "NOD" }),
-    ]);
+    const logo = element("img", { attributes: { src: "/assets/nod-logo.png", alt: "NOD" } });
+    const brand = element("a", { className: "brand", href: "/", ariaLabel: "NOD 홈" }, [logo]);
     const siteHeader = element("header", { className: "site-header" }, [brand]);
 
     if (!user) return siteHeader;
@@ -74,39 +78,14 @@
       element("span", { className: "account-name", text: user.name || user.email || "NOD 사용자" }),
       element("span", { className: "account-email", text: user.email || "" }),
     ]);
-    const logout = element("button", { className: "icon-button", type: "button", ariaLabel: "로그아웃", text: "↗" });
+    const logout = element("button", { className: "icon-button", type: "button", ariaLabel: "로그아웃" }, [icon("logout", 20)]);
     logout.addEventListener("click", logoutUser);
     siteHeader.append(element("div", { className: "account" }, [avatar, details, logout]));
     return siteHeader;
   }
 
   function renderLanding(message = "") {
-    app.replaceChildren(header(null));
-    const title = element("h1", { className: "hero-title", text: "읽고 싶은 순간을\n놓치지 마세요." });
-    const login = element("a", { className: "button", href: "/auth/google" }, [
-      element("span", { className: "google-mark", text: "G", attributes: { "aria-hidden": "true" } }),
-      element("span", { text: "Google로 시작하기" }),
-    ]);
-    const intro = element("section", { attributes: { "aria-labelledby": "landing-title" } }, [
-      element("p", { className: "eyebrow", text: "나만의 링크 보관함" }),
-      title,
-      element("p", { className: "hero-copy", text: "NOD는 나중에 다시 볼 웹페이지를 조용히 모아두는 개인 링크 라이브러리입니다." }),
-      login,
-      element("p", { className: "landing-note", text: message || "Google 계정으로 안전하게 로그인합니다." }),
-    ]);
-    title.id = "landing-title";
-
-    const card = element("aside", { className: "capture-card", attributes: { "aria-label": "Chrome 확장 프로그램으로 저장하는 방법" } }, [
-      element("div", { className: "capture-icon", text: "⌁", attributes: { "aria-hidden": "true" } }),
-      element("h2", { text: "탭에서 바로 저장" }),
-      element("p", { text: "읽고 있는 페이지를 떠나지 않고 Chrome 툴바에서 한 번에 보관하세요." }),
-      element("ol", { className: "steps" }, [
-        step("1", "Chrome에 NOD 확장 프로그램을 추가합니다."),
-        step("2", "툴바의 NOD 아이콘에서 Google 로그인으로 연결합니다."),
-        step("3", "저장할 탭에서 아이콘을 누르면 링크가 바로 추가됩니다."),
-      ]),
-    ]);
-    app.append(element("main", { className: "landing" }, [intro, card]));
+    window.NodLanding.mount(app, message);
   }
 
   function step(number, text) {
@@ -130,7 +109,7 @@
       ariaLabel: "저장한 링크 검색",
       attributes: { "aria-describedby": "library-count", spellcheck: "false" },
     });
-    const searchButton = element("button", { className: "icon-button search-submit", type: "submit", ariaLabel: "검색", text: "⌕" });
+    const searchButton = element("button", { className: "icon-button search-submit", type: "submit", ariaLabel: "검색" }, [icon("search", 20)]);
     const searchForm = element("form", { className: "search-form", role: "search" }, [searchInput, searchButton]);
     searchForm.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -194,7 +173,7 @@
       const retry = element("button", { className: "button secondary-button", type: "button", text: "다시 시도" });
       retry.addEventListener("click", () => loadArticles({ reset: true }));
       list.append(element("li", { className: "empty" }, [
-        element("div", { className: "empty-symbol", text: "!", attributes: { "aria-hidden": "true" } }),
+        element("div", { className: "empty-symbol", attributes: { "aria-hidden": "true" } }, [icon("error")]),
         element("h2", { text: "링크를 불러오지 못했어요" }),
         element("p", { text: "잠시 후 다시 시도해 주세요." }),
         retry,
@@ -209,7 +188,7 @@
     if (state.articles.length === 0) {
       const searchEmpty = Boolean(state.query);
       list.append(element("li", { className: "empty" }, [
-        element("div", { className: "empty-symbol", text: searchEmpty ? "⌕" : "＋", attributes: { "aria-hidden": "true" } }),
+        element("div", { className: "empty-symbol", attributes: { "aria-hidden": "true" } }, [icon(searchEmpty ? "search_off" : "add")]),
         element("h2", { text: searchEmpty ? "찾는 링크가 없어요" : "아직 저장한 링크가 없어요" }),
         element("p", { text: searchEmpty ? "다른 검색어로 다시 찾아보세요." : "Chrome 툴바에서 NOD 아이콘을 눌러 첫 링크를 저장해 보세요." }),
       ]));
@@ -238,7 +217,7 @@
     metadata.append(element("span", { text: formatDate(article.createdAt) }));
     if (url) metadata.append(element("span", { className: "article-url", text: url }));
 
-    const deleteButton = element("button", { className: "delete-button", type: "button", ariaLabel: `“${title}” 삭제`, text: "×" });
+    const deleteButton = element("button", { className: "delete-button", type: "button", ariaLabel: `“${title}” 삭제` }, [icon("delete", 20)]);
     deleteButton.addEventListener("click", () => deleteArticle(article, deleteButton));
     item.append(titleNode, metadata, deleteButton);
     return item;
@@ -354,6 +333,7 @@
 
   function showUnauthenticated() {
     state.user = null;
+    window.NodLanding.unmount();
     state.articles = [];
     state.nextCursor = null;
     state.loading = false;
