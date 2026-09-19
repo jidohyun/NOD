@@ -29,7 +29,7 @@ jobs:
       run:
         working-directory: apps/nod
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -62,7 +62,7 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: 307e231ed540969f16722a6bba5311ae
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Node
         uses: actions/setup-node@v4
         with:
