@@ -42,6 +42,8 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Check syntax
         run: bun run check
+      - name: Run tests
+        run: bun run test
       - name: Apply local D1 migrations
         run: bun run db:local
       - name: Dry-run Worker build
