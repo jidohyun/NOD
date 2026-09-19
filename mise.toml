@@ -35,3 +35,22 @@ run = "bunx wrangler d1 migrations apply nod-links --remote"
 description = "Deploy the Nod Worker to production"
 dir = "apps/nod"
 run = "bunx wrangler deploy"
+
+[tasks.work]
+description = "Create a worktree + branch for a GitHub issue: mise run work <issue-N> [type]"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+issue="${1:?usage: mise run work <issue-number> [type]}"
+type="${2:-feat}"
+title=$(gh issue view "$issue" --repo jidohyun/NOD --json title --jq .title)
+slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40 | sed -E 's/-+$//')
+branch="$type/$issue-$slug"
+dir="../NOD-worktrees/$branch"
+git fetch origin main
+git worktree add "$dir" -b "$branch" origin/main
+if [ -f apps/nod/.dev.vars ]; then cp apps/nod/.dev.vars "$dir/apps/nod/.dev.vars"; fi
+echo "worktree: $dir"
+echo "branch:   $branch"
+echo "issue:    #$issue $title"
+"""

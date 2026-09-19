@@ -13,6 +13,8 @@ on:
       - "apps/nod/**"
       - "mise.toml"
       - ".github/workflows/ci.yml"
+  pull_request_target:
+    types: [closed]
 
 permissions:
   contents: read
@@ -48,6 +50,27 @@ jobs:
         run: bun run db:local
       - name: Dry-run Worker build
         run: bun run build
+
+  close-issue:
+    name: Close linked issue
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Close issue referenced by branch name
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          issue=$(echo "$HEAD_REF" | grep -oE '/[0-9]+-' | tr -d '/-' || true)
+          if [ -n "$issue" ]; then
+            gh issue close "$issue" --repo "$GITHUB_REPOSITORY" --comment "Closed by merge of #$PR_NUMBER"
+            echo "Closed issue #$issue"
+          else
+            echo "No issue number in branch name $HEAD_REF"
+          fi
 
   deploy:
     name: Deploy

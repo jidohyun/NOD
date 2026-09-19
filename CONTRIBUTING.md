@@ -43,6 +43,8 @@ Work is tracked as GitHub issues. Every non-trivial change traces back to an iss
 ### Branches and commits
 
 - Branch: `<type>/<issue-N>-<slug>`, e.g. `feat/12-link-sorting`. Types match commit types.
+- `mise run work <issue-N> [type]` creates the branch and a git worktree at `../NOD-worktrees/<branch>` in one step, copying `.dev.vars` for local dev.
+- When a PR merges, the `close-issue` job parses the issue number from the branch name and closes it — `Closes #N` in the PR body is still good practice but no longer required.
 - Commits: `type(scope): subject` — types `feat`, `fix`, `docs`, `chore`, `ci`, `build`, `refactor`, `test`; scopes `nod` (app code) or `root` (repo/meta). Korean or English subjects are both fine; keep them one line.
 - Keep PRs focused: one issue, one PR. The PR template checklist must pass, including `mise run check && mise run build`.
 
