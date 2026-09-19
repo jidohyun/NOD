@@ -1,0 +1,17 @@
+:root {
+  /* Scale — DESIGN.md §5: 4, 8, 12, 16, 24, 32, 40, 48, 64, 96, 128 */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --space-16: 64px; --space-24: 96px; --space-32: 128px;
+  /* Layout */
+  --gutter-mobile: 24px;
+  --gutter-desktop: 40px;
+  --max-landing: 1280px;
+  --max-app: 1152px;
+  --sidebar-width: 256px;
+  --card-padding: 24px;
+  --card-padding-lg: 40px;
+  --touch-target: 44px;
+  /* Breakpoints (reference only; CSS vars cannot be used in media queries) */
+  --bp-sm: 640px; --bp-md: 768px; --bp-lg: 1024px;
+}

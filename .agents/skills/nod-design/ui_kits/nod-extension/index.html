@@ -1,0 +1,12 @@
+<!-- @dsCard group="NOD Extension" viewport="760x720" name="Extension options" subtitle="Service origin · account connection · last activity (English, per current source)" -->
+<!-- @startingPoint section="NOD Extension" subtitle="확장 프로그램 설정 화면" viewport="760x720" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NOD Save settings</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body><div id="root"></div>
+<script type="module">
+import { load, REACT_URL, REACT_DOM_CLIENT_URL } from "../../_cards/load.js";
+const React = (await import(REACT_URL)).default; const { createRoot } = await import(REACT_DOM_CLIENT_URL);
+const { Options } = await load(["./Options.jsx"]);
+createRoot(document.getElementById("root")).render(React.createElement(Options));
+</script></body></html>

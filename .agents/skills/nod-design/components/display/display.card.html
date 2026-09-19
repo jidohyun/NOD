@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components" viewport="700x380" name="Display" subtitle="LinkRow hover · InfoCard · Badge tones" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body style="padding:20px;background:var(--surface-page)"><div id="root"></div>
+<script type="text/plain" id="card">
+<div style={{display:"grid",gap:16}}>
+    <ul style={{display:"grid",gap:10,padding:0,margin:0}}>
+      <LinkRow title="브라우저 확장 프로그램으로 읽을 페이지를 저장하는 가장 단순한 방법" hostname="web.dev" url="https://web.dev/articles/manifest-v3-migration-guide" savedAt="2026년 9월 13일" />
+    </ul>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,alignItems:"start"}}>
+      <InfoCard icon="extension" title="탭에서 바로 저장">읽고 있는 페이지를 떠나지 않고 Chrome 툴바에서 한 번에 보관하세요.</InfoCard>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+        <Badge>기본</Badge><Badge tone="brand">선택</Badge><Badge tone="mint">Chrome</Badge><Badge tone="lavender">라벤더</Badge>
+        <Badge tone="success">연결됨</Badge><Badge tone="warning">확인 필요</Badge><Badge tone="error">저장 실패</Badge>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="module">
+import { mount } from "../../_cards/load.js";
+mount("#root", {LinkRow: "../display/LinkRow.jsx", InfoCard: "../display/InfoCard.jsx", Badge: "../display/Badge.jsx"}, document.getElementById("card").textContent);
+</script></body></html>

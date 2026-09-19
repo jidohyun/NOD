@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components" viewport="700x200" name="Navigation" subtitle="Brand wordmark · NavItem default/hover/selected" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body style="padding:20px;background:var(--surface-page)"><div id="root"></div>
+<script type="text/plain" id="card">
+<div style={{display:"grid",gridTemplateColumns:"200px 1fr",gap:32,alignItems:"start"}}>
+    <div style={{display:"grid",gap:16,justifyItems:"start"}}><Brand /><Brand size={40} /><Brand variant="mark" size={44} /></div>
+    <div style={{display:"grid",gap:6,width:256}}>
+      <NavItem icon="bookmarks" label="저장한 링크" selected />
+      <NavItem icon="search" label="검색" />
+      <NavItem icon="extension" label="확장 프로그램 연결" />
+    </div>
+  </div>
+</script>
+<script type="module">
+import { mount } from "../../_cards/load.js";
+mount("#root", {Brand: "../navigation/Brand.jsx", NavItem: "../navigation/NavItem.jsx"}, document.getElementById("card").textContent);
+</script></body></html>

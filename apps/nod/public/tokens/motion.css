@@ -1,0 +1,20 @@
+:root {
+  /* DESIGN.md §8 */
+  --duration-hover: 200ms;   /* 150–300ms */
+  --duration-fast: 150ms;
+  --duration-slow: 300ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --hover-lift: 4px;          /* card movement max 4px */
+  --float-period: 6s;         /* landing decoration only */
+  --float-distance: 20px;
+  --float-rotate: 2deg;
+}
+@keyframes nod-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(calc(-1 * var(--float-distance))) rotate(var(--float-rotate)); }
+}
+@keyframes nod-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration-hover: 0ms; --duration-fast: 0ms; --duration-slow: 0ms; }
+  * { animation: none !important; }
+}

@@ -1,0 +1,13 @@
+<!-- @dsCard group="NOD Web App" viewport="1280x900" name="Landing — essay" subtitle="Hero: 12 read-later clutter pieces peel off, 4 lines remain · Gmarket Sans / Pretendard · yellow ×3 · doodle border ×2" -->
+<!-- @startingPoint section="NOD Web App" subtitle="스크롤 인터랙션 랜딩" viewport="1280x900" -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NOD — 요약은 필요 없습니다. 자리만 있으면 됩니다.</title>
+<link rel="icon" href="../../assets/nod-favicon-32.png">
+<link rel="stylesheet" href="./landing-fonts.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body><div id="root"></div>
+<script type="module">
+import { load, REACT_URL, REACT_DOM_CLIENT_URL } from "../../_cards/load.js?v=5";
+const React = (await import(REACT_URL)).default; const { createRoot } = await import(REACT_DOM_CLIENT_URL);
+const { LandingScroll } = await load(["./LandingScroll.jsx"]);
+createRoot(document.getElementById("root")).render(React.createElement(LandingScroll, { onLogin: () => { location.href = "./library.html"; } }));
+</script></body></html>

@@ -1,0 +1,24 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Feedback" subtitle="Notice · StatusMessage kinds · EmptyState neutral/error · SkeletonRow" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head>
+<body style="padding:20px;background:var(--surface-page)"><div id="root"></div>
+<script type="text/plain" id="card">
+<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,alignItems:"start"}}>
+    <div style={{display:"grid",gap:12}}>
+      <Notice title="Chrome에서 바로 저장" actionLabel="확장 프로그램 연결" onDismiss={()=>{}}>확장 프로그램을 연결하면 보고 있는 탭을 툴바 아이콘 한 번으로 저장할 수 있습니다.</Notice>
+      <StatusMessage kind="loading">연결을 해제하는 중입니다.</StatusMessage>
+      <StatusMessage kind="success">링크를 삭제했습니다.</StatusMessage>
+      <StatusMessage kind="warning">로그인이 만료되었습니다.</StatusMessage>
+      <StatusMessage kind="error">링크를 삭제하지 못했습니다. 다시 시도해 주세요.</StatusMessage>
+      <ul style={{display:"grid",gap:8,padding:0,margin:0}}><SkeletonRow /></ul>
+    </div>
+    <div style={{display:"grid",gap:12}}>
+      <EmptyState title="아직 저장한 링크가 없어요" style={{padding:"28px 20px"}}>Chrome 툴바에서 NOD 아이콘을 눌러 첫 링크를 저장해 보세요.</EmptyState>
+      <EmptyState tone="error" icon="wifi_off" title="링크를 불러오지 못했어요" actionLabel="다시 시도" style={{padding:"28px 20px"}}>네트워크 상태를 확인해 주세요.</EmptyState>
+    </div>
+  </div>
+</script>
+<script type="module">
+import { mount } from "../../_cards/load.js";
+mount("#root", {Notice: "../feedback/Notice.jsx", StatusMessage: "../feedback/StatusMessage.jsx", EmptyState: "../feedback/EmptyState.jsx", SkeletonRow: "../feedback/SkeletonRow.jsx"}, document.getElementById("card").textContent);
+</script></body></html>
