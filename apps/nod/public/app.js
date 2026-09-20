@@ -97,6 +97,13 @@
 
   function renderLibraryShell() {
     window.NodLanding.unmount();
+    if (!document.getElementById("app-fonts")) {
+      const link = document.createElement("link");
+      link.id = "app-fonts";
+      link.rel = "stylesheet";
+      link.href = "/tokens/fonts-app.css";
+      document.head.append(link);
+    }
     app.replaceChildren(header(state.user));
 
     const heading = element("h1", { className: "library-title", text: "저장한 링크" });

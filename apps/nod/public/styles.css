@@ -1,3 +1,4 @@
+/* fonts.css = Material Symbols only. App fonts live in fonts-app.css, injected by app.js on library render — the landing must not load them (DESIGN.md §11). */
 @import "./tokens/fonts.css";
 @import "./tokens/colors.css";
 @import "./tokens/typography.css";

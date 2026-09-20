@@ -153,7 +153,7 @@
       svg,
       saved,
       el("div", { display: "grid", gap: "6px", marginBottom: "20px" }, [
-        el("span", { fontSize: "13px", color: "#6B665C", fontVariantNumeric: "tabular-nums" }, [txt("https://developer.chrome.com/docs/extensions/develop/migrate")]),
+        el("span", { fontSize: "13px", color: "#6B665C", fontVariantNumeric: "tabular-nums", overflowWrap: "anywhere", paddingRight: "76px" }, [txt("https://developer.chrome.com/docs/extensions/develop/migrate")]),
         el("span", { ...DISPLAY, fontSize: "24px", lineHeight: 1.3 }, [txt("Manifest V3 migration guide")]),
         el("span", { fontSize: "14px", color: "#6B665C" }, [txt("developer.chrome.com")]),
         el("span", { fontSize: "14px", color: "#6B665C", fontVariantNumeric: "tabular-nums" }, [txt("2026년 9월 13일")]),
@@ -360,14 +360,14 @@
     searchInput.setAttribute("aria-label", "저장한 링크 검색");
     searchInput.tabIndex = -1;
     searchInput.readOnly = true;
-    const row = (r) => el("li", { listStyle: "none", display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: "12px", alignItems: "start", padding: "16px 0", borderTop: HAIR }, [
-      el("div", { minWidth: 0, display: "grid", gap: "6px" }, [
-        el("span", { fontSize: "var(--text-link-title)", lineHeight: "var(--leading-link)", fontWeight: 700, color: "var(--text-primary)" }, [txt(r.title)]),
-        el("p", { margin: 0, display: "flex", flexWrap: "wrap", gap: "4px 12px", fontSize: "var(--text-meta)", lineHeight: "var(--leading-meta)", color: "var(--text-secondary)" }, [
+    const row = (r) => el("li", { listStyle: "none", display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: "12px", alignItems: "start", padding: "16px 0", borderTop: HAIR, minWidth: 0 }, [
+      el("div", { minWidth: 0, display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "6px" }, [
+        el("span", { fontSize: "var(--text-link-title)", lineHeight: "var(--leading-link)", fontWeight: 700, color: "var(--text-primary)", minWidth: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", wordBreak: "keep-all" }, [txt(r.title)]),
+        el("p", { margin: 0, display: "flex", flexWrap: "wrap", gap: "4px 12px", fontSize: "var(--text-meta)", lineHeight: "var(--leading-meta)", color: "var(--text-secondary)", minWidth: 0 }, [
           el("span", { fontWeight: 700 }, [txt(r.hostname)]),
           el("span", null, [txt(r.savedAt)]),
         ]),
-        el("span", { fontSize: "var(--text-meta-sm)", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, [txt(r.url)]),
+        el("span", { fontSize: "var(--text-meta-sm)", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0 }, [txt(r.url)]),
       ]),
       el("span", { width: "44px", height: "44px", display: "inline-grid", placeItems: "center", color: "var(--text-primary)" }, [icon("delete", 24, "currentColor")]),
     ]);
@@ -376,10 +376,10 @@
           el("p", CAP, [txt("화면")]),
           el("h2", { ...DISPLAY, fontSize: "clamp(1.8rem, 3.2vw, 3rem)" }, [txt("목록, 검색, 열기, 삭제."), el("br"), txt("화면도 여기서 끝납니다.")]),
         ]),
-        el("div", { gridColumn: "5 / 13", display: "grid", gap: "16px", borderTop: "2px solid " + INK, paddingTop: "20px" }, [
+        el("div", { gridColumn: "5 / 13", minWidth: 0, display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "16px", borderTop: "2px solid " + INK, paddingTop: "20px" }, [
           el("div", { display: "flex", justifyContent: "space-between", alignItems: "baseline" }, [el("span", CAP, [txt("저장한 링크")]), el("span", { ...CAP, color: INK }, [txt("3")])]),
           searchBox,
-          el("ul", { margin: 0, padding: 0, display: "grid" }, ROWS.map(row)),
+          el("ul", { margin: 0, padding: 0, display: "grid", gridTemplateColumns: "minmax(0, 1fr)", minWidth: 0 }, ROWS.map(row)),
         ]),
       ]);
     grid.setAttribute("data-grid-12", "");
