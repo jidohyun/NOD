@@ -45,6 +45,7 @@ issue="${1:?usage: mise run work <issue-number> [type]}"
 type="${2:-feat}"
 title=$(gh issue view "$issue" --repo jidohyun/NOD --json title --jq .title)
 slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40 | sed -E 's/-+$//')
+slug="${slug:-work}"
 branch="$type/$issue-$slug"
 dir="../NOD-worktrees/$branch"
 git fetch origin main
