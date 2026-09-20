@@ -8,13 +8,24 @@
 @import "./tokens/motion.css";
 @import "./tokens/base.css";
 @font-face { font-family: "Gmarket Sans"; font-weight: 700; font-style: normal; font-display: swap; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff"); }
-:root {
+/* Scoped to .nod-landing so the authenticated library keeps the app font stacks. */
+.nod-landing {
   --landing-display: "Gmarket Sans", "Pretendard", sans-serif;
   --landing-body: "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif;
   --landing-ink: #1A1A1A;
   /* override kit font stacks so components used on the landing never request Fredoka/Quicksand */
   --font-brand: var(--landing-display);
   --font-body: var(--landing-body);
+  font-family: var(--landing-body);
+  color: var(--landing-ink);
+  font-weight: 400;
 }
-body { font-family: var(--landing-body); color: var(--landing-ink); font-weight: 400; }
-h1, h2, h3 { font-family: var(--landing-display); font-weight: 700; color: var(--landing-ink); }
+.nod-landing h1, .nod-landing h2, .nod-landing h3 { font-family: var(--landing-display); font-weight: 700; color: var(--landing-ink); }
+
+/* Narrow viewports: stack the 12-col compositions and the hero title/CTA row. */
+@media (max-width: 760px) {
+  .nod-landing { --gutter-desktop: var(--gutter-mobile); }
+  .nod-landing [data-hero-top] { grid-template-columns: 1fr !important; align-items: start !important; }
+  .nod-landing [data-grid-12] { grid-template-columns: 1fr !important; }
+  .nod-landing [data-grid-12] > * { grid-column: 1 / -1 !important; }
+}

@@ -96,6 +96,7 @@
   }
 
   function renderLibraryShell() {
+    window.NodLanding.unmount();
     app.replaceChildren(header(state.user));
 
     const heading = element("h1", { className: "library-title", text: "저장한 링크" });

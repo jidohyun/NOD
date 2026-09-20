@@ -8,7 +8,7 @@
   const CAP = { fontFamily: "var(--landing-body)", fontSize: "0.7rem", letterSpacing: "0.24em", textTransform: "uppercase", fontWeight: 600, color: "#6B665C", fontVariantNumeric: "tabular-nums", margin: 0 };
   const DISPLAY = { fontFamily: "var(--landing-display)", fontWeight: 700, lineHeight: 1.02, letterSpacing: "-0.01em", margin: 0, wordBreak: "keep-all", color: INK };
   const NUM = { fontFamily: "var(--landing-display)", fontWeight: 700, color: INK, fontVariantNumeric: "tabular-nums", lineHeight: 0.9, margin: 0 };
-  const wrap = { width: "100%", maxWidth: 1280, margin: "0 auto", paddingLeft: "var(--gutter-desktop)", paddingRight: "var(--gutter-desktop)" };
+  const wrap = { width: "100%", maxWidth: "var(--max-landing)", margin: "0 auto", paddingLeft: "var(--gutter-desktop)", paddingRight: "var(--gutter-desktop)" };
 
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -59,7 +59,7 @@
     } catch (e) { console.warn("lenis unavailable", e); return () => {}; }
   }
 
-  const chip = (t, extra) => el("span", { display: "inline-block", padding: "3px 10px", border: HAIR, borderRadius: 999, fontSize: "12px", color: "#6B665C", background: "var(--surface-card)", ...extra }, [txt(t)]);
+  const chip = (t, extra) => el("span", { display: "inline-block", padding: "3px 10px", border: HAIR, borderRadius: "999px", fontSize: "12px", color: "#6B665C", background: "var(--surface-card)", ...extra }, [txt(t)]);
   const TAGS = ["chrome", "extension", "mv3", "migration", "javascript", "web", "later"];
 
   function clutterNodes() {
@@ -91,21 +91,23 @@
 
   const DOODLE_PATH = "M 8 6 C 200 2, 420 10, 632 6 C 640 90, 636 200, 632 300 C 420 306, 200 298, 8 302 C 4 200, 6 90, 8 6 Z";
 
+  // Original: Button primary overriden by ctaPlain/ctaDoodle — no resting shadow, ink(#4A4A4A) text;
+  // hero border 2px #1A1A1A radius 8, closing keeps 3px doodle-emphasis border + doodle radius.
   function ctaButton(doodle) {
     const a = el("a", {
       display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "var(--space-2)",
       minHeight: "52px", padding: "0 28px", fontSize: "18px", fontFamily: "var(--landing-body)", fontWeight: 700,
       lineHeight: 1.2, textDecoration: "none", cursor: "pointer", whiteSpace: "nowrap",
-      background: "var(--color-brand)", color: INK,
-      border: doodle ? "3px solid " + INK : "2px solid " + INK,
+      background: "var(--color-brand)", color: "var(--color-ink)",
+      border: doodle ? "var(--border-doodle-emphasis)" : "2px solid " + INK,
       borderRadius: doodle ? "var(--radius-doodle)" : "8px",
-      boxShadow: doodle ? "var(--shadow-sketch)" : "none",
+      boxShadow: "none",
       transition: "background var(--duration-hover) var(--ease-out), color var(--duration-hover) var(--ease-out), box-shadow var(--duration-hover) var(--ease-out), transform var(--duration-fast) var(--ease-out)",
     }, [txt("Google로 시작하기")]);
     a.href = "/auth/google";
-    a.addEventListener("mouseenter", () => { a.style.background = INK; a.style.color = "#fff"; a.style.boxShadow = "var(--shadow-sketch-hover)"; });
-    a.addEventListener("mouseleave", () => { a.style.background = "var(--color-brand)"; a.style.color = INK; a.style.boxShadow = doodle ? "var(--shadow-sketch)" : "none"; });
-    a.addEventListener("mousedown", () => { a.style.transform = "translate(2px,2px)"; a.style.boxShadow = "none"; });
+    a.addEventListener("mouseenter", () => { a.style.background = "var(--color-ink)"; a.style.color = "#fff"; a.style.boxShadow = "var(--shadow-sketch-hover)"; });
+    a.addEventListener("mouseleave", () => { a.style.background = "var(--color-brand)"; a.style.color = "var(--color-ink)"; a.style.boxShadow = "none"; a.style.transform = ""; });
+    a.addEventListener("mousedown", () => { if (!REDUCED) a.style.transform = "translate(2px,2px)"; a.style.boxShadow = "none"; });
     a.addEventListener("mouseup", () => { a.style.transform = ""; a.style.boxShadow = "var(--shadow-sketch-hover)"; });
     return a;
   }
@@ -189,14 +191,20 @@
         const t = map(v, [s0, s1], [0, 1]);
         if (t >= 0.5) remaining -= 1;
         const h = measure.h[key] || 0;
+        const dir = idx % 2 ? 1 : -1;
+        idx += 1;
+        if (REDUCED) {
+          // §11: reduced motion = opacity only, layout stays put.
+          piece.style.opacity = String(1 - t);
+          piece.style.transform = "none";
+          targetH += h + 16;
+          continue;
+        }
         const collapse = easeInOut(map(t, [0.55, 1], [0, 1]));
         targetH += (h + 16) * (1 - collapse);
         piece.style.pointerEvents = "none";
         piece.style.maxHeight = h * (1 - collapse) + "px";
         piece.style.marginBottom = 16 * (1 - collapse) + "px";
-        const dir = idx % 2 ? 1 : -1;
-        idx += 1;
-        if (REDUCED) { piece.style.opacity = String(1 - t); piece.style.transform = "none"; continue; }
         if (tier === "heavy") {
           const e = easeIn(t);
           piece.style.opacity = String(1 - map(t, [0.25, 0.85], [0, 1]));
@@ -250,15 +258,17 @@
       if (!smooth.raf) smooth.raf = requestAnimationFrame(tick);
     };
 
-    const section = el("section", { position: "relative", height: "220vh" }, [
-      el("div", { position: "sticky", top: 0, height: "100dvh", overflow: "hidden", display: "grid", gridTemplateRows: "auto minmax(0, 1fr)", alignItems: "start" }, [
-        el("div", { ...wrap, paddingTop: "13vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "24px", alignItems: "end" }, [
+    const heroTop = el("div", { ...wrap, paddingTop: "13vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "24px", alignItems: "end" }, [
           el("div", null, [
             el("p", CAP, [txt("NOD — 개인 링크 라이브러리")]),
             el("h1", { ...DISPLAY, fontSize: "clamp(1.8rem, 4.2vw, 4rem)", marginTop: "14px", overflowWrap: "anywhere" }, [txt("요약은 필요 없습니다."), el("br"), txt("자리만 있으면 됩니다.")]),
           ]),
           ctaButton(false),
-        ]),
+        ]);
+    heroTop.dataset.heroTop = "";
+    const section = el("section", { position: "relative", height: "220vh" }, [
+      el("div", { position: "sticky", top: 0, height: "100dvh", overflow: "hidden", display: "grid", gridTemplateRows: "auto minmax(0, 1fr)", alignItems: "start" }, [
+        heroTop,
         el("div", { ...wrap, alignSelf: "start", display: "grid", justifyItems: "center", paddingTop: "28px", minHeight: 0 }, [
           el("div", { width: "min(640px, 100%)", display: "grid", gap: "12px" }, [
             el("p", { ...CAP, display: "flex", justifyContent: "space-between", alignItems: "baseline" }, [capLabel, capNum]),
@@ -271,17 +281,20 @@
     section.setAttribute("aria-labelledby", "hero-title");
     section.querySelector("h1").id = "hero-title";
 
-    requestAnimationFrame(() => {
+    // Measure + subscribe only after the section is attached: scrollHeight is 0 while detached,
+    // and apply() before measurement would collapse every piece to maxHeight 0 (overlap).
+    const init = () => {
       const h = {};
       let sum = 0;
       for (const [k, p] of Object.entries(pieces)) { h[k] = p.el.scrollHeight; sum += p.el.scrollHeight + 16; }
       measure.h = h;
       measure.baseH = card.scrollHeight - sum;
       smooth.fit = 1;
-    });
-    const progress = createProgress(section, "pin");
-    const off = progress.on(apply);
-    return { node: section, destroy: () => { off(); progress.destroy(); cancelAnimationFrame(smooth.raf); } };
+      const progress = createProgress(section, "pin");
+      const off = progress.on(apply);
+      return () => { off(); progress.destroy(); cancelAnimationFrame(smooth.raf); };
+    };
+    return { node: section, init };
   }
 
   function notDoing() {
@@ -291,8 +304,7 @@
       el("p", { ...DISPLAY, fontSize: "clamp(1.4rem, 2.4vw, 2.2rem)" }, [txt(label)]),
       el("p", { margin: "8px 0 0", fontSize: "17px", lineHeight: 1.6, maxWidth: "440px" }, [txt(desc)]),
     ]);
-    const section = el("section", { borderTop: HAIR }, [
-      el("div", { ...wrap, paddingTop: "112px", paddingBottom: "112px", display: "grid", gridTemplateColumns: "repeat(12, minmax(0, 1fr))", gap: "24px", alignItems: "start" }, [
+    const grid = el("div", { ...wrap, paddingTop: "112px", paddingBottom: "112px", display: "grid", gridTemplateColumns: "repeat(12, minmax(0, 1fr))", gap: "24px", alignItems: "start" }, [
         el("div", { gridColumn: "1 / 6", display: "grid", gap: "20px" }, [
           el("p", CAP, [txt("하지 않는 것")]),
           el("ul", { margin: 0, padding: 0, listStyle: "none", display: "grid" }, NOT.map((t) =>
@@ -300,15 +312,26 @@
         ]),
         el("div", { gridColumn: "7 / 13", display: "grid", gap: "40px" }, [
           el("p", CAP, [txt("남는 것")]),
-          num("4", "개 필드", "URL, 제목, 출처, 저장 시각. 그 외의 데이터는 서버에 만들어지지 않습니다."),
+          (() => {
+            const d = el("div", { display: "grid", gap: "8px" }, [
+              el("p", { ...NUM, fontSize: "clamp(6rem, 15vw, 15rem)" }, [txt("4")]),
+              el("p", { ...DISPLAY, fontSize: "clamp(1.4rem, 2.4vw, 2.2rem)" }, [txt("개 필드")]),
+              el("p", { margin: "8px 0 0", fontSize: "17px", lineHeight: 1.6, maxWidth: "440px" }, [
+                txt("URL, 제목, 출처, 저장 시각. 그 외의 데이터는 서버에 "),
+                el("span", { whiteSpace: "nowrap" }, [txt("만들어지지 않습니다.")]),
+              ]),
+            ]);
+            return d;
+          })(),
           el("div", { display: "grid", gap: "8px", borderTop: HAIR, paddingTop: "32px" }, [
             el("p", { ...NUM, fontSize: "clamp(6rem, 15vw, 15rem)" }, [txt("0")]),
             el("p", { ...DISPLAY, fontSize: "clamp(1.4rem, 2.4vw, 2.2rem)" }, [txt("바이트의 본문")]),
             el("p", { margin: "8px 0 0", fontSize: "17px", lineHeight: 1.6, maxWidth: "440px" }, [txt("페이지 본문을 수집하지 않습니다. 확장 프로그램이 보내는 것은 현재 탭의 URL과 제목뿐입니다.")]),
           ]),
         ]),
-      ]),
-    ]);
+      ]);
+    grid.setAttribute("data-grid-12", "");
+    const section = el("section", { borderTop: HAIR }, [grid]);
     section.setAttribute("aria-labelledby", "not-title");
     section.querySelector("p").id = "not-title";
     return section;
@@ -330,45 +353,54 @@
     const searchBox = el("div", { position: "relative", display: "flex", alignItems: "center", gap: "8px", minHeight: "48px", padding: "0 12px", background: "var(--surface-card)", border: "2px solid var(--border-subtle)", borderRadius: "var(--radius-control)" }, [
       icon("search"),
       el("input", { flex: 1, minWidth: 0, border: 0, outline: 0, background: "transparent", fontSize: "16px", padding: "10px 0", color: "var(--text-primary)", fontFamily: "var(--landing-body)" }),
-      icon("arrow_forward", 20, "var(--text-primary)"),
+      el("span", { width: "36px", height: "36px", display: "inline-grid", placeItems: "center", flex: "0 0 auto" }, [icon("arrow_forward", 20, "var(--text-primary)")]),
     ]);
-    searchBox.querySelector("input").placeholder = "제목이나 출처로 검색";
-    const row = (r) => el("li", { listStyle: "none", display: "grid", gap: "6px", padding: "16px 0", borderTop: HAIR }, [
-      el("span", { fontSize: "var(--text-link-title)", lineHeight: "var(--leading-link)", fontWeight: 700, color: "var(--text-primary)" }, [txt(r.title)]),
-      el("p", { margin: 0, display: "flex", flexWrap: "wrap", gap: "4px 12px", fontSize: "var(--text-meta)", lineHeight: "var(--leading-meta)", color: "var(--text-secondary)" }, [
-        el("span", { fontWeight: 700 }, [txt(r.hostname)]),
-        el("span", null, [txt(r.savedAt)]),
+    const searchInput = searchBox.querySelector("input");
+    searchInput.placeholder = "제목이나 출처로 검색";
+    searchInput.setAttribute("aria-label", "저장한 링크 검색");
+    searchInput.tabIndex = -1;
+    searchInput.readOnly = true;
+    const row = (r) => el("li", { listStyle: "none", display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: "12px", alignItems: "start", padding: "16px 0", borderTop: HAIR }, [
+      el("div", { minWidth: 0, display: "grid", gap: "6px" }, [
+        el("span", { fontSize: "var(--text-link-title)", lineHeight: "var(--leading-link)", fontWeight: 700, color: "var(--text-primary)" }, [txt(r.title)]),
+        el("p", { margin: 0, display: "flex", flexWrap: "wrap", gap: "4px 12px", fontSize: "var(--text-meta)", lineHeight: "var(--leading-meta)", color: "var(--text-secondary)" }, [
+          el("span", { fontWeight: 700 }, [txt(r.hostname)]),
+          el("span", null, [txt(r.savedAt)]),
+        ]),
+        el("span", { fontSize: "var(--text-meta-sm)", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, [txt(r.url)]),
       ]),
-      el("span", { fontSize: "var(--text-meta-sm)", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, [txt(r.url)]),
+      el("span", { width: "44px", height: "44px", display: "inline-grid", placeItems: "center", color: "var(--text-primary)" }, [icon("delete", 24, "currentColor")]),
     ]);
-    const section = el("section", { borderTop: HAIR }, [
-      el("div", { ...wrap, paddingTop: "112px", paddingBottom: "120px", display: "grid", gridTemplateColumns: "repeat(12, minmax(0, 1fr))", gap: "24px", alignItems: "start" }, [
+    const grid = el("div", { ...wrap, paddingTop: "112px", paddingBottom: "120px", display: "grid", gridTemplateColumns: "repeat(12, minmax(0, 1fr))", gap: "24px", alignItems: "start" }, [
         el("div", { gridColumn: "1 / 5", display: "grid", gap: "20px" }, [
           el("p", CAP, [txt("화면")]),
           el("h2", { ...DISPLAY, fontSize: "clamp(1.8rem, 3.2vw, 3rem)" }, [txt("목록, 검색, 열기, 삭제."), el("br"), txt("화면도 여기서 끝납니다.")]),
         ]),
-        el("div", { gridColumn: "5 / 13", pointerEvents: "none", display: "grid", gap: "16px", borderTop: "2px solid " + INK, paddingTop: "20px" }, [
+        el("div", { gridColumn: "5 / 13", display: "grid", gap: "16px", borderTop: "2px solid " + INK, paddingTop: "20px" }, [
           el("div", { display: "flex", justifyContent: "space-between", alignItems: "baseline" }, [el("span", CAP, [txt("저장한 링크")]), el("span", { ...CAP, color: INK }, [txt("3")])]),
           searchBox,
           el("ul", { margin: 0, padding: 0, display: "grid" }, ROWS.map(row)),
         ]),
-      ]),
-    ]);
+      ]);
+    grid.setAttribute("data-grid-12", "");
+    const section = el("section", { borderTop: HAIR }, [grid]);
     section.setAttribute("aria-labelledby", "product-title");
     section.querySelector("p").id = "product-title";
+    // Preview is a static crop: inert so it can't receive focus or input.
+    grid.lastElementChild.inert = true;
     return section;
   }
 
   function closing() {
-    const section = el("section", { borderTop: HAIR }, [
-      el("div", { ...wrap, paddingTop: "128px", paddingBottom: "160px", display: "grid", gridTemplateColumns: "repeat(12, minmax(0, 1fr))", gap: "24px", alignItems: "end" }, [
+    const grid = el("div", { ...wrap, paddingTop: "128px", paddingBottom: "160px", display: "grid", gridTemplateColumns: "repeat(12, minmax(0, 1fr))", gap: "24px", alignItems: "end" }, [
         el("h2", { ...DISPLAY, gridColumn: "1 / 9", fontSize: "clamp(2.4rem, 6vw, 6.5rem)" }, [txt("읽고 싶은 순간을"), el("br"), txt("놓치지 마세요.")]),
         el("div", { gridColumn: "9 / 13", display: "grid", gap: "16px", justifyItems: "start" }, [
           ctaButton(true),
           el("p", { margin: 0, fontSize: "14px", lineHeight: 1.5, color: "#6B665C" }, [txt("Google 계정으로 로그인합니다. Chrome 확장 프로그램은 배포 후 연결됩니다.")]),
         ]),
-      ]),
-    ]);
+      ]);
+    grid.setAttribute("data-grid-12", "");
+    const section = el("section", { borderTop: HAIR }, [grid]);
     section.id = "start";
     section.setAttribute("aria-labelledby", "close-title");
     section.querySelector("h2").id = "close-title";
@@ -397,15 +429,19 @@
         ]),
       ]),
     ]);
+    root.classList.add("nod-landing");
     root.querySelector("nav").setAttribute("aria-label", "바닥글");
     app.replaceChildren(root);
     if (message) {
-      const note = el("p", { ...CAP, position: "fixed", bottom: "16px", left: "50%", transform: "translateX(-50%)", zIndex: 10, color: INK }, [txt(message)]);
-      root.append(note);
+      // In-flow under the hero title — a fixed overlay would cover the card.
+      const note = el("p", { ...CAP, marginTop: "16px", color: INK }, [txt(message)]);
+      heroPart.node.querySelector("h1").after(note);
     }
+    const destroyHero = heroPart.init();
     let stopLenis = () => {};
-    startLenis().then((s) => { stopLenis = s; });
-    return () => { heroPart.destroy(); stopLenis(); };
+    let disposed = false;
+    startLenis().then((s) => { if (disposed) s(); else stopLenis = s; });
+    return () => { disposed = true; destroyHero(); stopLenis(); };
   }
 
   let unmount = null;
