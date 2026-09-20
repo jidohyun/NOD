@@ -1,0 +1,9 @@
+/* App fonts — Fredoka (brand/EN headings) + Quicksand (EN body/UI) per DESIGN.md §3. Weights 300–700.
+   Korean: NanumSquareRound (from repo apps/web/public/fonts) — rounded, pairs with Fredoka/Quicksand.
+   Loaded only when the library renders (app.js injects this file); the landing must not load these (§11). */
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap");
+
+@font-face { font-family: "NanumSquareRound"; font-weight: 300; font-display: swap; src: url("../assets/fonts/NanumSquareRoundL.woff2") format("woff2"); }
+@font-face { font-family: "NanumSquareRound"; font-weight: 400; font-display: swap; src: url("../assets/fonts/NanumSquareRoundR.woff2") format("woff2"); }
+@font-face { font-family: "NanumSquareRound"; font-weight: 500 700; font-display: swap; src: url("../assets/fonts/NanumSquareRoundB.woff2") format("woff2"); }
+@font-face { font-family: "NanumSquareRound"; font-weight: 800 900; font-display: swap; src: url("../assets/fonts/NanumSquareRoundEB.woff2") format("woff2"); }
