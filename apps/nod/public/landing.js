@@ -1,18 +1,31 @@
-/* NOD landing behaviour (landing-interaction-standard.md §0): one frame loop (motion) drives Lenis and every scene;
-   each scene derives one progress value from geometry cached on resize, and per frame writes transform/opacity only. */
+/* NOD landing behaviour (landing-interaction-standard.md §0): one requestAnimationFrame loop drives Lenis and every scene.
+   Scroll-linked values come from one progress value per scene, using geometry cached on resize. Discrete events
+   (a save, a search, a pointer) ease toward their targets in the same loop. Every frame writes transform/opacity only. */
 (() => {
   "use strict";
 
   const DEPTHS = [10, 14, 12, 16, 13, 17, 11, 15];
   const reducedQuery = matchMedia("(prefers-reduced-motion: reduce)");
+  const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
   const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
-  const map = (v, a, b, from = 0, to = 1) => from + (to - from) * clamp01((v - a) / (b - a));
-  const easeIn = (t) => t * t;
+  const map = (v, a, b) => clamp01((v - a) / (b - a));
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const docTop = (el) => el.getBoundingClientRect().top + window.scrollY;
+  const pad = (n) => String(Math.max(0, Math.round(n))).padStart(4, "0");
+  const approach = (current, target, k) => (Math.abs(target - current) < 0.002 ? target : current + (target - current) * k);
+  const written = new WeakMap();
+  function put(node, prop, value) {
+    let cache = written.get(node);
+    if (!cache) { cache = {}; written.set(node, cache); }
+    if (cache[prop] === value) return;
+    cache[prop] = value;
+    if (prop.startsWith("--")) node.style.setProperty(prop, value);
+    else node.style[prop] = value;
+  }
 
   function splitWords(heading) {
-    const label = [...heading.childNodes].map((n) => (n.nodeName === "BR" ? " " : n.textContent)).join("").replace(/\s+/g, " ").trim();
+    const label = heading.textContent.replace(/\s+/g, " ").trim();
     heading.setAttribute("aria-label", label);
     const words = [];
     for (const node of [...heading.childNodes]) {
@@ -33,156 +46,252 @@
     return words;
   }
 
-  function heroScene(el, reduced) {
+  function progressOf(g, y) {
+    return clamp01((y - g.top) / Math.max(1, g.height - g.vh));
+  }
+
+  function heroScene(el, reduced, start) {
     const words = splitWords(el.querySelector("[data-words]"));
-    const stage = el.querySelector("[data-stage]");
-    const sticky = el.querySelector(".ld-hero__sticky");
-    const card = el.querySelector("[data-card]");
-    const hair = el.querySelector("[data-hair]");
-    const doodle = el.querySelector("[data-doodle]");
-    const path = doodle.querySelector("path");
-    const saved = el.querySelector("[data-saved]");
-    const final = el.querySelector("[data-final]");
-    const label = el.querySelector("[data-label]");
-    const count = el.querySelector("[data-count]");
-    const tiers = { heavy: [0, 0.35, 0.12], light: [0.35, 0.62, 0.07], status: [0.62, 0.8, 0.06] };
-    const pieces = [...el.querySelectorAll("[data-piece]")].map((node, i) => ({ node, tier: node.dataset.piece, dir: i % 2 ? 1 : -1, chips: [...node.querySelectorAll("[data-chip]")] }));
-    for (const tier of Object.keys(tiers)) {
-      const group = pieces.filter((p) => p.tier === tier);
-      const [start, end, span] = tiers[tier];
-      group.forEach((p, i) => { const s0 = start + (end - start - span) * (i / Math.max(1, group.length - 1)); p.window = [s0, s0 + span]; });
+    const rows = [...el.querySelectorAll("[data-row]")];
+    const title = el.querySelector("[data-title]");
+    const mark = el.querySelector(".ld-mark");
+    const full = title.textContent;
+    const typeAt = 520;
+    const charMs = 34;
+    const markAt = typeAt + full.length * charMs + 120;
+    const done = markAt + 480;
+    const g = { vh: 1 };
+    let typed = -1;
+    let lastExit = -1;
+    let settled = reduced;
+
+    if (reduced) mark.style.setProperty("--mark", "1");
+    else {
+      title.textContent = "";
+      mark.style.setProperty("--mark", "0");
+      rows.forEach((r) => { r.style.opacity = "0"; });
     }
-    const g = { top: 0, height: 1, vh: 1, len: 0 };
-    let shownLabel = "";
-    let shownCount = "";
 
     return {
-      measure(vh) {
-        stage.style.setProperty("--fit", "1");
-        const avail = vh - (stage.getBoundingClientRect().top - sticky.getBoundingClientRect().top) - 24;
-        const fit = Math.max(0.5, Math.min(1, avail / stage.offsetHeight));
-        stage.style.setProperty("--fit", fit.toFixed(3));
-        g.top = docTop(el);
-        g.height = el.offsetHeight;
-        g.vh = vh;
-        g.len = path.getTotalLength();
-        path.style.strokeDasharray = String(g.len);
-      },
-      render(y) {
-        if (y < g.top - g.vh || y > g.top + g.height) return;
-        const p = clamp01((y - g.top) / (g.height - g.vh));
-        const exit = clamp01((y - (g.top + g.height - g.vh)) / g.vh);
-        if (!reduced) words.forEach((w, i) => { w.style.transform = `translate3d(0, ${(-exit * DEPTHS[i % 8]).toFixed(2)}vh, 0)`; });
-
-        let remaining = pieces.length;
-        for (const piece of pieces) {
-          const t = map(p, piece.window[0], piece.window[1]);
-          if (t >= 0.5) remaining -= 1;
-          const s = piece.node.style;
-          if (reduced) { s.opacity = String(1 - t); continue; }
-          if (piece.tier === "heavy") {
-            const e = easeIn(t);
-            s.opacity = String(1 - map(t, 0.25, 0.85));
-            s.transform = `translate3d(${piece.dir * 24 * e}px, ${170 * e}px, 0) rotate(${piece.dir * 8 * e}deg)`;
-          } else if (piece.tier === "light" && piece.chips.length) {
-            piece.chips.forEach((chip, i) => {
-              const k = i / piece.chips.length;
-              const ct = map(t, k * 0.6, k * 0.6 + 0.4);
-              const e = easeOut(ct);
-              const d = i % 2 ? 1 : -1;
-              chip.style.opacity = String(1 - ct);
-              chip.style.transform = `translate3d(${d * (40 + i * 10) * e}px, ${-(30 + i * 6) * e}px, 0) rotate(${d * 12 * e}deg)`;
-            });
-          } else if (piece.tier === "light") {
-            const e = easeOut(t);
-            s.opacity = String(1 - t);
-            s.transform = `translate3d(${piece.dir * 60 * e}px, ${-24 * e}px, 0)`;
-          } else {
-            s.opacity = String(1 - t);
-            s.transform = `scale(${1 - 0.1 * t})`;
-          }
+      measure(vh) { g.vh = vh; },
+      render(y, now) {
+        let busy = false;
+        if (!settled) {
+          const t = now - start;
+          rows.forEach((row, i) => {
+            const e = easeOut(map(t, 160 + i * 90, 900 + i * 90));
+            row.style.opacity = String(e);
+            row.style.transform = `translate3d(0, ${((1 - e) * 22).toFixed(2)}px, 0)`;
+          });
+          const n = Math.min(full.length, Math.max(0, Math.floor((t - typeAt) / charMs)));
+          if (n !== typed) { typed = n; title.textContent = full.slice(0, n); }
+          mark.style.setProperty("--mark", easeOut(map(t, markAt, markAt + 420)).toFixed(4));
+          settled = t > done;
+          busy = !settled;
         }
-
-        const settled = p >= 0.81;
-        const nextLabel = settled ? "NOD가 저장하는 것" : "다른 앱이 링크 하나에 붙이는 것";
-        const nextCount = String(settled ? 4 : remaining).padStart(2, "0");
-        if (nextLabel !== shownLabel) { label.textContent = nextLabel; shownLabel = nextLabel; }
-        if (nextCount !== shownCount) { count.textContent = nextCount; shownCount = nextCount; }
-        label.style.opacity = String(1 - map(p, 0.78, 0.81) + map(p, 0.81, 0.84));
-
-        if (!reduced) {
-          const snap = 1 - 0.03 * (1 - easeOut(map(p, 0.78, 0.82))) * map(p, 0.77, 0.78);
-          const rot = -1.25 * easeOut(map(p, 0.82, 0.92));
-          card.style.transform = `scale(${snap.toFixed(4)}) rotate(${rot.toFixed(3)}deg)`;
+        if (reduced || y > g.vh * 1.5) return busy;
+        const exit = clamp01(y / (g.vh * 0.9));
+        if (exit !== lastExit) {
+          lastExit = exit;
+          words.forEach((w, i) => { w.style.transform = `translate3d(0, ${(-exit * DEPTHS[i % 8] * 0.6).toFixed(2)}vh, 0)`; });
         }
-        hair.style.opacity = String(map(p, 0.8, 0.86, 1, 0));
-        doodle.style.opacity = String(map(p, 0.82, 0.86));
-        path.style.strokeDashoffset = reduced ? "0" : String(g.len * (1 - easeOut(map(p, 0.82, 0.92))));
-        const lit = String(map(p, 0.92, 1));
-        saved.style.opacity = lit;
-        final.style.opacity = lit;
+        return busy;
       },
     };
   }
 
-  function notScene(el, reduced) {
-    const strikes = [...el.querySelectorAll("[data-strike] .ld-strike")];
-    const rises = [...el.querySelectorAll("[data-rise]")].map((node) => ({ node, center: 0 }));
-    const g = { top: 0, height: 1, vh: 1 };
-    return {
-      measure(vh) {
-        g.top = docTop(el);
-        g.height = el.offsetHeight;
-        g.vh = vh;
-        for (const r of rises) r.center = docTop(r.node) + r.node.offsetHeight / 2;
-      },
-      render(y) {
-        if (y < g.top - g.vh || y > g.top + g.height) return;
-        const v = clamp01((y + g.vh - g.top) / (g.height + g.vh));
-        strikes.forEach((s, i) => { s.style.transform = `scaleX(${reduced ? 1 : map(v, 0.1 + i * 0.04, 0.22 + i * 0.04).toFixed(4)})`; });
-        for (const r of rises) {
-          const d = r.center - (y + g.vh / 2);
-          const q = clamp01(1 - d / (g.vh * 0.55));
-          r.node.style.opacity = String(map(q, 0, 0.6));
-          if (!reduced) r.node.style.transform = `translate3d(0, ${((1 - easeOut(q)) * 48).toFixed(2)}px, 0)`;
-        }
-      },
-    };
+  const SAMPLES = [
+    ["A field guide to good defaults", "rauno.me"],
+    ["The page you meant to finish", "nytimes.com"],
+    ["Small tools, sharp edges", "arstechnica.com"],
+    ["How we built a calm inbox", "hey.com"],
+    ["Notes on typography for the web", "practicaltypography.com"],
+    ["What to cook this week", "bonappetit.com"],
+  ];
+  const BASE = [["0410", "Optimize Largest Contentful Paint", "web.dev"], ["0411", "position: sticky", "developer.mozilla.org"], ["0412", "How to write a README people read", "github.com"], ["0413", "The page you’re reading", "nod-archive.com"]];
+  const THRESHOLDS = [0.16, 0.4, 0.64];
+
+  function ledgerRow(no, title, src) {
+    const li = document.createElement("div");
+    li.className = "ld-row";
+    const n = document.createElement("span"); n.className = "ld-row__no"; n.textContent = no;
+    const t = document.createElement("span"); t.className = "ld-row__title";
+    const m = document.createElement("span"); m.className = "ld-mark"; m.setAttribute("aria-hidden", "true");
+    t.append(m, document.createTextNode(title));
+    const s = document.createElement("span"); s.className = "ld-row__src"; s.textContent = src;
+    li.append(n, t, s);
+    return { node: li, mark: m, y: 0, o: 1, k: 0, alive: true };
   }
 
-  /* Outer height = viewport + horizontal overflow, re-measured on resize and after fonts load (standard §3.3). */
-  function timelineScene(el, reduced) {
-    const track = el.querySelector("[data-track]");
-    const rail = el.querySelector("[data-rail]");
-    const slots = [...el.querySelectorAll("[data-slot]")].map((node) => ({ node, center: 0, link: node.querySelector("[data-link]") }));
-    const g = { top: 0, height: 1, vh: 1, vw: 1, overflow: 0, radius: 800 };
+  function saveScene(el, reduced) {
+    const stack = el.querySelector("[data-stack]");
+    const counter = el.querySelector("[data-counter]");
+    const key = el.querySelector("[data-savekey]");
+    const live = el.querySelector("[data-save-live]");
+    const base = 413;
+    const g = { top: 0, height: 1, vh: 1, rowH: 64 };
+    const rows = BASE.map(([no, t, s]) => ledgerRow(no, t, s));
+    rows.forEach((r) => stack.append(r.node));
+    let scrollSaves = reduced ? THRESHOLDS.length : 0;
+    let clickSaves = 0;
+    let shown = base;
+    let pressAt = -1e9;
+    let lastTotal = -1;
+
+    function sync(now) {
+      const total = scrollSaves + clickSaves;
+      if (total === lastTotal) return;
+      if (lastTotal >= 0 && total > lastTotal) pressAt = now;
+      lastTotal = total;
+      const want = BASE.length + total;
+      let alive = rows.filter((r) => r.alive);
+      while (alive.length < want) {
+        const i = alive.length - BASE.length;
+        const [t, s] = SAMPLES[i % SAMPLES.length];
+        const r = ledgerRow(pad(base + 1 + i), t, s);
+        r.y = -g.rowH * 0.7; r.o = 0; r.k = 0;
+        if (reduced) { r.o = 1; }
+        stack.prepend(r.node);
+        rows.push(r);
+        alive = rows.filter((x) => x.alive);
+      }
+      while (alive.length > want) { alive[alive.length - 1].alive = false; alive.pop(); }
+    }
+
+    key.addEventListener("click", () => {
+      clickSaves += 1;
+      live.textContent = `Saved No. ${pad(base + scrollSaves + clickSaves)}.`;
+    });
+
     return {
       measure(vh, vw) {
-        if (reduced) { el.style.height = ""; g.top = 0; g.height = 0; return; }
-        g.vh = vh;
-        g.vw = vw;
-        g.overflow = Math.max(0, track.scrollWidth - vw);
-        const height = `${Math.round(vh + g.overflow)}px`;
-        if (el.style.height !== height) el.style.height = height;
-        g.radius = Math.min(800, vw * 0.9);
-        for (const s of slots) s.center = s.node.offsetLeft + s.node.offsetWidth / 2;
+        g.rowH = vw <= 760 ? 68 : 64;
+        stack.style.setProperty("--row-h", `${g.rowH}px`);
+        g.top = docTop(el); g.height = el.offsetHeight; g.vh = vh;
       },
-      measureTop() { if (!reduced) { g.top = docTop(el); g.height = el.offsetHeight; } },
-      render(y) {
-        if (reduced || y < g.top - g.vh || y > g.top + g.height) return;
-        const p = clamp01((y - g.top) / (g.height - g.vh));
-        const x = -p * g.overflow;
-        track.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
-        rail.style.transform = `scaleX(${p.toFixed(4)})`;
-        const mid = g.vw / 2;
-        for (const s of slots) {
-          const v = clamp01(1 - (s.center + x - mid) / g.radius);
-          const line = v < 0.5 ? v / 0.5 : 1;
-          const placed = v < 0.5 ? 0 : (v - 0.5) / 0.5;
-          s.node.style.opacity = String(line);
-          s.link.style.opacity = String(placed);
-          s.link.style.transform = `translate3d(0, ${(-(1 - easeOut(placed)) * 28).toFixed(2)}px, 0)`;
+      render(y, now, k) {
+        if (!reduced && y >= g.top - g.vh && y <= g.top + g.height) {
+          const p = progressOf(g, y);
+          scrollSaves = THRESHOLDS.filter((t) => p >= t).length;
         }
+        sync(now);
+        const step = reduced ? 1 : k;
+        const alive = rows.filter((r) => r.alive);
+        let busy = false;
+        for (let i = rows.length - 1; i >= 0; i -= 1) {
+          const r = rows[i];
+          const idx = alive.indexOf(r);
+          const ty = r.alive ? (alive.length - 1 - idx) * g.rowH : -g.rowH * 0.7;
+          const to = r.alive ? 1 : 0;
+          const tk = r.alive && idx === alive.length - 1 ? 1 : 0;
+          r.y = approach(r.y, ty, step); r.o = approach(r.o, to, step); r.k = approach(r.k, tk, step * 0.8);
+          put(r.node, "transform", `translate3d(0, ${r.y.toFixed(1)}px, 0)`);
+          put(r.node, "opacity", r.o.toFixed(3));
+          put(r.mark, "--mark", r.k.toFixed(3));
+          if (r.isNew !== (tk === 1)) { r.isNew = tk === 1; r.node.classList.toggle("ld-row--new", r.isNew); }
+          if (r.y !== ty || r.o !== to || r.k !== tk) busy = true;
+          if (!r.alive && r.o === 0) { r.node.remove(); rows.splice(i, 1); }
+        }
+        const target = base + scrollSaves + clickSaves;
+        shown = approach(shown, target, reduced ? 1 : k * 0.7);
+        if (shown !== target) busy = true;
+        const text = pad(shown);
+        if (counter.textContent !== text) counter.textContent = text;
+        const t = now - pressAt;
+        if (!reduced && t < 600) {
+          put(key, "--press", (1 - 0.14 * Math.sin(Math.PI * map(t, 0, 260))).toFixed(4));
+          put(key, "--ring", (1 - map(t, 60, 560)).toFixed(4));
+          busy = true;
+        } else {
+          put(key, "--press", "1");
+          put(key, "--ring", "0");
+        }
+        return busy;
+      },
+    };
+  }
+
+  function colsScene(el, reduced) {
+    const drop = el.querySelector("[data-drop]");
+    const cols = [...el.querySelectorAll("[data-dropcol]")];
+    const after = el.querySelector("[data-after]");
+    const g = { top: 0, height: 1, vh: 1, w: 0, narrow: false };
+    let last = -1;
+    return {
+      measure(vh, vw) { g.top = docTop(el); g.height = el.offsetHeight; g.vh = vh; g.w = drop.offsetWidth; g.narrow = vw <= 1024; last = -1; },
+      render(y) {
+        if (!reduced && (y < g.top - g.vh || y > g.top + g.height)) return false;
+        const p = reduced ? 0.6 : progressOf(g, y);
+        if (p === last) return false;
+        last = p;
+        cols.forEach((col, i) => put(col, "--s", easeOut(map(p, 0.06 + i * 0.1, 0.2 + i * 0.1)).toFixed(3)));
+        const c = easeInOut(map(p, 0.58, 0.8));
+        put(drop, "opacity", (1 - c * (g.narrow ? 0.8 : 1)).toFixed(3));
+        put(drop, "transform", g.narrow
+          ? `translate3d(0, ${(-c * 10).toFixed(2)}px, 0)`
+          : `translate3d(${(-c * g.w * 0.25).toFixed(1)}px, 0, 0) scaleX(${(1 - c * 0.5).toFixed(3)})`);
+        put(after, "--after", reduced ? "1" : easeOut(map(p, 0.8, 0.94)).toFixed(3));
+        return false;
+      },
+    };
+  }
+
+  function findScene(el, reduced) {
+    const input = el.querySelector("[data-search]");
+    const count = el.querySelector("[data-count]");
+    const rows = [...el.querySelectorAll("[data-row]")].map((node) => {
+      const title = node.querySelector(".ld-row__title");
+      return { node, title, text: title.textContent, hay: node.textContent.toLowerCase(), v: 1, h: 0 };
+    });
+    const word = "design";
+    const g = { top: 0, height: 1, vh: 1 };
+    let user = false;
+    let query = null;
+
+    function apply(q) {
+      if (q === query) return;
+      query = q;
+      const needle = q.trim().toLowerCase();
+      let hits = 0;
+      for (const r of rows) {
+        r.match = !needle || r.hay.includes(needle);
+        if (r.match) hits += 1;
+        const at = needle ? r.text.toLowerCase().indexOf(needle) : -1;
+        if (at < 0) { r.title.textContent = r.text; continue; }
+        const mark = document.createElement("span");
+        mark.className = "ld-hit";
+        mark.textContent = r.text.slice(at, at + needle.length);
+        r.title.replaceChildren(r.text.slice(0, at), mark, r.text.slice(at + needle.length));
+      }
+      count.textContent = needle ? `${hits} of ${rows.length}` : `${rows.length} links`;
+    }
+
+    input.addEventListener("input", () => { user = input.value.length > 0 || document.activeElement === input; apply(input.value); });
+    input.addEventListener("blur", () => { if (!input.value) user = false; });
+    input.addEventListener("keydown", (e) => { if (e.key === "Escape") { input.value = ""; user = false; apply(""); } });
+
+    return {
+      measure(vh) { g.top = docTop(el); g.height = el.offsetHeight; g.vh = vh; for (const r of rows) r.h = r.node.offsetHeight; },
+      render(y, now, k) {
+        const inRange = y >= g.top - g.vh && y <= g.top + g.height;
+        if (!inRange && !user && !reduced && query !== null && rows.every((r) => r.v === (r.match ? 1 : 0))) return false;
+        if (!user) {
+          const p = reduced ? 1 : progressOf(g, y);
+          const q = word.slice(0, Math.round(map(p, 0.12, 0.48) * word.length));
+          if (reduced || inRange) { if (input.value !== q) input.value = q; apply(q); }
+        }
+        if (query === null) apply("");
+        let shift = 0;
+        let busy = false;
+        for (const r of rows) {
+          const to = r.match ? 1 : 0;
+          r.v = approach(r.v, to, reduced ? 1 : k);
+          if (r.v !== to) busy = true;
+          put(r.node, "opacity", r.v.toFixed(3));
+          put(r.node, "transform", `translate3d(0, ${(-shift).toFixed(1)}px, 0) scale(${(0.97 + 0.03 * r.v).toFixed(3)})`);
+          shift += (1 - r.v) * r.h;
+        }
+        return busy;
       },
     };
   }
@@ -193,28 +302,57 @@
     return {
       measure(vh) { g.top = docTop(el); g.height = el.offsetHeight; g.vh = vh; },
       render(y) {
-        if (reduced || y < g.top - g.vh || y > g.top + g.height) return;
+        if (reduced || y < g.top - g.vh || y > g.top + g.height) return false;
         const v = clamp01((y + g.vh - g.top) / (g.height + g.vh));
         words.forEach((w, i) => { w.style.transform = `translate3d(0, ${((0.5 - v) * DEPTHS[i % 8] * 0.6).toFixed(2)}vh, 0)`; });
+        return false;
+      },
+    };
+  }
+
+  function magnets(root, reduced) {
+    const items = [...root.querySelectorAll("[data-magnet]")].map((node) => ({ node, x: 0, y: 0, tx: 0, ty: 0 }));
+    if (reduced || !finePointer.matches) return { render: () => false };
+    for (const m of items) {
+      m.node.addEventListener("pointermove", (e) => {
+        const r = m.node.getBoundingClientRect();
+        m.tx = Math.max(-10, Math.min(10, (e.clientX - (r.left + r.width / 2)) * 0.2));
+        m.ty = Math.max(-6, Math.min(6, (e.clientY - (r.top + r.height / 2)) * 0.3));
+      });
+      m.node.addEventListener("pointerleave", () => { m.tx = 0; m.ty = 0; });
+    }
+    return {
+      render(y, now, k) {
+        let busy = false;
+        for (const m of items) {
+          const x = approach(m.x, m.tx, k);
+          const yy = approach(m.y, m.ty, k);
+          if (x === m.x && yy === m.y) continue;
+          m.x = x; m.y = yy; busy = true;
+          m.node.style.setProperty("--mx", `${x.toFixed(2)}px`);
+          m.node.style.setProperty("--my", `${yy.toFixed(2)}px`);
+        }
+        return busy;
       },
     };
   }
 
   function createLanding(app, root) {
     const reduced = reducedQuery.matches;
-    const scenes = {
-      hero: heroScene(root.querySelector('[data-scene="hero"]'), reduced),
-      not: notScene(root.querySelector('[data-scene="not"]'), reduced),
-      timeline: timelineScene(root.querySelector('[data-scene="timeline"]'), reduced),
-      closing: closingScene(root.querySelector('[data-scene="closing"]'), reduced),
-    };
-    const list = Object.values(scenes);
+    const start = performance.now();
+    const scenes = [
+      heroScene(root.querySelector('[data-scene="hero"]'), reduced, start),
+      saveScene(root.querySelector('[data-scene="save"]'), reduced),
+      colsScene(root.querySelector('[data-scene="cols"]'), reduced),
+      findScene(root.querySelector('[data-scene="find"]'), reduced),
+      closingScene(root.querySelector('[data-scene="closing"]'), reduced),
+      magnets(root, reduced),
+    ];
     const message = root.querySelector("[data-message]");
-    let lastY = -1;
-    let dirty = true;
     let disposed = false;
     let lenis = null;
-    let stopLoop = () => {};
+    let frameId = 0;
+    let last = start;
     let measureQueued = false;
 
     const measure = () => {
@@ -222,45 +360,28 @@
       if (disposed) return;
       const vh = window.innerHeight;
       const vw = document.documentElement.clientWidth;
-      scenes.timeline.measure(vh, vw);
-      scenes.hero.measure(vh);
-      scenes.not.measure(vh);
-      scenes.timeline.measureTop();
-      scenes.closing.measure(vh);
+      for (const scene of scenes) scene.measure?.(vh, vw);
       if (lenis) lenis.resize();
-      dirty = true;
     };
     const queueMeasure = () => { if (!measureQueued) { measureQueued = true; requestAnimationFrame(measure); } };
-    const update = (timestamp) => { if (lenis) lenis.raf(timestamp); };
-    const render = () => {
+
+    const tick = (now) => {
+      if (disposed) return;
+      if (lenis) lenis.raf(now);
+      const dt = Math.min(64, now - last);
+      last = now;
+      const k = 1 - Math.exp(-dt / 85);
       const y = window.scrollY;
-      if (y === lastY && !dirty) return;
-      lastY = y;
-      dirty = false;
-      for (const scene of list) scene.render(y);
+      for (const scene of scenes) scene.render(y, now, k);
+      frameId = requestAnimationFrame(tick);
     };
 
     measure();
-    render();
     window.addEventListener("resize", queueMeasure);
     const resizeObserver = new ResizeObserver(queueMeasure);
     resizeObserver.observe(root);
     document.fonts.ready.then(queueMeasure);
-
-    import("/vendor/motion-frame.mjs").then(({ frame, cancelFrame }) => {
-      if (disposed) return;
-      const onUpdate = ({ timestamp }) => update(timestamp);
-      frame.update(onUpdate, true);
-      frame.render(render, true);
-      stopLoop = () => { cancelFrame(onUpdate); cancelFrame(render); };
-    }).catch((error) => {
-      console.warn("motion frame loop unavailable; using requestAnimationFrame", error);
-      if (disposed) return;
-      let id = 0;
-      const tick = (t) => { update(t); render(); id = requestAnimationFrame(tick); };
-      id = requestAnimationFrame(tick);
-      stopLoop = () => cancelAnimationFrame(id);
-    });
+    frameId = requestAnimationFrame(tick);
 
     if (!reduced) {
       import("/vendor/lenis.mjs").then(({ default: Lenis }) => {
@@ -278,7 +399,7 @@
       },
       destroy() {
         disposed = true;
-        stopLoop();
+        cancelAnimationFrame(frameId);
         resizeObserver.disconnect();
         window.removeEventListener("resize", queueMeasure);
         if (lenis) { lenis.destroy(); lenis = null; }
