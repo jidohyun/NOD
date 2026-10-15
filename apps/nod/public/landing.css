@@ -152,7 +152,7 @@ html.lenis, html.lenis body { height: auto; }
 .ld-slot__title { font-family: var(--landing-display); font-weight: 700; font-size: 20px; line-height: 1.3; color: var(--landing-ink); word-break: keep-all; overflow-wrap: break-word; text-wrap: pretty; }
 .ld-slot__url { font-size: 14px; line-height: 1.5; color: var(--landing-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ld-slot--next .ld-slot__title { color: var(--landing-muted); }
-.ld-slot--next .ld-slot__url { white-space: normal; }
+.ld-slot--next .ld-slot__url { white-space: normal; word-break: keep-all; text-wrap: balance; }
 
 .ld-product__copy { grid-column: 1 / 6; display: grid; gap: 20px; }
 .ld-product__copy .ld-h2 { font-size: clamp(1.8rem, 2.6vw, 2.6rem); }
@@ -199,6 +199,7 @@ html.lenis, html.lenis body { height: auto; }
   .ld-piece--tags, .ld-piece--share { max-width: 80%; }
   .ld-not .ld-grid, .ld-product .ld-grid { padding-top: 80px; padding-bottom: 80px; }
   .ld-not__keep { margin-top: 40px; }
+  .ld-field__url, .ld-slot__url, .ld-row__url, .ld-row__meta, .ld-small { font-size: 15px !important; }
   .ld-track { --slot: 264px; }
   .ld-slot__title { font-size: 18px; }
   .ld-slot { padding-right: 16px; }
@@ -211,6 +212,11 @@ html.lenis, html.lenis body { height: auto; }
   .ld-hero__title { margin-top: 0; font-size: clamp(1.5rem, 4vw, 2.4rem); }
   .ld-hero .ld-cta { min-height: 44px; font-size: 16px; }
   .ld-hero__stage { padding-top: 12px; padding-bottom: 8px; }
+  .ld-timeline__head { padding-top: calc(var(--header-h) + 8px); gap: 6px; }
+  .ld-timeline__head .ld-h2 { font-size: 1.5rem; }
+  .ld-timeline__lede { display: none; }
+  .ld-rail { margin-top: 4px; }
+  .ld-slot__frame { min-height: 0; margin-top: 10px; padding: 14px; }
 }
 
 /* Reduced motion: no pin choreography beyond fades; timeline becomes a vertical list (standard §6). */
