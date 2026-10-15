@@ -60,7 +60,7 @@
       measure(vh) {
         stage.style.setProperty("--fit", "1");
         const avail = vh - (stage.getBoundingClientRect().top - sticky.getBoundingClientRect().top) - 24;
-        const fit = Math.max(0.62, Math.min(1, avail / stage.offsetHeight));
+        const fit = Math.max(0.5, Math.min(1, avail / stage.offsetHeight));
         stage.style.setProperty("--fit", fit.toFixed(3));
         g.top = docTop(el);
         g.height = el.offsetHeight;
@@ -117,7 +117,7 @@
         }
         hair.style.opacity = String(map(p, 0.8, 0.86, 1, 0));
         doodle.style.opacity = String(map(p, 0.82, 0.86));
-        path.style.strokeDashoffset = String(g.len * (1 - easeOut(map(p, 0.82, 0.92))));
+        path.style.strokeDashoffset = reduced ? "0" : String(g.len * (1 - easeOut(map(p, 0.82, 0.92))));
         const lit = String(map(p, 0.92, 1));
         saved.style.opacity = lit;
         final.style.opacity = lit;

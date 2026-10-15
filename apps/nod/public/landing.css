@@ -33,6 +33,8 @@ html.lenis, html.lenis body { height: auto; }
 }
 .nod-landing h1, .nod-landing h2 { font-family: var(--landing-display); font-weight: 700; color: var(--landing-ink); margin: 0; }
 .nod-landing p { margin: 0; }
+.nod-landing p, .nod-landing .ld-piece { overflow-wrap: normal; word-break: keep-all; text-wrap: pretty; }
+.nod-landing h1, .nod-landing h2 { text-wrap: balance; }
 
 .ld-wrap { width: 100%; max-width: var(--max-landing); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
 .ld-cap { font-family: var(--landing-body); font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 600; color: var(--landing-muted); font-variant-numeric: tabular-nums; }
@@ -52,7 +54,9 @@ html.lenis, html.lenis body { height: auto; }
 .ld-brand img { display: block; height: 25px; width: auto; }
 .ld-brand--small img { height: 21px; }
 .ld-header__link { display: inline-flex; align-items: center; min-height: var(--touch-target); color: var(--landing-ink); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
-.ld-header__link:hover { color: var(--landing-ink); }
+.ld-header__link:hover, .ld-footer__nav a:hover { color: var(--landing-ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.ld-header__link:active, .ld-footer__nav a:active, .ld-brand:active { opacity: 0.6; }
+.ld-brand:hover img { opacity: 0.75; }
 
 /* CTA — yellow budget: hero CTA + closing CTA (+ hero settle stroke). */
 .ld-cta {
@@ -86,7 +90,7 @@ html.lenis, html.lenis body { height: auto; }
 .ld-field { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 12px; align-items: baseline; }
 .ld-field dt { margin: 0; }
 .ld-field dd { margin: 0; font-size: 15px; line-height: 1.5; color: var(--landing-ink); min-width: 0; }
-.ld-field__url { font-size: 13px !important; color: var(--landing-muted) !important; overflow-wrap: anywhere; }
+.ld-field__url { font-size: 14px !important; color: var(--landing-muted) !important; overflow-wrap: anywhere; }
 .ld-field__title { font-family: var(--landing-display); font-weight: 700; font-size: 24px !important; line-height: 1.3 !important; word-break: keep-all; }
 
 .ld-clutter { position: absolute; inset: 0; pointer-events: none; }
@@ -131,7 +135,7 @@ html.lenis, html.lenis body { height: auto; }
 .ld-timeline { position: relative; border-top: var(--hair); }
 .ld-timeline__sticky { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 .ld-timeline__head { padding-top: calc(var(--header-h) + 4vh); display: grid; gap: 14px; justify-items: start; }
-.ld-timeline__lede { max-width: 520px; }
+.ld-timeline__lede { max-width: 560px; }
 .ld-rail { display: block; width: 100%; height: 1px; margin-top: 12px; background: rgba(26, 26, 26, 0.14); }
 .ld-rail__fill { display: block; height: 2px; margin-top: -0.5px; background: var(--landing-ink); transform: scaleX(0); transform-origin: left center; }
 .ld-timeline__viewport { align-self: center; min-height: 0; }
@@ -145,8 +149,8 @@ html.lenis, html.lenis body { height: auto; }
 .ld-slot__tick { position: absolute; left: 0; top: -6px; width: 1px; height: 12px; background: var(--landing-ink); }
 .ld-slot__frame { margin-top: 18px; min-height: 176px; padding: 20px; border: 1px dashed rgba(26, 26, 26, 0.28); border-radius: 8px; }
 .ld-slot__link { display: grid; gap: 8px; min-width: 0; will-change: transform, opacity; }
-.ld-slot__title { font-family: var(--landing-display); font-weight: 700; font-size: 20px; line-height: 1.3; color: var(--landing-ink); word-break: keep-all; overflow-wrap: anywhere; }
-.ld-slot__url { font-size: 12px; line-height: 1.5; color: var(--landing-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ld-slot__title { font-family: var(--landing-display); font-weight: 700; font-size: 20px; line-height: 1.3; color: var(--landing-ink); word-break: keep-all; overflow-wrap: break-word; text-wrap: pretty; }
+.ld-slot__url { font-size: 14px; line-height: 1.5; color: var(--landing-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ld-slot--next .ld-slot__title { color: var(--landing-muted); }
 .ld-slot--next .ld-slot__url { white-space: normal; }
 
@@ -164,7 +168,7 @@ html.lenis, html.lenis body { height: auto; }
 .ld-row__main { display: grid; gap: 6px; min-width: 0; }
 .ld-row__title { font-size: var(--text-link-title); line-height: var(--leading-link); font-weight: 700; color: var(--text-primary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: keep-all; }
 .ld-row__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: var(--text-meta); line-height: var(--leading-meta); color: var(--text-secondary); }
-.ld-row__url { font-size: var(--text-meta-sm); color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ld-row__url { font-size: var(--text-meta); color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ld-row__icon { width: 44px; height: 44px; display: inline-grid; place-items: center; color: var(--text-primary); }
 
 .ld-closing__grid { padding-top: 128px; padding-bottom: 160px; align-items: end; }
@@ -201,9 +205,18 @@ html.lenis, html.lenis body { height: auto; }
   .ld-closing__grid { padding-top: 96px; padding-bottom: 112px; gap: 32px; }
 }
 
+@media (max-height: 560px) {
+  .ld-hero__top { padding-top: calc(var(--header-h) + 8px); gap: 12px; }
+  .ld-hero__top .ld-cap { display: none; }
+  .ld-hero__title { margin-top: 0; font-size: clamp(1.5rem, 4vw, 2.4rem); }
+  .ld-hero .ld-cta { min-height: 44px; font-size: 16px; }
+  .ld-hero__stage { padding-top: 12px; padding-bottom: 8px; }
+}
+
 /* Reduced motion: no pin choreography beyond fades; timeline becomes a vertical list (standard §6). */
 @media (prefers-reduced-motion: reduce) {
   .ld-word, .ld-piece, .ld-chip, .ld-card, .ld-track, .ld-slot, .ld-slot__link { will-change: auto; }
+  .ld-cta:active { transform: none; }
   .ld-timeline { height: auto !important; }
   .ld-timeline__sticky { position: static; height: auto; overflow: visible; padding-bottom: 96px; }
   .ld-timeline__viewport { margin-top: 40px; }
