@@ -92,20 +92,39 @@
   };
   const matrix3d = (h) => `matrix3d(${[h[0], h[3], 0, h[6], h[1], h[4], 0, h[7], 0, 0, 1, 0, h[2], h[5], 0, 1].join(",")})`;
 
+  // Row bottoms of the ruled page in page units, from the ruling lines (the same fr values as .ld-page rows in landing.css).
+  const ROW_FR = [89.3, 95.9, 99.6, 100.5, 101, 101.4, 101.4, 103, 102.5, 101.8, 100.8, 103];
+  const ROW_BOTTOM = (() => { const total = ROW_FR.reduce((a, b) => a + b, 0); let acc = 0; return ROW_FR.map((f) => (acc += f) / total * PAGE_H); })();
+  const HERO_END = 0.2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+
   function heroScene(el, reduced, start) {
     const words = splitWords(el.querySelector("[data-words]"));
     const plate = el.querySelector("[data-plate]");
+    const copy = el.querySelector("[data-hero-copy]");
+    const action = copy.querySelector(".ld-hero__action");
+    const scrim = el.querySelector("[data-scrim]");
     const cam = el.querySelector("[data-cam]");
-    const rows = [...el.querySelectorAll("[data-row]")];
     const title = el.querySelector("[data-title]");
     const mark = el.querySelector("[data-hero-mark]");
     const full = title.textContent;
+    const ink = [...el.querySelectorAll("[data-row]")].map((row) => ({
+      row, no: row.querySelector(".ld-entry__no"), title: row.querySelector(".ld-entry__title"), src: row.querySelector(".ld-entry__src"),
+      intro: reduced ? 1 : 0, ends: null,
+    }));
     const h = homography([[0, 0], [PAGE_W, 0], [PAGE_W, PAGE_H], [0, PAGE_H]], QUAD);
     el.querySelector("[data-page]").style.transform = matrix3d(h);
+    const measureCtx = document.createElement("canvas").getContext("2d");
+    const textWidth = (node, text) => {
+      const cs = getComputedStyle(node);
+      measureCtx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      measureCtx.letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
+      return measureCtx.measureText(text).width;
+    };
     const typeAt = 700;
     const charMs = 34;
     const done = typeAt + full.length * charMs + 120;
-    const g = { vh: 1, vw: 1, top: 0, height: 1, cover: 1, zoom: 1, sx: PLATE_W / 2, sy: PLATE_H / 2, fx: PLATE_W / 2, fy: PLATE_H / 2 };
+    const g = { vh: 1, vw: 1, top: 0, height: 1, cover: 1, zoom: 1, sx: PLATE_W / 2, sy: PLATE_H / 2, fx: PLATE_W / 2, fy: PLATE_H / 2, hs: 1, htx: 0, hty: 0 };
     let typed = -1;
     let lastExit = -1;
     let lastP = -1;
@@ -113,19 +132,59 @@
 
     if (!reduced) {
       title.textContent = "";
-      rows.forEach((r) => { r.style.opacity = "0"; });
+      ink.forEach((r) => { r.row.style.opacity = "0"; });
     }
+    // The copy fades while the camera leaves the hero framing; a keyboard user who tabs back to it gets the hero back.
+    copy.addEventListener("focusin", () => { if (lastP > 0.04) window.scrollTo(0, 0); });
 
-    // Camera: cover the stage at p = 0, then dolly toward row 0413 and stop where the row fits the screen.
-    function frame(p) {
-      const k = easeInOut(map(p, 0, 0.72));
-      const s = g.cover + (g.zoom - g.cover) * k;
+    // Camera translate (screen = plate * s + t) with the centre clamped so the plate always covers the stage.
+    function clampedPose(s, x, y) {
       const hx = g.vw / (2 * s);
       const hy = g.vh / (2 * s);
-      const cx = Math.min(PLATE_W - hx, Math.max(hx, g.sx + (g.fx - g.sx) * k));
-      const cy = Math.min(PLATE_H - hy, Math.max(hy, g.sy + (g.fy - g.sy) * k));
-      put(cam, "transform", `translate3d(${(g.vw / 2 - cx * s).toFixed(2)}px, ${(g.vh / 2 - cy * s).toFixed(2)}px, 0) scale(${s.toFixed(4)})`);
-      put(mark, "--mark", easeOut(map(p, 0.48, 0.8)).toFixed(4));
+      const cx = Math.min(PLATE_W - hx, Math.max(hx, x));
+      const cy = Math.min(PLATE_H - hy, Math.max(hy, y));
+      return [s, g.vw / 2 - cx * s, g.vh / 2 - cy * s];
+    }
+    // p 0..HERO_END: from the hero framing (photo beside or under the copy) to the cover framing.
+    // p HERO_END..0.8: dolly toward row 0413 and stop where the row fits the screen.
+    function pose(p) {
+      if (g.stacked) {
+        // Portrait: zoom straight from the whole page to row 0413. Until the plate is taller than the screen it stays on
+        // the bottom edge (the scrim follows its top edge), so the page never has to be cropped to cover the stage.
+        const k = easeInOut(map(p, 0, 0.8));
+        const s = lerp(g.hs, g.zoom, k);
+        const cx = lerp(g.hcx, g.fx, k);
+        const cy = lerp(g.hcy, g.fy, k);
+        const tx = Math.min(0, Math.max(g.vw - PLATE_W * s, g.vw / 2 - cx * s));
+        const low = g.vh - PLATE_H * s;
+        const ty = low >= 0 ? low : Math.min(0, Math.max(low, g.vh / 2 - cy * s));
+        return [s, tx, ty];
+      }
+      const [bs, btx, bty] = clampedPose(g.cover, g.sx, g.sy);
+      if (p < HERO_END) {
+        const e = easeInOut(p / HERO_END);
+        return [lerp(g.hs, bs, e), lerp(g.htx, btx, e), lerp(g.hty, bty, e)];
+      }
+      const k = easeInOut(map(p, HERO_END, 0.8));
+      const s = g.cover + (g.zoom - g.cover) * k;
+      return clampedPose(s, g.sx + (g.fx - g.sx) * k, g.sy + (g.fy - g.sy) * k);
+    }
+    // A row (number + title) or a source fades out before any glyph reaches a screen edge, so nothing on screen is cut.
+    const fit = (x0, x1) => clamp01((Math.min(x0, g.vw - x1) - 2) / 14);
+
+    function frame(p) {
+      const [s, tx, ty] = pose(p);
+      put(cam, "transform", `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${s.toFixed(4)})`);
+      put(mark, "--mark", reduced ? "1" : easeOut(map(p, 0.55, 0.86)).toFixed(4));
+      put(copy, "opacity", (1 - map(p, 0.05, 0.17)).toFixed(3));
+      if (g.stacked) put(scrim, "transform", `translate3d(0, ${Math.min(0, ty - g.hty).toFixed(2)}px, 0)`);
+      else put(scrim, "opacity", (1 - easeInOut(map(p, 0.08, HERO_END))).toFixed(3));
+      for (const r of ink) {
+        if (!r.ends) continue;
+        const [a, b, c, d] = r.ends.map((pt) => pt[0] * s + tx);
+        put(r.row, "opacity", (r.intro * fit(a, b)).toFixed(3));
+        put(r.src, "opacity", fit(c, d).toFixed(3));
+      }
     }
 
     return {
@@ -133,29 +192,82 @@
         g.vh = vh; g.vw = vw; g.top = docTop(plate); g.height = plate.offsetHeight;
         g.cover = Math.max(vw / PLATE_W, vh / PLATE_H) * 1.02;
         const narrow = vw <= 760;
-        // Narrow screens frame only the number and the title of the new row; wide screens frame the whole row.
-        const a = mapPoint(h, narrow ? 16 : 0, NEW_ROW_MID);
-        const b = mapPoint(h, narrow ? PAGE_W * 0.56 : PAGE_W, NEW_ROW_MID);
-        const span = Math.hypot(b[0] - a[0], b[1] - a[1]);
-        g.zoom = Math.max(g.cover, Math.min(g.cover * 1.8, (vw * (narrow ? 0.92 : 0.8)) / span));
-        g.fx = (a[0] + b[0]) / 2; g.fy = (a[1] + b[1]) / 2;
-        // A portrait screen shows only a slice of the landscape plate, so start on the written page, not the plate centre.
-        const s0 = narrow ? mapPoint(h, PAGE_W * 0.4, PAGE_H * 0.42) : [PLATE_W / 2, PLATE_H / 2];
-        g.sx = s0[0]; g.sy = s0[1];
+        // Glyph extents of each row in plate pixels: number start, title end, source start, source end (at the text's mid-line).
+        ink.forEach((r, i) => {
+          const y = ROW_BOTTOM[i] - 30;
+          const isNew = i === ink.length - 1;
+          const tw = Math.min(640, textWidth(r.title, isNew ? full : r.title.textContent)) + (isNew ? 10 : 0);
+          const sw = Math.min(210, textWidth(r.src, r.src.textContent));
+          r.ends = [mapPoint(h, 22, y), mapPoint(h, 132 + tw, y), mapPoint(h, PAGE_W - 18 - sw, y), mapPoint(h, PAGE_W - 18, y)];
+        });
+        if (narrow) {
+          // Narrow screens end on the last five rows (0409-0413): every number and title of those rows fits the width.
+          const last = ink.slice(-5);
+          const x0 = Math.min(...last.map((r) => r.ends[0][0]));
+          const x1 = Math.max(...last.map((r) => r.ends[1][0]));
+          g.zoom = (vw - 40) / (x1 - x0);
+          g.fx = (x0 + x1) / 2;
+          g.fy = last.reduce((sum, r) => sum + r.ends[0][1] + r.ends[1][1], 0) / (2 * last.length);
+        } else {
+          // Wide screens frame the whole new row.
+          const a = mapPoint(h, 0, NEW_ROW_MID);
+          const b = mapPoint(h, PAGE_W, NEW_ROW_MID);
+          const span = Math.hypot(b[0] - a[0], b[1] - a[1]);
+          g.zoom = Math.max(g.cover, Math.min(g.cover * 1.8, (vw * 0.8) / span));
+          g.fx = (a[0] + b[0]) / 2; g.fy = (a[1] + b[1]) / 2;
+        }
+        // Landscape dolly starts from the plate centre (portrait screens use their own path, see pose()).
+        g.sx = PLATE_W / 2; g.sy = PLATE_H / 2;
+        // Hero framing. Landscape: the written page fills the right side beside the copy, the plate covers the height.
+        // Portrait: the whole page fits the width and the plate sits under the call to action.
+        const left = QUAD[0][0];
+        const right = QUAD[2][0];
+        g.hold = Math.max(0, action.offsetTop + action.offsetHeight + 24 - vh);
+        g.stacked = !(vw > 760 && vw > vh);
+        put(scrim, "opacity", "1");
+        put(scrim, "transform", "none");
+        if (!g.stacked) {
+          const range = document.createRange();
+          let textRight = 0;
+          for (const node of copy.querySelectorAll("h1, .ld-lede, .ld-hero__action > a")) {
+            range.selectNodeContents(node);
+            textRight = Math.max(textRight, range.getBoundingClientRect().right);
+          }
+          const pageLeft = Math.max(vw * 0.46, textRight + 48);
+          let s = vh / PLATE_H;
+          if (pageLeft + (PLATE_W - left) * s < vw) s = (vw - pageLeft) / (PLATE_W - left);
+          g.hs = s; g.htx = pageLeft - left * s;
+          const mid = (QUAD[1][1] + QUAD[3][1]) / 2;
+          g.hty = Math.min(0, Math.max(vh - PLATE_H * s, (72 + (vh - 72) / 2) - mid * s));
+          scrim.style.setProperty("--scrim-dir", "90deg");
+          scrim.style.setProperty("--scrim-a", `${Math.round(pageLeft - 150)}px`);
+          scrim.style.setProperty("--scrim-b", `${Math.round(pageLeft - 10)}px`);
+        } else {
+          const s = (vw - 20) / (right - left);
+          g.hs = s; g.htx = 10 - left * s; g.hty = vh - PLATE_H * s;
+          g.hcx = (vw / 2 - g.htx) / s; g.hcy = (vh / 2 - g.hty) / s;
+          const below = Math.max(action.offsetTop + action.offsetHeight + 8, g.hty);
+          scrim.style.setProperty("--scrim-dir", "180deg");
+          scrim.style.setProperty("--scrim-a", `${Math.round(below)}px`);
+          scrim.style.setProperty("--scrim-b", `${Math.round(below + 56)}px`);
+        }
         lastP = -1;
       },
       render(y, now) {
         let busy = false;
+        let introMoved = false;
         if (!settled) {
           const t = now - start;
-          rows.forEach((row, i) => { row.style.opacity = easeOut(map(t, 160 + i * 60, 760 + i * 60)).toFixed(3); });
+          ink.forEach((r, i) => { r.intro = easeOut(map(t, 160 + i * 60, 760 + i * 60)); });
+          introMoved = true;
           const n = Math.min(full.length, Math.max(0, Math.floor((t - typeAt) / charMs)));
           if (n !== typed) { typed = n; title.textContent = full.slice(0, n); }
           settled = t > done;
           busy = !settled;
         }
-        const p = reduced ? 1 : progressOf(g, y);
-        if (p !== lastP) { lastP = p; frame(p); }
+        // On a short screen the copy is taller than the stage: hold the scene until the call to action has scrolled into view.
+        const p = reduced ? 0 : clamp01((y - g.top - g.hold) / Math.max(1, g.height - g.vh - g.hold));
+        if (p !== lastP || introMoved) { lastP = p; frame(p); }
         if (reduced || y > g.vh * 1.5) return busy;
         const exit = clamp01(y / (g.vh * 0.9));
         if (exit !== lastExit) {
@@ -279,6 +391,7 @@
         // The card sinks into its slot with the scroll; each save lifts it once, like a card being filed.
         const lift = !reduced && t < 600 ? Math.sin(Math.PI * map(t, 0, 600)) * 10 : 0;
         put(card, "transform", `translate3d(0, ${(-(1 - drop) * 70 - lift).toFixed(2)}%, 0) rotate(${(-(1 - drop) * 3).toFixed(2)}deg)`);
+        put(card, "--sink", drop.toFixed(3));
         return busy;
       },
     };
