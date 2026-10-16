@@ -68,17 +68,17 @@
 
   function header(user) {
     const logo = element("img", { attributes: { src: "/assets/nod-logo.png", alt: "NOD" } });
-    const brand = element("a", { className: "brand", href: "/", ariaLabel: "NOD 홈" }, [logo]);
+    const brand = element("a", { className: "brand", href: "/", ariaLabel: "NOD home" }, [logo]);
     const siteHeader = element("header", { className: "site-header" }, [brand]);
 
     if (!user) return siteHeader;
 
     const avatar = element("span", { className: "account-avatar", text: initial(user.name), attributes: { "aria-hidden": "true" } });
     const details = element("span", { className: "account-details" }, [
-      element("span", { className: "account-name", text: user.name || user.email || "NOD 사용자" }),
+      element("span", { className: "account-name", text: user.name || user.email || "NOD user" }),
       element("span", { className: "account-email", text: user.email || "" }),
     ]);
-    const logout = element("button", { className: "icon-button", type: "button", ariaLabel: "로그아웃" }, [icon("logout", 20)]);
+    const logout = element("button", { className: "icon-button", type: "button", ariaLabel: "Sign out" }, [icon("logout", 20)]);
     logout.addEventListener("click", logoutUser);
     siteHeader.append(element("div", { className: "account" }, [avatar, details, logout]));
     return siteHeader;
@@ -106,18 +106,18 @@
     }
     app.replaceChildren(header(state.user));
 
-    const heading = element("h1", { className: "library-title", text: "저장한 링크" });
-    const subtitle = element("p", { className: "library-subtitle", id: "library-count", text: "링크를 불러오는 중입니다." });
+    const heading = element("h1", { className: "library-title", text: "Your links" });
+    const subtitle = element("p", { className: "library-subtitle", id: "library-count", text: "Loading your links…" });
     const searchInput = element("input", {
       className: "search-input",
       type: "search",
       name: "q",
       value: state.query,
       autocomplete: "off",
-      ariaLabel: "저장한 링크 검색",
+      ariaLabel: "Search your links",
       attributes: { "aria-describedby": "library-count", spellcheck: "false" },
     });
-    const searchButton = element("button", { className: "icon-button search-submit", type: "submit", ariaLabel: "검색" }, [icon("search", 20)]);
+    const searchButton = element("button", { className: "icon-button search-submit", type: "submit", ariaLabel: "Search" }, [icon("search", 20)]);
     const searchForm = element("form", { className: "search-form", role: "search" }, [searchInput, searchButton]);
     searchForm.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -135,16 +135,16 @@
     heading.id = "library-title";
 
     const extensionPanel = element("aside", { className: "extension-panel", attributes: { "aria-labelledby": "extension-title" } }, [
-      element("h2", { id: "extension-title", text: "Chrome에서 바로 저장" }),
-      element("p", { text: "NOD 확장 프로그램을 연결하면, 보고 있는 탭을 툴바 아이콘 한 번으로 저장할 수 있습니다." }),
+      element("h2", { id: "extension-title", text: "Save from Chrome" }),
+      element("p", { text: "Connect the NOD extension to save the tab you’re on with one click." }),
       element("ol", { className: "steps" }, [
-        step("1", "읽고 있는 아티클에서 Chrome 툴바의 NOD 아이콘을 누릅니다."),
-        step("2", "처음에는 Google 로그인과 확장 프로그램 연결을 완료합니다."),
-        step("3", "연결 후 원래 아티클이 저장됩니다. 다음부터는 한 번만 누르면 됩니다."),
+        step("1", "On any page, click the NOD icon in the Chrome toolbar."),
+        step("2", "The first time, sign in with Google and connect the extension."),
+        step("3", "The page is saved. From then on, it’s one click."),
       ]),
       element("div", { className: "panel-divider", attributes: { "aria-hidden": "true" } }),
-      element("p", { className: "revoke-copy", text: "다른 기기에서의 확장 프로그램 연결을 모두 끊을 수 있습니다." }),
-      element("button", { className: "text-button", type: "button", id: "revoke-extension", text: "모든 확장 프로그램 연결 해제" }),
+      element("p", { className: "revoke-copy", text: "You can disconnect the extension on every device at once." }),
+      element("button", { className: "text-button", type: "button", id: "revoke-extension", text: "Disconnect all extensions" }),
       element("p", { className: "revoke-status", id: "revoke-status", ariaLive: "polite" }),
     ]);
     extensionPanel.querySelector("#revoke-extension").addEventListener("click", revokeExtensionTokens);
@@ -169,27 +169,27 @@
     pagination.replaceChildren();
     list.replaceChildren();
     if (state.loading && state.articles.length === 0) {
-      setStatus("저장한 링크를 불러오는 중입니다.");
-      count.textContent = "링크를 불러오는 중입니다.";
+      setStatus("Loading your links…");
+      count.textContent = "Loading your links…";
       list.append(...[1, 2, 3].map(() => element("li", { className: "loading-line", attributes: { "aria-hidden": "true" } })));
       return;
     }
 
     if (errorMessage) {
       setStatus(errorMessage, true);
-      count.textContent = "링크를 불러오지 못했습니다.";
-      const retry = element("button", { className: "button secondary-button", type: "button", text: "다시 시도" });
+      count.textContent = "Couldn’t load your links.";
+      const retry = element("button", { className: "button secondary-button", type: "button", text: "Try again" });
       retry.addEventListener("click", () => loadArticles({ reset: true }));
       list.append(element("li", { className: "empty" }, [
         element("div", { className: "empty-symbol", attributes: { "aria-hidden": "true" } }, [icon("error")]),
-        element("h2", { text: "링크를 불러오지 못했어요" }),
-        element("p", { text: "잠시 후 다시 시도해 주세요." }),
+        element("h2", { text: "Couldn’t load your links" }),
+        element("p", { text: "Please try again in a moment." }),
         retry,
       ]));
       return;
     }
 
-    const label = state.query ? `“${state.query}” 검색 결과 ${state.articles.length}개` : `저장한 링크 ${state.articles.length}개`;
+    const label = state.query ? `${state.articles.length} ${state.articles.length === 1 ? "result" : "results"} for “${state.query}”` : `${state.articles.length} ${state.articles.length === 1 ? "link" : "links"}`;
     count.textContent = label;
     setStatus("");
 
@@ -197,15 +197,15 @@
       const searchEmpty = Boolean(state.query);
       list.append(element("li", { className: "empty" }, [
         element("div", { className: "empty-symbol", attributes: { "aria-hidden": "true" } }, [icon(searchEmpty ? "search_off" : "add")]),
-        element("h2", { text: searchEmpty ? "찾는 링크가 없어요" : "아직 저장한 링크가 없어요" }),
-        element("p", { text: searchEmpty ? "다른 검색어로 다시 찾아보세요." : "Chrome 툴바에서 NOD 아이콘을 눌러 첫 링크를 저장해 보세요." }),
+        element("h2", { text: searchEmpty ? "No links match" : "No links yet" }),
+        element("p", { text: searchEmpty ? "Try a different word." : "Click the NOD icon in the Chrome toolbar to save your first link." }),
       ]));
       return;
     }
 
     for (const article of state.articles) list.append(renderArticle(article));
     if (state.nextCursor) {
-      const more = element("button", { className: "button secondary-button load-more", type: "button", text: "더 보기", disabled: state.loading });
+      const more = element("button", { className: "button secondary-button load-more", type: "button", text: "Load more", disabled: state.loading });
       more.addEventListener("click", () => loadArticles());
       pagination.append(more);
     }
@@ -214,18 +214,18 @@
   function renderArticle(article) {
     const item = element("li", { className: "article" });
     const url = safeUrl(article.url);
-    const title = article.title || article.hostname || article.url || "제목 없는 링크";
+    const title = article.title || article.hostname || article.url || "Untitled link";
     const titleNode = url
       ? element("a", { className: "article-link", href: url, target: "_blank", rel: "noopener noreferrer", text: title })
       : element("span", { className: "article-link", text: title });
-    if (!url) titleNode.setAttribute("aria-label", "안전하지 않은 주소로 열 수 없는 링크");
+    if (!url) titleNode.setAttribute("aria-label", "This link can’t be opened because its address is unsafe");
 
     const metadata = element("p", { className: "article-meta" });
-    metadata.append(element("span", { text: article.hostname || hostnameFrom(url) || "알 수 없는 출처" }));
+    metadata.append(element("span", { text: article.hostname || hostnameFrom(url) || "Unknown source" }));
     metadata.append(element("span", { text: formatDate(article.createdAt) }));
     if (url) metadata.append(element("span", { className: "article-url", text: url }));
 
-    const deleteButton = element("button", { className: "delete-button", type: "button", ariaLabel: `“${title}” 삭제` }, [icon("delete", 20)]);
+    const deleteButton = element("button", { className: "delete-button", type: "button", ariaLabel: `Delete “${title}”` }, [icon("delete", 20)]);
     deleteButton.addEventListener("click", () => deleteArticle(article, deleteButton));
     item.append(titleNode, metadata, deleteButton);
     return item;
@@ -237,13 +237,13 @@
 
   function formatDate(value) {
     const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "저장한 날짜 없음";
-    return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "long", day: "numeric" }).format(date);
+    if (Number.isNaN(date.getTime())) return "No saved date";
+    return new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" }).format(date);
   }
 
   async function deleteArticle(article, button) {
-    const title = article.title || article.hostname || "이 링크";
-    if (!window.confirm(`“${title}” 링크를 삭제할까요?`)) return;
+    const title = article.title || article.hostname || "this link";
+    if (!window.confirm(`Delete “${title}”?`)) return;
     button.disabled = true;
     setStatus("");
     try {
@@ -252,10 +252,10 @@
       if (!response.ok) throw new Error("delete_failed");
       state.articles = state.articles.filter((item) => item.id !== article.id);
       renderArticleState();
-      setStatus("링크를 삭제했습니다.");
+      setStatus("Link deleted.");
     } catch {
       button.disabled = false;
-      setStatus("링크를 삭제하지 못했습니다. 다시 시도해 주세요.", true);
+      setStatus("Couldn’t delete the link. Please try again.", true);
     }
   }
 
@@ -301,7 +301,7 @@
     } catch (error) {
       if (error.name === "AbortError") return;
       state.loading = false;
-      renderArticleState("링크를 불러오지 못했습니다. 네트워크 상태를 확인해 주세요.");
+      renderArticleState("Couldn’t load your links. Check your connection.");
     } finally {
       if (state.searchController === controller) state.searchController = null;
     }
@@ -311,17 +311,17 @@
     const button = document.querySelector("#revoke-extension");
     const status = document.querySelector("#revoke-status");
     if (!button || !status) return;
-    if (!window.confirm("연결된 모든 Chrome 확장 프로그램을 해제할까요? 해당 확장 프로그램에서는 다시 로그인해야 합니다.")) return;
+    if (!window.confirm("Disconnect every connected Chrome extension? Each one will need to sign in again.")) return;
     button.disabled = true;
-    status.textContent = "연결을 해제하는 중입니다.";
+    status.textContent = "Disconnecting…";
     status.classList.remove("error");
     try {
       const response = await request("/api/extension-tokens/revoke", { method: "POST" });
       if (response.status === 401) return showUnauthenticated();
       if (!response.ok) throw new Error("revoke_failed");
-      status.textContent = "모든 확장 프로그램 연결을 해제했습니다.";
+      status.textContent = "All extensions are disconnected.";
     } catch {
-      status.textContent = "연결을 해제하지 못했습니다. 다시 시도해 주세요.";
+      status.textContent = "Couldn’t disconnect. Please try again.";
       status.classList.add("error");
     } finally {
       button.disabled = false;
@@ -333,7 +333,7 @@
       const response = await request("/api/logout", { method: "POST" });
       if (!response.ok && response.status !== 401) throw new Error("logout_failed");
     } catch {
-      setStatus("로그아웃하지 못했습니다. 연결 상태를 확인하고 다시 시도해 주세요.", true);
+      setStatus("Couldn’t sign out. Check your connection and try again.", true);
       return;
     }
     showUnauthenticated();
@@ -346,11 +346,11 @@
     state.nextCursor = null;
     state.loading = false;
     state.searchController?.abort();
-    renderLanding("로그인이 필요합니다. Google 계정으로 다시 시작해 주세요.");
+    renderLanding("Please sign in with Google to continue.");
   }
 
   async function boot() {
-    renderLanding("로그인 상태를 확인하는 중입니다.");
+    renderLanding("Checking your sign-in…");
     try {
       const response = await request("/api/me", { cache: "no-store" });
       if (response.status === 401) return renderLanding();
@@ -360,7 +360,7 @@
       renderLibraryShell();
       await loadArticles({ reset: true });
     } catch {
-      renderLanding("로그인 상태를 확인하지 못했습니다. 네트워크 상태를 확인해 주세요.");
+      renderLanding("Couldn’t check your sign-in. Check your connection.");
     }
   }
 

@@ -1,13 +1,18 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#FFFDFA" />
-    <meta name="description" content="NOD에 저장한 링크를 다시 찾으세요." />
+    <meta name="description" content="NOD gives every link you save a place. No summaries, no tags. Just the link, in the order you saved it." />
+    <meta property="og:title" content="NOD — Every link gets a place." />
+    <meta property="og:description" content="No summaries, no tags. Just the link, in the order you saved it." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nod-archive.com/" />
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/nod-favicon-32.png" />
-    <title>NOD — 저장한 링크</title>
+    <title>NOD — Every link gets a place.</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/landing.js" defer></script>
@@ -20,189 +25,120 @@
       <div class="nod-landing">
         <header class="ld-header">
           <div class="ld-wrap ld-header__row">
-            <a class="ld-brand" href="/" aria-label="NOD 홈"><img src="/assets/nod-logo.png" alt="NOD" width="480" height="120" /></a>
-            <a class="ld-cap ld-header__link" href="#start">시작하기</a>
+            <a class="ld-brand" href="/" aria-label="NOD home"><img src="/assets/nod-logo.png" alt="NOD" width="480" height="120" /></a>
+            <a class="ld-header__link" href="/auth/google">Sign in</a>
           </div>
         </header>
 
         <main>
           <section class="ld-hero" data-scene="hero" aria-labelledby="hero-title">
-            <div class="ld-sticky ld-hero__sticky">
-              <div class="ld-wrap ld-hero__top">
-                <div class="ld-hero__copy">
-                  <p class="ld-cap">NOD — 개인 링크 라이브러리</p>
-                  <h1 id="hero-title" class="ld-hero__title" data-words>요약은 필요 없습니다.<br />자리만 있으면 됩니다.</h1>
-                  <p class="ld-cap ld-hero__message" data-message hidden></p>
-                </div>
-                <a class="ld-cta" href="/auth/google">Google로 시작하기</a>
+            <div class="ld-wrap ld-hero__inner">
+              <p class="ld-cap">NOD · A ledger for links</p>
+              <h1 id="hero-title" class="ld-display" data-words>Every link gets a place.</h1>
+              <p class="ld-lede">No summaries. No tags. Just the link, in the order you saved it.</p>
+              <div class="ld-hero__action">
+                <a class="ld-cta" href="/auth/google" data-magnet><span>Start with Google</span><span class="ld-cta__arrow" aria-hidden="true">→</span></a>
+                <p class="ld-cap ld-hero__message" data-message role="status" hidden></p>
               </div>
+              <ol class="ld-ledger ld-hero__ledger" data-ledger aria-label="A sample ledger">
+                <li class="ld-row ld-row--new" data-row data-type="The page you’re reading"><span class="ld-row__no">0413</span><span class="ld-row__title"><span class="ld-mark" aria-hidden="true"></span><span data-title>The page you’re reading</span></span><span class="ld-row__src">nod-archive.com</span><span class="ld-row__time">just now</span></li>
+                <li class="ld-row" data-row><span class="ld-row__no">0412</span><span class="ld-row__title">How to write a README people read</span><span class="ld-row__src">github.com</span><span class="ld-row__time">2h ago</span></li>
+                <li class="ld-row" data-row><span class="ld-row__no">0411</span><span class="ld-row__title">position: sticky</span><span class="ld-row__src">developer.mozilla.org</span><span class="ld-row__time">yesterday</span></li>
+                <li class="ld-row" data-row><span class="ld-row__no">0410</span><span class="ld-row__title">Optimize Largest Contentful Paint</span><span class="ld-row__src">web.dev</span><span class="ld-row__time">Oct 12</span></li>
+                <li class="ld-row" data-row><span class="ld-row__no">0409</span><span class="ld-row__title">Get started with D1</span><span class="ld-row__src">developers.cloudflare.com</span><span class="ld-row__time">Oct 11</span></li>
+              </ol>
+            </div>
+          </section>
 
-              <div class="ld-wrap ld-hero__stage">
-                <div class="ld-stage" data-stage>
-                  <p class="ld-cap ld-stage__cap">
-                    <span class="ld-stage__label" data-label>다른 앱이 링크 하나에 붙이는 것</span>
-                    <span class="ld-stage__count" data-count>12</span>
-                  </p>
-                  <div class="ld-card" data-card>
-                    <span class="ld-card__hair" data-hair aria-hidden="true"></span>
-                    <svg class="ld-card__doodle" data-doodle viewBox="0 0 640 308" preserveAspectRatio="none" aria-hidden="true">
-                      <path d="M 8 6 C 200 2, 420 10, 632 6 C 640 90, 636 200, 632 300 C 420 306, 200 298, 8 302 C 4 200, 6 90, 8 6 Z" />
-                    </svg>
-                    <span class="ld-cap ld-card__saved" data-saved>저장됨</span>
-                    <dl class="ld-fields">
-                      <div class="ld-field"><dt class="ld-cap">URL</dt><dd class="ld-field__url">https://developer.chrome.com/docs/extensions/develop/migrate</dd></div>
-                      <div class="ld-field"><dt class="ld-cap">제목</dt><dd class="ld-field__title">Manifest V3 migration guide</dd></div>
-                      <div class="ld-field"><dt class="ld-cap">출처</dt><dd>developer.chrome.com</dd></div>
-                      <div class="ld-field"><dt class="ld-cap">저장 시각</dt><dd class="ld-num">2026년 9월 13일 08:14</dd></div>
-                    </dl>
-                    <div class="ld-clutter" aria-hidden="true">
-                      <div class="ld-piece ld-piece--ai" data-piece="heavy">
-                        <span class="ld-cap">AI 요약</span>
-                        <span>Manifest V3는 백그라운드 페이지를 서비스 워커로 대체하며, 원격 코드 실행을 금지합니다.</span>
-                        <span>마이그레이션 기한은 2024년 6월로 예정되어…</span>
-                      </div>
-                      <div class="ld-piece ld-piece--rec" data-piece="heavy">
-                        <span class="ld-cap">추천 아티클</span>
-                        <span>Service workers in extensions</span>
-                        <span>Migrating from background pages</span>
-                      </div>
-                      <div class="ld-piece ld-piece--note" data-piece="heavy">메모: 나중에 팀에 공유할 것</div>
-                      <div class="ld-piece ld-piece--hl" data-piece="heavy"><mark>“서비스 워커는 필요할 때만 실행된다”</mark></div>
-                      <div class="ld-piece ld-piece--tags ld-piece--bare" data-piece="light">
-                        <span class="ld-chip" data-chip>#chrome</span><span class="ld-chip" data-chip>#mv3</span><span class="ld-chip" data-chip>#migration</span><span class="ld-chip" data-chip>#later</span>
-                      </div>
-                      <div class="ld-piece ld-piece--stars" data-piece="light">★★★★☆</div>
-                      <div class="ld-piece ld-piece--share ld-piece--bare" data-piece="light">
-                        <span class="ld-chip" data-chip>공유</span><span class="ld-chip" data-chip>메일</span><span class="ld-chip" data-chip>복사</span>
-                      </div>
-                      <div class="ld-piece ld-piece--author" data-piece="light">작성자 · Chrome Developers</div>
-                      <div class="ld-piece ld-piece--unread ld-piece--bare" data-piece="status"><span class="ld-chip ld-chip--strong">읽지 않음 47</span></div>
-                      <div class="ld-piece ld-piece--prog" data-piece="status"><span>읽음 34%</span><span class="ld-bar"><span></span></span></div>
-                      <div class="ld-piece ld-piece--time" data-piece="status">읽는 데 12분</div>
-                      <div class="ld-piece ld-piece--folder" data-piece="status">Inbox / Tech / Later</div>
-                    </div>
+          <section class="ld-scene ld-save" data-scene="save" aria-labelledby="save-title">
+            <div class="ld-sticky">
+              <div class="ld-wrap ld-split">
+                <div class="ld-split__copy">
+                  <p class="ld-cap">01 — Save</p>
+                  <h2 id="save-title" class="ld-h2">One click.<br />One line.</h2>
+                  <p class="ld-body">The extension sends the URL and the title. That’s all.</p>
+                  <p class="ld-counter" aria-hidden="true"><span class="ld-counter__no">No.</span><span data-counter>0413</span></p>
+                </div>
+                <div class="ld-split__stage">
+                  <div class="ld-browser">
+                    <div class="ld-browser__bar" aria-hidden="true"><span class="ld-dot"></span><span class="ld-dot"></span><span class="ld-dot"></span><span class="ld-browser__url">your-next-read.com/article</span></div>
+                    <button class="ld-savekey" type="button" data-savekey aria-label="Save a sample link to the ledger"><span class="ld-savekey__face">N</span></button>
+                    <span class="ld-cap ld-savekey__hint" aria-hidden="true">Try it</span>
                   </div>
-                  <p class="ld-cap ld-stage__final" data-final>URL · 제목 · 출처 · 저장 시각 — 이 넷이 전부입니다</p>
+                  <div class="ld-ledger ld-stack" data-stack aria-hidden="true"></div>
+                  <p class="sr-only" data-save-live aria-live="polite"></p>
                 </div>
               </div>
             </div>
           </section>
 
-          <section class="ld-section ld-not" data-scene="not" aria-labelledby="not-title">
-            <div class="ld-wrap ld-grid">
-              <div class="ld-not__list">
-                <p id="not-title" class="ld-cap">하지 않는 것</p>
-                <ul>
-                  <li><span class="ld-not__item" data-strike>요약<span class="ld-strike" aria-hidden="true"></span></span></li>
-                  <li><span class="ld-not__item" data-strike>태그<span class="ld-strike" aria-hidden="true"></span></span></li>
-                  <li><span class="ld-not__item" data-strike>폴더<span class="ld-strike" aria-hidden="true"></span></span></li>
-                  <li><span class="ld-not__item" data-strike>추천<span class="ld-strike" aria-hidden="true"></span></span></li>
-                  <li><span class="ld-not__item" data-strike>읽음 상태<span class="ld-strike" aria-hidden="true"></span></span></li>
-                  <li><span class="ld-not__item" data-strike>하이라이트<span class="ld-strike" aria-hidden="true"></span></span></li>
-                  <li><span class="ld-not__item" data-strike>읽는 시간<span class="ld-strike" aria-hidden="true"></span></span></li>
-                </ul>
-              </div>
-              <div class="ld-not__keep">
-                <p class="ld-cap">남는 것</p>
-                <div class="ld-stat" data-rise>
-                  <p class="ld-stat__num">4</p>
-                  <p class="ld-stat__label">개 필드</p>
-                  <p class="ld-body">URL, 제목, 출처, 저장 시각. 그 외의 데이터는 서버에 <span class="ld-nowrap">만들어지지 않습니다.</span></p>
+          <section class="ld-scene ld-cols" data-scene="cols" aria-labelledby="cols-title">
+            <div class="ld-sticky">
+              <div class="ld-wrap ld-cols__inner">
+                <p class="ld-cap">02 — Keep</p>
+                <h2 id="cols-title" class="ld-h2">Four columns.<br />Nothing else.</h2>
+                <div class="ld-sheet" data-sheet aria-hidden="true">
+                  <div class="ld-sheet__group ld-sheet__keep" data-keep>
+                    <div class="ld-col ld-col--no"><span class="ld-col__head">No.</span><span>0413</span><span>0412</span></div>
+                    <div class="ld-col ld-col--wide"><span class="ld-col__head">Title</span><span>The page you’re reading</span><span>How to write a README</span></div>
+                    <div class="ld-col ld-col--src"><span class="ld-col__head">Source</span><span>nod-archive.com</span><span>github.com</span></div>
+                    <div class="ld-col"><span class="ld-col__head">Saved</span><span>just now</span><span>2h ago</span></div>
+                  </div>
+                  <div class="ld-sheet__group ld-sheet__drop" data-drop>
+                    <div class="ld-col" data-dropcol><span class="ld-col__head">Summary</span><span>An AI summary…</span><span>An AI summary…</span></div>
+                    <div class="ld-col" data-dropcol><span class="ld-col__head">Tags</span><span>#later #read</span><span>#docs</span></div>
+                    <div class="ld-col" data-dropcol><span class="ld-col__head">Folder</span><span>Inbox / Tech</span><span>Reading</span></div>
+                    <div class="ld-col" data-dropcol><span class="ld-col__head">Rating</span><span>★★★★☆</span><span>★★★☆☆</span></div>
+                  </div>
                 </div>
-                <div class="ld-stat ld-stat--rule" data-rise>
-                  <p class="ld-stat__num">0</p>
-                  <p class="ld-stat__label">바이트의 본문</p>
-                  <p class="ld-body">페이지 본문을 수집하지 않습니다. 확장 프로그램이 보내는 것은 현재 탭의 URL과 제목뿐입니다.</p>
+                <p class="ld-body ld-cols__after" data-after>We never read the page. We just keep its place.</p>
+                <p class="sr-only">NOD keeps four fields per link: number, title, source, and saved time. It has no summaries, tags, folders, or ratings.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ld-scene ld-find" data-scene="find" aria-labelledby="find-title">
+            <div class="ld-sticky">
+              <div class="ld-wrap ld-split">
+                <div class="ld-split__copy">
+                  <p class="ld-cap">03 — Find</p>
+                  <h2 id="find-title" class="ld-h2">Find it by what you remember.</h2>
+                  <p class="ld-body">Search titles and sources. Open it, or let it go.</p>
+                </div>
+                <div class="ld-split__stage">
+                  <label class="ld-search">
+                    <span class="sr-only">Search the sample ledger</span>
+                    <span class="ld-search__icon" aria-hidden="true">⌕</span>
+                    <input type="search" data-search autocomplete="off" spellcheck="false" placeholder="Search" aria-describedby="find-count" />
+                    <span class="ld-cap ld-search__count" id="find-count" data-count>6 links</span>
+                  </label>
+                  <ol class="ld-ledger ld-results" data-results aria-hidden="true">
+                    <li class="ld-row" data-row><span class="ld-row__no">0388</span><span class="ld-row__title">Design systems, explained</span><span class="ld-row__src">figma.com</span></li>
+                    <li class="ld-row" data-row><span class="ld-row__no">0371</span><span class="ld-row__title">Sourdough starter, day one</span><span class="ld-row__src">seriouseats.com</span></li>
+                    <li class="ld-row" data-row><span class="ld-row__no">0302</span><span class="ld-row__title">A design review checklist</span><span class="ld-row__src">medium.com</span></li>
+                    <li class="ld-row" data-row><span class="ld-row__no">0277</span><span class="ld-row__title">Rail passes for a week in Japan</span><span class="ld-row__src">japan-guide.com</span></li>
+                    <li class="ld-row" data-row><span class="ld-row__no">0215</span><span class="ld-row__title">Why we design in public</span><span class="ld-row__src">linear.app</span></li>
+                    <li class="ld-row" data-row><span class="ld-row__no">0190</span><span class="ld-row__title">Postgres indexing basics</span><span class="ld-row__src">postgresql.org</span></li>
+                  </ol>
                 </div>
               </div>
             </div>
           </section>
 
-          <section class="ld-timeline" data-scene="timeline" aria-labelledby="timeline-title">
-            <div class="ld-sticky ld-timeline__sticky">
-              <div class="ld-wrap ld-timeline__head">
-                <p class="ld-cap">저장한 순서</p>
-                <h2 id="timeline-title" class="ld-h2">저장한 순간이 곧 자리입니다.</h2>
-                <p class="ld-body ld-timeline__lede">폴더도 태그도 고르지 않습니다.<br /> 링크는 저장한 시각 순서대로 한&nbsp;줄에&nbsp;놓입니다.</p>
-                <span class="ld-rail" aria-hidden="true"><span class="ld-rail__fill" data-rail></span></span>
-              </div>
-              <div class="ld-timeline__viewport">
-                <ol class="ld-track" data-track>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-02T08:14">9월 2일 08:14</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">developer.mozilla.org</span><span class="ld-slot__title">position: sticky — CSS</span><span class="ld-slot__url">https://developer.mozilla.org/docs/Web/CSS/position</span></div></div>
-                  </li>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-04T22:41">9월 4일 22:41</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">web.dev</span><span class="ld-slot__title">Largest Contentful Paint 최적화하기</span><span class="ld-slot__url">https://web.dev/articles/optimize-lcp</span></div></div>
-                  </li>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-07T13:05">9월 7일 13:05</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">github.com</span><span class="ld-slot__title">Lenis 1.3 릴리스 노트</span><span class="ld-slot__url">https://github.com/darkroomengineering/lenis</span></div></div>
-                  </li>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-09T19:20">9월 9일 19:20</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">developers.cloudflare.com</span><span class="ld-slot__title">Cloudflare D1: 서버리스 SQL 데이터베이스 시작하기</span><span class="ld-slot__url">https://developers.cloudflare.com/d1/get-started/</span></div></div>
-                  </li>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-10T07:52">9월 10일 07:52</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">web.dev</span><span class="ld-slot__title">브라우저 확장 프로그램으로 읽을 페이지를 저장하는 가장 단순한 방법</span><span class="ld-slot__url">https://web.dev/articles/save-for-later</span></div></div>
-                  </li>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-12T23:58">9월 12일 23:58</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">velog.io</span><span class="ld-slot__title">IntersectionObserver로 화면 밖 계산 멈추기</span><span class="ld-slot__url">https://velog.io/@nod/intersection-observer</span></div></div>
-                  </li>
-                  <li class="ld-slot" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><time class="ld-cap" datetime="2026-09-13T08:14">9월 13일 08:14</time></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-cap">developer.chrome.com</span><span class="ld-slot__title">Manifest V3 migration guide</span><span class="ld-slot__url">https://developer.chrome.com/docs/extensions/develop/migrate</span></div></div>
-                  </li>
-                  <li class="ld-slot ld-slot--next" data-slot>
-                    <p class="ld-slot__mark" data-mark><span class="ld-slot__tick"></span><span class="ld-cap">다음 자리</span></p>
-                    <div class="ld-slot__frame" data-frame><div class="ld-slot__link" data-link><span class="ld-slot__title">다음에 저장할 링크</span><span class="ld-slot__url">확장 프로그램 버튼을 누르면 여기에 놓입니다.</span></div></div>
-                  </li>
-                </ol>
-              </div>
-            </div>
-          </section>
-
-          <section class="ld-section ld-product" aria-labelledby="product-title">
-            <div class="ld-wrap ld-grid">
-              <div class="ld-product__copy">
-                <p id="product-title" class="ld-cap">화면</p>
-                <h2 class="ld-h2">목록, 검색, 열기, 삭제.<br />화면도 여기서 끝납니다.</h2>
-              </div>
-              <div class="ld-crop" inert>
-                <div class="ld-crop__head"><span class="ld-cap">저장한 링크</span><span class="ld-cap ld-crop__count">3</span></div>
-                <div class="ld-search">
-                  <span class="material-symbols-outlined" aria-hidden="true">search</span>
-                  <span class="ld-search__placeholder">제목이나 출처로 검색</span>
-                  <span class="material-symbols-outlined ld-search__go" aria-hidden="true">arrow_forward</span>
-                </div>
-                <ul class="ld-rows">
-                  <li class="ld-row"><div class="ld-row__main"><span class="ld-row__title">Manifest V3 migration guide</span><p class="ld-row__meta"><b>developer.chrome.com</b><span>2026년 9월 13일</span></p><span class="ld-row__url">https://developer.chrome.com/docs/extensions/develop/migrate</span></div><span class="material-symbols-outlined ld-row__icon" aria-hidden="true">delete</span></li>
-                  <li class="ld-row"><div class="ld-row__main"><span class="ld-row__title">Cloudflare D1: 서버리스 SQL 데이터베이스 시작하기</span><p class="ld-row__meta"><b>developers.cloudflare.com</b><span>2026년 9월 12일</span></p><span class="ld-row__url">https://developers.cloudflare.com/d1/get-started/</span></div><span class="material-symbols-outlined ld-row__icon" aria-hidden="true">delete</span></li>
-                  <li class="ld-row"><div class="ld-row__main"><span class="ld-row__title">브라우저 확장 프로그램으로 읽을 페이지를 저장하는 가장 단순한 방법</span><p class="ld-row__meta"><b>web.dev</b><span>2026년 9월 10일</span></p><span class="ld-row__url">https://web.dev/articles/save-for-later</span></div><span class="material-symbols-outlined ld-row__icon" aria-hidden="true">delete</span></li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section id="start" class="ld-section ld-closing" data-scene="closing" aria-labelledby="close-title">
-            <div class="ld-wrap ld-grid ld-closing__grid">
-              <h2 id="close-title" class="ld-closing__title" data-words>읽고 싶은 순간을<br />놓치지 마세요.</h2>
-              <div class="ld-closing__action">
-                <a class="ld-cta ld-cta--doodle" href="/auth/google">Google로 시작하기</a>
-                <p class="ld-small">Google 계정으로 로그인합니다. Chrome 확장 프로그램은 배포 후 연결됩니다.</p>
-              </div>
+          <section id="start" class="ld-closing" data-scene="closing" aria-labelledby="close-title">
+            <div class="ld-wrap ld-closing__inner">
+              <h2 id="close-title" class="ld-display ld-closing__title"><span class="ld-closing__no">No. 0001</span><span data-words>is yours.</span></h2>
+              <a class="ld-cta ld-cta--doodle" href="/auth/google" data-magnet><span>Start with Google</span><span class="ld-cta__arrow" aria-hidden="true">→</span></a>
+              <p class="ld-small">Sign in with Google, then add the Chrome extension.</p>
             </div>
           </section>
         </main>
 
         <footer class="ld-footer">
           <div class="ld-wrap ld-footer__row">
-            <a class="ld-brand ld-brand--small" href="/" aria-label="NOD 홈"><img src="/assets/nod-logo.png" alt="NOD" width="480" height="120" loading="lazy" /></a>
-            <nav class="ld-footer__nav" aria-label="바닥글">
-              <a class="ld-cap" href="https://github.com/jidohyun/NOD">GitHub</a>
+            <a class="ld-brand ld-brand--small" href="/" aria-label="NOD home"><img src="/assets/nod-logo.png" alt="NOD" width="480" height="120" loading="lazy" /></a>
+            <nav class="ld-footer__nav" aria-label="Footer">
+              <a href="https://github.com/jidohyun/NOD">GitHub</a>
             </nav>
             <span class="ld-cap">© 2026 NOD</span>
           </div>
