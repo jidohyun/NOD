@@ -96,6 +96,8 @@
   const ROW_FR = [89.3, 95.9, 99.6, 100.5, 101, 101.4, 101.4, 103, 102.5, 101.8, 100.8, 103];
   const ROW_BOTTOM = (() => { const total = ROW_FR.reduce((a, b) => a + b, 0); let acc = 0; return ROW_FR.map((f) => (acc += f) / total * PAGE_H); })();
   const HERO_END = 0.2;
+  // Portrait screens reach a cover framing (the photo fills the stage under the header) by this progress.
+  const STACK_COVER = 0.25;
   const lerp = (a, b, t) => a + (b - a) * t;
 
   function heroScene(el, reduced, start) {
@@ -105,6 +107,10 @@
     const action = copy.querySelector(".ld-hero__action");
     const scrim = el.querySelector("[data-scrim]");
     const cam = el.querySelector("[data-cam]");
+    const inkMask = el.querySelector("[data-ink-mask]");
+    const inkCam = el.querySelector("[data-cam-ink]");
+    const stage = el.querySelector(".ld-plate__stage");
+    const header = document.querySelector(".ld-header");
     const title = el.querySelector("[data-title]");
     const mark = el.querySelector("[data-hero-mark]");
     const full = title.textContent;
@@ -124,7 +130,7 @@
     const typeAt = 700;
     const charMs = 34;
     const done = typeAt + full.length * charMs + 120;
-    const g = { vh: 1, vw: 1, top: 0, height: 1, cover: 1, zoom: 1, sx: PLATE_W / 2, sy: PLATE_H / 2, fx: PLATE_W / 2, fy: PLATE_H / 2, hs: 1, htx: 0, hty: 0 };
+    const g = { vh: 1, vw: 1, top: 0, height: 1, cover: 1, zoom: 1, sx: PLATE_W / 2, sy: PLATE_H / 2, fx: PLATE_W / 2, fy: PLATE_H / 2, hs: 1, htx: 0, hty: 0, hb: 0, sc: 1, se: 1, k0: 1 };
     let typed = -1;
     let lastExit = -1;
     let lastP = -1;
@@ -149,15 +155,16 @@
     // p HERO_END..0.8: dolly toward row 0413 and stop where the row fits the screen.
     function pose(p) {
       if (g.stacked) {
-        // Portrait: zoom straight from the whole page to row 0413. Until the plate is taller than the screen it stays on
-        // the bottom edge (the scrim follows its top edge), so the page never has to be cropped to cover the stage.
+        // Portrait: from the whole page under the copy, zoom to the cover scale by STACK_COVER, then dolly to row 0413.
+        // Until the plate is taller than the stage below the header it stays on the bottom edge (the scrim follows its
+        // top edge); from STACK_COVER on it covers everything below the header. The edge mask fades the rows instead.
+        const s = p < STACK_COVER ? lerp(g.hs, g.sc, easeInOut(p / STACK_COVER)) : lerp(g.sc, g.se, easeInOut(map(p, STACK_COVER, 0.8)));
         const k = easeInOut(map(p, 0, 0.8));
-        const s = lerp(g.hs, g.zoom, k);
         const cx = lerp(g.hcx, g.fx, k);
         const cy = lerp(g.hcy, g.fy, k);
         const tx = Math.min(0, Math.max(g.vw - PLATE_W * s, g.vw / 2 - cx * s));
         const low = g.vh - PLATE_H * s;
-        const ty = low >= 0 ? low : Math.min(0, Math.max(low, g.vh / 2 - cy * s));
+        const ty = low >= g.hb ? low : Math.min(g.hb, Math.max(low, (g.hb + g.vh) / 2 - cy * s));
         return [s, tx, ty];
       }
       const [bs, btx, bty] = clampedPose(g.cover, g.sx, g.sy);
@@ -174,16 +181,32 @@
 
     function frame(p) {
       const [s, tx, ty] = pose(p);
-      put(cam, "transform", `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${s.toFixed(4)})`);
+      const camT = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${s.toFixed(4)})`;
+      put(cam, "transform", camT);
       put(mark, "--mark", reduced ? "1" : easeOut(map(p, 0.55, 0.86)).toFixed(4));
       put(copy, "opacity", (1 - map(p, 0.05, 0.17)).toFixed(3));
-      if (g.stacked) put(scrim, "transform", `translate3d(0, ${Math.min(0, ty - g.hty).toFixed(2)}px, 0)`);
-      else put(scrim, "opacity", (1 - easeInOut(map(p, 0.08, HERO_END))).toFixed(3));
-      for (const r of ink) {
-        if (!r.ends) continue;
-        const [a, b, c, d] = r.ends.map((pt) => pt[0] * s + tx);
-        put(r.row, "opacity", (r.intro * fit(a, b)).toFixed(3));
-        put(r.src, "opacity", fit(c, d).toFixed(3));
+      if (g.stacked) {
+        // The edge mask starts stretched past the screen edges (the first screen shows every row whole) and settles on
+        // the edges before any glyph gets there; the ink camera undoes the stretch, so the rows stay on the paper.
+        const settle = map(p, 0, 0.03);
+        const m = settle === 1 ? 1 : lerp(g.k0, 1, easeOut(settle));
+        const c = g.vw / 2;
+        put(inkMask, "transform", m === 1 ? "none" : `scaleX(${m.toFixed(4)})`);
+        put(inkCam, "transform", m === 1 ? camT : `translate3d(${(c + (tx - c) / m).toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${(s / m).toFixed(4)}, ${s.toFixed(4)})`);
+        const wash = (1 - easeInOut(map(p, 0.08, STACK_COVER))).toFixed(3);
+        put(scrim, "transform", `translate3d(0, ${Math.min(0, ty - g.hty).toFixed(2)}px, 0)`);
+        put(scrim, "opacity", wash);
+        put(stage, "--wash", wash);
+        for (const r of ink) put(r.row, "opacity", r.intro.toFixed(3));
+      } else {
+        put(inkCam, "transform", camT);
+        put(scrim, "opacity", (1 - easeInOut(map(p, 0.08, HERO_END))).toFixed(3));
+        for (const r of ink) {
+          if (!r.ends) continue;
+          const [a, b, c, d] = r.ends.map((pt) => pt[0] * s + tx);
+          put(r.row, "opacity", (r.intro * fit(a, b)).toFixed(3));
+          put(r.src, "opacity", fit(c, d).toFixed(3));
+        }
       }
     }
 
@@ -200,14 +223,13 @@
           const sw = Math.min(210, textWidth(r.src, r.src.textContent));
           r.ends = [mapPoint(h, 22, y), mapPoint(h, 132 + tw, y), mapPoint(h, PAGE_W - 18 - sw, y), mapPoint(h, PAGE_W - 18, y)];
         });
+        const edge = parseFloat(getComputedStyle(inkMask).getPropertyValue("--edge-b")) || 32;
         if (narrow) {
-          // Narrow screens end on the last five rows (0409-0413): every number and title of those rows fits the width.
-          const last = ink.slice(-5);
-          const x0 = Math.min(...last.map((r) => r.ends[0][0]));
-          const x1 = Math.max(...last.map((r) => r.ends[1][0]));
-          g.zoom = (vw - 40) / (x1 - x0);
-          g.fx = (x0 + x1) / 2;
-          g.fy = last.reduce((sum, r) => sum + r.ends[0][1] + r.ends[1][1], 0) / (2 * last.length);
+          // Narrow screens end on row 0413: its number and title fit between the faded edges.
+          const [no, end] = ink[ink.length - 1].ends;
+          g.zoom = (vw - 2 * (edge + 6)) / (end[0] - no[0]);
+          g.fx = (no[0] + end[0]) / 2;
+          g.fy = (no[1] + end[1]) / 2;
         } else {
           // Wide screens frame the whole new row.
           const a = mapPoint(h, 0, NEW_ROW_MID);
@@ -224,8 +246,12 @@
         const right = QUAD[2][0];
         g.hold = Math.max(0, action.offsetTop + action.offsetHeight + 24 - vh);
         g.stacked = !(vw > 760 && vw > vh);
+        g.hb = header ? header.offsetHeight : 0;
         put(scrim, "opacity", "1");
         put(scrim, "transform", "none");
+        put(stage, "--wash", "1");
+        put(inkMask, "transform", "none");
+        inkMask.classList.toggle("ld-plate__ink--edge", g.stacked);
         if (!g.stacked) {
           const range = document.createRange();
           let textRight = 0;
@@ -245,7 +271,15 @@
         } else {
           const s = (vw - 20) / (right - left);
           g.hs = s; g.htx = 10 - left * s; g.hty = vh - PLATE_H * s;
-          g.hcx = (vw / 2 - g.htx) / s; g.hcy = (vh / 2 - g.hty) / s;
+          g.hcx = (vw / 2 - g.htx) / s; g.hcy = ((g.hb + vh) / 2 - g.hty) / s;
+          // Cover scale: the plate fills the width and the stage below the header. The dolly never ends below it.
+          g.sc = Math.max(vw / PLATE_W, (vh - g.hb) / PLATE_H);
+          g.se = Math.max(g.sc, g.zoom);
+          // Mask stretch for the first screen: its fade ends 4px before the glyph nearest a screen edge.
+          let near = vw / 2;
+          for (const r of ink) for (const pt of r.ends) near = Math.min(near, pt[0] * s + g.htx, vw - (pt[0] * s + g.htx));
+          g.k0 = Math.max(1, (vw / 2 - (near - 4)) / (vw / 2 - edge));
+          ink.forEach((r) => put(r.src, "opacity", "1"));
           const below = Math.max(action.offsetTop + action.offsetHeight + 8, g.hty);
           scrim.style.setProperty("--scrim-dir", "180deg");
           scrim.style.setProperty("--scrim-a", `${Math.round(below)}px`);

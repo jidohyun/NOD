@@ -109,12 +109,17 @@ html.lenis, html.lenis body { height: auto; }
 .ld-hero__message { color: var(--ld-ink); }
 
 /* Hero plate: one generated text-free ledger photo (assets/generated/PROMPTS.md). Real HTML rows sit on its ruled page through a
-   homography (landing.js), inside the same camera layer, so the text stays on the paper while the camera dollies in. */
+   homography (landing.js), in a camera layer with the same pose, so the text stays on the paper while the camera dollies in. */
 .ld-plate { position: relative; height: 270vh; }
 .ld-plate__stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: var(--surface-page); }
-.ld-plate__stage::before { content: ""; position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: 16vh; background: linear-gradient(var(--surface-page), transparent); pointer-events: none; }
+.ld-plate__stage::before { content: ""; position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: 16vh; background: linear-gradient(var(--surface-page), transparent); pointer-events: none; opacity: var(--wash, 1); }
 .ld-plate__stage::after { content: ""; position: absolute; z-index: 1; inset: 0; background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(20, 12, 6, 0.4)); pointer-events: none; }
 .ld-plate__cam { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; transform-origin: 0 0; will-change: transform; background: center / cover no-repeat url("data:image/webp;base64,UklGRgABAABXRUJQVlA4IPQAAABQBgCdASowACAAPu1srlCppiQiqrgKATAdiWMAr4at0D56XrXIXxGEM1JTVwDpJPScKAuuWnyi3GMOSADN/IYKCogHjc0PBkA4Bc4bkPw6Zdep4RpmD6LPtcUn+D17HEeuxWLIRuKGmSNoX7YQYOYfyUnLTv4TUx//4G8jPbprzRck5XnCOJjAT1SL9DcYlXncNFaJX4NMsFWrkOwmneLLxq7mtp5XYG5soGi9yn0/jF8UTpVeltbWEpwvKi/6PPRs+mu4m2tHxhci6aOFFy7LUOVMlwABTMkAokdtJySAoooNsDL0jI3GlVCmys56OK6l5hQA"); }
+/* The rows ride a second camera layer with the same pose, so portrait screens can fade them at the screen edges with a
+   screen-space mask while the photo underneath still fills the stage. The layer multiplies onto the photo like ink. */
+.ld-plate__ink { position: absolute; inset: 0; mix-blend-mode: multiply; transform-origin: 50% 50%; pointer-events: none; will-change: transform; --edge-a: 2px; --edge-b: 32px; }
+.ld-plate__ink--edge { -webkit-mask-image: linear-gradient(90deg, transparent var(--edge-a), #000 var(--edge-b), #000 calc(100% - var(--edge-b)), transparent calc(100% - var(--edge-a))); mask-image: linear-gradient(90deg, transparent var(--edge-a), #000 var(--edge-b), #000 calc(100% - var(--edge-b)), transparent calc(100% - var(--edge-a))); }
+.ld-plate__inkcam { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; transform-origin: 0 0; will-change: transform; }
 .ld-plate__cam picture, .ld-plate__img { position: absolute; inset: 0; display: block; width: 1536px; height: 1024px; }
 /* Cream wash behind the hero copy: left-to-right on wide screens, top-to-bottom on narrow ones (stops set on resize). */
 .ld-plate__scrim { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: opacity; background: linear-gradient(var(--scrim-dir, 90deg), var(--surface-page) 0, var(--surface-page) var(--scrim-a, 38%), color-mix(in srgb, var(--surface-page) 0%, transparent) var(--scrim-b, 46%)); }
@@ -122,7 +127,6 @@ html.lenis, html.lenis body { height: auto; }
 .ld-page {
   position: absolute; left: 0; top: 0; width: 1000px; height: 1200px; transform-origin: 0 0;
   display: grid; grid-template-rows: 89.3fr 95.9fr 99.6fr 100.5fr 101fr 101.4fr 101.4fr 103fr 102.5fr 101.8fr 100.8fr 103fr;
-  mix-blend-mode: multiply;
 }
 .ld-entry__src { will-change: opacity; }
 .ld-entry { display: grid; grid-template-columns: 132px minmax(0, 1fr) 210px; align-items: end; padding: 0 18px 14px 0; color: rgba(26, 22, 18, 0.88); }
@@ -262,7 +266,7 @@ html.lenis, html.lenis body { height: auto; }
   .ld-save, .ld-cols, .ld-find, .ld-plate { height: auto; }
   .ld-plate__stage { position: relative; }
   .ld-plate { min-height: 100dvh; }
-  .ld-plate__cam, .ld-drawer__card, .ld-hero__inner, .ld-plate__scrim, .ld-entry__src { will-change: auto; }
+  .ld-plate__cam, .ld-plate__ink, .ld-plate__inkcam, .ld-drawer__card, .ld-hero__inner, .ld-plate__scrim, .ld-entry__src { will-change: auto; }
   .ld-sticky { position: static; height: auto; overflow: visible; padding: 112px 0; }
   .ld-word, .ld-stack .ld-row, .ld-results .ld-row, .ld-sheet__group { will-change: auto; }
   .ld-row > *, .ld-row::before, .ld-cta__arrow { transition: none; }
