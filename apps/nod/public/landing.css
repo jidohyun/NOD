@@ -99,14 +99,43 @@ html.lenis, html.lenis body { height: auto; }
   .ld-row:hover .ld-row__src { transform: translateX(4px); color: var(--ld-ink); }
 }
 
-/* 0. Hero */
+/* 0. Hero: the copy sits over the top of the pinned photo stage, so the photo is in the first view. It scrolls away with
+   the page while the camera pans from the hero framing into the dolly (landing.js). */
 .ld-hero { position: relative; }
-.ld-hero__inner { padding-top: calc(var(--header-h) + 12vh); padding-bottom: 14vh; display: grid; gap: 28px; justify-items: start; }
+.ld-hero__inner { position: absolute; z-index: 3; top: 0; left: 0; right: 0; padding-top: calc(var(--header-h) + 12vh); padding-bottom: 8vh; display: grid; gap: 28px; justify-items: start; will-change: opacity; }
 .ld-hero__inner .ld-display { margin-top: 6px; max-width: 11ch; }
+@media (min-width: 761px) { .ld-hero__inner .ld-display { font-size: clamp(3rem, min(6vw, 12vh), 7rem); } }
 .ld-hero__action { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 8px; }
 .ld-hero__message { color: var(--ld-ink); }
-.ld-hero__ledger { width: 100%; margin-top: 9vh; -webkit-mask-image: linear-gradient(#000 45%, transparent); mask-image: linear-gradient(#000 45%, transparent); }
-.ld-hero__ledger .ld-row--new .ld-row__title { font-size: clamp(1.5rem, 2.4vw, 2.1rem); }
+
+/* Hero plate: one generated text-free ledger photo (assets/generated/PROMPTS.md). Real HTML rows sit on its ruled page through a
+   homography (landing.js), in a camera layer with the same pose, so the text stays on the paper while the camera dollies in. */
+.ld-plate { position: relative; height: 270vh; }
+.ld-plate__stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: var(--surface-page); }
+.ld-plate__stage::before { content: ""; position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: 16vh; background: linear-gradient(var(--surface-page), transparent); pointer-events: none; opacity: var(--wash, 1); }
+.ld-plate__stage::after { content: ""; position: absolute; z-index: 1; inset: 0; background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(20, 12, 6, 0.4)); pointer-events: none; }
+.ld-plate__cam { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; transform-origin: 0 0; will-change: transform; background: center / cover no-repeat url("data:image/webp;base64,UklGRgABAABXRUJQVlA4IPQAAABQBgCdASowACAAPu1srlCppiQiqrgKATAdiWMAr4at0D56XrXIXxGEM1JTVwDpJPScKAuuWnyi3GMOSADN/IYKCogHjc0PBkA4Bc4bkPw6Zdep4RpmD6LPtcUn+D17HEeuxWLIRuKGmSNoX7YQYOYfyUnLTv4TUx//4G8jPbprzRck5XnCOJjAT1SL9DcYlXncNFaJX4NMsFWrkOwmneLLxq7mtp5XYG5soGi9yn0/jF8UTpVeltbWEpwvKi/6PPRs+mu4m2tHxhci6aOFFy7LUOVMlwABTMkAokdtJySAoooNsDL0jI3GlVCmys56OK6l5hQA"); }
+/* The rows ride a second camera layer with the same pose, so portrait screens can fade them at the screen edges with a
+   screen-space mask while the photo underneath still fills the stage. The layer multiplies onto the photo like ink. */
+.ld-plate__ink { position: absolute; inset: 0; mix-blend-mode: multiply; transform-origin: 50% 50%; pointer-events: none; will-change: transform; --edge-a: 2px; --edge-b: 32px; }
+.ld-plate__ink--edge { -webkit-mask-image: linear-gradient(90deg, transparent var(--edge-a), #000 var(--edge-b), #000 calc(100% - var(--edge-b)), transparent calc(100% - var(--edge-a))); mask-image: linear-gradient(90deg, transparent var(--edge-a), #000 var(--edge-b), #000 calc(100% - var(--edge-b)), transparent calc(100% - var(--edge-a))); }
+.ld-plate__inkcam { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; transform-origin: 0 0; will-change: transform; }
+.ld-plate__cam picture, .ld-plate__img { position: absolute; inset: 0; display: block; width: 1536px; height: 1024px; }
+/* Cream wash behind the hero copy: left-to-right on wide screens, top-to-bottom on narrow ones (stops set on resize). */
+.ld-plate__scrim { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: opacity; background: linear-gradient(var(--scrim-dir, 90deg), var(--surface-page) 0, var(--surface-page) var(--scrim-a, 38%), color-mix(in srgb, var(--surface-page) 0%, transparent) var(--scrim-b, 46%)); }
+.ld-plate__grain { position: absolute; z-index: 1; inset: 0; opacity: 0.09; pointer-events: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.ld-page {
+  position: absolute; left: 0; top: 0; width: 1000px; height: 1200px; transform-origin: 0 0;
+  display: grid; grid-template-rows: 89.3fr 95.9fr 99.6fr 100.5fr 101fr 101.4fr 101.4fr 103fr 102.5fr 101.8fr 100.8fr 103fr;
+}
+.ld-entry__src { will-change: opacity; }
+.ld-entry { display: grid; grid-template-columns: 132px minmax(0, 1fr) 210px; align-items: end; padding: 0 18px 14px 0; color: rgba(26, 22, 18, 0.88); }
+.ld-entry__no { padding-left: 22px; font-family: var(--ld-mono); font-size: 30px; font-weight: 500; color: rgba(26, 22, 18, 0.6); font-variant-numeric: tabular-nums; }
+.ld-entry__title { position: relative; isolation: isolate; justify-self: start; max-width: 100%; font-size: 34px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; white-space: nowrap; overflow: hidden; }
+.ld-entry__src { font-family: var(--ld-mono); font-size: 21px; text-align: right; color: rgba(26, 22, 18, 0.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ld-entry--new .ld-entry__title { overflow: visible; }
+.ld-entry--new .ld-entry__no { color: rgba(26, 22, 18, 0.9); font-weight: 600; }
+.ld-entry .ld-mark { opacity: 0.7; left: -10px; right: -10px; top: 6%; bottom: -4%; border-radius: 3px 9px 4px 10px; }
 
 /* Pinned scenes: outer height is the scroll length, inner is one screen. */
 .ld-scene { position: relative; border-top: var(--ld-hair); }
@@ -135,6 +164,18 @@ html.lenis, html.lenis body { height: auto; }
 .ld-stack .ld-row { position: absolute; left: 0; right: 0; top: 0; height: var(--row-h, 64px); align-items: center; align-content: center; padding: 0; border-bottom: 0; will-change: transform, opacity; }
 .ld-stack .ld-row:last-child { border-bottom: 0; }
 .ld-split__stage .ld-row { --row-cols: 4.5rem minmax(0, 1fr) 11rem; }
+/* The physical place: a generated card drawer with one empty slot; a transparent card drops into it as the scene saves. */
+.ld-drawer { position: relative; margin-top: 24px; aspect-ratio: 1440 / 600; border-radius: 14px; overflow: hidden; background: #3a2618; }
+.ld-drawer picture, .ld-drawer__img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.ld-drawer__slot { position: absolute; inset: 0; clip-path: polygon(34.6% 0, 53% 0, 53% 69.5%, 34.6% 63%); }
+/* The generated card is flatter and brighter than the drawer photo: warm it down to the drawer's paper, light it from the
+   upper left like the photo, add the same grain, and let the neighbouring cards shade it as it sinks (--sink, landing.js). */
+.ld-drawer__card { position: absolute; left: 35.97%; top: 37.2%; width: 15.42%; aspect-ratio: 240 / 294; transform: translate3d(0, -70%, 0); will-change: transform; filter: drop-shadow(-3px 7px 6px rgba(40, 22, 8, 0.32)) drop-shadow(-1px 2px 1.5px rgba(40, 22, 8, 0.28)); }
+.ld-drawer__card img { display: block; width: 100%; height: 100%; filter: sepia(0.24) saturate(1.12) brightness(0.97) contrast(0.94); }
+.ld-drawer__shade { position: absolute; inset: 0; pointer-events: none; -webkit-mask: url("/assets/generated/card-yellow-240.webp") center / 100% 100% no-repeat; mask: url("/assets/generated/card-yellow-240.webp") center / 100% 100% no-repeat; mix-blend-mode: multiply; }
+.ld-drawer__shade::before, .ld-drawer__shade::after { content: ""; position: absolute; inset: 0; }
+.ld-drawer__shade::before { opacity: 0.55; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"), linear-gradient(118deg, rgba(255, 246, 228, 0) 22%, rgba(160, 120, 84, 0.16) 76%, rgba(120, 84, 54, 0.28)); }
+.ld-drawer__shade::after { opacity: var(--sink, 0); background: linear-gradient(rgba(120, 84, 52, 0) 45%, rgba(110, 74, 44, 0.22) 78%, rgba(84, 54, 30, 0.38)); }
 
 /* 2. Keep */
 .ld-cols__inner { display: grid; gap: 22px; justify-items: start; padding-top: var(--header-h); }
@@ -193,12 +234,10 @@ html.lenis, html.lenis body { height: auto; }
   .ld-display { font-size: clamp(2.75rem, 13.5vw, 4.25rem); }
   .ld-h2 { font-size: clamp(2.25rem, 11vw, 3.25rem); }
   .ld-hero__inner { padding-top: calc(var(--header-h) + 8vh); padding-bottom: 10vh; gap: 22px; }
-  .ld-hero__ledger { margin-top: 5vh; }
   .ld-row { row-gap: 2px; padding: 14px 0; }
   .ld-row__no { grid-column: 1; grid-row: 1 / 3; }
   .ld-row__title { grid-column: 2; grid-row: 1; font-size: 1.1rem; }
   .ld-row__src { grid-column: 2; grid-row: 2; font-size: 0.8rem; }
-  .ld-hero__ledger .ld-row--new .ld-row__title { font-size: 1.35rem; }
   .ld-split__stage .ld-row { --row-cols: 3.25rem minmax(0, 1fr); }
   .ld-save { height: 260vh; }
   .ld-cols { height: 220vh; }
@@ -207,7 +246,9 @@ html.lenis, html.lenis body { height: auto; }
   .ld-split__copy { gap: 14px; }
   .ld-split__copy .ld-body { display: none; }
   .ld-counter { margin-top: 4px; font-size: 3rem; }
-  .ld-stack { margin-top: 36px; height: calc(var(--row-h, 64px) * 4); }
+  .ld-stack { margin-top: 28px; height: calc(var(--row-h, 64px) * 3); }
+  .ld-drawer { margin-top: 18px; border-radius: 10px; }
+  .ld-plate { height: 250vh; }
   .ld-browser__url { font-size: 0.75rem; }
   .ld-cols__after { margin-top: 20px; }
   .ld-search input { font-size: 1.5rem; }
@@ -216,12 +257,16 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (max-height: 640px) and (min-width: 761px) {
   .ld-stack { height: calc(var(--row-h, 64px) * 3); margin-top: 32px; }
+  .ld-drawer { display: none; }
   .ld-counter { font-size: 3.5rem; }
 }
 
 /* Reduced motion: no pinning, no smooth scroll; every scene shows its final state (standard §6). */
 @media (prefers-reduced-motion: reduce) {
-  .ld-save, .ld-cols, .ld-find { height: auto; }
+  .ld-save, .ld-cols, .ld-find, .ld-plate { height: auto; }
+  .ld-plate__stage { position: relative; }
+  .ld-plate { min-height: 100dvh; }
+  .ld-plate__cam, .ld-plate__ink, .ld-plate__inkcam, .ld-drawer__card, .ld-hero__inner, .ld-plate__scrim, .ld-entry__src { will-change: auto; }
   .ld-sticky { position: static; height: auto; overflow: visible; padding: 112px 0; }
   .ld-word, .ld-stack .ld-row, .ld-results .ld-row, .ld-sheet__group { will-change: auto; }
   .ld-row > *, .ld-row::before, .ld-cta__arrow { transition: none; }
