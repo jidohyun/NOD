@@ -50,45 +50,112 @@
     return clamp01((y - g.top) / Math.max(1, g.height - g.vh));
   }
 
+  /* Hero plate geometry, in plate pixels (1536x1024). QUAD is the ruled area of the right page (top-left, top-right,
+     bottom-right, bottom-left); the 12 rows match the ruling lines detected in the image (see .ld-page rows in landing.css). */
+  const PLATE_W = 1536;
+  const PLATE_H = 1024;
+  const PAGE_W = 1000;
+  const PAGE_H = 1200;
+  const QUAD = [[458, 215], [1150, 143], [1420, 697], [566, 820]];
+  const NEW_ROW_MID = (792.1 + 894.6) / 2;
+
+  function homography(src, dst) {
+    const A = [];
+    const b = [];
+    for (let i = 0; i < 4; i += 1) {
+      const [x, y] = src[i];
+      const [u, v] = dst[i];
+      A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+      A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+    }
+    for (let i = 0; i < 8; i += 1) {
+      let m = i;
+      for (let r = i + 1; r < 8; r += 1) if (Math.abs(A[r][i]) > Math.abs(A[m][i])) m = r;
+      [A[i], A[m]] = [A[m], A[i]]; [b[i], b[m]] = [b[m], b[i]];
+      for (let r = i + 1; r < 8; r += 1) {
+        const f = A[r][i] / A[i][i];
+        for (let c = i; c < 8; c += 1) A[r][c] -= f * A[i][c];
+        b[r] -= f * b[i];
+      }
+    }
+    const h = new Array(8);
+    for (let i = 7; i >= 0; i -= 1) {
+      let s = b[i];
+      for (let c = i + 1; c < 8; c += 1) s -= A[i][c] * h[c];
+      h[i] = s / A[i][i];
+    }
+    return h;
+  }
+  const mapPoint = (h, x, y) => {
+    const w = h[6] * x + h[7] * y + 1;
+    return [(h[0] * x + h[1] * y + h[2]) / w, (h[3] * x + h[4] * y + h[5]) / w];
+  };
+  const matrix3d = (h) => `matrix3d(${[h[0], h[3], 0, h[6], h[1], h[4], 0, h[7], 0, 0, 1, 0, h[2], h[5], 0, 1].join(",")})`;
+
   function heroScene(el, reduced, start) {
     const words = splitWords(el.querySelector("[data-words]"));
+    const plate = el.querySelector("[data-plate]");
+    const cam = el.querySelector("[data-cam]");
     const rows = [...el.querySelectorAll("[data-row]")];
     const title = el.querySelector("[data-title]");
-    const mark = el.querySelector(".ld-mark");
+    const mark = el.querySelector("[data-hero-mark]");
     const full = title.textContent;
-    const typeAt = 520;
+    const h = homography([[0, 0], [PAGE_W, 0], [PAGE_W, PAGE_H], [0, PAGE_H]], QUAD);
+    el.querySelector("[data-page]").style.transform = matrix3d(h);
+    const typeAt = 700;
     const charMs = 34;
-    const markAt = typeAt + full.length * charMs + 120;
-    const done = markAt + 480;
-    const g = { vh: 1 };
+    const done = typeAt + full.length * charMs + 120;
+    const g = { vh: 1, vw: 1, top: 0, height: 1, cover: 1, zoom: 1, sx: PLATE_W / 2, sy: PLATE_H / 2, fx: PLATE_W / 2, fy: PLATE_H / 2 };
     let typed = -1;
     let lastExit = -1;
+    let lastP = -1;
     let settled = reduced;
 
-    if (reduced) mark.style.setProperty("--mark", "1");
-    else {
+    if (!reduced) {
       title.textContent = "";
-      mark.style.setProperty("--mark", "0");
       rows.forEach((r) => { r.style.opacity = "0"; });
     }
 
+    // Camera: cover the stage at p = 0, then dolly toward row 0413 and stop where the row fits the screen.
+    function frame(p) {
+      const k = easeInOut(map(p, 0, 0.72));
+      const s = g.cover + (g.zoom - g.cover) * k;
+      const hx = g.vw / (2 * s);
+      const hy = g.vh / (2 * s);
+      const cx = Math.min(PLATE_W - hx, Math.max(hx, g.sx + (g.fx - g.sx) * k));
+      const cy = Math.min(PLATE_H - hy, Math.max(hy, g.sy + (g.fy - g.sy) * k));
+      put(cam, "transform", `translate3d(${(g.vw / 2 - cx * s).toFixed(2)}px, ${(g.vh / 2 - cy * s).toFixed(2)}px, 0) scale(${s.toFixed(4)})`);
+      put(mark, "--mark", easeOut(map(p, 0.48, 0.8)).toFixed(4));
+    }
+
     return {
-      measure(vh) { g.vh = vh; },
+      measure(vh, vw) {
+        g.vh = vh; g.vw = vw; g.top = docTop(plate); g.height = plate.offsetHeight;
+        g.cover = Math.max(vw / PLATE_W, vh / PLATE_H) * 1.02;
+        const narrow = vw <= 760;
+        // Narrow screens frame only the number and the title of the new row; wide screens frame the whole row.
+        const a = mapPoint(h, narrow ? 16 : 0, NEW_ROW_MID);
+        const b = mapPoint(h, narrow ? PAGE_W * 0.56 : PAGE_W, NEW_ROW_MID);
+        const span = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        g.zoom = Math.max(g.cover, Math.min(g.cover * 1.8, (vw * (narrow ? 0.92 : 0.8)) / span));
+        g.fx = (a[0] + b[0]) / 2; g.fy = (a[1] + b[1]) / 2;
+        // A portrait screen shows only a slice of the landscape plate, so start on the written page, not the plate centre.
+        const s0 = narrow ? mapPoint(h, PAGE_W * 0.4, PAGE_H * 0.42) : [PLATE_W / 2, PLATE_H / 2];
+        g.sx = s0[0]; g.sy = s0[1];
+        lastP = -1;
+      },
       render(y, now) {
         let busy = false;
         if (!settled) {
           const t = now - start;
-          rows.forEach((row, i) => {
-            const e = easeOut(map(t, 160 + i * 90, 900 + i * 90));
-            row.style.opacity = String(e);
-            row.style.transform = `translate3d(0, ${((1 - e) * 22).toFixed(2)}px, 0)`;
-          });
+          rows.forEach((row, i) => { row.style.opacity = easeOut(map(t, 160 + i * 60, 760 + i * 60)).toFixed(3); });
           const n = Math.min(full.length, Math.max(0, Math.floor((t - typeAt) / charMs)));
           if (n !== typed) { typed = n; title.textContent = full.slice(0, n); }
-          mark.style.setProperty("--mark", easeOut(map(t, markAt, markAt + 420)).toFixed(4));
           settled = t > done;
           busy = !settled;
         }
+        const p = reduced ? 1 : progressOf(g, y);
+        if (p !== lastP) { lastP = p; frame(p); }
         if (reduced || y > g.vh * 1.5) return busy;
         const exit = clamp01(y / (g.vh * 0.9));
         if (exit !== lastExit) {
@@ -128,6 +195,7 @@
     const counter = el.querySelector("[data-counter]");
     const key = el.querySelector("[data-savekey]");
     const live = el.querySelector("[data-save-live]");
+    const card = el.querySelector("[data-card]");
     const base = 413;
     const g = { top: 0, height: 1, vh: 1, rowH: 64 };
     const rows = BASE.map(([no, t, s]) => ledgerRow(no, t, s));
@@ -137,6 +205,7 @@
     let shown = base;
     let pressAt = -1e9;
     let lastTotal = -1;
+    let drop = reduced ? 1 : 0;
 
     function sync(now) {
       const total = scrollSaves + clickSaves;
@@ -173,6 +242,7 @@
         if (!reduced && y >= g.top - g.vh && y <= g.top + g.height) {
           const p = progressOf(g, y);
           scrollSaves = THRESHOLDS.filter((t) => p >= t).length;
+          drop = easeInOut(map(p, 0.06, 0.66));
         }
         sync(now);
         const step = reduced ? 1 : k;
@@ -206,6 +276,9 @@
           put(key, "--press", "1");
           put(key, "--ring", "0");
         }
+        // The card sinks into its slot with the scroll; each save lifts it once, like a card being filed.
+        const lift = !reduced && t < 600 ? Math.sin(Math.PI * map(t, 0, 600)) * 10 : 0;
+        put(card, "transform", `translate3d(0, ${(-(1 - drop) * 70 - lift).toFixed(2)}%, 0) rotate(${(-(1 - drop) * 3).toFixed(2)}deg)`);
         return busy;
       },
     };
